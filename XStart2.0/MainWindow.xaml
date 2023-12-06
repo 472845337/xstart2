@@ -1,0 +1,145 @@
+﻿<Window x:Class="XStart2._0.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XStart2._0"
+        xmlns:localparam="clr-namespace:XStart2._0.Bean"
+        mc:Ignorable="d"
+        Title="X启动" Height="800" Width="450" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style x:Key="{x:Static ToolBar.MenuStyleKey}" TargetType="Menu">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <!-- 栏目样式 -->
+        <Style x:Key="ExpandablePanelStyle" TargetType="{x:Type Expander}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Expander}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <DockPanel>
+                                <ToggleButton x:Name="HeaderSite" Height="36" Content="{TemplateBinding Header}" Background="LightBlue" DockPanel.Dock="Top" 
+                                              IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                              PreviewMouseLeftButtonDown="Expander_Header_PreviewMouseLeftButtonDown"/>
+                                <ContentPresenter x:Name="ExpandSite" DockPanel.Dock="Bottom" Visibility="Hidden"/>
+                            </DockPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsExpanded" Value="True">
+                                <Setter TargetName="ExpandSite" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IsExpanded" Value="False">
+                                <Setter TargetName="ExpandSite" Property="Visibility" Value="Hidden" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <EventSetter Event="Expanded" Handler="Expander_Expanded_Handler"/>
+        </Style>
+        <!-- 项目样式 -->
+        <Style x:Key="AppButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="32"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Padding="3">
+                                <Image Source="Images/LifelineIcon.theme-light.png" Stretch="Fill" Margin="2"/>
+                            </Border>
+                            <TextBlock Grid.Column="1" Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="5 0 0 0"></TextBlock>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="LightBlue"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TabControl Grid.Row="0" x:Name="MainTabControl" TabStripPlacement="Left" ItemsSource="{Binding Types}" SizeChanged="MainTabControl_SizeChanged">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Width="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=DataContext.TypeWidth}">
+                        <Image Source="/Images/LifelineIcon.theme-light.png" Width="24" Margin="5"/>
+                        <TextBlock VerticalAlignment="Center" Text="{Binding Value.Name}" FontSize="18"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ScrollViewer VerticalScrollBarVisibility="{Binding Value.VerticalScroll}">
+                        <ItemsControl ItemsSource="{Binding Value.ColumnDic}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Expander localparam:ElementParam.TypeSection="{Binding Value.TypeSection}" localparam:ElementParam.ColumnSection="{Binding Value.Section}"
+                                          Header="{Binding Value.Name}" IsExpanded="{Binding Value.IsExpanded}" Style="{StaticResource ExpandablePanelStyle}">
+                                        <ScrollViewer Height="{Binding Value.ColumnHeight}">
+                                            <ItemsControl ItemsSource="{Binding Value.ProjectDic}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel ItemWidth="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=DataContext.ProjectWidth}"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Button Content="{Binding Value.Name}" Style="{StaticResource AppButton}"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </Expander>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+        <ToolBar Grid.Row="1">
+            <Menu>
+                <MenuItem Header="菜单">
+                    <MenuItem IsCheckable="True" Header="置顶" Style="{Binding MenuStyleKey}"/>
+                    <MenuItem IsCheckable="True" Header="禁止移动" Style="{Binding MenuStyleKey}"/>
+                    <MenuItem Header="选项">
+                        <MenuItem.Icon>
+                            <Image Source="/Files/Icons/preference.ico" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="恢复默认"/>
+                    <MenuItem Header="关于"/>
+                    <MenuItem Header="退出程序" Click="Window_Close"/>
+                </MenuItem>
+                <MenuItem Padding="0" Margin="0">
+                    <MenuItem.Icon>
+                        <Image Source="/Files/Icons/preference.ico" Width="16" Height="16" Margin="0"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <TextBlock Style="{StaticResource FontAwesome}" Text="&#xf205;"/>
+                    </MenuItem.Header>
+                </MenuItem>
+            </Menu>
+        </ToolBar>
+    </Grid>
+</Window>

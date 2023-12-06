@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8E5A8F52-8AE8-4B69-9A6C-9A846153D2B2}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>XStart2._0</RootNamespace>
+    <AssemblyName>XStart2.0</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <Deterministic>true</Deterministic>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\XStart\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.112.1, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\XStart\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Bean\ElementParam.cs" />
+    <Compile Include="Config\Configs.cs" />
+    <Compile Include="DataBase\ClsLock.cs" />
+    <Compile Include="DataBase\DBConstants.cs" />
+    <Compile Include="DataBase\SQLiteFactory.cs" />
+    <Compile Include="DataBase\SQLiteHelper.cs" />
+    <Compile Include="Services\ProjectService.cs" />
+    <Compile Include="Services\ColumnService.cs" />
+    <Compile Include="Services\TableService.cs" />
+    <Compile Include="Services\TypeService.cs" />
+    <Compile Include="Services\XStartService.cs" />
+    <Compile Include="Utils\DllUtils.cs" />
+    <Compile Include="Utils\IconUtils.cs" />
+    <Compile Include="Utils\WinApi.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Bean\Project.cs" />
+    <Compile Include="Bean\BackData.cs" />
+    <Compile Include="Bean\Column.cs" />
+    <Compile Include="Bean\LinkedHashMap.cs" />
+    <Compile Include="Bean\Sections.cs" />
+    <Compile Include="Bean\SystemAppParam.cs" />
+    <Compile Include="Bean\Table.cs" />
+    <Compile Include="Bean\TableData.cs" />
+    <Compile Include="Bean\TableParam.cs" />
+    <Compile Include="Bean\Type.cs" />
+    <Compile Include="Const\Constants.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Files\Ini\Set.ini" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Resource Include="Resources\Fonts\FontAwesome.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\LifelineIcon.theme-light.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Files\Audio\Change.wav" />
+    <Content Include="Files\Audio\Start.wav" />
+    <Resource Include="Files\Doc\about.txt" />
+    <Resource Include="Files\Icons\about.ico" />
+    <Resource Include="Files\Icons\add.ico" />
+    <Resource Include="Files\Icons\app.ico" />
+    <Resource Include="Files\Icons\buttom.ico" />
+    <Resource Include="Files\Icons\clear.ico" />
+    <Resource Include="Files\Icons\copy.ico" />
+    <Resource Include="Files\Icons\cut.ico" />
+    <Resource Include="Files\Icons\default.ico" />
+    <Resource Include="Files\Icons\desktop.ico" />
+    <Resource Include="Files\Icons\down.ico" />
+    <Resource Include="Files\Icons\exit.ico" />
+    <Resource Include="Files\Icons\folder.ico" />
+    <Resource Include="Files\Icons\Fresh.ico" />
+    <Resource Include="Files\Icons\lock.ico" />
+    <Resource Include="Files\Icons\paste.ico" />
+    <Resource Include="Files\Icons\preference.ico" />
+    <Resource Include="Files\Icons\property.ico" />
+    <Resource Include="Files\Icons\remove.ico" />
+    <Resource Include="Files\Icons\security_add.ico" />
+    <Resource Include="Files\Icons\security_del.ico" />
+    <Resource Include="Files\Icons\security_edit.ico" />
+    <Resource Include="Files\Icons\show.ico" />
+    <Resource Include="Files\Icons\System\AccessibilityOptions.ico" />
+    <Resource Include="Files\Icons\System\AddHardware.ico" />
+    <Resource Include="Files\Icons\System\AddOrRemoveApp.ico" />
+    <Resource Include="Files\Icons\System\CdRom.ico" />
+    <Resource Include="Files\Icons\System\ClosePC.ico" />
+    <Resource Include="Files\Icons\System\Cmd.ico" />
+    <Resource Include="Files\Icons\System\Control.ico" />
+    <Resource Include="Files\Icons\System\CurWindow.ico" />
+    <Resource Include="Files\Icons\System\DateTime.ico" />
+    <Resource Include="Files\Icons\System\DeskTopIcon.ico" />
+    <Resource Include="Files\Icons\System\EndProcess.ico" />
+    <Resource Include="Files\Icons\System\FolderOptions.ico" />
+    <Resource Include="Files\Icons\System\GameController.ico" />
+    <Resource Include="Files\Icons\System\IE.ico" />
+    <Resource Include="Files\Icons\System\InternetOptions.ico" />
+    <Resource Include="Files\Icons\System\KeyBoard.ico" />
+    <Resource Include="Files\Icons\System\LockPC.ico" />
+    <Resource Include="Files\Icons\System\logout.ico" />
+    <Resource Include="Files\Icons\System\Memory.ico" />
+    <Resource Include="Files\Icons\System\Mouse.ico" />
+    <Resource Include="Files\Icons\System\Mstsc.ico" />
+    <Resource Include="Files\Icons\System\MyComputer.ico" />
+    <Resource Include="Files\Icons\System\MyDocument.ico" />
+    <Resource Include="Files\Icons\System\NetEnd.ico" />
+    <Resource Include="Files\Icons\System\Network.ico" />
+    <Resource Include="Files\Icons\System\PhoneModemOptions.ico" />
+    <Resource Include="Files\Icons\System\PowerOptions.ico" />
+    <Resource Include="Files\Icons\System\PrintAndFax.ico" />
+    <Resource Include="Files\Icons\System\RecycleBin.ico" />
+    <Resource Include="Files\Icons\System\Regedit.ico" />
+    <Resource Include="Files\Icons\System\RegionLanguageOptions.ico" />
+    <Resource Include="Files\Icons\System\RestartPC.ico" />
+    <Resource Include="Files\Icons\System\ScreenSaver.ico" />
+    <Resource Include="Files\Icons\System\SleepPC.ico" />
+    <Resource Include="Files\Icons\System\SoundAudioEquipment.ico" />
+    <Resource Include="Files\Icons\System\StandbyPC.ico" />
+    <Resource Include="Files\Icons\System\SystemProperties.ico" />
+    <Resource Include="Files\Icons\System\TaskBar.ico" />
+    <Resource Include="Files\Icons\System\TurnoffMonitor.ico" />
+    <Resource Include="Files\Icons\System\UserAccount.ico" />
+    <Resource Include="Files\Icons\System\VolumeAdd.ico" />
+    <Resource Include="Files\Icons\System\VolumeControl.ico" />
+    <Resource Include="Files\Icons\System\VolumeReduce.ico" />
+    <Resource Include="Files\Icons\System\VolumeSilent.ico" />
+    <Resource Include="Files\Icons\System\WindowExplorer.ico" />
+    <Resource Include="Files\Icons\theme.ico" />
+    <Resource Include="Files\Icons\top.ico" />
+    <Resource Include="Files\Icons\up.ico" />
+    <Resource Include="Files\Icons\update.ico" />
+    <Resource Include="Files\Icons\url.ico" />
+    <Resource Include="Files\Icons\XStart.ico" />
+    <Content Include="NAudio.dll" />
+    <Content Include="System.Data.SQLite.dll" />
+    <EmbeddedResource Include="X64\SQLite.Interop.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="X86\SQLite.Interop.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
