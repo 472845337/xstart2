@@ -129,7 +129,7 @@
                     <MenuItem Header="关于"/>
                     <MenuItem Header="退出程序" Click="Window_Close"/>
                 </MenuItem>
-                <MenuItem Padding="0" Margin="0">
+                <MenuItem Padding="0" Margin="0" Click="Open_Setting">
                     <MenuItem.Icon>
                         <Image Source="/Files/Icons/preference.ico" Width="16" Height="16" Margin="0"/>
                     </MenuItem.Icon>

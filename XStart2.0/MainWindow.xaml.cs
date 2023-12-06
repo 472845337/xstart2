@@ -7,6 +7,7 @@ using XStart.Bean;
 using XStart.Services;
 using XStart2._0.Bean;
 using XStart2._0.ViewModels;
+using XStart2._0.Windows;
 
 namespace XStart2._0 {
     /// <summary>
@@ -159,6 +160,10 @@ namespace XStart2._0 {
             }
             // 重新计算栏目宽度
             mainViewModel.ProjectWidth = (int)MainTabControl.ActualWidth - mainViewModel.TypeWidth - 22;
+        }
+        private void Open_Setting(object sender, RoutedEventArgs e) {
+            SettingWindow settingWindow = new SettingWindow() { WindowStartupLocation = WindowStartupLocation.CenterOwner};
+            settingWindow.ShowDialog();
         }
     }
 }
