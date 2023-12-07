@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -164,6 +163,17 @@ namespace XStart2._0 {
         private void Open_Setting(object sender, RoutedEventArgs e) {
             SettingWindow settingWindow = new SettingWindow() { WindowStartupLocation = WindowStartupLocation.CenterScreen};
             settingWindow.ShowDialog();
+        }
+        /// <summary>
+        /// 添加类别
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AddType(object sender, RoutedEventArgs e) {
+            ProjectTypeVM typeVm = new ProjectTypeVM();
+            typeVm.Title = "添加类别";
+            ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow(typeVm);
+            projectTypeWindow.ShowDialog();
         }
     }
 }
