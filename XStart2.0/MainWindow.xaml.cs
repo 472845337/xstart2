@@ -87,7 +87,7 @@ namespace XStart2._0 {
                     }
                 }
             }
-            mainViewModel.TypeWidth = 120;
+            mainViewModel.TypeWidth = 80;
             mainViewModel.Types = XStartService.TypeDic;
             MainTabControl.SelectedIndex = 0;
         }
@@ -162,7 +162,7 @@ namespace XStart2._0 {
             mainViewModel.ProjectWidth = (int)MainTabControl.ActualWidth - mainViewModel.TypeWidth - 22;
         }
         private void Open_Setting(object sender, RoutedEventArgs e) {
-            SettingWindow settingWindow = new SettingWindow() { WindowStartupLocation = WindowStartupLocation.CenterOwner};
+            SettingWindow settingWindow = new SettingWindow() { WindowStartupLocation = WindowStartupLocation.CenterScreen};
             settingWindow.ShowDialog();
         }
     }

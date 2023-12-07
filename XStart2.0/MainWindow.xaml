@@ -64,16 +64,32 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <ContextMenu x:Key="TypeTabContextMenu">
+            <ContextMenu.Items>
+                <MenuItem Name="AddType" Header="添加类别"/>
+            </ContextMenu.Items>
+        </ContextMenu>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TabControl Grid.Row="0" x:Name="MainTabControl" TabStripPlacement="Left" ItemsSource="{Binding Types}" SizeChanged="MainTabControl_SizeChanged">
+        <TabControl Grid.Row="0" x:Name="MainTabControl" TabStripPlacement="Left" ItemsSource="{Binding Types}" SizeChanged="MainTabControl_SizeChanged" ContextMenu="{StaticResource TypeTabContextMenu}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Width="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=DataContext.TypeWidth}">
+                        <StackPanel.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="添加类别"/>
+                                <MenuItem Header="修改类别"/>
+                                <MenuItem Header="删除类别"/>
+                                <Separator/>
+                                <MenuItem Header="添加口令"/>
+                                <MenuItem Header="修改口令"/>
+                                <MenuItem Header="移除口令"/>
+                            </ContextMenu>
+                        </StackPanel.ContextMenu>
                         <Image Source="/Images/LifelineIcon.theme-light.png" Width="24" Margin="5"/>
                         <TextBlock VerticalAlignment="Center" Text="{Binding Value.Name}" FontSize="18"/>
                     </StackPanel>
@@ -92,7 +108,18 @@
                                 <DataTemplate>
                                     <Expander localparam:ElementParam.TypeSection="{Binding Value.TypeSection}" localparam:ElementParam.ColumnSection="{Binding Value.Section}"
                                           Header="{Binding Value.Name}" IsExpanded="{Binding Value.IsExpanded}" Style="{StaticResource ExpandablePanelStyle}">
-                                        <ScrollViewer Height="{Binding Value.ColumnHeight}">
+                                        <Expander.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="添加栏目"/>
+                                                <MenuItem Header="修改栏目"/>
+                                                <MenuItem Header="删除栏目"/>
+                                                <Separator/>
+                                                <MenuItem Header="添加口令"/>
+                                                <MenuItem Header="修改口令"/>
+                                                <MenuItem Header="移除口令"/>
+                                            </ContextMenu>
+                                        </Expander.ContextMenu>
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="{Binding Value.ColumnHeight}">
                                             <ItemsControl ItemsSource="{Binding Value.ProjectDic}">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
