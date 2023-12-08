@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using XStart.Bean;
 using XStart.Config;
@@ -8,8 +10,10 @@ using XStart.Const;
 using XStart.Utils;
 
 namespace XStart.Services {
-    class XStartService {
+   public class XStartService{
+
         public static LinkedHashMap<string, Bean.Type> TypeDic = new LinkedHashMap<string, Bean.Type>();
+
         public static Sections GetSectionByName(string name) {
             Sections section = new Sections();
             string[] nameArray = name.Split('_');

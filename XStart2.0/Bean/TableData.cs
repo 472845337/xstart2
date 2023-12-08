@@ -1,5 +1,7 @@
 ﻿
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace XStart.Bean {
     /// <summary>
@@ -7,7 +9,7 @@ namespace XStart.Bean {
     /// </summary>
     /// 
     [Serializable]
-    public abstract class TableData {
+    public abstract class TableData : INotifyPropertyChanged{
 
         public const string KEY_NAME = "Name";
         public const string KEY_SORT = "Sort";
@@ -15,9 +17,10 @@ namespace XStart.Bean {
         // section
         [TableParam(true, "section", "VARCHAR")]
         public string Section { get; set; }
+        private string name;
         // 名称
         [TableParam("name", "VARCHAR")]
-        public string Name { get; set; }
+        public string Name { get => name; set { name = value;OnPropertyChanged("Name"); } }
         // 排序
         [TableParam("sort", "INT")]
         public int? Sort { get; set; }
@@ -25,5 +28,11 @@ namespace XStart.Bean {
         [TableParam("icon_index", "INT")]
         public int? IconIndex { get; set; }
         public string OrderBy { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }

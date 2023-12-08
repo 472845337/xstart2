@@ -78,19 +78,19 @@
         <TabControl Grid.Row="0" x:Name="MainTabControl" TabStripPlacement="Left" ItemsSource="{Binding Types}" SizeChanged="MainTabControl_SizeChanged" ContextMenu="{StaticResource TypeTabContextMenu}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Width="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=DataContext.TypeWidth}">
+                    <StackPanel Tag="{Binding Value.Section}" Orientation="Horizontal" Height="32" Width="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=DataContext.TypeWidth}">
                         <StackPanel.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="添加类别"/>
-                                <MenuItem Header="修改类别"/>
-                                <MenuItem Header="删除类别"/>
+                                <MenuItem Header="添加类别" Click="AddType"/>
+                                <MenuItem Header="修改类别" Click="UpdateType"/>
+                                <MenuItem Header="删除类别" Click="DeleteType"/>
                                 <Separator/>
                                 <MenuItem Header="添加口令"/>
                                 <MenuItem Header="修改口令"/>
                                 <MenuItem Header="移除口令"/>
                             </ContextMenu>
                         </StackPanel.ContextMenu>
-                        <Image Source="/Images/LifelineIcon.theme-light.png" Width="24" Margin="5"/>
+                        <TextBlock Width="28" Text="{Binding Value.FaIcon}" FontFamily="{Binding Value.FaIconFontFamily}" Foreground="{Binding Value.FaIconColor}" FontSize="18" Margin="5"/>
                         <TextBlock VerticalAlignment="Center" Text="{Binding Value.Name}" FontSize="18"/>
                     </StackPanel>
                 </DataTemplate>
@@ -146,7 +146,7 @@
                 <MenuItem Header="菜单">
                     <MenuItem IsCheckable="True" Header="置顶" Style="{Binding MenuStyleKey}"/>
                     <MenuItem IsCheckable="True" Header="禁止移动" Style="{Binding MenuStyleKey}"/>
-                    <MenuItem Header="选项">
+                    <MenuItem Header="选项" Click="Open_Setting">
                         <MenuItem.Icon>
                             <Image Source="/Files/Icons/preference.ico" Width="16" Height="16"/>
                         </MenuItem.Icon>
@@ -160,11 +160,6 @@
                     <MenuItem.Icon>
                         <Image Source="/Files/Icons/preference.ico" Width="16" Height="16" Margin="0"/>
                     </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem>
-                    <MenuItem.Header>
-                        <TextBlock FontFamily="{StaticResource FontAwesomeSolid}" Text="&#xf205;"/>
-                    </MenuItem.Header>
                 </MenuItem>
             </Menu>
         </ToolBar>

@@ -1,7 +1,7 @@
 ﻿
 namespace XStart.Bean {
     // 数据共用的结构体
-    internal class Sections {
+    public class Sections {
         public string TypeSection { get; set; }
         public string ColumnSection { get; set; }
         public string AppSection { get; set; }

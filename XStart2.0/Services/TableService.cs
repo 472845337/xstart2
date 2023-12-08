@@ -26,7 +26,8 @@ namespace XStart.Services {
                 // 创建表
                 CreateTable();
             } else {
-                StringBuilder sb = new StringBuilder();
+                // SQLLite数据库添加新增的列
+                List<string> addColumnList = new List<string>();
                 List<string> nameList = GetTableParam();
                 // 获取自己和父类的属性
                 var infos = typeof(T).GetProperties();
@@ -36,18 +37,18 @@ namespace XStart.Services {
                         continue;
                     }
                     if (!nameList.Contains(tableParam.param)) {
-                        if (sb.Length > 0) {
-                            sb.Append(", ");
-                        }
+                        StringBuilder sb = new StringBuilder();
                         sb.Append(tableParam.param).Append(" ").Append(tableParam.type);
                         if (tableParam.isKey) {
                             sb.Append(" PRIMARY KEY AUTOINCREMENT");
                         }
+                        addColumnList.Add(sb.ToString());
                     }
                 }
-                if (sb.Length > 0) {
-                    sb.Insert(0, $"ALTER TABLE {tableName} ADD COLUMN ");
-                    SqlLiteHelper.ExecuteNonQuery(sb.ToString(), null);
+                if (addColumnList.Count > 0) {
+                    foreach(string addColumn in addColumnList) {
+                        SqlLiteHelper.ExecuteNonQuery($"ALTER TABLE {tableName} ADD COLUMN {addColumn}", null);
+                    }
                 }
             }
         }

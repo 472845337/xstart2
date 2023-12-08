@@ -5,12 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XStart2._0.Windows"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="190" Width="400">
+        Title="{Binding Title}" Height="200" Width="400">
     <Window.Resources>
         <Style x:Key="Button_Style" TargetType="Button">
-            <Setter Property="Width" Value="48"/>
-            <Setter Property="Height" Value="32"/>
+            <Setter Property="Width" Value="45"/>
+            <Setter Property="Height" Value="28"/>
             <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style x:Key="Popular_Fa" TargetType="{x:Type TextBlock}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+            <Style.Setters>
+                <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Margin" Value="4"/>
+                <Setter Property="Foreground" Value="SkyBlue"/>
+                <EventSetter Event="MouseLeftButtonUp" Handler="PopularFa_MouseLeftButtonUp"/>
+            </Style.Setters>
         </Style>
     </Window.Resources>
     <Grid>
@@ -20,21 +34,46 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="38"/>
-            <RowDefinition Height="74"/>
+            <RowDefinition Height="84"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Text="名称：" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Margin="5" FontSize="22"/>
+        <TextBox Text="{Binding Name}" Grid.Row="0" Grid.Column="1" Margin="5" FontSize="22"/>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="图标：" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <WrapPanel Grid.Row="1" Grid.Column="1">
-            <Border BorderBrush="Black" BorderThickness="1" Margin="5">
-                <Image Grid.Column="0" Margin="5" Width="48" Height="48"/>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="76"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" BorderBrush="LightGray" BorderThickness="1" Margin="5" Height="68" VerticalAlignment="Bottom">
+                <TextBlock Text="{Binding SelectedFa, Mode=TwoWay}" FontFamily="{Binding SelectedFf, Mode=TwoWay}" Foreground="{Binding SelectedIconColor, Mode=TwoWay}"
+                           Grid.Column="0" Margin="5" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Center"
+                           MouseLeftButtonUp="SelectIconColor"/>
             </Border>
-            <Button Grid.Column="1" Content="..." Width="36" Height="36" Margin="5" VerticalAlignment="Bottom"/>
-        </WrapPanel>
+            <Button Grid.Column="1" Content="..." Width="28" Height="28" Margin="5" VerticalAlignment="Bottom"/>
+            <GroupBox Header="常用图标" Grid.Column="2">
+                <WrapPanel Margin="5">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding PopularFas}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Style="{StaticResource Popular_Fa}" Text="{Binding}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    </ScrollViewer>
+                </WrapPanel>
+            </GroupBox>
+        </Grid>
         <WrapPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <Button Content="保存" Style="{StaticResource Button_Style}"/>
-            <Button Content="取消" Style="{StaticResource Button_Style}"/>
+            <Button Content="保存" Style="{StaticResource Button_Style}" Click="ProjectType_Save"/>
+            <Button Content="取消" Style="{StaticResource Button_Style}" Click="Window_Close"/>
         </WrapPanel>
     </Grid>
 </Window>

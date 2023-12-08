@@ -46,6 +46,7 @@
       <HintPath>..\..\XStart\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -77,8 +78,11 @@
     <Compile Include="Services\TypeService.cs" />
     <Compile Include="Services\XStartService.cs" />
     <Compile Include="Utils\DllUtils.cs" />
+    <Compile Include="Utils\FaIcons.cs" />
     <Compile Include="Utils\IconUtils.cs" />
+    <Compile Include="Utils\IniUtils.cs" />
     <Compile Include="Utils\WinApi.cs" />
+    <Compile Include="Utils\XStartIniUtils.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ProjectTypeVM.cs" />
     <Compile Include="View\SliderButton.cs" />
@@ -147,10 +151,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="Resources\Fonts\fa-v4compatibility.ttf" />
     <Resource Include="Resources\Fonts\fa-brands-400.ttf" />
     <Resource Include="Resources\Fonts\fa-regular-400.ttf" />
     <Resource Include="Resources\Fonts\fa-solid-900.ttf" />
-    <Resource Include="Resources\Fonts\fa-v4compatibility.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -158,8 +162,12 @@
   <ItemGroup>
     <Resource Include="Images\LifelineIcon.theme-light.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <Folder Include="Converters\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Files\Audio\Change.wav" />
     <Content Include="Files\Audio\Start.wav" />
     <Resource Include="Files\Doc\about.txt" />

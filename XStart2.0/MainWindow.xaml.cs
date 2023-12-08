@@ -1,9 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 using XStart.Bean;
+using XStart.Config;
+using XStart.Const;
 using XStart.Services;
+using XStart.Utils;
 using XStart2._0.Bean;
 using XStart2._0.ViewModels;
 using XStart2._0.Windows;
@@ -86,7 +91,7 @@ namespace XStart2._0 {
                     }
                 }
             }
-            mainViewModel.TypeWidth = 80;
+            mainViewModel.TypeWidth = 100;
             mainViewModel.Types = XStartService.TypeDic;
             MainTabControl.SelectedIndex = 0;
         }
@@ -172,8 +177,94 @@ namespace XStart2._0 {
         private void AddType(object sender, RoutedEventArgs e) {
             ProjectTypeVM typeVm = new ProjectTypeVM();
             typeVm.Title = "添加类别";
-            ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow(typeVm);
-            projectTypeWindow.ShowDialog();
+            ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow(typeVm) { WindowStartupLocation = WindowStartupLocation.CenterScreen};
+            OperateType(projectTypeWindow);
+        }
+
+        private void UpdateType(object sender, RoutedEventArgs e) {
+            StackPanel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as StackPanel;
+            string typeSection = typePanel.Tag as string;
+            ProjectTypeVM typeVm = new ProjectTypeVM() { Section = typeSection, Name = XStartService.TypeDic[typeSection].Name
+                , SelectedFa = XStartService.TypeDic[typeSection].FaIcon};
+            if (!string.IsNullOrEmpty(XStartService.TypeDic[typeSection].FaIconColor)) {
+                typeVm.SelectedIconColor = XStartService.TypeDic[typeSection].FaIconColor;
+            }
+            if (!string.IsNullOrEmpty(XStartService.TypeDic[typeSection].FaIconFontFamily)) {
+                typeVm.SelectedFf = XStartService.TypeDic[typeSection].FaIconFontFamily;
+            }
+            typeVm.Title = "修改类别";
+            ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow(typeVm) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
+            OperateType(projectTypeWindow);
+        }
+
+        private void OperateType(ProjectTypeWindow projectTypeWindow) {
+            if (true == projectTypeWindow.ShowDialog()) {
+                // 保存数据到类别库中
+                if (string.IsNullOrEmpty(projectTypeWindow.vm.Section)) {
+                    XStart.Bean.Type projectType = new XStart.Bean.Type { Name = projectTypeWindow.vm.Name
+                        , FaIcon = projectTypeWindow.vm.SelectedFa
+                        , FaIconColor = projectTypeWindow.vm.SelectedIconColor
+                        , FaIconFontFamily = projectTypeWindow.vm.SelectedFf.ToString()
+                    };
+                    projectType.Section = Guid.NewGuid().ToString();
+                    projectType.Sort = XStartService.TypeDic[XStartService.TypeDic.Count - 1].Sort + 1;
+                    typeService.Insert(projectType);
+                    XStartService.TypeDic.Add(projectType.Section, projectType);
+                } else {
+                    XStart.Bean.Type projectType = XStartService.TypeDic[projectTypeWindow.vm.Section];
+                    projectType.Name = projectTypeWindow.vm.Name; 
+                    projectType.FaIcon = projectTypeWindow.vm.SelectedFa;
+                    projectType.FaIconColor = projectTypeWindow.vm.SelectedIconColor;
+                    projectType.FaIconFontFamily = projectTypeWindow.vm.SelectedFf.ToString();
+                    typeService.Update(projectType);
+                }
+            }
+            projectTypeWindow.Close();
+        }
+
+        private void DeleteType(object sender, RoutedEventArgs e) {
+            StackPanel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as StackPanel;
+            string section = typePanel.Tag as string;
+            if (MessageBoxResult.OK == MessageBox.Show("确认删除该类别？", "提示", MessageBoxButton.OKCancel)) {
+                if (XStartService.TypeDic[section].Locked) {
+                    MessageBox.Show("当前类别已锁，不可删除！","错误");
+                    return;
+                }
+                foreach (KeyValuePair<string, Column> k in XStartService.TypeDic[section].ColumnDic) {
+                    if (k.Value.Locked) {
+                        MessageBox.Show($"当前类别栏目[{k.Value.Name}]已锁，不可删除！","错误");
+                        return;
+                    }
+                }
+                RemoveType(section);
+                DelCount(typeService);
+                
+                MessageBox.Show("类别删除成功");
+            }
+        }
+
+        // 移除类别（左侧TreeMenu,TabControl的UIPage,TypeDic中数据，Ini文件）
+        private void RemoveType(string section) {
+            // 数据删除
+            typeService.Delete(section);
+            foreach (KeyValuePair<string, Column> column in XStartService.TypeDic[section].ColumnDic) {
+                columnService.Delete(column.Value.Section);
+                foreach (KeyValuePair<string, Project> project in column.Value.ProjectDic) {
+                    appService.Delete(project.Value.Section);
+                }
+            }
+            XStartService.TypeDic.Remove(section);
+        }
+
+        private void DelCount<T>(TableService<T> t) where T : TableData {
+            if (Configs.delCount > Constants.DEL_COUNT_LIMIT) {
+                Configs.delCount = 0;
+                t.Vacuum();
+            } else {
+                Configs.delCount += 1;
+            }
+            XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_DEL_COUNT, Convert.ToString(Configs.delCount));
+
         }
     }
 }
