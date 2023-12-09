@@ -22,7 +22,7 @@ namespace XStart2._0.ViewModels {
         private string selectedFa;
         public string SelectedFa { get => selectedFa; set { selectedFa = value; OnPropertyChanged("SelectedFa"); } }
         // 类别Icon颜色
-        private string selectedIconColor = "Blue";
+        private string selectedIconColor = "LightSeaGreen";
         public string SelectedIconColor { get => selectedIconColor; set { selectedIconColor = value; OnPropertyChanged("SelectedIconColor"); } }
         // 类别所选FontAwesome字体
         private string selectedFf = "{pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Solid}";

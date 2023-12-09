@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace XStart.Bean {
     /// <summary>
@@ -18,6 +18,9 @@ namespace XStart.Bean {
         public bool? StartOpen { get; set; }
         public bool SaveSecurity { get; set; }
 
+        private Visibility verticalScrollBar;
+        public Visibility VerticalScrollBar { get => verticalScrollBar; set { verticalScrollBar = value; OnPropertyChanged("VerticalScrollBar"); } }
+
         private int columnHeight;
         public int ColumnHeight { get => columnHeight; set { columnHeight = value;OnPropertyChanged("ColumnHeight"); } }
 
@@ -26,13 +29,12 @@ namespace XStart.Bean {
 
         private bool isExpanded;
         public bool IsExpanded { get => isExpanded; set { isExpanded = value; OnPropertyChanged("IsExpanded"); } }
+
+        private int projectWidth;
+        public int ProjectWidth { get => projectWidth; set { projectWidth = value;OnPropertyChanged("ProjectWidth"); } }
+
+
         private LinkedHashMap<string, Project> projectDic = new LinkedHashMap<string, Project>();
         public LinkedHashMap<string, Project> ProjectDic { get => projectDic; set { projectDic = value; OnPropertyChanged("ProjectDic"); } }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

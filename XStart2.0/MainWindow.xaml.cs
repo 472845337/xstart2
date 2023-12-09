@@ -10,6 +10,7 @@ using XStart.Const;
 using XStart.Services;
 using XStart.Utils;
 using XStart2._0.Bean;
+using XStart2._0.Utils;
 using XStart2._0.ViewModels;
 using XStart2._0.Windows;
 
@@ -91,6 +92,8 @@ namespace XStart2._0 {
                     }
                 }
             }
+            mainViewModel.TypeTabExpanded = true;
+            mainViewModel.TypeTabToggleIcon = FaIcons.Outdent;
             mainViewModel.TypeWidth = 100;
             mainViewModel.Types = XStartService.TypeDic;
             MainTabControl.SelectedIndex = 0;
@@ -121,6 +124,7 @@ namespace XStart2._0 {
                     c.ColumnHeight = (int)type.ExpandedColumnHeight;
                 }
             }
+            AudioUtils.PlayWav(AudioUtils.CHANGE);
         }
 
         /// <summary>
@@ -140,15 +144,18 @@ namespace XStart2._0 {
             // 重新计算按钮宽度以及栏目高度
             CalculateWidthHeight();
         }
+        private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            AudioUtils.PlayWav(AudioUtils.CHANGE);
+        }
 
         private void CalculateWidthHeight() {
             // 重新计算栏目高度
             foreach (KeyValuePair<string, XStart.Bean.Type> type in XStartService.TypeDic) {
                 // 计算栏目高度
                 int headerHeight = 38;
-                // 当高度为小于50时，将高度置为-1
+                // 当高度为小于一定高度時，将高度置为-1
                 double expandedHeight = MainTabControl.ActualHeight - headerHeight * type.Value.ColumnDic.Count - 6;
-                if (expandedHeight < 50) {
+                if (expandedHeight < 100) {
                     expandedHeight = -1D;
                     // 滚动条应该出现
                     type.Value.VerticalScroll = ScrollBarVisibility.Visible;
@@ -160,11 +167,20 @@ namespace XStart2._0 {
                     if (column.IsExpanded) {
                         column.ColumnHeight = (int)expandedHeight;
                     }
+                    // 栏目里项目的宽度 宽度根据ScrollView的ScrollChanged事件触发
+                    //ComputedColumnProjectWidth(column);
                 }
             }
-            // 重新计算栏目宽度
-            mainViewModel.ProjectWidth = (int)MainTabControl.ActualWidth - mainViewModel.TypeWidth - 22;
         }
+
+        private void ComputedColumnProjectWidth(Column column) {
+            if(Visibility.Visible == column.VerticalScrollBar || ScrollBarVisibility.Visible == XStartService.TypeDic[column.TypeSection].VerticalScroll) {
+                column.ProjectWidth = (int)MainTabControl.ActualWidth - mainViewModel.TypeWidth - 40;
+            } else {
+                column.ProjectWidth = (int)MainTabControl.ActualWidth - mainViewModel.TypeWidth-22;
+            }
+        }
+
         private void Open_Setting(object sender, RoutedEventArgs e) {
             SettingWindow settingWindow = new SettingWindow() { WindowStartupLocation = WindowStartupLocation.CenterScreen};
             settingWindow.ShowDialog();
@@ -182,7 +198,7 @@ namespace XStart2._0 {
         }
 
         private void UpdateType(object sender, RoutedEventArgs e) {
-            StackPanel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as StackPanel;
+            Panel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Panel;
             string typeSection = typePanel.Tag as string;
             ProjectTypeVM typeVm = new ProjectTypeVM() { Section = typeSection, Name = XStartService.TypeDic[typeSection].Name
                 , SelectedFa = XStartService.TypeDic[typeSection].FaIcon};
@@ -265,6 +281,32 @@ namespace XStart2._0 {
             }
             XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_DEL_COUNT, Convert.ToString(Configs.delCount));
 
+        }
+
+        private void ToggleTabItem(object sender, RoutedEventArgs e) {
+            if (mainViewModel.TypeTabExpanded) {
+                // 类别是展开的
+                mainViewModel.TypeWidth = 28;
+                mainViewModel.TypeTabExpanded = false;
+                mainViewModel.TypeTabToggleIcon = FaIcons.Indent;
+            } else {
+                mainViewModel.TypeWidth =100;
+                mainViewModel.TypeTabExpanded = true;
+                mainViewModel.TypeTabToggleIcon = FaIcons.Outdent;
+            }
+        }
+
+        /// <summary>
+        /// 栏目里滚动条变动事件
+        /// 获取当前滚动条是否显示，计算出项目的宽度（在一个项目一行的情况下）
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ScrollChanged(object sender, ScrollChangedEventArgs e) {
+            ScrollViewer sv = sender as ScrollViewer;
+            Column column = sv.Tag as Column;
+            column.VerticalScrollBar = sv.ComputedVerticalScrollBarVisibility;
+            ComputedColumnProjectWidth(column);
         }
     }
 }

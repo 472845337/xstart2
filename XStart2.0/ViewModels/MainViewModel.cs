@@ -19,13 +19,15 @@ namespace XStart2._0.ViewModels {
         #endregion
 
         #region 窗口相关
-        // 项目按钮宽度
-        private int projectWidth;
-        public int ProjectWidth { get => projectWidth; set { projectWidth = value;OnPropertyChanged("ProjectWidth"); } }
         // 类别宽度（TabControl的TabItem的宽度）
         private int typeWidth;
         public int TypeWidth { get => typeWidth; set { typeWidth = value;OnPropertyChanged("TypeWidth"); } }
 
+        private bool typeTabExpanded;
+        public bool TypeTabExpanded { get => typeTabExpanded; set { typeTabExpanded = value;OnPropertyChanged("ByteTabExpanded"); } }
+
+        private string typeTabToggleIcon;
+        public string TypeTabToggleIcon { get => typeTabToggleIcon;set { typeTabToggleIcon = value; OnPropertyChanged("TypeTabToggleIcon"); } }
         #endregion
     }
 }

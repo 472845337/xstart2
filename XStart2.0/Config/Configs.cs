@@ -9,7 +9,7 @@ namespace XStart.Config {
     /// 系统缓存参数
     /// </summary>
     class Configs {
-        public static string AppStartPath = System.AppDomain.CurrentDomain.BaseDirectory + "\\";
+        public static string AppStartPath = System.AppDomain.CurrentDomain.BaseDirectory;
         public static System.IntPtr Handler = System.IntPtr.Zero;
         public static bool inited = false;// 是否初始化
         public static string AppClickType = Constants.CLICK_TYPE_SINGLE;// 默认单击打开

@@ -77,6 +77,7 @@
     <Compile Include="Services\TableService.cs" />
     <Compile Include="Services\TypeService.cs" />
     <Compile Include="Services\XStartService.cs" />
+    <Compile Include="Utils\AudioUtils.cs" />
     <Compile Include="Utils\DllUtils.cs" />
     <Compile Include="Utils\FaIcons.cs" />
     <Compile Include="Utils\IconUtils.cs" />
@@ -163,14 +164,18 @@
     <Resource Include="Images\LifelineIcon.theme-light.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Converters\" />
+    <Folder Include="Commands\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\font-awesome.css" />
-    <Content Include="Content\font-awesome.min.css" />
-    <Content Include="Files\Audio\Change.wav" />
-    <Content Include="Files\Audio\Start.wav" />
-    <Resource Include="Files\Doc\about.txt" />
+    <EmbeddedResource Include="Files\Audio\Change.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Files\Audio\Start.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Files\Doc\about.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Resource Include="Files\Icons\about.ico" />
     <Resource Include="Files\Icons\add.ico" />
     <Resource Include="Files\Icons\app.ico" />

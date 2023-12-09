@@ -42,22 +42,28 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="32"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Padding="3">
-                                <Image Source="Images/LifelineIcon.theme-light.png" Stretch="Fill" Margin="2"/>
-                            </Border>
-                            <TextBlock Grid.Column="1" Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="5 0 0 0"></TextBlock>
-                        </Grid>
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="32"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Padding="3">
+                                    <Image Source="Images/LifelineIcon.theme-light.png" Stretch="Fill" Margin="2"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="5 0 0 0"></TextBlock>
+                            </Grid>
+                        </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="LightBlue"/>
+                                <Setter Property="Background" Value="AliceBlue"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="BorderBrush" Value="Gray"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="False">
                                 <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Cursor" Value=""/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -75,11 +81,15 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TabControl Grid.Row="0" x:Name="MainTabControl" TabStripPlacement="Left" ItemsSource="{Binding Types}" SizeChanged="MainTabControl_SizeChanged" ContextMenu="{StaticResource TypeTabContextMenu}">
+        <TabControl Grid.Row="0" x:Name="MainTabControl" TabStripPlacement="Left" ItemsSource="{Binding Types}"
+                    SizeChanged="MainTabControl_SizeChanged" ContextMenu="{StaticResource TypeTabContextMenu}"
+                    SelectionChanged="MainTabControl_SelectionChanged">
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Tag="{Binding Value.Section}" Orientation="Horizontal" Height="32" Width="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=DataContext.TypeWidth}">
-                        <StackPanel.ContextMenu>
+                    <DockPanel LastChildFill="True" Tag="{Binding Value.Section}"  Height="32" 
+                               Width="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=DataContext.TypeWidth}"
+                               >
+                        <DockPanel.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="添加类别" Click="AddType"/>
                                 <MenuItem Header="修改类别" Click="UpdateType"/>
@@ -89,10 +99,10 @@
                                 <MenuItem Header="修改口令"/>
                                 <MenuItem Header="移除口令"/>
                             </ContextMenu>
-                        </StackPanel.ContextMenu>
-                        <TextBlock Width="28" Text="{Binding Value.FaIcon}" FontFamily="{Binding Value.FaIconFontFamily}" Foreground="{Binding Value.FaIconColor}" FontSize="18" Margin="5"/>
-                        <TextBlock VerticalAlignment="Center" Text="{Binding Value.Name}" FontSize="18"/>
-                    </StackPanel>
+                        </DockPanel.ContextMenu>
+                        <TextBlock DockPanel.Dock="Left" Width="28" Text="{Binding Value.FaIcon}" FontFamily="{Binding Value.FaIconFontFamily}" Foreground="{Binding Value.FaIconColor}" FontSize="18" Padding="5"/>
+                        <TextBlock DockPanel.Dock="Right" VerticalAlignment="Center" Text="{Binding Value.Name}" FontSize="18" Padding="5"/>
+                    </DockPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
@@ -119,11 +129,11 @@
                                                 <MenuItem Header="移除口令"/>
                                             </ContextMenu>
                                         </Expander.ContextMenu>
-                                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="{Binding Value.ColumnHeight}">
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="{Binding Value.ColumnHeight}" ScrollChanged="ScrollChanged" Tag="{Binding Value}">
                                             <ItemsControl ItemsSource="{Binding Value.ProjectDic}">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
-                                                        <WrapPanel ItemWidth="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=DataContext.ProjectWidth}"/>
+                                                        <WrapPanel ItemWidth="{Binding Value.ProjectWidth}"/>
                                                     </ItemsPanelTemplate>
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
@@ -143,6 +153,11 @@
         </TabControl>
         <ToolBar Grid.Row="1">
             <Menu>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <TextBlock Text="{Binding TypeTabToggleIcon}" Foreground="BlueViolet" FontFamily="{StaticResource FontAwesomeSolid}" FontSize="16" ToolTip="类别名称显示切换" MouseLeftButtonUp="ToggleTabItem"/>
+                    </MenuItem.Header>
+                </MenuItem>
                 <MenuItem Header="菜单">
                     <MenuItem IsCheckable="True" Header="置顶" Style="{Binding MenuStyleKey}"/>
                     <MenuItem IsCheckable="True" Header="禁止移动" Style="{Binding MenuStyleKey}"/>
