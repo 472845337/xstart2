@@ -176,6 +176,7 @@
                         <Image Source="/Files/Icons/preference.ico" Width="16" Height="16" Margin="0"/>
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="关于" Click="ShowAbout"/>
             </Menu>
         </ToolBar>
     </Grid>

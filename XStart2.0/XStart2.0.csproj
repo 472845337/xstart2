@@ -82,11 +82,16 @@
     <Compile Include="Utils\FaIcons.cs" />
     <Compile Include="Utils\IconUtils.cs" />
     <Compile Include="Utils\IniUtils.cs" />
+    <Compile Include="Utils\NotifyUtils.cs" />
     <Compile Include="Utils\WinApi.cs" />
     <Compile Include="Utils\XStartIniUtils.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\NotifyData.cs" />
     <Compile Include="ViewModels\ProjectTypeVM.cs" />
     <Compile Include="View\SliderButton.cs" />
+    <Compile Include="Windows\NotificationWindow.xaml.cs">
+      <DependentUpon>NotificationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ProjectTypeWindow.xaml.cs">
       <DependentUpon>ProjectTypeWindow.xaml</DependentUpon>
     </Compile>
@@ -117,6 +122,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\ResourseDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\NotificationWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

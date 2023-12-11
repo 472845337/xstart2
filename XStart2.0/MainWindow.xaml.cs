@@ -308,5 +308,14 @@ namespace XStart2._0 {
             column.VerticalScrollBar = sv.ComputedVerticalScrollBarVisibility;
             ComputedColumnProjectWidth(column);
         }
+
+        /// <summary>
+        /// 显示关于窗口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ShowAbout(object sender, RoutedEventArgs e) {
+            NotifyUtils.ShowNotification("X启动2.0版", Colors.Gray, "关于");
+        }
     }
 }
