@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Media;
 
 namespace XStart2._0.ViewModels {
     public class ProjectTypeVM : INotifyPropertyChanged {

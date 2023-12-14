@@ -2,7 +2,7 @@
 
 namespace XStart2._0.Bean {
     // 自定义的属性值
-    class ElementParam : DependencyObject {
+    class ElementParamHelper : DependencyObject {
 
         #region 类别Section
         public static string GetTypeSection(DependencyObject obj) {
@@ -12,7 +12,7 @@ namespace XStart2._0.Bean {
         public static void SetTypeSection(DependencyObject obj, string value) {
             obj.SetValue(TypeSectionProperty, value);
         }
-        public static readonly DependencyProperty TypeSectionProperty = DependencyProperty.Register("TypeSection", typeof(string), typeof(ElementParam), new PropertyMetadata(string.Empty));
+        public static readonly DependencyProperty TypeSectionProperty = DependencyProperty.Register("TypeSection", typeof(string), typeof(ElementParamHelper), new PropertyMetadata(string.Empty));
         #endregion
 
         #region 栏目Section
@@ -24,7 +24,7 @@ namespace XStart2._0.Bean {
             obj.SetValue(ColumnSectionProperty, value);
         }
 
-        public static readonly DependencyProperty ColumnSectionProperty = DependencyProperty.Register("ColumnSection", typeof(string), typeof(ElementParam), new PropertyMetadata(string.Empty));
+        public static readonly DependencyProperty ColumnSectionProperty = DependencyProperty.Register("ColumnSection", typeof(string), typeof(ElementParamHelper), new PropertyMetadata(string.Empty));
         #endregion
 
         #region 项目Section
@@ -36,7 +36,7 @@ namespace XStart2._0.Bean {
             obj.SetValue(ProjectSectionProperty, value);
         }
 
-        public static readonly DependencyProperty ProjectSectionProperty = DependencyProperty.Register("ProjectSection", typeof(string), typeof(ElementParam), new PropertyMetadata(string.Empty));
+        public static readonly DependencyProperty ProjectSectionProperty = DependencyProperty.Register("ProjectSection", typeof(string), typeof(ElementParamHelper), new PropertyMetadata(string.Empty));
         #endregion
     }
 }

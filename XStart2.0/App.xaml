@@ -2,6 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:XStart2._0"
+             xmlns:con="clr-namespace:XStart2._0.Converters"
+             
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -9,6 +11,34 @@
             <FontFamily x:Key="FontAwesomeRegular">pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Regular</FontFamily>
             <FontFamily x:Key="FontAwesomeSolid">pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Solid</FontFamily>
             <FontFamily x:Key="FontAwesomeV4Compatibility">pack://application:,,,/Resources/Fonts/#Font Awesome v4 Compatibility Regular</FontFamily>
+            <con:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <con:Boolean2VisibilityConverter x:Key="Boolean2VisibilityConverter"/>
+            <Style x:Key="Btn_Style" TargetType="{x:Type Button}">
+                <Setter Property="Width" Value="60"/>
+                <Setter Property="Height" Value="28"/>
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+            <Style x:Key="BtnConfirm_Style" TargetType="{x:Type Button}" BasedOn="{StaticResource Btn_Style}">
+                <Setter Property="Background" Value="LightBlue"/>
+                <Setter Property="Content" Value="确认"/>
+            </Style>
+            <Style x:Key="BtnCancel_Style" TargetType="{x:Type Button}" BasedOn="{StaticResource Btn_Style}">
+                <Setter Property="Background" Value="LightGray"/>
+                <Setter Property="Content" Value="取消"/>
+            </Style>
+            <Style x:Key="FormLabel_Style" TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Margin" Value="5 5 5 0"/>
+            </Style>
+            <Style x:Key="FormValue_Style" TargetType="Control">
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="5 5 5 0"/>
+            </Style>
+            <Style x:Key="FormButtonPanel_Style" TargetType="StackPanel">
+                <Setter Property="Orientation" Value="Horizontal"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -8,11 +8,12 @@ using XStart.Bean;
 using XStart.Config;
 using XStart.Const;
 using XStart.Utils;
+using XStart2._0.Bean;
 
 namespace XStart.Services {
    public class XStartService{
 
-        public static LinkedHashMap<string, Bean.Type> TypeDic = new LinkedHashMap<string, Bean.Type>();
+        public static ObservableDictionary<string, Bean.Type> TypeDic = new ObservableDictionary<string, Bean.Type>();
 
         public static Sections GetSectionByName(string name) {
             Sections section = new Sections();

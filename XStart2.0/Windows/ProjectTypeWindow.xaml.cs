@@ -72,5 +72,10 @@ namespace XStart2._0.Windows {
                 vm.SelectedIconColor = System.Drawing.ColorTranslator.ToHtml(colorDialog.Color);
             }
         }
+        // 选择更多的图标
+        private void SelectMoreFontAwesome(object sender, RoutedEventArgs e) {
+            FontAwesomeWindow faw = new FontAwesomeWindow();
+            faw.Show();
+        }
     }
 }

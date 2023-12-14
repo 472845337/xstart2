@@ -88,9 +88,9 @@
             </TabItem>
             <TabItem Header="其他">
                 <WrapPanel>
-                    <Button Content="备份" Width="80" Margin="5"/>
-                    <Button Content="恢复" Width="80" Margin="5"/>
-                    <Button Content="生成桌面快捷方式" Width="120" Margin="5"/>
+                    <Button Style="{StaticResource BtnConfirm_Style}" Content="备份" Width="80" Margin="5"/>
+                    <Button Style="{StaticResource BtnConfirm_Style}" Content="恢复" Width="80" Margin="5"/>
+                    <Button Style="{StaticResource BtnConfirm_Style}" Content="生成桌面快捷方式" Width="120" Margin="5"/>
                 </WrapPanel>
             </TabItem>
         </TabControl>

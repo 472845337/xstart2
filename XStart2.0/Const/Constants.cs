@@ -77,7 +77,7 @@ namespace XStart.Const {
 
         public const string TYPE = "type";
         public const string COLUMN = "column";
-        public const string APP = "app";
+        public const string PROJECT = "project";
 
 
         public const int COL_PANEL_W_INV = 8;
@@ -98,5 +98,7 @@ namespace XStart.Const {
 
         public const string OPERATE_CREATE = "create";// 创建
         public const string OPERATE_UPDATE = "update";// 更新
+        public const string OPERATE_REMOVE = "remove";// 移除
+
     }
 }

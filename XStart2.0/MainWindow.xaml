@@ -3,10 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:XStart2._0"
         xmlns:localparam="clr-namespace:XStart2._0.Bean"
+        xmlns:helper="clr-namespace:XStart2._0.Helper"
         mc:Ignorable="d"
-        Title="X启动" Height="800" Width="450" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+        Title="X启动" Height="800" Width="450" WindowStartupLocation="CenterScreen">
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Loaded">
+            <b:InvokeCommandAction Command="{Binding MainWindowLoadedCommand}"/>
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
     <Window.Resources>
         <Style x:Key="{x:Static ToolBar.MenuStyleKey}" TargetType="Menu">
             <Setter Property="Background" Value="Transparent" />
@@ -43,6 +50,17 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                            <Border.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="添加项目"/>
+                                    <MenuItem Header="修改项目"/>
+                                    <MenuItem Header="删除项目"/>
+                                    <Separator/>
+                                    <MenuItem Header="剪切"/>
+                                    <MenuItem Header="复制"/>
+                                    <MenuItem Header="粘贴"/>
+                                </ContextMenu>
+                            </Border.ContextMenu>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="32"/>
@@ -73,8 +91,13 @@
         <ContextMenu x:Key="TypeTabContextMenu">
             <ContextMenu.Items>
                 <MenuItem Name="AddType" Header="添加类别" Click="AddType"/>
+                <MenuItem Name="ClearType" Header="清空所有类别" Click="ClearType"/>
             </ContextMenu.Items>
         </ContextMenu>
+        <Style x:Key="AddColumnMenuItemStyle" TargetType="{x:Type MenuItem}">
+            <Setter Property="Header" Value="{Binding Path=DisplayText}"/>
+            <Setter Property="Command" Value="{Binding Path=AddColumnCommand}"/>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -83,7 +106,7 @@
         </Grid.RowDefinitions>
         <TabControl Grid.Row="0" x:Name="MainTabControl" TabStripPlacement="Left" ItemsSource="{Binding Types}"
                     SizeChanged="MainTabControl_SizeChanged" ContextMenu="{StaticResource TypeTabContextMenu}"
-                    SelectionChanged="MainTabControl_SelectionChanged">
+                    SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="{Binding SelectedIndex}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <DockPanel LastChildFill="True" Tag="{Binding Value.Section}"  Height="32" 
@@ -95,9 +118,17 @@
                                 <MenuItem Header="修改类别" Click="UpdateType"/>
                                 <MenuItem Header="删除类别" Click="DeleteType"/>
                                 <Separator/>
-                                <MenuItem Header="添加口令"/>
-                                <MenuItem Header="修改口令"/>
-                                <MenuItem Header="移除口令"/>
+                                <MenuItem Header="添加口令" IsEnabled="{Binding Value.HasPassword, Converter={StaticResource InverseBooleanConverter}}" Click="AddTypeSecurity"/>
+                                <MenuItem Header="修改口令" IsEnabled="{Binding Value.HasPassword}" Click="UpdateTypeSecurity"/>
+                                <MenuItem Header="移除口令" IsEnabled="{Binding Value.HasPassword}" Click="RemoveTypeSecurity"/>
+                                <MenuItem Header="锁定" IsEnabled="{Binding Value.CanLock}" Click="LockType"/>
+                                <Separator/>
+                                <MenuItem Header="至顶"/>
+                                <MenuItem Header="上移"/>
+                                <MenuItem Header="下移"/>
+                                <MenuItem Header="至底"/>
+                                <Separator/>
+                                <MenuItem Header="清空栏目"/>
                             </ContextMenu>
                         </DockPanel.ContextMenu>
                         <TextBlock DockPanel.Dock="Left" Width="28" Text="{Binding Value.FaIcon}" FontFamily="{Binding Value.FaIconFontFamily}" Foreground="{Binding Value.FaIconColor}" FontSize="18" Padding="5"/>
@@ -107,47 +138,79 @@
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <ScrollViewer VerticalScrollBarVisibility="{Binding Value.VerticalScroll}">
-                        <ItemsControl ItemsSource="{Binding Value.ColumnDic}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Vertical"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Expander localparam:ElementParam.TypeSection="{Binding Value.TypeSection}" localparam:ElementParam.ColumnSection="{Binding Value.Section}"
+                    <Grid>
+                        <StackPanel Visibility="{Binding Value.Locked, Converter={StaticResource Boolean2VisibilityConverter}}" Tag="{Binding Value.Section}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="口令:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"/>
+                                <PasswordBox PasswordChar="*" Grid.Row="0" Grid.Column="1" helper:PasswordBoxHelper.Attach ="True" helper:PasswordBoxHelper.Password="{Binding Value.UnlockSecurity,Mode=TwoWay}" FontSize="14" Height="30" VerticalContentAlignment="Center" Margin="5"/>
+                                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <CheckBox Content="记住口令" IsChecked="{Binding Value.RememberSecurity}" Margin="5" VerticalAlignment="Center"/>
+                                    <Button Style="{StaticResource Btn_Style}" Content="确定" Click="UnlockType" Tag="{Binding Value.Section}"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                        <ScrollViewer Visibility="{Binding Value.Unlocked, Converter={StaticResource Boolean2VisibilityConverter}}" VerticalScrollBarVisibility="{Binding Value.VerticalScroll}" Tag="{Binding Value.Section}">
+                            <ScrollViewer.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="添加栏目" Click="AddColumn"/>
+                                </ContextMenu>
+                            </ScrollViewer.ContextMenu>
+                            <ItemsControl ItemsSource="{Binding Value.ColumnDic}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Expander localparam:ElementParamHelper.TypeSection="{Binding Value.TypeSection}" localparam:ElementParamHelper.ColumnSection="{Binding Value.Section}"
                                           Header="{Binding Value.Name}" IsExpanded="{Binding Value.IsExpanded}" Style="{StaticResource ExpandablePanelStyle}">
-                                        <Expander.ContextMenu>
-                                            <ContextMenu>
-                                                <MenuItem Header="添加栏目"/>
-                                                <MenuItem Header="修改栏目"/>
-                                                <MenuItem Header="删除栏目"/>
-                                                <Separator/>
-                                                <MenuItem Header="添加口令"/>
-                                                <MenuItem Header="修改口令"/>
-                                                <MenuItem Header="移除口令"/>
-                                            </ContextMenu>
-                                        </Expander.ContextMenu>
-                                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="{Binding Value.ColumnHeight}" ScrollChanged="ScrollChanged" Tag="{Binding Value}">
-                                            <ItemsControl ItemsSource="{Binding Value.ProjectDic}">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <WrapPanel ItemWidth="{Binding Value.ProjectWidth}"/>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Button Content="{Binding Value.Name}" Style="{StaticResource AppButton}"/>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </ScrollViewer>
-                                    </Expander>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
+                                            <Expander.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="添加栏目" Click="AddColumn"/>
+                                                    <MenuItem Header="修改栏目" Click="UpdateColumn"/>
+                                                    <MenuItem Header="删除栏目" Click="DeleteColumn"/>
+                                                    <Separator/>
+                                                    <MenuItem Header="添加口令" IsEnabled="{Binding Value.HasPassword, Converter={StaticResource InverseBooleanConverter}}" Click="AddColumnSecurity"/>
+                                                    <MenuItem Header="修改口令" IsEnabled="{Binding Value.HasPassword}" Click="UpdateColumnSecurity"/>
+                                                    <MenuItem Header="移除口令" IsEnabled="{Binding Value.HasPassword}" Click="RemoveColumnSecurity"/>
+                                                </ContextMenu>
+                                            </Expander.ContextMenu>
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="{Binding Value.ColumnHeight}" ScrollChanged="ScrollChanged" Tag="{Binding Value}">
+                                                <ScrollViewer.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="添加项目"/>
+                                                        <MenuItem Header="粘贴"/>
+                                                        <MenuItem Header="清空本栏目"/>
+                                                    </ContextMenu>
+                                                </ScrollViewer.ContextMenu>
+                                                <ItemsControl ItemsSource="{Binding Value.ProjectDic}">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <WrapPanel ItemWidth="{Binding Value.ProjectWidth}"/>
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Button Content="{Binding Value.Name}" Style="{StaticResource AppButton}"/>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </ScrollViewer>
+                                        </Expander>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
