@@ -163,8 +163,8 @@ namespace XStart.Utils {
         [DllImport(Shell32)]
         public static extern int ExtractIconEx(string lpszFile, int niconIndex, IntPtr[] phiconLarge, IntPtr[] phiconSmall, int nIcons);
         [DllImport(Shell32)]
-        public static extern int ExtractIconExW(string lpszFile, int niconIndex,ref IntPtr phiconLarge,ref IntPtr phiconSmall, int nIcons);
-        
+        public static extern int ExtractIconExW(string lpszFile, int niconIndex, ref IntPtr phiconLarge, ref IntPtr phiconSmall, int nIcons);
+
         [DllImport(User32)]
         public static extern int DestroyIcon(IntPtr hIcon);
 

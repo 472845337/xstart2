@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace XStart2._0.ViewModels {
     public class ColumnVM : INotifyPropertyChanged {
@@ -22,6 +17,6 @@ namespace XStart2._0.ViewModels {
         private string typeSection;
         public string TypeSection { get => typeSection; set { typeSection = value; OnPropertyChanged("TypeSection"); } }
         private string name;
-        public string Name { get => name; set { name = value;OnPropertyChanged("Name"); } }
+        public string Name { get => name; set { name = value; OnPropertyChanged("Name"); } }
     }
 }

@@ -9,7 +9,7 @@ namespace XStart.Bean {
     /// </summary>
     /// 
     [Serializable]
-    public abstract class TableData : INotifyPropertyChanged{
+    public abstract class TableData : INotifyPropertyChanged {
 
         public const string KEY_NAME = "Name";
         public const string KEY_SORT = "Sort";
@@ -20,7 +20,7 @@ namespace XStart.Bean {
         private string name;
         // 名称
         [TableParam("name", "VARCHAR")]
-        public string Name { get => name; set { name = value;OnPropertyChanged("Name"); } }
+        public string Name { get => name; set { name = value; OnPropertyChanged("Name"); } }
         // 排序
         [TableParam("sort", "INT")]
         public int? Sort { get; set; }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Windows.Controls;
 
 namespace XStart.Utils {
     class IconUtils {

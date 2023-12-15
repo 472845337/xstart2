@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using XStart.Services;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
 using static XStart2._0.Utils.FontAwesome6;
@@ -75,7 +64,7 @@ namespace XStart2._0.Windows {
         }
         // 选择更多的图标
         private void SelectMoreFontAwesome(object sender, RoutedEventArgs e) {
-            FontAwesomeWindow faw = new FontAwesomeWindow() { WindowStartupLocation = WindowStartupLocation.CenterOwner, Owner = this};
+            FontAwesomeWindow faw = new FontAwesomeWindow() { WindowStartupLocation = WindowStartupLocation.CenterOwner, Owner = this };
             if (true == faw.ShowDialog()) {
                 vm.SelectedFa = faw.VM.SelectedFa;
                 vm.SelectedFf = faw.VM.SelectedFf;

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using XStart2._0.Bean;
 
 namespace XStart2._0.ViewModels {
     public class FontAwesomeVM : INotifyPropertyChanged {
@@ -29,7 +24,7 @@ namespace XStart2._0.ViewModels {
 
         private List<string> solidFontAwesomes;
 
-        public List<string> SolidFontAwesomes { get => solidFontAwesomes; set { solidFontAwesomes = value;OnPropertyChanged("SolidFontAwesomes"); } }
+        public List<string> SolidFontAwesomes { get => solidFontAwesomes; set { solidFontAwesomes = value; OnPropertyChanged("SolidFontAwesomes"); } }
 
         private List<string> brandsFontAwesomes;
 

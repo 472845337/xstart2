@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using XStart.Bean;
 using XStart.Config;
@@ -11,7 +9,7 @@ using XStart.Utils;
 using XStart2._0.Bean;
 
 namespace XStart.Services {
-   public class XStartService{
+    public class XStartService {
 
         public static ObservableDictionary<string, Bean.Type> TypeDic = new ObservableDictionary<string, Bean.Type>();
 
@@ -88,11 +86,11 @@ namespace XStart.Services {
                     }
                 }
                 return image;
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 MessageBox.Show(ex.StackTrace);
                 return null;
             }
-            
+
         }
         /// <summary>
         /// 根据路径生成对应的类型

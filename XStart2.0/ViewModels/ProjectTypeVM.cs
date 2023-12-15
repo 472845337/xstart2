@@ -10,10 +10,10 @@ namespace XStart2._0.ViewModels {
         }
         // 窗口的标题
         private string title;
-        public string Title { get => title; set { title = value;OnPropertyChanged("Title"); } }
+        public string Title { get => title; set { title = value; OnPropertyChanged("Title"); } }
         // 类别的section
         private string section;
-        public string Section { get => section; set { section = value;OnPropertyChanged("Section"); } }
+        public string Section { get => section; set { section = value; OnPropertyChanged("Section"); } }
         // 类别名称
         private string name;
         public string Name { get => name; set { name = value; OnPropertyChanged("Name"); } }
@@ -28,9 +28,9 @@ namespace XStart2._0.ViewModels {
         public string SelectedFf { get => selectedFf; set { selectedFf = value; OnPropertyChanged("SelectedFf"); } }
 
         private List<string> popularFas;
-        public List<string> PopularFas { get => popularFas; set { popularFas = value;OnPropertyChanged("PopularFas"); } }
+        public List<string> PopularFas { get => popularFas; set { popularFas = value; OnPropertyChanged("PopularFas"); } }
 
         private bool moreButtonEnable = true;
-        public bool MoreButtonEnable { get => moreButtonEnable;set { moreButtonEnable = value; OnPropertyChanged("MoreButtonEnable"); } }
+        public bool MoreButtonEnable { get => moreButtonEnable; set { moreButtonEnable = value; OnPropertyChanged("MoreButtonEnable"); } }
     }
 }

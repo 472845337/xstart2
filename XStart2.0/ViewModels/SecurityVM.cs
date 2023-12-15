@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace XStart2._0.ViewModels {
     public class SecurityVM : INotifyPropertyChanged {
@@ -18,12 +13,12 @@ namespace XStart2._0.ViewModels {
         // 操作类型，create/update/remove
         public string Operate { get; set; }
         private string title;
-        public string Title { get => title; set { title = value;OnPropertyChanged("Title"); } }
+        public string Title { get => title; set { title = value; OnPropertyChanged("Title"); } }
         // 当前口令
         public string CurSecurity { get; set; }
         // 原口令
         private string priSecurity;
-        public string PriSecurity { get => priSecurity; set { priSecurity = value;OnPropertyChanged("PriSecurity"); } }
+        public string PriSecurity { get => priSecurity; set { priSecurity = value; OnPropertyChanged("PriSecurity"); } }
         // 口令
         private string security;
         public string Security { get => security; set { security = value; OnPropertyChanged("Security"); } }

@@ -26,7 +26,7 @@ namespace XStart.Bean {
         public Visibility VerticalScrollBar { get => verticalScrollBar; set { verticalScrollBar = value; OnPropertyChanged("VerticalScrollBar"); } }
         // 栏目高度
         private int columnHeight;
-        public int ColumnHeight { get => columnHeight; set { columnHeight = value;OnPropertyChanged("ColumnHeight"); } }
+        public int ColumnHeight { get => columnHeight; set { columnHeight = value; OnPropertyChanged("ColumnHeight"); } }
         // 栏目是否锁定
         private bool locked;
         public bool Locked { get => locked; set { locked = value; OnPropertyChanged("Locked"); } }
@@ -37,7 +37,7 @@ namespace XStart.Bean {
         public bool IsExpanded { get => isExpanded; set { isExpanded = value; OnPropertyChanged("IsExpanded"); } }
 
         private int projectWidth;
-        public int ProjectWidth { get => projectWidth; set { projectWidth = value;OnPropertyChanged("ProjectWidth"); } }
+        public int ProjectWidth { get => projectWidth; set { projectWidth = value; OnPropertyChanged("ProjectWidth"); } }
 
 
         private ObservableDictionary<string, Project> projectDic = new ObservableDictionary<string, Project>();

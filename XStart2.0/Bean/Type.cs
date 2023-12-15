@@ -31,16 +31,16 @@ namespace XStart.Bean {
 
         #region 窗口中使用的属性
         // 是否有密码
-        private bool hasPassword;
+        private bool hasPassword = false;
         public bool HasPassword { get => hasPassword; set { hasPassword = value; OnPropertyChanged("HasPassword"); SetCanLock(); } }
         // 用于判定是否锁定状态，展示锁定页面
-        private bool locked;
+        private bool locked = false;
         public bool Locked { get => locked; set { locked = value; OnPropertyChanged("Locked"); SetUnlocked(); SetCanLock(); } }
         // 是否非锁定状态，展示内容页面,则Locked控制
-        private bool unlocked;
+        private bool unlocked = true;
         public bool Unlocked { get => unlocked; set { unlocked = value; OnPropertyChanged("Unlocked"); } }
         // 是否可锁, HasPassword && !Locked
-        private bool canLock;
+        private bool canLock = false;
         public bool CanLock { get => canLock; set { canLock = value; OnPropertyChanged("CanLock"); } }
         // 解锁口令
         private string unlockSecurity;

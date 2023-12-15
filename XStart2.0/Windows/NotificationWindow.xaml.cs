@@ -42,7 +42,7 @@ namespace XStart2._0.Windows {
 
                 double right = SystemParameters.WorkArea.Right;//工作区最右边的值
                 self.Top = self.TopFrom - self.ActualHeight;
-                Console.WriteLine("当前Notify窗体:"+self.Top);
+                Console.WriteLine("当前Notify窗体:" + self.Top);
                 DoubleAnimation animation = new DoubleAnimation();
                 animation.Duration = new Duration(TimeSpan.FromMilliseconds(500));//NotifyTimeSpan是自己定义的一个int型变量，用来设置动画的持续时间
                 animation.From = right;

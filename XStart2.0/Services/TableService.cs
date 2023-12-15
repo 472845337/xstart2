@@ -46,7 +46,7 @@ namespace XStart.Services {
                     }
                 }
                 if (addColumnList.Count > 0) {
-                    foreach(string addColumn in addColumnList) {
+                    foreach (string addColumn in addColumnList) {
                         SqlLiteHelper.ExecuteNonQuery($"ALTER TABLE {tableName} ADD COLUMN {addColumn}", null);
                     }
                 }

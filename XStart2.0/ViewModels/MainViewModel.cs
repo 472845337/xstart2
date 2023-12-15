@@ -1,13 +1,13 @@
-﻿using XStart.Bean;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
+using System.Windows.Input;
+using XStart.Bean;
+using XStart.Services;
 using XStart2._0.Bean;
 using XStart2._0.Commands;
-using System.Windows.Input;
-using System.Collections.Generic;
-using XStart.Services;
 using XStart2._0.Utils;
-using System.Windows.Controls;
 
 namespace XStart2._0.ViewModels {
     internal class MainViewModel : INotifyPropertyChanged {

@@ -162,7 +162,7 @@ namespace XStart2._0 {
         private void ClearType(object sender, RoutedEventArgs e) {
             if (XStartService.TypeDic.Count > 0) {
                 if (MessageBoxResult.OK == MessageBox.Show("确认清空所有类别？", "警告", MessageBoxButton.OKCancel)) {
-                    foreach (KeyValuePair < string, XStart.Bean.Type> type in mainViewModel.Types) {
+                    foreach (KeyValuePair<string, XStart.Bean.Type> type in mainViewModel.Types) {
                         if (type.Value.Locked) {
                             MessageBox.Show($"[{type.Value.Name}]类别已锁，不可删除！");
                             return;
