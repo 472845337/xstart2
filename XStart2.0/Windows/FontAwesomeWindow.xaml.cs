@@ -21,15 +21,18 @@ namespace XStart2._0.Windows {
             List<string> fontAwesomeBrandsList = GetFontAwesomeFieldValue<FontAwesomeBrands>();
             // 常用
             List<string> fontAwesomeRegularList = GetFontAwesomeFieldValue<FontAwesomeRegular>();
-
+            // V4
+            List<string> fontAwesome4List = GetFontAwesomeFieldValue<FontAwesome4>();
             VM = new FontAwesomeVM {
                 CustomFontAwesomes = new List<string> { Comments, Check, Xmark, Wheelchair, Bell, Car
                 , AngleUp, AngleDown, Gears,FolderOpen, FolderClosed, House,Envelope, Eye
-                , EyeSlash, Heart, Film, Globe, Gift, Cloud, FontAwesome6.Calendar, Camera, PhotoFilm, ScaleBalanced, Cube, FontAwesome6.Key, Map
-                , Pencil, Rocket, FaceSmile, Star, FontAwesome6.Tag, FontAwesome6.Table, Tv},
+                , EyeSlash, Heart, Film, Globe, Gift, Cloud, FontAwesome6.Calendar, Camera, PhotoFilm, ScaleBalanced, Cube, Key, Map
+                , Pencil, Rocket, FaceSmile, Star, FontAwesome6.Tag, Table, Tv},
+
                 SolidFontAwesomes = fontAwesomeList,
                 RegularFontAwesomes = fontAwesomeRegularList,
-                BrandsFontAwesomes = fontAwesomeBrandsList
+                BrandsFontAwesomes = fontAwesomeBrandsList,
+                FontAwesomes4 = fontAwesome4List
             };
             Loaded += WindowLoaded;
         }

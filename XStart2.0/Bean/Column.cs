@@ -19,7 +19,7 @@ namespace XStart.Bean {
         public bool? StartOpen { get; set; }
         public bool SaveSecurity { get; set; }
         // 是否有密码
-        private bool hasPassword;
+        private bool hasPassword = false;
         public bool HasPassword { get => hasPassword; set { hasPassword = value; OnPropertyChanged("HasPassword"); } }
         // 垂直滚动条显示状态
         private Visibility verticalScrollBar;
@@ -28,10 +28,13 @@ namespace XStart.Bean {
         private int columnHeight;
         public int ColumnHeight { get => columnHeight; set { columnHeight = value; OnPropertyChanged("ColumnHeight"); } }
         // 栏目是否锁定
-        private bool locked;
+        private bool locked = false;
         public bool Locked { get => locked; set { locked = value; OnPropertyChanged("Locked"); } }
-        private bool unlocked;
+        private bool unlocked = true;
         public bool Unlocked { get => unlocked; set { unlocked = value; OnPropertyChanged("Unlocked"); } }
+        // 是否可锁, HasPassword && !Locked
+        private bool canLock = false;
+        public bool CanLock { get => canLock; set { canLock = value; OnPropertyChanged("CanLock"); } }
         // 栏目是否展开
         private bool isExpanded;
         public bool IsExpanded { get => isExpanded; set { isExpanded = value; OnPropertyChanged("IsExpanded"); } }

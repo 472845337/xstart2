@@ -90,6 +90,22 @@
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>
+            <TabItem Header="V4">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding FontAwesomes4}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesome4}" Text="{Binding}" FontSize="32" MouseLeftButtonUp="SelectedFontAwesome"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

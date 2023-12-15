@@ -33,5 +33,8 @@ namespace XStart2._0.ViewModels {
         private List<string> regularFontAwesomes;
 
         public List<string> RegularFontAwesomes { get => regularFontAwesomes; set { regularFontAwesomes = value; OnPropertyChanged("RegularFontAwesomes"); } }
+
+        private List<string> fontAwesomes4;
+        public List<string> FontAwesomes4 { get => fontAwesomes4; set { fontAwesomes4 = value; OnPropertyChanged("FontAwesomes4"); } }
     }
 }
