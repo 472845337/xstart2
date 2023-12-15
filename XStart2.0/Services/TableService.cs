@@ -15,7 +15,7 @@ namespace XStart.Services {
     public class TableService<T> where T : TableData {
         private static readonly SqLiteHelper SqlLiteHelper = SqLiteFactory.GetSqLiteHelper(Configs.AppStartPath + DbConstants.DbName, DbConstants.DbPassword);
 
-        protected TableService() {
+        public TableService() {
             InitTable();
         }
 

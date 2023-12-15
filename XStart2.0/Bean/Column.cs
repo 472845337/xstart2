@@ -7,34 +7,21 @@ namespace XStart.Bean {
     /// 栏目数据
     /// </summary>
     [Table("t_column")]
-    public class Column : TableData, INotifyPropertyChanged {
+    public class Column : TableData {
 
         public const string KEY_TYPE_SECTION = "TypeSection";
         public const string KEY_PASSWORD = "Password";
         [TableParam("type_section", "VARCHAR")]
         public string TypeSection { get; set; }
-        [TableParam("password", "VARCHAR")]
-        public string Password { get; set; }
         [TableParam("start_open", "BIT")]
         public bool? StartOpen { get; set; }
         public bool SaveSecurity { get; set; }
-        // 是否有密码
-        private bool hasPassword = false;
-        public bool HasPassword { get => hasPassword; set { hasPassword = value; OnPropertyChanged("HasPassword"); } }
         // 垂直滚动条显示状态
         private Visibility verticalScrollBar;
         public Visibility VerticalScrollBar { get => verticalScrollBar; set { verticalScrollBar = value; OnPropertyChanged("VerticalScrollBar"); } }
         // 栏目高度
         private int columnHeight;
         public int ColumnHeight { get => columnHeight; set { columnHeight = value; OnPropertyChanged("ColumnHeight"); } }
-        // 栏目是否锁定
-        private bool locked = false;
-        public bool Locked { get => locked; set { locked = value; OnPropertyChanged("Locked"); } }
-        private bool unlocked = true;
-        public bool Unlocked { get => unlocked; set { unlocked = value; OnPropertyChanged("Unlocked"); } }
-        // 是否可锁, HasPassword && !Locked
-        private bool canLock = false;
-        public bool CanLock { get => canLock; set { canLock = value; OnPropertyChanged("CanLock"); } }
         // 栏目是否展开
         private bool isExpanded;
         public bool IsExpanded { get => isExpanded; set { isExpanded = value; OnPropertyChanged("IsExpanded"); } }

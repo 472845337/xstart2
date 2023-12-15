@@ -12,9 +12,13 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0">
-            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="5" Width="240">
-                <TextBlock Style="{StaticResource FormLabel_Style}" Text="搜索" VerticalAlignment="Center"/>
-                <TextBox Style="{StaticResource FormValue_Style}" Width="200" Height="38"/>
+            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                <TextBlock Style="{StaticResource FormLabel_Style}" Text="名称：" VerticalAlignment="Center"/>
+                <TextBox Style="{StaticResource FormValue_Style}" Text="{Binding QueryFontAwesomeName}" Width="140" Height="24" KeyUp="EnterKey"/>
+                <Button Style="{StaticResource BtnConfirm_Style}" Width="40" Height="24" Margin="0 5 5 0" Click="QueryFontAwesome">
+                    <TextBlock Text="&#xf002;" Foreground="OrangeRed" FontFamily="{StaticResource FontAwesomeSolid}"/>
+                </Button>
+                <TextBlock Text="{Binding QueryFontAwesomeResult}" Height="24"/>
             </StackPanel>
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <Border Grid.Column="0" BorderBrush="LightGray" BorderThickness="1" Margin="5 0" Height="68" Width="68" VerticalAlignment="Bottom">
@@ -25,8 +29,8 @@
                 <Button Style="{StaticResource BtnConfirm_Style}" Click="ConfirmSelectFontAwesome"/>
             </StackPanel>
         </DockPanel>
-        <TabControl Grid.Row="1">
-            <TabItem Header="常用">
+        <TabControl x:Name="FontAwesomeTabControl" Grid.Row="1">
+            <TabItem Header="常用" Width="60">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding CustomFontAwesomes}">
                         <ItemsControl.ItemsPanel>
@@ -36,13 +40,16 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Style="{StaticResource FontAwesome_Style}" Text="{Binding}" FontSize="32" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                <StackPanel Orientation="Vertical" Width="60">
+                                    <TextBlock Style="{StaticResource FontAwesome_Style}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                    <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
+                                </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Solid">
+            <TabItem Header="Solid" Width="60">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding SolidFontAwesomes}">
                         <ItemsControl.ItemsPanel>
@@ -52,13 +59,16 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeSolid}" Text="{Binding}" FontSize="32" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                <StackPanel Orientation="Vertical" Width="60">
+                                <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeSolid}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                    <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
+                                </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Regular">
+            <TabItem Header="Regular" Width="60">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding RegularFontAwesomes}">
                         <ItemsControl.ItemsPanel>
@@ -68,13 +78,16 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeRegular}" Text="{Binding}" FontSize="32" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                <StackPanel Orientation="Vertical" Width="60">
+                                    <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeRegular}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                    <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
+                                </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Brands">
+            <TabItem Header="Brands" Width="60">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding BrandsFontAwesomes}">
                         <ItemsControl.ItemsPanel>
@@ -84,13 +97,16 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeBrands}" Text="{Binding}" FontSize="32" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                <StackPanel Orientation="Vertical" Width="60">
+                                    <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeBrands}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                    <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
+                                </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="V4">
+            <TabItem Header="V4" Width="60">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding FontAwesomes4}">
                         <ItemsControl.ItemsPanel>
@@ -100,7 +116,29 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesome4}" Text="{Binding}" FontSize="32" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                <StackPanel Orientation="Vertical" Width="60">
+                                    <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesome4}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                    <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="查询" Width="60">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding QueryFontAwesomes}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" Width="60">
+                                    <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{Binding FfName}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                    <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
+                                </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

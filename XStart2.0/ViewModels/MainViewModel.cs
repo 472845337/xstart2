@@ -62,7 +62,6 @@ namespace XStart2._0.ViewModels {
                     typeService.Delete(type.Section);
                     continue;
                 }
-                type.Unlocked = string.IsNullOrEmpty(type.Password);
                 type.Locked = !string.IsNullOrEmpty(type.Password);
                 type.HasPassword = !string.IsNullOrEmpty(type.Password);
                 XStartService.TypeDic.Add(type.Section, type);
@@ -76,7 +75,6 @@ namespace XStart2._0.ViewModels {
                     continue;
                 }
                 column.Locked = !string.IsNullOrEmpty(column.Password);
-                column.Unlocked = string.IsNullOrEmpty(column.Password);
                 column.HasPassword = !string.IsNullOrEmpty(column.Password);
                 column.IsExpanded = false;
                 XStartService.TypeDic[column.TypeSection].ColumnDic.Add(column.Section, column);

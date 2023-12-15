@@ -7,9 +7,9 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <FontFamily x:Key="FontAwesomeBrands">pack://application:,,,/Resources/Fonts/#Font Awesome 6 Brands Regular</FontFamily>
-            <FontFamily x:Key="FontAwesomeRegular">pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Regular</FontFamily>
             <FontFamily x:Key="FontAwesomeSolid">pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Solid</FontFamily>
+            <FontFamily x:Key="FontAwesomeRegular">pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Regular</FontFamily>
+            <FontFamily x:Key="FontAwesomeBrands">pack://application:,,,/Resources/Fonts/#Font Awesome 6 Brands Regular</FontFamily>
             <FontFamily x:Key="FontAwesome4">pack://application:,,,/Resources/Fonts/#FontAwesome</FontFamily>
             <con:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
             <con:Boolean2VisibilityConverter x:Key="Boolean2VisibilityConverter"/>
@@ -50,7 +50,14 @@
                     <Setter Property="FontSize" Value="16"/>
                     <Setter Property="Margin" Value="4"/>
                     <Setter Property="Foreground" Value="DodgerBlue"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
                 </Style.Setters>
+            </Style>
+            <Style x:Key="FontAwesomeName_Style" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="10"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="TextWrapping" Value="NoWrap"/>
+                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

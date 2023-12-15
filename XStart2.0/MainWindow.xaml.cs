@@ -9,7 +9,7 @@ using XStart.Config;
 using XStart.Const;
 using XStart.Services;
 using XStart.Utils;
-using XStart2._0.Bean;
+using XStart2._0.Helper;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
 using XStart2._0.Windows;
@@ -55,13 +55,16 @@ namespace XStart2._0 {
         /// <param name="columnSection">栏目Section</param>
         private void ExpandColumn(string typeSection, string columnSection) {
             XStart.Bean.Type type = XStartService.TypeDic[typeSection];
-
             foreach (Column c in type.ColumnDic.Values) {
                 if (!columnSection.Equals(c.Section) && c.IsExpanded) {
                     c.IsExpanded = false;
                     c.ColumnHeight = 0;
                 } else if (columnSection.Equals(c.Section)) {
                     c.ColumnHeight = (int)type.ExpandedColumnHeight;
+                    // 如果当前类别有口令，并且没有记住口令则展示为锁定
+                    if (!c.Locked && !c.RememberSecurity && c.HasPassword) {
+                        c.Locked = true;
+                    }
                 }
             }
             AudioUtils.PlayWav(AudioUtils.CHANGE);
@@ -265,56 +268,19 @@ namespace XStart2._0 {
         private void AddTypeSecurity(object sender, RoutedEventArgs e) {
             Panel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Panel;
             string section = typePanel.Tag as string;
-            AddSecurityWindow window = new AddSecurityWindow() {
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                VM = new SecurityVM() { Title = "添加口令", Section = section, Kind = Constants.TYPE, Operate = Constants.OPERATE_CREATE }
-            };
-            if (true == window.ShowDialog()) {
-                // 保存口令
-                typeService.Update(new XStart.Bean.Type() { Section = section, Password = window.VM.Security });
-                // 更新数据
-                XStartService.TypeDic[section].Password = window.VM.Security;
-                XStartService.TypeDic[section].HasPassword = true;
-                XStartService.TypeDic[section].Locked = true;
-                XStartService.TypeDic[section].RememberSecurity = false;
-                NotifyUtils.ShowNotification("口令添加成功！");
-            }
+            AddSecurity(XStartService.TypeDic[section]);
         }
         private void UpdateTypeSecurity(object sender, RoutedEventArgs e) {
             Panel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Panel;
             string section = typePanel.Tag as string;
             XStart.Bean.Type type = XStartService.TypeDic[section];
-            UpdateSecurityWindow window = new UpdateSecurityWindow() {
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                VM = new SecurityVM() { Title = "修改口令", Section = section, CurSecurity = type.Password, Kind = Constants.TYPE, Operate = Constants.OPERATE_UPDATE }
-            };
-            if (true == window.ShowDialog()) {
-                // 保存口令
-                typeService.Update(new XStart.Bean.Type() { Section = section, Password = window.VM.Security });
-                // 更新数据
-                type.Password = window.VM.Security;
-                type.HasPassword = true;
-                type.Locked = true;
-                NotifyUtils.ShowNotification("口令修改成功！");
-            }
+            UpdateSecurity(type);
         }
         private void RemoveTypeSecurity(object sender, RoutedEventArgs e) {
             Panel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Panel;
             string section = typePanel.Tag as string;
             XStart.Bean.Type type = XStartService.TypeDic[section];
-            RemoveSecurityWindow window = new RemoveSecurityWindow() {
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                VM = new SecurityVM() { Title = "移除口令", Section = section, CurSecurity = type.Password, Kind = Constants.TYPE, Operate = Constants.OPERATE_REMOVE }
-            };
-            if (true == window.ShowDialog()) {
-                // 去除口令
-                typeService.Update(new XStart.Bean.Type() { Section = section, Password = string.Empty });
-                // 更新数据
-                type.Password = string.Empty;
-                type.HasPassword = false;
-                type.Locked = false;
-                NotifyUtils.ShowNotification("口令移除成功！");
-            }
+            RemoveSecurity(type);
         }
         // 类别锁定
         private void LockType(object sender, RoutedEventArgs e) {
@@ -335,8 +301,8 @@ namespace XStart2._0 {
                 type.Unlocked = true;
                 type.UnlockSecurity = string.Empty;
             } else {
-                MessageBox.Show("口令不匹配");
-                mainViewModel.Types[typeSection].UnlockSecurity = string.Empty;
+                MessageBox.Show("口令不匹配", "错误");
+                type.UnlockSecurity = string.Empty;
             }
         }
 
@@ -423,17 +389,114 @@ namespace XStart2._0 {
         }
 
         private void AddColumnSecurity(object sender, RoutedEventArgs e) {
+            Expander curExpander = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Expander;
+            string columnSection = curExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
+            string typeSection = curExpander.GetValue(ElementParamHelper.TypeSectionProperty) as string;
+            Column column = XStartService.TypeDic[typeSection].ColumnDic[columnSection];
             // 添加口令
+            AddSecurity(column);
         }
+        
+        // 修改口令
         private void UpdateColumnSecurity(object sender, RoutedEventArgs e) {
-            // 添加口令
+            Expander curExpander = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Expander;
+            string columnSection = curExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
+            string typeSection = curExpander.GetValue(ElementParamHelper.TypeSectionProperty) as string;
+            
+            Column column = XStartService.TypeDic[typeSection].ColumnDic[columnSection];
+            UpdateSecurity(column);
         }
         private void RemoveColumnSecurity(object sender, RoutedEventArgs e) {
-            // 添加口令
+            // 移除口令
+            Expander curExpander = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Expander;
+            string columnSection = curExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
+            string typeSection = curExpander.GetValue(ElementParamHelper.TypeSectionProperty) as string;
+            Column column = XStartService.TypeDic[typeSection].ColumnDic[columnSection];
+            RemoveSecurity(column);
         }
+        // 栏目锁定
         private void LockColumn(object sender, RoutedEventArgs e) {
-
+            Expander curExpander = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Expander;
+            string columnSection = curExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
+            string typeSection = curExpander.GetValue(ElementParamHelper.TypeSectionProperty) as string;
+            Column column = XStartService.TypeDic[typeSection].ColumnDic[columnSection];
+            column.Locked = true;
         }
+        // 解锁栏目
+        private void UnlockColumn(object sender, RoutedEventArgs e) {
+            Button unlockButton = sender as Button;
+            string columnSection = unlockButton.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
+            string typeSection = unlockButton.GetValue(ElementParamHelper.TypeSectionProperty) as string;
+            Column column = XStartService.TypeDic[typeSection].ColumnDic[columnSection];
+            // 比较密码是否匹配
+            if (column.Password.Equals(column.UnlockSecurity)) {
+                // 解锁当前类别窗口
+                column.Locked = false;
+                column.UnlockSecurity = string.Empty;
+            } else {
+                MessageBox.Show("口令不匹配");
+                column.UnlockSecurity = string.Empty;
+            }
+        }
+
+        private void AddSecurity<T>(T t) where T : TableData {
+            // 添加口令
+            AddSecurityWindow window = new AddSecurityWindow() {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                VM = new SecurityVM() { Title = "添加口令", Section = t.Section, Kind = Constants.TYPE, Operate = Constants.OPERATE_CREATE }
+            };
+            if (true == window.ShowDialog()) {
+                // 保存口令
+                T newT = Activator.CreateInstance<T>();
+                newT.Section = t.Section;
+                newT.Password = window.VM.Security;
+                new TableService<T>().Update(newT);
+                // 更新数据
+                t.Password = window.VM.Security;
+                t.HasPassword = true;
+                t.Locked = true;
+                t.RememberSecurity = false;
+                NotifyUtils.ShowNotification("口令添加成功！");
+            }
+        }
+        private void UpdateSecurity<T>(T t) where T : TableData {
+            UpdateSecurityWindow window = new UpdateSecurityWindow() {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                VM = new SecurityVM() { Title = "修改口令", Section = t.Section, CurSecurity = t.Password, Kind = Constants.TYPE, Operate = Constants.OPERATE_UPDATE }
+            };
+            if (true == window.ShowDialog()) {
+                T newT = Activator.CreateInstance<T>();
+                newT.Section = t.Section;
+                newT.Password = window.VM.Security;
+                // 保存口令
+                new TableService<T>().Update(newT);
+                // 更新数据
+                t.Password = window.VM.Security;
+                t.HasPassword = true;
+                t.Locked = true;
+                NotifyUtils.ShowNotification("口令修改成功！");
+            }
+        }
+
+        private void RemoveSecurity<T>(T t) where T : TableData {
+            RemoveSecurityWindow window = new RemoveSecurityWindow() {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                VM = new SecurityVM() { Title = "移除口令", Section = t.Section, CurSecurity = t.Password, Kind = Constants.TYPE, Operate = Constants.OPERATE_REMOVE }
+            };
+            if (true == window.ShowDialog()) {
+                T newT = Activator.CreateInstance<T>();
+                newT.Section = t.Section;
+                newT.Password = string.Empty;
+                // 去除口令
+                new TableService<T>().Update(newT);
+                // 更新数据
+                t.Password = string.Empty;
+                t.HasPassword = false;
+                t.Locked = false;
+                NotifyUtils.ShowNotification("口令移除成功！");
+            }
+        }
+        
 
         // 移除类别（左侧TreeMenu,TabControl的UIPage,TypeDic中数据，Ini文件）
         private void RemoveTypeData(string section) {

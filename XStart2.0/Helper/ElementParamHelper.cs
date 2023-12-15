@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace XStart2._0.Bean {
+namespace XStart2._0.Helper {
     // 自定义的属性值
     class ElementParamHelper : DependencyObject {
 
