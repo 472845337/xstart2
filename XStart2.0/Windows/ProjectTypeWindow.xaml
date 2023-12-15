@@ -46,7 +46,7 @@
                            Grid.Column="0" Margin="5" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Center"
                            MouseLeftButtonUp="SelectIconColor"/>
             </Border>
-            <Button Grid.Column="1" Content="..." Width="28" Height="28" Margin="5 0" VerticalAlignment="Bottom" Click="SelectMoreFontAwesome"/>
+            <Button Grid.Column="1" Content="..." Width="28" Height="28" Margin="5 0" VerticalAlignment="Bottom" Click="SelectMoreFontAwesome" IsEnabled="{Binding MoreButtonEnable}"/>
             <GroupBox Header="常用图标" Grid.Column="2" Margin="0 0 5 0">
                 <WrapPanel Margin="5 0">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -58,7 +58,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Style="{StaticResource Popular_Fa}" Text="{Binding}"/>
+                                    <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeSolid}" Text="{Binding}" MouseLeftButtonUp="PopularFa_MouseLeftButtonUp"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

@@ -464,11 +464,11 @@ namespace XStart2._0 {
                 // 类别是展开的
                 mainViewModel.TypeWidth = 28;
                 mainViewModel.TypeTabExpanded = false;
-                mainViewModel.TypeTabToggleIcon = FaIcons.Indent;
+                mainViewModel.TypeTabToggleIcon = FontAwesome6.Indent;
             } else {
                 mainViewModel.TypeWidth = 100;
                 mainViewModel.TypeTabExpanded = true;
-                mainViewModel.TypeTabToggleIcon = FaIcons.Outdent;
+                mainViewModel.TypeTabToggleIcon = FontAwesome6.Outdent;
             }
         }
 

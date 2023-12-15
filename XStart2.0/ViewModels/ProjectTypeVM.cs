@@ -29,5 +29,8 @@ namespace XStart2._0.ViewModels {
 
         private List<string> popularFas;
         public List<string> PopularFas { get => popularFas; set { popularFas = value;OnPropertyChanged("PopularFas"); } }
+
+        private bool moreButtonEnable = true;
+        public bool MoreButtonEnable { get => moreButtonEnable;set { moreButtonEnable = value; OnPropertyChanged("MoreButtonEnable"); } }
     }
 }

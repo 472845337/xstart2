@@ -128,7 +128,7 @@ namespace XStart2._0.ViewModels {
                 }
             }
             TypeTabExpanded = true;
-            TypeTabToggleIcon = FaIcons.Outdent;
+            TypeTabToggleIcon = FontAwesome6.Outdent;
             TypeWidth = 100;
             Types = XStartService.TypeDic;
             SelectedIndex = 0;

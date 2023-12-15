@@ -115,20 +115,20 @@
                         <DockPanel.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="添加类别" Click="AddType"/>
-                                <MenuItem Header="修改类别" Click="UpdateType"/>
-                                <MenuItem Header="删除类别" Click="DeleteType"/>
+                                <MenuItem Header="修改类别" Click="UpdateType" IsEnabled="{Binding Value.Unlocked}"/>
+                                <MenuItem Header="删除类别" Click="DeleteType" IsEnabled="{Binding Value.Unlocked}"/>
                                 <Separator/>
                                 <MenuItem Header="添加口令" IsEnabled="{Binding Value.HasPassword, Converter={StaticResource InverseBooleanConverter}}" Click="AddTypeSecurity"/>
                                 <MenuItem Header="修改口令" IsEnabled="{Binding Value.HasPassword}" Click="UpdateTypeSecurity"/>
                                 <MenuItem Header="移除口令" IsEnabled="{Binding Value.HasPassword}" Click="RemoveTypeSecurity"/>
                                 <MenuItem Header="锁定" IsEnabled="{Binding Value.CanLock}" Click="LockType"/>
                                 <Separator/>
-                                <MenuItem Header="至顶"/>
-                                <MenuItem Header="上移"/>
-                                <MenuItem Header="下移"/>
-                                <MenuItem Header="至底"/>
+                                <MenuItem Header="至顶" IsEnabled="{Binding Value.Unlocked}"/>
+                                <MenuItem Header="上移" IsEnabled="{Binding Value.Unlocked}"/>
+                                <MenuItem Header="下移" IsEnabled="{Binding Value.Unlocked}"/>
+                                <MenuItem Header="至底" IsEnabled="{Binding Value.Unlocked}"/>
                                 <Separator/>
-                                <MenuItem Header="清空栏目"/>
+                                <MenuItem Header="清空栏目" IsEnabled="{Binding Value.Unlocked}"/>
                             </ContextMenu>
                         </DockPanel.ContextMenu>
                         <TextBlock DockPanel.Dock="Left" Width="28" Text="{Binding Value.FaIcon}" FontFamily="{Binding Value.FaIconFontFamily}" Foreground="{Binding Value.FaIconColor}" FontSize="18" Padding="5"/>
