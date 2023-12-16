@@ -30,7 +30,6 @@ namespace XStart2._0 {
             DataContext = mainViewModel;
         }
 
-
         private void Window_Close(object sender, RoutedEventArgs e) {
             Close();
         }
@@ -315,9 +314,9 @@ namespace XStart2._0 {
             FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
             // 需要判断是现有栏目发起的，还是类别空白发起的
             string typeSection = string.Empty;
-            if (element.GetType() == typeof(Expander)) {
+            if (element is Expander) {
                 typeSection = element.GetValue(ElementParamHelper.TypeSectionProperty) as string;
-            } else if (element.GetType() == typeof(ScrollViewer)) {
+            } else if (element is ScrollViewer) {
                 typeSection = element.Tag as string;
             }
             if (string.Empty.Equals(typeSection)) {
