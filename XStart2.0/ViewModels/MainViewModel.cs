@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Input;
 using XStart.Bean;
+using XStart.Config;
+using XStart.Const;
 using XStart.Services;
+using XStart.Utils;
 using XStart2._0.Bean;
 using XStart2._0.Commands;
 using XStart2._0.Utils;
@@ -15,6 +19,8 @@ namespace XStart2._0.ViewModels {
         public ColumnService columnService = ColumnService.Instance;
         public ProjectService projectService = ProjectService.Instance;
         public bool InitFinished { get; set; } = false;
+
+        
         public MainViewModel() {
 
         }
@@ -23,9 +29,22 @@ namespace XStart2._0.ViewModels {
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        #region 用户数据
+        // 头像
+        private string avatar = "/Files/Icons/user.ico";
+        public string Avatar { get => avatar; set { avatar = value;OnPropertyChanged("Avatar"); } }
+        // 昵称
+        private string nickName = "昵称";
+        public string NickName { get => nickName; set { nickName = value; OnPropertyChanged("NickName"); } }
+        #endregion
+
+        #region 时间数据
+        private string currentTime = DateTime.Now.ToString("F");
+        public string CurrentTime { get => currentTime; set { currentTime = value; OnPropertyChanged("CurrentTime"); } }
+        #endregion
         #region 应用数据
-        private ObservableDictionary<string, Type> types;
-        public ObservableDictionary<string, Type> Types {
+        private ObservableDictionary<string, XStart.Bean.Type> types;
+        public ObservableDictionary<string, XStart.Bean.Type> Types {
             get => types;
             set { types = value; OnPropertyChanged("Types"); }
         }
@@ -54,10 +73,53 @@ namespace XStart2._0.ViewModels {
         /// </summary>
         /// <param name="param"></param>
         private void WindowLoaded(object param) {
+            #region 加载设置项
+            string openType = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE);
+            string clickType = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_CLICK_TYPE);
+            string audio = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_AUDIO);
+            string autoRun = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_AUTO_RUN);
+            string exitWarn = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_EXIT_WARN);
+            string closeBorderHide = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE);
+            string urlOpen = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN);
+            string urlOpenCustomBrowser = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER);
+            
+            Configs.clickType = clickType;
+            Configs.audio = !string.IsNullOrEmpty(audio) && Convert.ToBoolean(audio);
+            Configs.autoRun = !string.IsNullOrEmpty(autoRun) && Convert.ToBoolean(autoRun);
+            Configs.ExitWarn = string.IsNullOrEmpty(exitWarn) || Convert.ToBoolean(exitWarn);
+            Configs.closeBorderHide = string.IsNullOrEmpty(closeBorderHide) || Convert.ToBoolean(closeBorderHide);
+            Configs.UrlOpen = urlOpen;
+            Configs.UrlOpenCustomBrowser = urlOpenCustomBrowser;
+            // 系统其他配置
+            string delCount = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_DEL_COUNT);// 数据库执行多少次删除后执行VACUUM
+            Configs.delCount = string.IsNullOrEmpty(delCount) ? 0 : Convert.ToInt32(delCount);
+            #endregion
+
+            #region 系统功能图标和操作
+            string systemAppPage = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_SYSTEM_APP_PAGE);
+            Configs.systemAppPage = string.IsNullOrEmpty(systemAppPage) ? 0 : Convert.ToInt32(systemAppPage);
+            string addMulti = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_ADD_MULTI);
+            Configs.addMulti = !string.IsNullOrEmpty(addMulti) && Convert.ToBoolean(addMulti);
+            Configs.InitIconDic();
+            SystemAppParam.InitOperate();
+            Configs.taskbarHandler = DllUtils.FindWindow("Shell_TrayWnd", null);
+            Configs.taskbarIsShow = (DllUtils.GetWindowLong(Configs.taskbarHandler, WinApi.GWL_STYLE) & WinApi.WS_VISIBLE) == WinApi.WS_VISIBLE;
+            DllUtils.waveOutGetVolume(0, out uint volume);
+            uint leftVolume = volume & 0x0000FFFF, rightVolume = volume >> 16;
+            Configs.volume = (leftVolume + rightVolume) / 2;
+            Configs.waveMuted = Configs.volume == 0x0000;
+            Configs.micVolume = AudioUtils.GetDeviceVolume(Constants.DEVICE_NAME_MIC);// 音量
+            Configs.lineInVolume = AudioUtils.GetDeviceVolume(Constants.DEVICE_NAME_LINE_IN);
+            Configs.cdPlayerVolume = AudioUtils.GetDeviceVolume(Constants.DEVICE_NAME_CD_PLAYER, NAudio.CoreAudioApi.DataFlow.Render);
+            Configs.micMuted = AudioUtils.GetDeviceMute(Constants.DEVICE_NAME_MIC);// 是否静音
+            Configs.lineInMuted = AudioUtils.GetDeviceMute(Constants.DEVICE_NAME_LINE_IN);
+            Configs.cdPlayerMuted = AudioUtils.GetDeviceMute(Constants.DEVICE_NAME_CD_PLAYER, NAudio.CoreAudioApi.DataFlow.Render);
+            #endregion
+
             #region 加载数据
             // 加载类别配置
-            List<Type> types = typeService.SelectList(new Type { OrderBy = "sort" });
-            foreach (Type type in types) {
+            List<XStart.Bean.Type> types = typeService.SelectList(new XStart.Bean.Type { OrderBy = "sort" });
+            foreach (XStart.Bean.Type type in types) {
                 if (string.IsNullOrEmpty(type.Name)) {
                     typeService.Delete(type.Section);
                     continue;
@@ -93,10 +155,11 @@ namespace XStart2._0.ViewModels {
                 }
             }
             #endregion
+            #region 窗口相关数据初始化
             LinkedHashMap<string, Project> autoRunApp = new LinkedHashMap<string, Project>();
             CalculateWidthHeight();
             // 面板初始化
-            foreach (KeyValuePair<string, Type> type in XStartService.TypeDic) {
+            foreach (KeyValuePair<string, XStart.Bean.Type> type in XStartService.TypeDic) {
                 // 计算栏目高度
                 for (int i = 0; i < type.Value.ColumnDic.Count; i++) {
                     // 打开哪个栏目
@@ -130,6 +193,8 @@ namespace XStart2._0.ViewModels {
             TypeWidth = 100;
             Types = XStartService.TypeDic;
             SelectedIndex = 0;
+            #endregion
+
             InitFinished = true;
         }
 
@@ -138,7 +203,7 @@ namespace XStart2._0.ViewModels {
         /// </summary>
         private void CalculateWidthHeight() {
             // 重新计算栏目高度
-            foreach (KeyValuePair<string, Type> type in XStartService.TypeDic) {
+            foreach (KeyValuePair<string, XStart.Bean.Type> type in XStartService.TypeDic) {
                 // 计算栏目高度
                 CalculateWidthHeight(type.Value.Section);
             }
@@ -149,7 +214,7 @@ namespace XStart2._0.ViewModels {
         /// </summary>
         /// <param name="typeSection">类别Section</param>
         private void CalculateWidthHeight(string typeSection) {
-            Type type = XStartService.TypeDic[typeSection];
+            XStart.Bean.Type type = XStartService.TypeDic[typeSection];
             // 计算栏目高度
             int headerHeight = 38;
             // 当高度为小于一定高度時，将高度置为-1

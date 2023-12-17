@@ -27,6 +27,7 @@ namespace XStart2._0 {
         MainViewModel mainViewModel = new MainViewModel();
         public MainWindow() {
             InitializeComponent();
+            Configs.Handler = new System.Windows.Interop.WindowInteropHelper(this).Handle;
             DataContext = mainViewModel;
         }
 

@@ -308,6 +308,10 @@
     <Resource Include="Files\Icons\update.ico" />
     <Resource Include="Files\Icons\url.ico" />
     <Resource Include="Files\Icons\XStart.ico" />
+    <Resource Include="Files\Icons\user.ico" />
+    <Resource Include="Files\Images\Weather.png" />
+    <Resource Include="Files\Images\Calendar.png" />
+    <Resource Include="Files\Images\NotePad.png" />
     <Content Include="NAudio.dll" />
     <Content Include="System.Data.SQLite.dll" />
     <EmbeddedResource Include="X64\SQLite.Interop.dll">

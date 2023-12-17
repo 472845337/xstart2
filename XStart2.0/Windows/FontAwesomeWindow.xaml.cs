@@ -19,13 +19,13 @@ namespace XStart2._0.Windows {
         public FontAwesomeWindow() {
             InitializeComponent();
             // 实体
-            List<FontAwesome> fontAwesomeList = GetFontAwesomeFieldValue<FontAwesome6>();
+            IEnumerable<FontAwesome> fontAwesomeList = GetFontAwesomeFieldValue<FontAwesome6>();
             // 品牌
-            List<FontAwesome> fontAwesomeBrandsList = GetFontAwesomeFieldValue<FontAwesomeBrands>();
+            IEnumerable<FontAwesome> fontAwesomeBrandsList = GetFontAwesomeFieldValue<FontAwesomeBrands>();
             // 常用
-            List<FontAwesome> fontAwesomeRegularList = GetFontAwesomeFieldValue<FontAwesomeRegular>();
+            IEnumerable<FontAwesome> fontAwesomeRegularList = GetFontAwesomeFieldValue<FontAwesomeRegular>();
             // V4
-            List<FontAwesome> fontAwesome4List = GetFontAwesomeFieldValue<FontAwesome4>();
+            IEnumerable<FontAwesome> fontAwesome4List = GetFontAwesomeFieldValue<FontAwesome4>();
             VM = new FontAwesomeVM {
                 CustomFontAwesomes = GetCustomFontAwesome(),
                 SolidFontAwesomes = fontAwesomeList,
@@ -157,14 +157,13 @@ namespace XStart2._0.Windows {
                 new FontAwesome{Name="Tv", Value =  Tv} };
         }
 
-        private List<FontAwesome> GetFontAwesomeFieldValue<T>() {
+        private IEnumerable<FontAwesome> GetFontAwesomeFieldValue<T>() {
             T t = System.Activator.CreateInstance<T>();
             FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Static | BindingFlags.Public);
             List<FontAwesome> fontAwesomeList = new List<FontAwesome>();
             foreach (FieldInfo info in fields) {
-                fontAwesomeList.Add(new FontAwesome { Name = info.Name, Value = info.GetValue(t) as string });
+                yield return new FontAwesome { Name = info.Name, Value = info.GetValue(t) as string };
             }
-            return fontAwesomeList;
         }
     }
 }
