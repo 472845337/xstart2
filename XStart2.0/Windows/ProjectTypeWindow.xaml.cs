@@ -45,7 +45,7 @@ namespace XStart2._0.Windows {
         /// <param name="e"></param>
         private void ProjectType_Save(object sender, RoutedEventArgs e) {
             if (string.IsNullOrEmpty(vm.Name)) {
-                System.Windows.MessageBox.Show("类别名不能为空!");
+                System.Windows.MessageBox.Show("类别名不能为空!", "错误");
                 return;
             }
 

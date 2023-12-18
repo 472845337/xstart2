@@ -54,7 +54,7 @@ namespace XStart2._0.Windows {
         }
         private void ConfirmSelectFontAwesome(object sender, RoutedEventArgs e) {
             if (string.IsNullOrEmpty(VM.SelectedFa)) {
-                System.Windows.MessageBox.Show("未选择图标");
+                System.Windows.MessageBox.Show("未选择图标", "错误");
                 return;
             }
             DialogResult = true;

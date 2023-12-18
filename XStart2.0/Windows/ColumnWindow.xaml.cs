@@ -19,7 +19,7 @@ namespace XStart2._0.Windows {
 
         private void Save_Column(object sender, RoutedEventArgs e) {
             if (string.IsNullOrEmpty(vm.Name)) {
-                MessageBox.Show("名称不能为空！");
+                MessageBox.Show("名称不能为空！", "错误");
                 return;
             } else {
                 DialogResult = true;

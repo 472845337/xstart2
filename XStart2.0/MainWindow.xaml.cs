@@ -89,12 +89,15 @@ namespace XStart2._0 {
         }
         private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (mainViewModel.InitFinished) {
-                mainViewModel.SelectedIndex = MainTabControl.SelectedIndex;
-                KeyValuePair<string, XStart.Bean.Type> type = (KeyValuePair<string, XStart.Bean.Type>)MainTabControl.SelectedItem;
-                // 如果当前类别有口令，并且没有记住口令则展示为锁定
-                if (!type.Value.Locked && !type.Value.RememberSecurity && type.Value.HasPassword) {
-                    type.Value.Locked = true;
+                if(MainTabControl.SelectedIndex != -1) {
+                    mainViewModel.SelectedIndex = MainTabControl.SelectedIndex;
+                    KeyValuePair<string, XStart.Bean.Type> type = (KeyValuePair<string, XStart.Bean.Type>)MainTabControl.SelectedItem;
+                    // 如果当前类别有口令，并且没有记住口令则展示为锁定
+                    if (!type.Value.Locked && !type.Value.RememberSecurity && type.Value.HasPassword) {
+                        type.Value.Locked = true;
+                    }
                 }
+                
                 AudioUtils.PlayWav(AudioUtils.CHANGE);
             }
         }
@@ -166,12 +169,12 @@ namespace XStart2._0 {
                 if (MessageBoxResult.OK == MessageBox.Show("确认清空所有类别？", "警告", MessageBoxButton.OKCancel)) {
                     foreach (KeyValuePair<string, XStart.Bean.Type> type in mainViewModel.Types) {
                         if (type.Value.Locked) {
-                            MessageBox.Show($"[{type.Value.Name}]类别已锁，不可删除！");
+                            MessageBox.Show($"[{type.Value.Name}]类别已锁，不可删除！", "错误");
                             return;
                         }
                         foreach (KeyValuePair<string, Column> k in type.Value.ColumnDic) {
                             if (k.Value.Locked) {
-                                MessageBox.Show($"类别[{type.Value.Name}]下栏目[{k.Value.Name}]已锁，不可删除！");
+                                MessageBox.Show($"类别[{type.Value.Name}]下栏目[{k.Value.Name}]已锁，不可删除！", "错误");
                                 return;
                             }
                         }
@@ -180,7 +183,7 @@ namespace XStart2._0 {
                     NotifyUtils.ShowNotification("清空完成！");
                 }
             } else {
-                MessageBox.Show("当前无需清空！");
+                MessageBox.Show("当前无需清空！","提示");
             }
         }
 
@@ -231,8 +234,7 @@ namespace XStart2._0 {
                 }
                 RemoveTypeData(section);
                 DelCount(typeService);
-
-                MessageBox.Show("类别删除成功");
+                NotifyUtils.ShowNotification("类别删除成功");
             }
         }
 
@@ -320,7 +322,7 @@ namespace XStart2._0 {
                 typeSection = element.Tag as string;
             }
             if (string.Empty.Equals(typeSection)) {
-                MessageBox.Show("无法获取当前类别");
+                MessageBox.Show("无法获取当前类别","错误");
                 return;
             }
             ColumnVM vm = new ColumnVM();
@@ -433,7 +435,7 @@ namespace XStart2._0 {
                 column.Locked = false;
                 column.UnlockSecurity = string.Empty;
             } else {
-                MessageBox.Show("口令不匹配");
+                MessageBox.Show("口令不匹配", "错误");
                 column.UnlockSecurity = string.Empty;
             }
         }
