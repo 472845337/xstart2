@@ -45,7 +45,6 @@
         public const string SECTION_CONFIG = "Config";
         public const string SECTION_SYSTEM_APP = "SystemApp";
 
-        public const string KEY_CONFIG_SPLIT = "Split";
         public const string KEY_CLICK_TYPE = "ClickType";
         public const string KEY_TOP_MOST = "TopMost";
         public const string KEY_AUDIO = "Audio";

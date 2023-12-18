@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Reflection;
 using XStart.Const;
 using XStart.Utils;
+using static XStart.Bean.SystemAppParam;
 
 namespace XStart.Config {
     /// <summary>
@@ -121,6 +122,83 @@ namespace XStart.Config {
         public static int systemAppPage = 0;
         public static bool addMulti = false;
 
+        public static void InitIconDic() {
+            Configs.iconDic.Clear();
+            #region 系统链接
+            Configs.iconDic.Add(MY_COMPUTER, Configs.ICON_MYCOMPUTER);
+            Configs.iconDic.Add(MY_DOCUMENT, Configs.ICON_MYDOCUMENT);
+            Configs.iconDic.Add(CONTROL, Configs.ICON_CONTROL);
+            Configs.iconDic.Add(RECYCLE_BIN, Configs.ICON_RECYCLE_BIN);
+            Configs.iconDic.Add(IE, Configs.ICON_IE);
+            Configs.iconDic.Add(INTERNET, Configs.ICON_NETWORK);
+            Configs.iconDic.Add(EXPLORER, Configs.ICON_WINDOW_EXPLORER);
+            Configs.iconDic.Add(PRINT_FAX, Configs.ICON_PRINT_AND_FAX);
+            Configs.iconDic.Add(REGEDIT, Configs.ICON_REGEDIT);
+            Configs.iconDic.Add(CMD, Configs.ICON_CMD);
+            Configs.iconDic.Add(FOLDER_OPTIONS, Configs.ICON_FOLDER_OPTIONS);
+            Configs.iconDic.Add(MSTSC, Configs.ICON_MSTSC);
+            #endregion
+            #region 系统操作
+            Configs.iconDic.Add(CLOSE_PC, Configs.ICON_CLOSE_PC);
+            Configs.iconDic.Add(RESTART_PC, Configs.ICON_RESTART_PC);
+            Configs.iconDic.Add(LOG_OUT, Configs.ICON_LOGOUT_PC);
+            Configs.iconDic.Add(LOCK_PC, Configs.ICON_LOCK_PC);
+            Configs.iconDic.Add(STANDBY_PC, Configs.ICON_STANDBY_PC);
+            Configs.iconDic.Add(SLEEP_PC, Configs.ICON_SLEEP_PC);
+            Configs.iconDic.Add(NET_END, Configs.ICON_NET_END);
+            Configs.iconDic.Add(SCREEN_SAVER, Configs.ICON_SCREEN_SAVER);
+            Configs.iconDic.Add(OPEN_CD_ROM, Configs.ICON_CD_ROM);
+            Configs.iconDic.Add(CLOSE_CD_ROM, Configs.ICON_CD_ROM);
+            Configs.iconDic.Add(SHOW_HIDE_TASKBAR, Configs.ICON_TASKBAR);
+            Configs.iconDic.Add(TURN_OFF_MONITOR, Configs.ICON_TURNOFF_MONITOR);
+            Configs.iconDic.Add(CLEAR_RECYCLE_BIN, Configs.ICON_RECYCLE_BIN);
+            Configs.iconDic.Add(CLEAR_IE_ADDRESS, Configs.ICON_RECYCLE_BIN);
+            Configs.iconDic.Add(CLEAR_IE_HISTORY, Configs.ICON_RECYCLE_BIN);
+            Configs.iconDic.Add(CLEAR_IE_COOKIES, Configs.ICON_RECYCLE_BIN);
+            Configs.iconDic.Add(CLEAR_RENT, Configs.ICON_RECYCLE_BIN);
+            Configs.iconDic.Add(CLEAR_SOME_DIRECTORY, Configs.ICON_RECYCLE_BIN);
+            Configs.iconDic.Add(CONTROL_APP_MEMORY, Configs.ICON_MEMORY);
+            Configs.iconDic.Add(END_PROCESS, Configs.ICON_END_PROCESS);
+            #endregion
+
+            #region 音量控制
+            Configs.iconDic.Add(VOLUME_ADD, Configs.ICON_VOLUME_ADD);
+            Configs.iconDic.Add(VOLUME_REDUCE, Configs.ICON_VOLUME_REDUCE);
+            Configs.iconDic.Add(VOLUME_SILENT_TOGGLE, Configs.ICON_SILENT_TOGGLE);
+            Configs.iconDic.Add(VOLUME_WAVE_ADD, Configs.ICON_VOLUME_ADD);
+            Configs.iconDic.Add(VOLUME_WAVE_REDUCE, Configs.ICON_VOLUME_REDUCE);
+            Configs.iconDic.Add(VOLUME_WAVE_SILENT_TOGGLE, Configs.ICON_SILENT_TOGGLE);
+            Configs.iconDic.Add(VOLUME_MIC_ADD, Configs.ICON_VOLUME_ADD);
+            Configs.iconDic.Add(VOLUME_MIC_REDUCE, Configs.ICON_VOLUME_REDUCE);
+            Configs.iconDic.Add(VOLUME_MIC_SILENT_TOGGLE, Configs.ICON_SILENT_TOGGLE);
+            Configs.iconDic.Add(VOLUME_LINE_IN_ADD, Configs.ICON_VOLUME_ADD);
+            Configs.iconDic.Add(VOLUME_LINE_IN_REDUCE, Configs.ICON_VOLUME_REDUCE);
+            Configs.iconDic.Add(VOLUME_LINE_IN_SILENT_TOGGLE, Configs.ICON_SILENT_TOGGLE);
+            Configs.iconDic.Add(VOLUME_CD_PLAYER_ADD, Configs.ICON_VOLUME_ADD);
+            Configs.iconDic.Add(VOLUME_CD_PLAYER_REDUCE, Configs.ICON_VOLUME_REDUCE);
+            Configs.iconDic.Add(VOLUME_CD_PLAYER_SILENT_TOGGLE, Configs.ICON_SILENT_TOGGLE);
+            #endregion
+
+            #region 控制面板
+            Configs.iconDic.Add(ADD_OR_REMOVE_APP, Configs.ICON_ADD_OR_REMOVE_APP);
+            Configs.iconDic.Add(INTERNET_OPTIONS, Configs.ICON_INTERNET_OPTIONS);
+            Configs.iconDic.Add(USER_ACCOUNT, Configs.ICON_USER_ACCOUNT);
+            Configs.iconDic.Add(REGION_LANGUAGE_OPTIONS, Configs.ICON_REGION_LANGUAGE_OPTIONS);
+            Configs.iconDic.Add(PHONE_AND_MODEM_OPTIONS, Configs.ICON_PHONE_MODEM);
+            Configs.iconDic.Add(ACCESSIBILITY_OPTIONS, Configs.ICON_ACCESSIBILITY_OPTIONS);
+            Configs.iconDic.Add(POWER_OPTIONS, Configs.ICON_POWER_OPTIONS);
+            Configs.iconDic.Add(GAME_CONTROLLER, Configs.ICON_GAME_CONTROLLER);
+            Configs.iconDic.Add(NETWORK_CONNECT, Configs.ICON_NETWORK);
+            Configs.iconDic.Add(SCREEN_SHOW, Configs.ICON_SCREEN_SAVER);
+            Configs.iconDic.Add(SYSTEM_PROPERTIES, Configs.ICON_SYSTEM_PROPERTIES);
+            Configs.iconDic.Add(ADD_HARDWARE, Configs.ICON_ADD_HARDWARE);
+            Configs.iconDic.Add(MOUSE, Configs.ICON_MOUSE);
+            Configs.iconDic.Add(KEYBOARD, Configs.ICON_KEYBOARD);
+            Configs.iconDic.Add(SOUND_AUDIO_EQUIPMENT, Configs.ICON_SOUND_AUDIO_EQUIPMENT);
+            Configs.iconDic.Add(VOLUME_CONTROL, Configs.ICON_VOLUME_CONTROL);
+            Configs.iconDic.Add(DATE_TIME, Configs.ICON_DATE_TIME);
+            #endregion
+        }
         public static void Dispose() {
             BindingFlags flag = BindingFlags.Static | BindingFlags.Public;
             System.Type configsType = typeof(Configs);

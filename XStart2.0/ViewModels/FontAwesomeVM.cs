@@ -29,20 +29,20 @@ namespace XStart2._0.ViewModels {
 
         public List<FontAwesome> CustomFontAwesomes { get => customFontAwesomes; set { customFontAwesomes = value; OnPropertyChanged("CustomFontAwesomes"); } }
 
-        private List<FontAwesome> solidFontAwesomes;
+        private IEnumerable<FontAwesome> solidFontAwesomes;
 
-        public List<FontAwesome> SolidFontAwesomes { get => solidFontAwesomes; set { solidFontAwesomes = value; OnPropertyChanged("SolidFontAwesomes"); } }
+        public IEnumerable<FontAwesome> SolidFontAwesomes { get => solidFontAwesomes; set { solidFontAwesomes = value; OnPropertyChanged("SolidFontAwesomes"); } }
 
-        private List<FontAwesome> brandsFontAwesomes;
+        private IEnumerable<FontAwesome> brandsFontAwesomes;
 
-        public List<FontAwesome> BrandsFontAwesomes { get => brandsFontAwesomes; set { brandsFontAwesomes = value; OnPropertyChanged("BrandsFontAwesomes"); } }
+        public IEnumerable<FontAwesome> BrandsFontAwesomes { get => brandsFontAwesomes; set { brandsFontAwesomes = value; OnPropertyChanged("BrandsFontAwesomes"); } }
 
-        private List<FontAwesome> regularFontAwesomes;
+        private IEnumerable<FontAwesome> regularFontAwesomes;
 
-        public List<FontAwesome> RegularFontAwesomes { get => regularFontAwesomes; set { regularFontAwesomes = value; OnPropertyChanged("RegularFontAwesomes"); } }
+        public IEnumerable<FontAwesome> RegularFontAwesomes { get => regularFontAwesomes; set { regularFontAwesomes = value; OnPropertyChanged("RegularFontAwesomes"); } }
 
-        private List<FontAwesome> fontAwesomes4;
-        public List<FontAwesome> FontAwesomes4 { get => fontAwesomes4; set { fontAwesomes4 = value; OnPropertyChanged("FontAwesomes4"); } }
+        private IEnumerable<FontAwesome> fontAwesomes4;
+        public IEnumerable<FontAwesome> FontAwesomes4 { get => fontAwesomes4; set { fontAwesomes4 = value; OnPropertyChanged("FontAwesomes4"); } }
 
         private ObservableCollection<FontAwesome> queryFontAwesomes;
         public ObservableCollection<FontAwesome> QueryFontAwesomes { get => queryFontAwesomes; set { queryFontAwesomes = value; OnPropertyChanged("QueryFontAwesomes"); } }

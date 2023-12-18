@@ -98,12 +98,44 @@
             <Setter Property="Command" Value="{Binding Path=AddColumnCommand}"/>
         </Style>
     </Window.Resources>
+    <!-- 窗体布局-->
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TabControl Grid.Row="0" x:Name="MainTabControl" TabStripPlacement="Left" ItemsSource="{Binding Types}"
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="180"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <!-- 个人信息 -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="5">
+                <Border BorderBrush="gray" BorderThickness="1" Height="50" Width="50" CornerRadius="2">
+                    <Image Source="{Binding Avatar}" />
+                </Border>
+                <TextBlock Text="{Binding NickName}" VerticalAlignment="Bottom" Margin="8 0 8 5"/>
+            </StackPanel>
+            <!-- 时间 -->
+            <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Bottom">
+                <TextBlock Text="{Binding CurrentTime}" Margin="5 2"/>
+                <TextBlock Margin="5 2">
+                    <Run Text="癸卯年"/>
+                    <Run Text="甲子月"/>
+                    <Run Text="已酉日"/>
+                </TextBlock>
+                <TextBlock Text="星期天" Margin="5 0 5 5"/>
+            </StackPanel>
+            <!-- 小工具 -->
+            <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5">
+                <Image Source="/Files/Images/Calendar.png" Height="25" Margin="2"/>
+                <Image Source="/Files/Images/NotePad.png" Height="25" Margin="2"/>
+                <Image Source="/Files/Images/Weather.png" Height="25" Margin="2"/>
+            </WrapPanel>
+        </Grid>
+        <TabControl Grid.Row="1" x:Name="MainTabControl" TabStripPlacement="Left" ItemsSource="{Binding Types}"
                     SizeChanged="MainTabControl_SizeChanged" ContextMenu="{StaticResource TypeTabContextMenu}"
                     SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="{Binding SelectedIndex}">
             <TabControl.ItemTemplate>
@@ -235,7 +267,7 @@
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
-        <ToolBar Grid.Row="1">
+        <ToolBar Grid.Row="2">
             <Menu>
                 <MenuItem>
                     <MenuItem.Header>
