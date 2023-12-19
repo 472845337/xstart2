@@ -18,7 +18,7 @@ namespace XStart2._0.Utils {
         public const string Eight = "\u0038";
         public const string Nine = "\u0039";
         public const string LessThan = "\u003c";
-        public const string FaEquals = "\u003d";
+        public new const string Equals = "\u003d";
         public const string GreaterThan = "\u003e";
         public const string Question = "\u003f";
         public const string At = "\u0040";

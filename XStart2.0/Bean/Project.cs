@@ -60,5 +60,8 @@ namespace XStart.Bean {
                 }
             }
         }
+
+        private System.Windows.Media.Imaging.BitmapImage icon;
+        public System.Windows.Media.Imaging.BitmapImage Icon { get => icon; set { icon = value;OnPropertyChanged("Icon"); } }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using XStart.Bean;
 using XStart.Config;
 using XStart.Const;
@@ -53,15 +54,17 @@ namespace XStart.Services {
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
-        public static System.Drawing.Image GetIconImage(Project project) {
+        public static System.Drawing.Bitmap GetIconImage(Project project) {
             try {
                 // 根据类型选择图标
                 string kind = project.Kind;
-                System.Drawing.Image image = null;
+                System.Drawing.Bitmap image = null;
                 if (!string.IsNullOrEmpty(project.IconPath)) {
                     if (project.IconPath.StartsWith("#")) {
+                        // 系统功能图标
                         image = Configs.iconDic[project.IconPath];
                     } else {
+                        // 项目图标
                         if (File.Exists(project.IconPath) || Directory.Exists(project.IconPath)) {
                             if (project.IconPath.ToLower().EndsWith(".exe") || project.IconPath.ToLower().EndsWith(".ico")) {
                                 image = IconUtils.GetIcon(project.IconPath, true).ToBitmap();
@@ -73,6 +76,7 @@ namespace XStart.Services {
                         }
                     }
                 } else {
+                    // IconPath为空，则取项目文件的图标
                     string iconPath = project.Path;
                     if (Project.KIND_FILE.Equals(kind) || Project.KIND_DIRECTORY.Equals(kind)) {
                         // 文件类型，判断是否exe或ico
@@ -91,6 +95,24 @@ namespace XStart.Services {
                 return null;
             }
 
+        }
+
+        /// <summary>
+        /// 将拿到的图标Bitmap转换成可以绑定的BitmapImage
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        public static BitmapImage BitmapToBitmapImage(System.Drawing.Bitmap bitmap) {
+            BitmapImage bitmapImage = new BitmapImage();
+            using (MemoryStream ms = new MemoryStream()) {
+                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = ms;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                bitmapImage.Freeze();
+            }
+            return bitmapImage;
         }
         /// <summary>
         /// 根据路径生成对应的类型

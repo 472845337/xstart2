@@ -38,5 +38,17 @@ namespace XStart2._0.Helper {
 
         public static readonly DependencyProperty ProjectSectionProperty = DependencyProperty.Register("ProjectSection", typeof(string), typeof(ElementParamHelper), new PropertyMetadata(string.Empty));
         #endregion
+
+        #region 按钮图标
+        public static string GetButtonIcon(DependencyObject obj) {
+            return (string)obj.GetValue(ButtonIconProperty);
+        }
+
+        public static void SetButtonIcon(DependencyObject obj, string value) {
+            obj.SetValue(ButtonIconProperty, value);
+        }
+
+        public static readonly DependencyProperty ButtonIconProperty = DependencyProperty.Register("ButtonIcon", typeof(string), typeof(ElementParamHelper), new PropertyMetadata(string.Empty));
+        #endregion
     }
 }

@@ -6,21 +6,21 @@
     <!-- SliderButtons 使用时 引入该字典xaml 
     <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/View/ResourseDictionary.xaml"/>
+                <ResourceDictionary Source="Resources\SliderButton.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     在<Window>中引用SliderButton类的包名 xmlns:view="clr-namespace:包名"
     使用示例：
-    <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="65" ButtonWidth="25" Style="{StaticResource styleSliderButton}" HorizontalAlignment="Center"/>
-    style:styleSliderButton            这个是圆角的
-    style:styleSliderButtonRectangular 这个是长方形的
+    <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="65" ButtonWidth="25" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+    Style:SliderButton_Style          这个是圆角的
+    Style:SliderButtonRectangular_Style 这个是长方形的
     -->
-    <Style x:Key="styleEllipseButton" TargetType="{x:Type Ellipse}">
+    <Style x:Key="EllipseButton_Style" TargetType="{x:Type Ellipse}">
         <Setter Property="Stroke" Value="Gray"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
     </Style>
 
-    <Style x:Key="styleEllipseGreyButton" TargetType="{x:Type Ellipse}" BasedOn="{StaticResource styleEllipseButton}">
+    <Style x:Key="EllipseGreyButton_Style" TargetType="{x:Type Ellipse}" BasedOn="{StaticResource EllipseButton_Style}">
         <Setter Property="Fill">
             <Setter.Value>
                 <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">
@@ -31,7 +31,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="styleSliderButtonLabel" TargetType="{x:Type Label}">
+    <Style x:Key="SliderButtonLabel_Style" TargetType="{x:Type Label}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -41,7 +41,7 @@
         <Setter Property="Padding" Value="0"/>
     </Style>
 
-    <Style x:Key="styleSliderButtonSideLabel" TargetType="{x:Type local:SliderButton}">
+    <Style x:Key="SliderButtonSideLabel_Style" TargetType="{x:Type local:SliderButton}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SliderButton}">
@@ -62,11 +62,11 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Ellipse Grid.Row="0" Grid.RowSpan="1" Grid.Column="0" Grid.ColumnSpan="2" Width="{TemplateBinding ButtonWidth}" Height="{TemplateBinding ButtonWidth}"  Style="{StaticResource styleEllipseGreyButton}" Panel.ZIndex="3" />
+                            <Ellipse Grid.Row="0" Grid.RowSpan="1" Grid.Column="0" Grid.ColumnSpan="2" Width="{TemplateBinding ButtonWidth}" Height="{TemplateBinding ButtonWidth}"  Style="{StaticResource EllipseGreyButton_Style}" Panel.ZIndex="3" />
                             <Border Grid.Row="0" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="3" Background="ForestGreen" BorderBrush="Gray" BorderThickness="0,1,0,1" Panel.ZIndex="1"/>
-                            <Ellipse Grid.Row="0" Grid.RowSpan="1" Grid.Column="3" Grid.ColumnSpan="2" Width="{TemplateBinding ButtonWidth}" Height="{TemplateBinding ButtonWidth}" Style="{StaticResource styleEllipseButton}" Fill="ForestGreen" Panel.ZIndex="0"/>
+                            <Ellipse Grid.Row="0" Grid.RowSpan="1" Grid.Column="3" Grid.ColumnSpan="2" Width="{TemplateBinding ButtonWidth}" Height="{TemplateBinding ButtonWidth}" Style="{StaticResource EllipseButton_Style}" Fill="ForestGreen" Panel.ZIndex="0"/>
                         </Grid>
-                        <Label Grid.Row="0" Grid.Column="0" Name="_labelOn" Content="{TemplateBinding OnLabel}" Style="{StaticResource styleSliderButtonLabel}" Foreground="Black"/>
+                        <Label Grid.Row="0" Grid.Column="0" Name="_labelOn" Content="{TemplateBinding OnLabel}" Style="{StaticResource SliderButtonLabel_Style}" Foreground="Black"/>
 
                         <Grid Grid.Column="2" Name="_borderOff" Background="Transparent">
                             <Grid.RowDefinitions>
@@ -81,9 +81,9 @@
                             </Grid.ColumnDefinitions>
                             <Ellipse Grid.Row="0" Grid.RowSpan="1" Grid.Column="0" Grid.ColumnSpan="2" Width="{TemplateBinding ButtonWidth}" Height="{TemplateBinding ButtonWidth}"  VerticalAlignment="Stretch" Fill="Crimson" Stroke="Gray" Panel.ZIndex="0"/>
                             <Border Grid.Row="0" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="3" Background="Crimson" BorderBrush="Gray" BorderThickness="0,1,0,1" Panel.ZIndex="1"/>
-                            <Ellipse Grid.Row="0" Grid.RowSpan="1" Grid.Column="3" Grid.ColumnSpan="2" Width="{TemplateBinding ButtonWidth}" Height="{TemplateBinding ButtonWidth}"  Style="{StaticResource styleEllipseGreyButton}" Panel.ZIndex="3"/>
+                            <Ellipse Grid.Row="0" Grid.RowSpan="1" Grid.Column="3" Grid.ColumnSpan="2" Width="{TemplateBinding ButtonWidth}" Height="{TemplateBinding ButtonWidth}"  Style="{StaticResource EllipseGreyButton_Style}" Panel.ZIndex="3"/>
                         </Grid>
-                        <Label Grid.Row="0" Grid.Column="0" Name="_labelOff" Content="{TemplateBinding OffLabel}" Style="{StaticResource styleSliderButtonLabel}" Foreground="Black"/>
+                        <Label Grid.Row="0" Grid.Column="0" Name="_labelOff" Content="{TemplateBinding OffLabel}" Style="{StaticResource SliderButtonLabel_Style}" Foreground="Black"/>
                     </Grid>
 
                     <!-- triggers toggle visual appearance -->
@@ -106,7 +106,7 @@
         </Setter>
     </Style>    
     
-    <Style x:Key="styleSliderButton" TargetType="{x:Type local:SliderButton}">
+    <Style x:Key="SliderButton_Style" TargetType="{x:Type local:SliderButton}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SliderButton}">
@@ -125,10 +125,10 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Ellipse Grid.Row="0" Grid.RowSpan="1" Grid.Column="0" Grid.ColumnSpan="2" Width="{TemplateBinding ButtonWidth}" Height="{TemplateBinding ButtonWidth}"  Style="{StaticResource styleEllipseGreyButton}" Panel.ZIndex="3" />
+                            <Ellipse Grid.Row="0" Grid.RowSpan="1" Grid.Column="0" Grid.ColumnSpan="2" Width="{TemplateBinding ButtonWidth}" Height="{TemplateBinding ButtonWidth}"  Style="{StaticResource EllipseGreyButton_Style}" Panel.ZIndex="3" />
                             <Border Grid.Row="0" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="3" Background="ForestGreen" BorderBrush="Gray" BorderThickness="0,1,0,1" Panel.ZIndex="1"/>
-                            <Label Grid.Row="0" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="3" Name="_labelOn" Content="{TemplateBinding OnLabel}" Style="{StaticResource styleSliderButtonLabel}" Panel.ZIndex="2"/>
-                            <Ellipse Grid.Row="0" Grid.RowSpan="1" Grid.Column="3" Grid.ColumnSpan="2" Width="{TemplateBinding ButtonWidth}" Height="{TemplateBinding ButtonWidth}" Style="{StaticResource styleEllipseButton}" Fill="ForestGreen" Panel.ZIndex="0"/>
+                            <Label Grid.Row="0" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="3" Name="_labelOn" Content="{TemplateBinding OnLabel}" Style="{StaticResource SliderButtonLabel_Style}" Panel.ZIndex="2"/>
+                            <Ellipse Grid.Row="0" Grid.RowSpan="1" Grid.Column="3" Grid.ColumnSpan="2" Width="{TemplateBinding ButtonWidth}" Height="{TemplateBinding ButtonWidth}" Style="{StaticResource EllipseButton_Style}" Fill="ForestGreen" Panel.ZIndex="0"/>
                         </Grid>
 
                         <Grid Grid.Column="0" Name="_borderOff" Background="Transparent" Width="{TemplateBinding Width}">
@@ -143,9 +143,9 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Ellipse Grid.Row="0" Grid.RowSpan="1" Grid.Column="0" Grid.ColumnSpan="2" Width="{TemplateBinding ButtonWidth}" Height="{TemplateBinding ButtonWidth}"  VerticalAlignment="Stretch" Fill="Crimson" Stroke="Gray" Panel.ZIndex="0"/>
-                            <Label Grid.Row="0" Grid.RowSpan="1" Grid.Column="0" Grid.ColumnSpan="3" Name="_labelOff" Content="{TemplateBinding OffLabel}" Style="{StaticResource styleSliderButtonLabel}" Panel.ZIndex="2"/>
+                            <Label Grid.Row="0" Grid.RowSpan="1" Grid.Column="0" Grid.ColumnSpan="3" Name="_labelOff" Content="{TemplateBinding OffLabel}" Style="{StaticResource SliderButtonLabel_Style}" Panel.ZIndex="2"/>
                             <Border Grid.Row="0" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="3" Background="Crimson" BorderBrush="Gray" BorderThickness="0,1,0,1" Panel.ZIndex="1"/>
-                            <Ellipse Grid.Row="0" Grid.RowSpan="1" Grid.Column="3" Grid.ColumnSpan="2" Width="{TemplateBinding ButtonWidth}" Height="{TemplateBinding ButtonWidth}"  Style="{StaticResource styleEllipseGreyButton}" Panel.ZIndex="3"/>
+                            <Ellipse Grid.Row="0" Grid.RowSpan="1" Grid.Column="3" Grid.ColumnSpan="2" Width="{TemplateBinding ButtonWidth}" Height="{TemplateBinding ButtonWidth}"  Style="{StaticResource EllipseGreyButton_Style}" Panel.ZIndex="3"/>
                         </Grid>
                 </Grid>
 
@@ -165,7 +165,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="styleBorderGreyButton" TargetType="{x:Type Border}">
+    <Style x:Key="BorderGreyButton_Style" TargetType="{x:Type Border}">
         <Setter Property="Background">
             <Setter.Value>
                 <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">
@@ -179,7 +179,7 @@
         <Setter Property="VerticalAlignment" Value="Stretch"/>
     </Style>
 
-    <Style x:Key="styleSliderButtonRectangular" TargetType="{x:Type local:SliderButton}">
+    <Style x:Key="SliderButtonRectangular_Style" TargetType="{x:Type local:SliderButton}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SliderButton}">
@@ -196,8 +196,8 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Row="0" Grid.Column="0" CornerRadius="0" Style="{StaticResource styleBorderGreyButton}"/>
-                                <Label Grid.Row="1" Grid.Column="1" Name="_labelOn" Content="{TemplateBinding OnLabel}" Style="{StaticResource styleSliderButtonLabel}" />
+                                <Border Grid.Row="0" Grid.Column="0" CornerRadius="0" Style="{StaticResource BorderGreyButton_Style}"/>
+                                <Label Grid.Row="1" Grid.Column="1" Name="_labelOn" Content="{TemplateBinding OnLabel}" Style="{StaticResource SliderButtonLabel_Style}" />
                             </Grid>
                         </Border>
 
@@ -210,8 +210,8 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Row="0" Grid.Column="0" Name="_labelOff" Content="{TemplateBinding OffLabel}" Style="{StaticResource styleSliderButtonLabel}" />
-                                <Border Grid.Row="0" Grid.Column="1" CornerRadius="0" Style="{StaticResource styleBorderGreyButton}"/>
+                                <Label Grid.Row="0" Grid.Column="0" Name="_labelOff" Content="{TemplateBinding OffLabel}" Style="{StaticResource SliderButtonLabel_Style}" />
+                                <Border Grid.Row="0" Grid.Column="1" CornerRadius="0" Style="{StaticResource BorderGreyButton_Style}"/>
                             </Grid>
                         </Border>
                     </Grid>
@@ -234,7 +234,7 @@
     <!--- SliderButton end -->    
     
     <!-- SwitchButton -->
-    <Style x:Key="ToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+    <Style x:Key="SwitchButton_Style" TargetType="{x:Type ToggleButton}">
         <Setter Property="Tag" Value="{DynamicResource {x:Static SystemParameters.HighContrastKey}}"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -258,7 +258,7 @@
                     <Border x:Name="toggleBorder"
                                 CornerRadius="13"
                                 Background="Green"
-                                Width="60"
+                                Width="{TemplateBinding Width}"
                                 Height="26"
                                 BorderThickness="1"
                                 BorderBrush="Black">
@@ -289,7 +289,7 @@
                         <Trigger Property="IsChecked" Value="True">
                             <Setter Property="Background" Value="DimGray"/>
                             <Setter TargetName="toggleBorder" Property="Background" Value="Green"/>
-                            <Setter TargetName="toggleBorder" Property="BorderBrush" Value="Green"/>
+                            <Setter TargetName="toggleBorder" Property="BorderBrush" Value="LightGray"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="False">
                             <Setter TargetName="toggleBorder" Property="Background" Value="LightGray"/>

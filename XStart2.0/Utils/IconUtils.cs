@@ -11,8 +11,8 @@ namespace XStart.Utils {
         /// </summary>
         /// <param name="exePath"></param>
         /// <returns></returns>
-        public static List<System.Drawing.Image> GetIconImage(string exePath) {
-            List<System.Drawing.Image> imageList = new List<System.Drawing.Image>();
+        public static List<Bitmap> GetIconImage(string exePath) {
+            List<Bitmap> imageList = new List<Bitmap>();
 
             //第一步：获取程序中的图标数
             int iconCount = DllUtils.ExtractIconEx(exePath, -1, null, null, 0);

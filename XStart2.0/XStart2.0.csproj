@@ -69,6 +69,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bean\FontAwesome.cs" />
+    <Compile Include="Converters\Project2IconConverter.cs" />
     <Compile Include="Helper\ElementParamHelper.cs" />
     <Compile Include="Bean\HighContrastHelper.cs" />
     <Compile Include="Bean\ObservableDictionary.cs" />
@@ -152,7 +153,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\ResourseDictionary.xaml">
+    <Page Include="Resources\GlassButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\SliderButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -221,97 +226,26 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\LifelineIcon.theme-light.png" />
-  </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Files\Audio\Change.wav">
+    <EmbeddedResource Include="Files\Audio\*.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Files\Audio\Start.wav">
+    <EmbeddedResource Include="Files\Doc\*.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Files\Doc\about.txt">
+    <EmbeddedResource Include="Files\Icons\*.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <Resource Include="Files\Icons\about.ico" />
-    <Resource Include="Files\Icons\add.ico" />
-    <Resource Include="Files\Icons\app.ico" />
-    <Resource Include="Files\Icons\buttom.ico" />
-    <Resource Include="Files\Icons\clear.ico" />
-    <Resource Include="Files\Icons\copy.ico" />
-    <Resource Include="Files\Icons\cut.ico" />
-    <Resource Include="Files\Icons\default.ico" />
-    <Resource Include="Files\Icons\desktop.ico" />
-    <Resource Include="Files\Icons\down.ico" />
-    <Resource Include="Files\Icons\exit.ico" />
-    <Resource Include="Files\Icons\folder.ico" />
-    <Resource Include="Files\Icons\Fresh.ico" />
-    <Resource Include="Files\Icons\lock.ico" />
-    <Resource Include="Files\Icons\paste.ico" />
-    <Resource Include="Files\Icons\preference.ico" />
-    <Resource Include="Files\Icons\property.ico" />
-    <Resource Include="Files\Icons\remove.ico" />
-    <Resource Include="Files\Icons\security_add.ico" />
-    <Resource Include="Files\Icons\security_del.ico" />
-    <Resource Include="Files\Icons\security_edit.ico" />
-    <Resource Include="Files\Icons\show.ico" />
-    <Resource Include="Files\Icons\System\AccessibilityOptions.ico" />
-    <Resource Include="Files\Icons\System\AddHardware.ico" />
-    <Resource Include="Files\Icons\System\AddOrRemoveApp.ico" />
-    <Resource Include="Files\Icons\System\CdRom.ico" />
-    <Resource Include="Files\Icons\System\ClosePC.ico" />
-    <Resource Include="Files\Icons\System\Cmd.ico" />
-    <Resource Include="Files\Icons\System\Control.ico" />
-    <Resource Include="Files\Icons\System\CurWindow.ico" />
-    <Resource Include="Files\Icons\System\DateTime.ico" />
-    <Resource Include="Files\Icons\System\DeskTopIcon.ico" />
-    <Resource Include="Files\Icons\System\EndProcess.ico" />
-    <Resource Include="Files\Icons\System\FolderOptions.ico" />
-    <Resource Include="Files\Icons\System\GameController.ico" />
-    <Resource Include="Files\Icons\System\IE.ico" />
-    <Resource Include="Files\Icons\System\InternetOptions.ico" />
-    <Resource Include="Files\Icons\System\KeyBoard.ico" />
-    <Resource Include="Files\Icons\System\LockPC.ico" />
-    <Resource Include="Files\Icons\System\logout.ico" />
-    <Resource Include="Files\Icons\System\Memory.ico" />
-    <Resource Include="Files\Icons\System\Mouse.ico" />
-    <Resource Include="Files\Icons\System\Mstsc.ico" />
-    <Resource Include="Files\Icons\System\MyComputer.ico" />
-    <Resource Include="Files\Icons\System\MyDocument.ico" />
-    <Resource Include="Files\Icons\System\NetEnd.ico" />
-    <Resource Include="Files\Icons\System\Network.ico" />
-    <Resource Include="Files\Icons\System\PhoneModemOptions.ico" />
-    <Resource Include="Files\Icons\System\PowerOptions.ico" />
-    <Resource Include="Files\Icons\System\PrintAndFax.ico" />
-    <Resource Include="Files\Icons\System\RecycleBin.ico" />
-    <Resource Include="Files\Icons\System\Regedit.ico" />
-    <Resource Include="Files\Icons\System\RegionLanguageOptions.ico" />
-    <Resource Include="Files\Icons\System\RestartPC.ico" />
-    <Resource Include="Files\Icons\System\ScreenSaver.ico" />
-    <Resource Include="Files\Icons\System\SleepPC.ico" />
-    <Resource Include="Files\Icons\System\SoundAudioEquipment.ico" />
-    <Resource Include="Files\Icons\System\StandbyPC.ico" />
-    <Resource Include="Files\Icons\System\SystemProperties.ico" />
-    <Resource Include="Files\Icons\System\TaskBar.ico" />
-    <Resource Include="Files\Icons\System\TurnoffMonitor.ico" />
-    <Resource Include="Files\Icons\System\UserAccount.ico" />
-    <Resource Include="Files\Icons\System\VolumeAdd.ico" />
-    <Resource Include="Files\Icons\System\VolumeControl.ico" />
-    <Resource Include="Files\Icons\System\VolumeReduce.ico" />
-    <Resource Include="Files\Icons\System\VolumeSilent.ico" />
-    <Resource Include="Files\Icons\System\WindowExplorer.ico" />
-    <Resource Include="Files\Icons\theme.ico" />
-    <Resource Include="Files\Icons\top.ico" />
-    <Resource Include="Files\Icons\up.ico" />
-    <Resource Include="Files\Icons\update.ico" />
-    <Resource Include="Files\Icons\url.ico" />
-    <Resource Include="Files\Icons\XStart.ico" />
-    <Resource Include="Files\Icons\user.ico" />
-    <Resource Include="Files\Images\Weather.png" />
-    <Resource Include="Files\Images\Calendar.png" />
-    <Resource Include="Files\Images\NotePad.png" />
+    <EmbeddedResource Include="Files\Ini\*.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Files\Icons\System\*.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+	<EmbeddedResource Include="Files\Images\*.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="NAudio.dll" />
     <Content Include="System.Data.SQLite.dll" />
     <EmbeddedResource Include="X64\SQLite.Interop.dll">

@@ -119,7 +119,7 @@ namespace XStart2._0.Bean {
             return default;
         }
 
-        private int IndexOf(TKey key) {
+        public int IndexOf(TKey key) {
             int index = 0;
             foreach (KeyValuePair<TKey, TValue> item in this) {
                 if (item.Key.Equals(key)) {

@@ -22,17 +22,215 @@ namespace XStart2._0 {
         public TypeService typeService = TypeService.Instance;
         public ColumnService columnService = ColumnService.Instance;
         public ProjectService projectService = ProjectService.Instance;
-
-
-        MainViewModel mainViewModel = new MainViewModel();
+        readonly MainViewModel mainViewModel = new MainViewModel();
         public MainWindow() {
             InitializeComponent();
             Configs.Handler = new System.Windows.Interop.WindowInteropHelper(this).Handle;
             DataContext = mainViewModel;
         }
 
+        /// <summary>
+        /// 主窗口加载
+        /// </summary>
+        /// <param name="param"></param>
+        private void Window_Loaded(object sender, RoutedEventArgs e) {
+            #region 窗口相关加载，尺寸，位置，置顶
+            string leftStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_LOCATION, Constants.KEY_LEFT);
+            string topStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_LOCATION, Constants.KEY_TOP);
+            string heightStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SIZE, Constants.KEY_HEIGHT);
+            string widthStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SIZE, Constants.KEY_WIDTH);
+            string topMostStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST);
+            // 尺寸
+            if (!string.IsNullOrEmpty(heightStr)) {
+                mainViewModel.MainHeight = Convert.ToDouble(heightStr);
+            }
+            if (!string.IsNullOrEmpty(widthStr)) {
+                mainViewModel.MainWidth = Convert.ToDouble(widthStr);
+            }
+            // 位置
+            if (!string.IsNullOrEmpty(leftStr)) {
+                mainViewModel.MainLeft = Convert.ToDouble(leftStr);
+            }
+            if (!string.IsNullOrEmpty(topStr)) {
+                mainViewModel.MainTop = Convert.ToDouble(topStr);
+            }
+            // 置顶
+            if (!string.IsNullOrEmpty(topMostStr)) {
+                Configs.topMost = Convert.ToBoolean(topMostStr);
+            }
+            Topmost = Configs.topMost;
+            Configs.mainHeight = mainViewModel.MainHeight;
+            Configs.mainWidth = mainViewModel.MainWidth;
+            Configs.mainLeft = mainViewModel.MainLeft;
+            Configs.mainTop = mainViewModel.MainTop;
+            #endregion
+            #region 加载设置项
+            string openType = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE);// 上次最后打开的类别
+            string clickType = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_CLICK_TYPE);// 点击方式，单击、双击
+            string audio = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_AUDIO);
+            string autoRun = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_AUTO_RUN);
+            string exitWarn = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_EXIT_WARN);
+            string closeBorderHide = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE);
+            string urlOpen = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN);
+            string urlOpenCustomBrowser = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER);
+
+            Configs.openType = openType;
+            Configs.clickType = clickType;
+            Configs.audio = !string.IsNullOrEmpty(audio) && Convert.ToBoolean(audio);
+            Configs.autoRun = !string.IsNullOrEmpty(autoRun) && Convert.ToBoolean(autoRun);
+            Configs.ExitWarn = string.IsNullOrEmpty(exitWarn) || Convert.ToBoolean(exitWarn);
+            Configs.closeBorderHide = string.IsNullOrEmpty(closeBorderHide) || Convert.ToBoolean(closeBorderHide);
+            Configs.UrlOpen = urlOpen;
+            Configs.UrlOpenCustomBrowser = urlOpenCustomBrowser;
+            // 系统其他配置
+            string delCount = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_DEL_COUNT);// 数据库执行多少次删除后执行VACUUM
+            Configs.delCount = string.IsNullOrEmpty(delCount) ? 0 : Convert.ToInt32(delCount);
+            #endregion
+
+            #region 系统功能图标和操作
+            string systemAppPage = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_SYSTEM_APP_PAGE);
+            Configs.systemAppPage = string.IsNullOrEmpty(systemAppPage) ? 0 : Convert.ToInt32(systemAppPage);
+            string addMulti = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_ADD_MULTI);
+            Configs.addMulti = !string.IsNullOrEmpty(addMulti) && Convert.ToBoolean(addMulti);
+            Configs.InitIconDic();
+            SystemAppParam.InitOperate();
+            Configs.taskbarHandler = DllUtils.FindWindow("Shell_TrayWnd", null);
+            Configs.taskbarIsShow = (DllUtils.GetWindowLong(Configs.taskbarHandler, WinApi.GWL_STYLE) & WinApi.WS_VISIBLE) == WinApi.WS_VISIBLE;
+            DllUtils.waveOutGetVolume(0, out uint volume);
+            uint leftVolume = volume & 0x0000FFFF, rightVolume = volume >> 16;
+            Configs.volume = (leftVolume + rightVolume) / 2;
+            Configs.waveMuted = Configs.volume == 0x0000;
+            Configs.micVolume = AudioUtils.GetDeviceVolume(Constants.DEVICE_NAME_MIC);// 音量
+            Configs.lineInVolume = AudioUtils.GetDeviceVolume(Constants.DEVICE_NAME_LINE_IN);
+            Configs.cdPlayerVolume = AudioUtils.GetDeviceVolume(Constants.DEVICE_NAME_CD_PLAYER, NAudio.CoreAudioApi.DataFlow.Render);
+            Configs.micMuted = AudioUtils.GetDeviceMute(Constants.DEVICE_NAME_MIC);// 是否静音
+            Configs.lineInMuted = AudioUtils.GetDeviceMute(Constants.DEVICE_NAME_LINE_IN);
+            Configs.cdPlayerMuted = AudioUtils.GetDeviceMute(Constants.DEVICE_NAME_CD_PLAYER, NAudio.CoreAudioApi.DataFlow.Render);
+            #endregion
+
+            #region 加载数据
+            // 加载类别配置
+            List<XStart.Bean.Type> types = typeService.SelectList(new XStart.Bean.Type { OrderBy = "sort" });
+            foreach (XStart.Bean.Type type in types) {
+                if (string.IsNullOrEmpty(type.Name)) {
+                    typeService.Delete(type.Section);
+                    continue;
+                }
+                type.Locked = !string.IsNullOrEmpty(type.Password);
+                type.HasPassword = !string.IsNullOrEmpty(type.Password);
+                XStartService.TypeDic.Add(type.Section, type);
+            }
+            // 加载栏目配置
+            List<Column> columns = columnService.SelectList(new Column { OrderBy = "sort" });
+            foreach (Column column in columns) {
+                if (string.IsNullOrEmpty(column.Name) || string.IsNullOrEmpty(column.TypeSection) || !XStartService.TypeDic.TryGetValue(column.TypeSection, out _)) {
+                    // 如果栏目不合规范，删除该栏目
+                    columnService.Delete(column.Section);
+                    continue;
+                }
+                column.Locked = !string.IsNullOrEmpty(column.Password);
+                column.HasPassword = !string.IsNullOrEmpty(column.Password);
+                column.IsExpanded = false;
+                XStartService.TypeDic[column.TypeSection].ColumnDic.Add(column.Section, column);
+            }
+            // 加载应用配置
+            List<Project> projects = projectService.SelectList(new Project { OrderBy = "sort" });
+
+            foreach (Project project in projects) {
+                project.Icon = XStartService.BitmapToBitmapImage(XStartService.GetIconImage(project));
+                if (string.IsNullOrEmpty(project.Name) || string.IsNullOrEmpty(project.TypeSection)
+                    || string.IsNullOrEmpty(project.ColumnSection) || !XStartService.TypeDic.TryGetValue(project.TypeSection, out _)
+                    || !XStartService.TypeDic[project.TypeSection].ColumnDic.TryGetValue(project.ColumnSection, out _)) {
+                    // 项目不合规范，删除该项目
+                    projectService.Delete(project.Section);
+                } else {
+                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic.Add(project.Section, project);
+                }
+            }
+            #endregion
+            #region 窗口相关数据初始化
+            LinkedHashMap<string, Project> autoRunApp = new LinkedHashMap<string, Project>();
+            CalculateWidthHeight();
+            // 面板初始化
+            foreach (KeyValuePair<string, XStart.Bean.Type> type in XStartService.TypeDic) {
+                // 计算栏目高度
+                for (int i = 0; i < type.Value.ColumnDic.Count; i++) {
+                    // 打开哪个栏目
+                    var column = type.Value.ColumnDic[i];
+                    if ((string.IsNullOrEmpty(type.Value.OpenColumn) || !type.Value.ColumnDic.ContainsKey(type.Value.OpenColumn)) && i == 0) {
+                        column.StartOpen = true;
+                    } else {
+                        if (column.Section.Equals(type.Value.OpenColumn)) {
+                            column.StartOpen = true;
+                        }
+                    }
+                    if (true == column.StartOpen) {
+                        column.IsExpanded = true;
+                        column.ColumnHeight = (int)type.Value.ExpandedColumnHeight;
+                    } else {
+                        column.IsExpanded = false;
+                        column.ColumnHeight = 0;
+                    }
+                    // 加载应用
+                    foreach (KeyValuePair<string, Project> project in column.ProjectDic) {
+                        Project projectValue = project.Value;
+                        // 自启动应用
+                        if (projectValue.AutoRun != null && (bool)projectValue.AutoRun) {
+                            autoRunApp.Add(projectValue.Section, projectValue);
+                        }
+                    }
+                }
+            }
+            mainViewModel.TypeTabExpanded = true;
+            mainViewModel.TypeTabToggleIcon = FontAwesome6.Outdent;
+            mainViewModel.TypeWidth = 100;
+            mainViewModel.Types = XStartService.TypeDic;
+            int openTypeIndex = mainViewModel.Types.IndexOf(openType);
+            mainViewModel.SelectedIndex = openTypeIndex < 0 ? 0 : openTypeIndex;
+            #endregion
+
+            mainViewModel.InitFinished = true;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+            /* 关闭后保存所有类别打开的栏目***************************************************************/
+            // 保存打开类别
+            string setOpenType = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE);
+            if (string.IsNullOrEmpty(Configs.openType) || !Configs.openType.Equals(setOpenType)) {
+                XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE, Configs.openType);
+            }
+            // 保存打开栏目
+            foreach (KeyValuePair<string, XStart.Bean.Type> type in mainViewModel.Types) {
+                foreach (KeyValuePair<string, Column> column in type.Value.ColumnDic) {
+                    if (column.Value.IsExpanded) {
+                        if (!column.Value.Section.Equals(XStartService.TypeDic[column.Value.TypeSection].OpenColumn)) {
+                            typeService.Update(new XStart.Bean.Type { Section = column.Value.TypeSection, OpenColumn = column.Value.Section });
+                        }
+                        break;
+                    }
+                }
+            }
+            // 窗口位置修改
+            if (WindowState.Minimized != WindowState) {
+                SaveFormSize();
+                SaveFormLocation();
+            }
+            if (Configs.ExitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", "警告", MessageBoxButton.OKCancel)) {
+                e.Cancel = true;
+            } else {
+                e.Cancel = false;
+            }
+        }
+
         private void Window_Close(object sender, RoutedEventArgs e) {
             Close();
+        }
+
+        private void Window_Closed(object sender, EventArgs e) {
+            // 回收相关资源
+            Configs.Dispose();
+            AudioUtils.Dispose();
+            XStart.DataBase.SqLiteFactory.CloseAllSqLite();
         }
 
         /// <summary>
@@ -90,15 +288,17 @@ namespace XStart2._0 {
         }
         private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (mainViewModel.InitFinished) {
-                if(MainTabControl.SelectedIndex != -1) {
+                if (MainTabControl.SelectedIndex != -1) {
                     mainViewModel.SelectedIndex = MainTabControl.SelectedIndex;
                     KeyValuePair<string, XStart.Bean.Type> type = (KeyValuePair<string, XStart.Bean.Type>)MainTabControl.SelectedItem;
+                    // 记录下当前打开的类别（关闭时判断如果和配置中打开不一样，则保存配置）
+                    Configs.openType = type.Value.Section;
                     // 如果当前类别有口令，并且没有记住口令则展示为锁定
                     if (!type.Value.Locked && !type.Value.RememberSecurity && type.Value.HasPassword) {
                         type.Value.Locked = true;
                     }
                 }
-                
+
                 AudioUtils.PlayWav(AudioUtils.CHANGE);
             }
         }
@@ -159,8 +359,9 @@ namespace XStart2._0 {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void AddType(object sender, RoutedEventArgs e) {
-            ProjectTypeVM typeVm = new ProjectTypeVM();
-            typeVm.Title = "添加类别";
+            ProjectTypeVM typeVm = new ProjectTypeVM {
+                Title = "添加类别"
+            };
             ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow(typeVm) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
             OperateType(projectTypeWindow);
         }
@@ -184,7 +385,7 @@ namespace XStart2._0 {
                     NotifyUtils.ShowNotification("清空完成！");
                 }
             } else {
-                MessageBox.Show("当前无需清空！","提示");
+                MessageBox.Show("当前无需清空！", "提示");
             }
         }
 
@@ -323,12 +524,13 @@ namespace XStart2._0 {
                 typeSection = element.Tag as string;
             }
             if (string.Empty.Equals(typeSection)) {
-                MessageBox.Show("无法获取当前类别","错误");
+                MessageBox.Show("无法获取当前类别", "错误");
                 return;
             }
-            ColumnVM vm = new ColumnVM();
-            vm.Title = "添加栏目";
-            vm.TypeSection = typeSection;
+            ColumnVM vm = new ColumnVM {
+                Title = "添加栏目",
+                TypeSection = typeSection
+            };
             ColumnWindow window = new ColumnWindow(vm) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
             OperateColumn(window);
             CalculateWidthHeight(typeSection);
@@ -338,11 +540,12 @@ namespace XStart2._0 {
             Expander curExpander = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Expander;
             string columnSection = curExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
             string typeSection = curExpander.GetValue(ElementParamHelper.TypeSectionProperty) as string;
-            ColumnVM vm = new ColumnVM();
-            vm.Title = "修改栏目";
-            vm.Name = XStartService.TypeDic[typeSection].ColumnDic[columnSection].Name;
-            vm.TypeSection = typeSection;
-            vm.Section = columnSection;
+            ColumnVM vm = new ColumnVM {
+                Title = "修改栏目",
+                Name = XStartService.TypeDic[typeSection].ColumnDic[columnSection].Name,
+                TypeSection = typeSection,
+                Section = columnSection
+            };
             ColumnWindow window = new ColumnWindow(vm) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
             OperateColumn(window);
         }
@@ -398,13 +601,13 @@ namespace XStart2._0 {
             // 添加口令
             AddSecurity(column);
         }
-        
+
         // 修改口令
         private void UpdateColumnSecurity(object sender, RoutedEventArgs e) {
             Expander curExpander = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Expander;
             string columnSection = curExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
             string typeSection = curExpander.GetValue(ElementParamHelper.TypeSectionProperty) as string;
-            
+
             Column column = XStartService.TypeDic[typeSection].ColumnDic[columnSection];
             UpdateSecurity(column);
         }
@@ -498,7 +701,7 @@ namespace XStart2._0 {
                 NotifyUtils.ShowNotification("口令移除成功！");
             }
         }
-        
+
 
         // 移除类别（左侧TreeMenu,TabControl的UIPage,TypeDic中数据，Ini文件）
         private void RemoveTypeData(string section) {
@@ -511,6 +714,10 @@ namespace XStart2._0 {
                 }
             }
             XStartService.TypeDic.Remove(section);
+        }
+
+        private void ProjectButton_Click(object sender, RoutedEventArgs e) {
+
         }
 
         private void DelCount<T>(TableService<T> t) where T : TableData {
@@ -557,6 +764,28 @@ namespace XStart2._0 {
         /// <param name="e"></param>
         private void ShowAbout(object sender, RoutedEventArgs e) {
             NotifyUtils.ShowNotification("X启动2.0版", Colors.Gray, "关于");
+        }
+        /// <summary>
+        /// 保存当前窗口尺寸配置
+        /// </summary>
+        public void SaveFormSize() {
+            double height = Height;
+            double width = Width;
+            XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_SIZE, Constants.KEY_HEIGHT, Convert.ToString(height));
+            XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_SIZE, Constants.KEY_WIDTH, Convert.ToString(width));
+        }
+
+        /// <summary>
+        /// 保存当前窗口位置
+        /// </summary>
+        public void SaveFormLocation() {
+            // 保存当前位置
+            if (0 == Configs.mainLeft || mainViewModel.MainLeft != Configs.mainLeft) {
+                XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_LOCATION, Constants.KEY_LEFT, Convert.ToString(mainViewModel.MainLeft));
+            }
+            if (0 == Configs.mainTop || mainViewModel.MainTop != Configs.mainTop) {
+                XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_LOCATION, Constants.KEY_TOP, Convert.ToString(mainViewModel.MainTop));
+            }
         }
     }
 }

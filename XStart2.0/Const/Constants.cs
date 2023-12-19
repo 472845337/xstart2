@@ -59,8 +59,8 @@
         public const string KEY_SYSTEM_APP_PAGE = "SystemAppPage";
         public const string KEY_ADD_MULTI = "AddMulti";
 
-        public const string KEY_X = "X";
-        public const string KEY_Y = "Y";
+        public const string KEY_LEFT = "Left";
+        public const string KEY_TOP = "Top";
         public const string KEY_HEIGHT = "Height";
         public const string KEY_WIDTH = "Width";
 

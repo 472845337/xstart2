@@ -6,13 +6,6 @@
         xmlns:view="clr-namespace:XStart2._0.View"
         mc:Ignorable="d"
         Title="选项" Height="360" Width="500">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/View/ResourseDictionary.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
     <Grid>
         <TabControl>
             <TabItem Header="基本">
@@ -23,7 +16,7 @@
                             <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="程序置顶:" HorizontalAlignment="Right"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="65" ButtonWidth="25" Style="{StaticResource styleSliderButton}" HorizontalAlignment="Center"/>
+                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="65" ButtonWidth="25" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                     </Grid>
                     <Grid Margin="5">
                         <Grid.ColumnDefinitions>
@@ -31,7 +24,7 @@
                             <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="操作音效:" HorizontalAlignment="Right"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="开" OffLabel="关" Width="65" ButtonWidth="25" Style="{StaticResource styleSliderButton}" HorizontalAlignment="Center"/>
+                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="开" OffLabel="关" Width="65" ButtonWidth="25" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                     </Grid>
                     <Grid Margin="5">
                         <Grid.ColumnDefinitions>
@@ -39,7 +32,7 @@
                             <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="靠边隐藏:" HorizontalAlignment="Right"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="65" ButtonWidth="25" Style="{StaticResource styleSliderButton}" HorizontalAlignment="Center"/>
+                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="65" ButtonWidth="25" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                     </Grid>
                     <Grid Margin="5" Height="26">
                         <Grid.ColumnDefinitions>
@@ -47,7 +40,7 @@
                             <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="开机启动:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="65" ButtonWidth="25" Style="{StaticResource styleSliderButton}" HorizontalAlignment="Center"/>
+                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="65" ButtonWidth="25" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                     </Grid>
                     <Grid Margin="5">
                         <Grid.ColumnDefinitions>
@@ -55,7 +48,7 @@
                             <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="退出提醒:" HorizontalAlignment="Right"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="65" ButtonWidth="25" Style="{StaticResource styleSliderButton}" HorizontalAlignment="Center"/>
+                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="65" ButtonWidth="25" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                     </Grid>
                 </WrapPanel>
             </TabItem>
@@ -67,7 +60,7 @@
                             <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="点击运行:" HorizontalAlignment="Right"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="单击" OffLabel="双击" Width="65" ButtonWidth="25" Style="{StaticResource styleSliderButton}" HorizontalAlignment="Center"/>
+                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="单击" OffLabel="双击" Width="65" ButtonWidth="25" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                     </Grid>
                     <GroupBox Header="网址打开">
                         <StackPanel>
