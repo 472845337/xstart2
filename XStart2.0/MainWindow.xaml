@@ -6,8 +6,9 @@
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:XStart2._0"
         xmlns:helper="clr-namespace:XStart2._0.Helper"
+        xmlns:view="clr-namespace:XStart2._0.View"
         mc:Ignorable="d"
-        Title="X启动" Height="{Binding MainHeight, Mode=TwoWay}" Width="{Binding MainWidth, Mode=TwoWay}" Left="{Binding MainLeft, Mode=TwoWay}" Top="{Binding MainTop, Mode=TwoWay}" Loaded="Window_Loaded" Closing="Window_Closing" Closed="Window_Closed">
+        Title="X启动" Height="{Binding MainHeight, Mode=TwoWay}" Width="{Binding MainWidth, Mode=TwoWay}" MinHeight="500" MinWidth="300" Left="{Binding MainLeft, Mode=TwoWay}" Top="{Binding MainTop, Mode=TwoWay}" Loaded="Window_Loaded" Closing="Window_Closing" Closed="Window_Closed">
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
             <b:InvokeCommandAction Command="{Binding MainWindowLoadedCommand}"/>
@@ -64,13 +65,13 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="32"/>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="25"/>
+                                    <ColumnDefinition Width="20"/>
                                 </Grid.ColumnDefinitions>
                                 <Border Grid.Column="0" Padding="3">
                                     <Image Source="{TemplateBinding Tag, Converter={StaticResource Project2IconConverter}}" Stretch="Fill" Margin="2"/>
                                 </Border>
                                 <TextBlock Grid.Column="1" Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="5 0 0 0"/>
-                                
+                                <ToggleButton Grid.Column="2" Style="{StaticResource GlassToggleButton}" Height="20" Background="Green" IsChecked="False"/>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -115,25 +116,26 @@
             </Grid.ColumnDefinitions>
             <!-- 个人信息 -->
             <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="5">
-                <Border BorderBrush="gray" BorderThickness="1" Height="50" Width="50" CornerRadius="2">
+                <Border BorderBrush="gray" BorderThickness="1" Height="50" Width="50" CornerRadius="25">
                     <Image Source="{Binding Avatar}" />
                 </Border>
                 <TextBlock Text="{Binding NickName}" VerticalAlignment="Bottom" Margin="8 0 8 5"/>
             </StackPanel>
             <!-- 时间 -->
             <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Bottom">
-                <TextBlock Text="{Binding CurrentTime}" Margin="5 2"/>
                 <TextBlock Margin="5 2">
-                    <Run Text="癸卯年"/>
-                    <Run Text="甲子月"/>
-                    <Run Text="已酉日"/>
+                    <Run Text="{Binding CurrentDay}"/>
+                    <Run Text="{Binding CurrentTime}"/>
                 </TextBlock>
-                <TextBlock Text="星期天" Margin="5 0 5 5"/>
+                <TextBlock Margin="5 2">
+                    <Run Text="{Binding LunarYear}"/><Run>年</Run>
+                    <Run Text="{Binding LunarMonth}"/><Run>月</Run>
+                    <Run Text="{Binding LunarDay}"/><Run>日</Run>
+                </TextBlock>
+                <TextBlock Text="{Binding WeekDay}" Margin="5 0 5 5"/>
             </StackPanel>
             <!-- 小工具 -->
             <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5">
-                <ToggleButton Grid.Column="2" Width="26"
-                                    Style="{StaticResource SwitchButton_Style}" HorizontalAlignment="Center"/>
                 <Image Source="/Files/Images/Calendar.png" Height="25" Margin="2"/>
                 <Image Source="/Files/Images/NotePad.png" Height="25" Margin="2"/>
                 <Image Source="/Files/Images/Weather.png" Height="25" Margin="2"/>

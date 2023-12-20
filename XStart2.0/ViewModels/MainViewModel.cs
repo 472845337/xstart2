@@ -22,6 +22,18 @@ namespace XStart2._0.ViewModels {
 
 
         public MainViewModel() {
+            // 计算初始化信息
+            avatar = "/Files/Images/DefaultUser.png";
+            nickName = "昵称";
+            // 日期
+            CurrentDay = DateTime.Now.ToString("D");
+            CurrentTime = DateTime.Now.ToString("T");
+            // 天干地支和星期
+            LunarCalendar lc = LunarCalendar.Now;
+            LunarYear = lc.GetEraYear();
+            LunarMonth = lc.GetEraMonth();
+            LunarDay = lc.GetEraDay();
+            WeekDay = lc.ChineseWeek;
 
         }
 
@@ -31,16 +43,26 @@ namespace XStart2._0.ViewModels {
         }
         #region 用户数据
         // 头像
-        private string avatar = "/Files/Icons/user.ico";
+        private string avatar;
         public string Avatar { get => avatar; set { avatar = value; OnPropertyChanged("Avatar"); } }
         // 昵称
-        private string nickName = "昵称";
+        private string nickName;
         public string NickName { get => nickName; set { nickName = value; OnPropertyChanged("NickName"); } }
         #endregion
 
         #region 时间数据
-        private string currentTime = DateTime.Now.ToString("F");
+        private string currentDay;
+        public string CurrentDay { get => currentDay; set { currentDay = value; OnPropertyChanged("CurrentDay"); } }
+        private string currentTime;
         public string CurrentTime { get => currentTime; set { currentTime = value; OnPropertyChanged("CurrentTime"); } }
+        private string lunarYear;
+        public string LunarYear { get => lunarYear; set { lunarYear = value;OnPropertyChanged("LunarYear"); } }
+        private string lunarMonth;
+        public string LunarMonth { get => lunarMonth; set { lunarMonth = value; OnPropertyChanged("LunarMonth"); } }
+        private string lunarDay;
+        public string LunarDay { get => lunarDay; set { lunarDay = value; OnPropertyChanged("LunarDay"); } }
+        private string weekDay;
+        public string WeekDay { get => weekDay; set { weekDay = value; OnPropertyChanged("WeekDay"); } }
         #endregion
         #region 应用数据
         private ObservableDictionary<string, XStart.Bean.Type> types;

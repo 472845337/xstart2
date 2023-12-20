@@ -253,7 +253,7 @@
                     <ControlTemplate.Triggers>
                         
                         <Trigger Property="IsChecked" Value="False">
-                            <Setter TargetName="BackgroundLayer" Property="Fill" Value="Green"/>
+                            <Setter TargetName="BackgroundLayer" Property="Fill" Value="Red"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="RefractionLayer" Property="Fill">

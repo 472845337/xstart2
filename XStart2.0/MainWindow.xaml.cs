@@ -19,13 +19,23 @@ namespace XStart2._0 {
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
     public partial class MainWindow : Window {
+        // 时钟定时器
+        private readonly System.Windows.Threading.DispatcherTimer currentTimer = new System.Windows.Threading.DispatcherTimer();
+        // 数据服务
         public TypeService typeService = TypeService.Instance;
         public ColumnService columnService = ColumnService.Instance;
         public ProjectService projectService = ProjectService.Instance;
+        // 模型
         readonly MainViewModel mainViewModel = new MainViewModel();
         public MainWindow() {
             InitializeComponent();
             Configs.Handler = new System.Windows.Interop.WindowInteropHelper(this).Handle;
+            // Tick 超过计时器间隔时发生。
+            currentTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            // Interval 获取或设置计时器刻度之间的时间段
+            currentTimer.Interval = new TimeSpan(0, 0, 1);
+            currentTimer.Start();
+            // 将模型赋值上下文
             DataContext = mainViewModel;
         }
 
@@ -786,6 +796,11 @@ namespace XStart2._0 {
             if (0 == Configs.mainTop || mainViewModel.MainTop != Configs.mainTop) {
                 XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_LOCATION, Constants.KEY_TOP, Convert.ToString(mainViewModel.MainTop));
             }
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)//计时执行的程序
+{
+            mainViewModel.CurrentTime = DateTime.Now.ToString("T");
         }
     }
 }
