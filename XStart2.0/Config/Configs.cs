@@ -13,22 +13,20 @@ namespace XStart.Config {
         public static string AppStartPath = System.AppDomain.CurrentDomain.BaseDirectory;
         public static System.IntPtr Handler = System.IntPtr.Zero;
         public static bool inited = false;// 是否初始化
-        public static string AppClickType = Constants.CLICK_TYPE_SINGLE;// 默认单击打开
-        public static string UrlOpen = Constants.URL_OPEN_DEFAULT;
-        public static string UrlOpenCustomBrowser;
-        public static bool ExitWarn = true;// 退出提醒
-
 
         public static double mainHeight;
         public static double mainWidth;
         public static double mainTop;
         public static double mainLeft;
-        public static bool topMost = false;
-        public static bool audio = false;
-        public static bool autoRun = true;// 随系统启动
+        public static bool topMost;
+        public static bool audio;
+        public static bool autoRun;// 随系统启动
         public static string openType = null;// 启动后打开的类别
         public static string clickType = Constants.CLICK_TYPE_SINGLE;// 默认单击
         public static bool closeBorderHide = true;// 靠边自动隐藏
+        public static string urlOpen = Constants.URL_OPEN_DEFAULT;
+        public static string urlOpenCustomBrowser;
+        public static bool exitWarn;// 退出提醒
         public static int delCount = 0;
 
         public static System.IntPtr taskbarHandler = System.IntPtr.Zero;

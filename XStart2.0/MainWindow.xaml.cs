@@ -31,7 +31,7 @@ namespace XStart2._0 {
             InitializeComponent();
             Configs.Handler = new System.Windows.Interop.WindowInteropHelper(this).Handle;
             // Tick 超过计时器间隔时发生。
-            currentTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            currentTimer.Tick += new EventHandler(CurrentTimer_Tick);
             // Interval 获取或设置计时器刻度之间的时间段
             currentTimer.Interval = new TimeSpan(0, 0, 1);
             currentTimer.Start();
@@ -49,7 +49,7 @@ namespace XStart2._0 {
             string topStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_LOCATION, Constants.KEY_TOP);
             string heightStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SIZE, Constants.KEY_HEIGHT);
             string widthStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SIZE, Constants.KEY_WIDTH);
-            string topMostStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST);
+
             // 尺寸
             if (!string.IsNullOrEmpty(heightStr)) {
                 mainViewModel.MainHeight = Convert.ToDouble(heightStr);
@@ -64,17 +64,15 @@ namespace XStart2._0 {
             if (!string.IsNullOrEmpty(topStr)) {
                 mainViewModel.MainTop = Convert.ToDouble(topStr);
             }
-            // 置顶
-            if (!string.IsNullOrEmpty(topMostStr)) {
-                Configs.topMost = Convert.ToBoolean(topMostStr);
-            }
-            Topmost = Configs.topMost;
+
+
             Configs.mainHeight = mainViewModel.MainHeight;
             Configs.mainWidth = mainViewModel.MainWidth;
             Configs.mainLeft = mainViewModel.MainLeft;
             Configs.mainTop = mainViewModel.MainTop;
             #endregion
             #region 加载设置项
+            string topMostStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST);
             string openType = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE);// 上次最后打开的类别
             string clickType = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_CLICK_TYPE);// 点击方式，单击、双击
             string audio = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_AUDIO);
@@ -84,14 +82,25 @@ namespace XStart2._0 {
             string urlOpen = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN);
             string urlOpenCustomBrowser = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER);
 
+            // 置顶
+            Configs.topMost = !string.IsNullOrEmpty(topMostStr) && Convert.ToBoolean(topMostStr);
             Configs.openType = openType;
-            Configs.clickType = clickType;
+            Configs.clickType = string.IsNullOrEmpty(clickType) ? Constants.CLICK_TYPE_SINGLE : clickType;
             Configs.audio = !string.IsNullOrEmpty(audio) && Convert.ToBoolean(audio);
             Configs.autoRun = !string.IsNullOrEmpty(autoRun) && Convert.ToBoolean(autoRun);
-            Configs.ExitWarn = string.IsNullOrEmpty(exitWarn) || Convert.ToBoolean(exitWarn);
+            Configs.exitWarn = string.IsNullOrEmpty(exitWarn) || Convert.ToBoolean(exitWarn);
             Configs.closeBorderHide = string.IsNullOrEmpty(closeBorderHide) || Convert.ToBoolean(closeBorderHide);
-            Configs.UrlOpen = urlOpen;
-            Configs.UrlOpenCustomBrowser = urlOpenCustomBrowser;
+            if (!string.IsNullOrEmpty(urlOpen)) { Configs.urlOpen = urlOpen; }
+            Configs.urlOpenCustomBrowser = urlOpenCustomBrowser;
+
+            mainViewModel.TopMost = Configs.topMost;
+            mainViewModel.ClickType = Configs.clickType;
+            mainViewModel.Audio = Configs.audio;
+            mainViewModel.AutoRun = Configs.autoRun;
+            mainViewModel.ExitWarn = Configs.exitWarn;
+            mainViewModel.CloseBorderHide = Configs.closeBorderHide;
+            mainViewModel.UrlOpen = Configs.urlOpen;
+            mainViewModel.UrlOpenCustomBrowser = Configs.urlOpenCustomBrowser;
             // 系统其他配置
             string delCount = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_DEL_COUNT);// 数据库执行多少次删除后执行VACUUM
             Configs.delCount = string.IsNullOrEmpty(delCount) ? 0 : Convert.ToInt32(delCount);
@@ -128,6 +137,9 @@ namespace XStart2._0 {
                 }
                 type.Locked = !string.IsNullOrEmpty(type.Password);
                 type.HasPassword = !string.IsNullOrEmpty(type.Password);
+                if (string.IsNullOrEmpty(type.FaIconFontFamily)) {
+                    type.FaIconFontFamily = Constants.FONT_FAMILY_FA_SOLID;
+                }
                 XStartService.TypeDic.Add(type.Section, type);
             }
             // 加载栏目配置
@@ -199,7 +211,7 @@ namespace XStart2._0 {
             mainViewModel.SelectedIndex = openTypeIndex < 0 ? 0 : openTypeIndex;
             #endregion
 
-            mainViewModel.InitFinished = true;
+            Configs.inited = true;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
@@ -225,11 +237,14 @@ namespace XStart2._0 {
                 SaveFormSize();
                 SaveFormLocation();
             }
-            if (Configs.ExitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", "警告", MessageBoxButton.OKCancel)) {
+            // 配置保存
+            SaveSetting();
+            if (Configs.exitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", "警告", MessageBoxButton.OKCancel)) {
                 e.Cancel = true;
             } else {
                 e.Cancel = false;
             }
+
         }
 
         private void Window_Close(object sender, RoutedEventArgs e) {
@@ -297,7 +312,7 @@ namespace XStart2._0 {
             CalculateWidthHeight();
         }
         private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (mainViewModel.InitFinished) {
+            if (Configs.inited) {
                 if (MainTabControl.SelectedIndex != -1) {
                     mainViewModel.SelectedIndex = MainTabControl.SelectedIndex;
                     KeyValuePair<string, XStart.Bean.Type> type = (KeyValuePair<string, XStart.Bean.Type>)MainTabControl.SelectedItem;
@@ -360,8 +375,23 @@ namespace XStart2._0 {
         }
 
         private void Open_Setting(object sender, RoutedEventArgs e) {
-            SettingWindow settingWindow = new SettingWindow() { WindowStartupLocation = WindowStartupLocation.CenterScreen };
-            settingWindow.ShowDialog();
+            if (Topmost) {
+                Topmost = false;
+            }
+            SettingWindow settingWindow = new SettingWindow(mainViewModel) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
+            if (true == settingWindow.ShowDialog()) {
+                SettingViewModel settingVM = settingWindow.settingVM;
+                // 将设置的值赋值，并写入配置
+                mainViewModel.Audio = settingVM.Audio;
+                mainViewModel.TopMost = settingVM.TopMost;
+                mainViewModel.AutoRun = settingVM.AutoRun;
+                mainViewModel.ExitWarn = settingVM.ExitWarn;
+                mainViewModel.CloseBorderHide = settingVM.CloseBorderHide;
+                mainViewModel.ClickType = settingVM.ClickType;
+                mainViewModel.UrlOpen = settingVM.UrlOpen;
+                mainViewModel.UrlOpenCustomBrowser = settingVM.UrlOpenCustomBrowser;
+                SaveSetting();
+            }
         }
         /// <summary>
         /// 添加类别
@@ -797,10 +827,45 @@ namespace XStart2._0 {
                 XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_LOCATION, Constants.KEY_TOP, Convert.ToString(mainViewModel.MainTop));
             }
         }
-
-        private void dispatcherTimer_Tick(object sender, EventArgs e)//计时执行的程序
-{
+        //计时执行的程序
+        private void CurrentTimer_Tick(object sender, EventArgs e) {
             mainViewModel.CurrentTime = DateTime.Now.ToString("T");
+        }
+
+        private void SaveSetting() {
+            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST, ref Configs.topMost, mainViewModel.TopMost);// 置顶
+            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_CLICK_TYPE, ref Configs.clickType, mainViewModel.ClickType);// 点击方式
+            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_AUDIO, ref Configs.audio, mainViewModel.Audio);// 音效开关
+            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_AUTO_RUN, ref Configs.autoRun, mainViewModel.AutoRun);// 自启动
+            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_EXIT_WARN, ref Configs.exitWarn, mainViewModel.ExitWarn);// 退出警告
+            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE, ref Configs.closeBorderHide, mainViewModel.CloseBorderHide);// 靠边隐藏
+            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN, ref Configs.urlOpen, mainViewModel.UrlOpen);// 浏览器打开链接
+            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER, ref Configs.urlOpenCustomBrowser, mainViewModel.UrlOpenCustomBrowser);// 自定义浏览器
+        }
+
+        private void SaveConfig<T>(string section, string key, ref T from, T to) {
+            bool isChange = false;
+            if (from is bool fromBool && to is bool toBool) {
+                if (fromBool != toBool) {
+                    isChange = true;
+                }
+            } else if (from is string fromStr && to is string toStr) {
+                if (!fromStr.Equals(toStr)) {
+                    isChange = true;
+                }
+            } else if (from is int fromInt && to is int toInt) {
+                if (fromInt != toInt) {
+                    isChange = true;
+                }
+            }else if(from is uint fromUint && to is uint toUint) {
+                if (fromUint != toUint) {
+                    isChange = true;
+                }
+            }
+            if (isChange) {
+                XStartIniUtils.IniWriteValue(Constants.SET_FILE, section, key, Convert.ToString(to));
+                from = to;
+            }
         }
     }
 }

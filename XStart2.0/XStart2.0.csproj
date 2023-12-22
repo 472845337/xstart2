@@ -69,6 +69,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bean\FontAwesome.cs" />
+    <Compile Include="Converters\UrlOpenConverter.cs" />
+    <Compile Include="Converters\ClickTypeConverter.cs" />
+    <Compile Include="Converters\ProjectAutoRunConverter.cs" />
     <Compile Include="Converters\Project2IconConverter.cs" />
     <Compile Include="Helper\ElementParamHelper.cs" />
     <Compile Include="Bean\HighContrastHelper.cs" />
@@ -100,13 +103,19 @@
     <Compile Include="Utils\NotifyUtils.cs" />
     <Compile Include="Utils\WinApi.cs" />
     <Compile Include="Utils\XStartIniUtils.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\CalendarVM.cs" />
     <Compile Include="ViewModels\ColumnVM.cs" />
     <Compile Include="ViewModels\FontAwesomeVM.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\NotifyData.cs" />
     <Compile Include="ViewModels\ProjectTypeVM.cs" />
     <Compile Include="ViewModels\SecurityVM.cs" />
+    <Compile Include="ViewModels\SettingViewModel.cs" />
     <Compile Include="View\SliderButton.cs" />
+    <Compile Include="Windows\CalendarWindow.xaml.cs">
+      <DependentUpon>CalendarWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FontAwesomeWindow.xaml.cs">
       <DependentUpon>FontAwesomeWindow.xaml</DependentUpon>
     </Compile>
@@ -161,6 +170,10 @@
     <Page Include="Resources\SliderButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\CalendarWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\FontAwesomeWindow.xaml">
       <SubType>Designer</SubType>

@@ -48,8 +48,11 @@ namespace XStart.Bean {
         public string HotKey { get; set; }// 热键
         [TableParam("remark", "VARCHAR")]
         public string Remark { get; set; }// 备注
+
+        // 随应用启动
+        private bool? autoRun;
         [TableParam("auto_run", "BIT")]
-        public bool? AutoRun { get; set; }// 随应用启动
+        public bool? AutoRun { get => autoRun; set { autoRun = value; OnPropertyChanged("AutoRun"); } }
         public string ToolTipContent {
             get {
                 if (SystemAppParam.MSTSC.Equals(Path)) {

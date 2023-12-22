@@ -7,7 +7,11 @@
         mc:Ignorable="d"
         Title="选项" Height="360" Width="500">
     <Grid>
-        <TabControl>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <TabControl Grid.Row="0">
             <TabItem Header="基本">
                 <WrapPanel>
                     <Grid Margin="5">
@@ -16,7 +20,7 @@
                             <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="程序置顶:" HorizontalAlignment="Right"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="65" ButtonWidth="25" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding TopMost,Mode=TwoWay}"  Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                     </Grid>
                     <Grid Margin="5">
                         <Grid.ColumnDefinitions>
@@ -24,7 +28,7 @@
                             <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="操作音效:" HorizontalAlignment="Right"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="开" OffLabel="关" Width="65" ButtonWidth="25" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="开" OffLabel="关" Width="55" ButtonWidth="25" IsChecked="{Binding Audio,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                     </Grid>
                     <Grid Margin="5">
                         <Grid.ColumnDefinitions>
@@ -32,7 +36,7 @@
                             <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="靠边隐藏:" HorizontalAlignment="Right"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="65" ButtonWidth="25" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding CloseBorderHide,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                     </Grid>
                     <Grid Margin="5" Height="26">
                         <Grid.ColumnDefinitions>
@@ -40,7 +44,7 @@
                             <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="开机启动:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="65" ButtonWidth="25" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding AutoRun,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                     </Grid>
                     <Grid Margin="5">
                         <Grid.ColumnDefinitions>
@@ -48,7 +52,7 @@
                             <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="退出提醒:" HorizontalAlignment="Right"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="65" ButtonWidth="25" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding ExitWarn,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                     </Grid>
                 </WrapPanel>
             </TabItem>
@@ -56,23 +60,24 @@
                 <StackPanel>
                     <Grid Margin="5">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="14"/>
+                            <ColumnDefinition Width="47"/>
                             <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="点击运行:" HorizontalAlignment="Right"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="单击" OffLabel="双击" Width="65" ButtonWidth="25" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                        <Label Grid.Column="0" Content="点击运行:" HorizontalAlignment="Right" Grid.ColumnSpan="2"/>
+                        <view:SliderButton Grid.Column="2" OnLabel="单击" OffLabel="双击" Width="65" ButtonWidth="25" IsChecked="{Binding ClickType,Converter={StaticResource ClickTypeConverter},Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center" Margin="8,0"/>
                     </Grid>
                     <GroupBox Header="网址打开">
                         <StackPanel>
-                            <RadioButton Content="使用系统默认浏览器" Margin="5"/>
-                            <RadioButton Content="使用Edge" Margin="5"/>
-                            <RadioButton Content="使用自定义浏览器" Margin="5"/>
+                            <RadioButton GroupName="UrlOpen" Content="使用系统默认浏览器" Margin="5" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlDefault',Mode=TwoWay}"/>
+                            <RadioButton GroupName="UrlOpen" Content="使用Edge" Margin="5" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlEdge',Mode=TwoWay}"/>
+                            <RadioButton GroupName="UrlOpen" Content="使用自定义浏览器" Margin="5" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlCustom',Mode=TwoWay}"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="32"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBox Grid.Column="0" Margin="5"/>
+                                <TextBox Grid.Column="0" Margin="5" Text="{Binding UrlOpenCustomBrowser}"/>
                                 <Button Content="..." Grid.Column="1" Margin="5"/>
                             </Grid>
                         </StackPanel>
@@ -81,11 +86,15 @@
             </TabItem>
             <TabItem Header="其他">
                 <WrapPanel>
-                    <Button Style="{StaticResource BtnConfirm_Style}" Content="备份" Width="80" Margin="5"/>
-                    <Button Style="{StaticResource BtnConfirm_Style}" Content="恢复" Width="80" Margin="5"/>
-                    <Button Style="{StaticResource BtnConfirm_Style}" Content="生成桌面快捷方式" Width="120" Margin="5"/>
+                    <Button Style="{StaticResource BtnConfirm_Style}" Content="备份" Width="80" Margin="5" Click="BackUp_Click"/>
+                    <Button Style="{StaticResource BtnConfirm_Style}" Content="恢复" Width="80" Margin="5" Click="Recover_Click"/>
+                    <Button Style="{StaticResource BtnConfirm_Style}" Content="生成桌面快捷方式" Width="120" Margin="5" Click="CreateDeskLink_Click"/>
                 </WrapPanel>
             </TabItem>
         </TabControl>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Style="{StaticResource BtnConfirm_Style}" Click="SaveSetting_Click"/>
+            <Button Style="{StaticResource BtnCancel_Style}" Click="CancelSetting_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

@@ -14,12 +14,10 @@ using XStart2._0.Commands;
 using XStart2._0.Utils;
 
 namespace XStart2._0.ViewModels {
-    internal class MainViewModel : INotifyPropertyChanged {
+    public class MainViewModel : BaseViewModel {
         public TypeService typeService = TypeService.Instance;
         public ColumnService columnService = ColumnService.Instance;
         public ProjectService projectService = ProjectService.Instance;
-        public bool InitFinished { get; set; } = false;
-
 
         public MainViewModel() {
             // 计算初始化信息
@@ -28,19 +26,9 @@ namespace XStart2._0.ViewModels {
             // 日期
             CurrentDay = DateTime.Now.ToString("D");
             CurrentTime = DateTime.Now.ToString("T");
-            // 天干地支和星期
-            LunarCalendar lc = LunarCalendar.Now;
-            LunarYear = lc.GetEraYear();
-            LunarMonth = lc.GetEraMonth();
-            LunarDay = lc.GetEraDay();
-            WeekDay = lc.ChineseWeek;
-
+            CurrentWeekDay = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
         #region 用户数据
         // 头像
         private string avatar;
@@ -55,14 +43,8 @@ namespace XStart2._0.ViewModels {
         public string CurrentDay { get => currentDay; set { currentDay = value; OnPropertyChanged("CurrentDay"); } }
         private string currentTime;
         public string CurrentTime { get => currentTime; set { currentTime = value; OnPropertyChanged("CurrentTime"); } }
-        private string lunarYear;
-        public string LunarYear { get => lunarYear; set { lunarYear = value;OnPropertyChanged("LunarYear"); } }
-        private string lunarMonth;
-        public string LunarMonth { get => lunarMonth; set { lunarMonth = value; OnPropertyChanged("LunarMonth"); } }
-        private string lunarDay;
-        public string LunarDay { get => lunarDay; set { lunarDay = value; OnPropertyChanged("LunarDay"); } }
-        private string weekDay;
-        public string WeekDay { get => weekDay; set { weekDay = value; OnPropertyChanged("WeekDay"); } }
+        private string currentWeekDay;
+        public string CurrentWeekDay { get => currentWeekDay; set { currentWeekDay = value; OnPropertyChanged("CurrentWeekDay"); } }
         #endregion
         #region 应用数据
         private ObservableDictionary<string, XStart.Bean.Type> types;
@@ -95,10 +77,30 @@ namespace XStart2._0.ViewModels {
         private string typeTabToggleIcon;
         public string TypeTabToggleIcon { get => typeTabToggleIcon; set { typeTabToggleIcon = value; OnPropertyChanged("TypeTabToggleIcon"); } }
         #endregion
+
+        #region 窗口相关设置
         private int selectedIndex;
         public int SelectedIndex { get => selectedIndex; set { selectedIndex = value; OnPropertyChanged("SelectedIndex"); } }
         private double tabControlActualHeight;
         public double TabControlActualHeight { get => tabControlActualHeight; set { tabControlActualHeight = value; OnPropertyChanged("TabControlActualHeight"); } }
+        private bool topMost;
+        public bool TopMost { get => topMost; set { topMost = value;OnPropertyChanged("TopMost"); } }
+        // 音效开关
+        private bool audio;
+        public bool Audio { get => audio; set { audio = value;OnPropertyChanged("Audio"); } }
+        private bool autoRun;
+        public bool AutoRun { get => autoRun; set { autoRun = value; OnPropertyChanged("AutoRun"); } }
+        private bool exitWarn;
+        public bool ExitWarn { get => exitWarn; set { exitWarn = value; OnPropertyChanged("ExitWarn"); } }
+        private bool closeBorderHide;
+        public bool CloseBorderHide { get => closeBorderHide; set { closeBorderHide = value;OnPropertyChanged("CloseBorderHide"); } }
+        private string clickType;
+        public string ClickType { get => clickType; set { clickType = value; OnPropertyChanged("ClickType"); } }
+        private string urlOpen;
+        public string UrlOpen { get => urlOpen; set { urlOpen = value; OnPropertyChanged("UrlOpen"); } }
+        private string urlOpenCustomBrowser;
+        public string UrlOpenCustomBrowser { get => urlOpenCustomBrowser; set { urlOpenCustomBrowser = value; OnPropertyChanged("UrlOpenCustomBrowser"); } }
+        #endregion
 
     }
 }
