@@ -10,13 +10,13 @@ namespace XStart2._0.ViewModels {
         private bool? _IsChecked = false;
         private string _Section;
         private string _Header = string.Empty;
-        private XStart.Bean.Project _Project;
+        private object _Data;
         private List<CheckBoxTreeViewModel> _Children = null;
         private CheckBoxTreeViewModel _Parent = null;
 
         public bool? IsChecked { get => _IsChecked; set { SetIsChecked(value, true, true); } }
         public string Header { get => _Header; set => _Header = value; }
-        public XStart.Bean.Project Project { get => _Project; set => _Project = value; }
+        public object Data { get => _Data; set => _Data = value; }
         public List<CheckBoxTreeViewModel> Children { get => _Children; set { _Children = value; SetParentValue(); } }
         public string Section { get => _Section; set => _Section = value; }
         public CheckBoxTreeViewModel Parent { get => _Parent; private set => _Parent = value; }

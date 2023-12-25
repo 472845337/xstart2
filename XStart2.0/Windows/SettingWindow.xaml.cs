@@ -55,7 +55,10 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Recover_Click(object sender, RoutedEventArgs e) {
-
+            ResumeWindow resumeWindow = new ResumeWindow() {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
+            };
+            resumeWindow.ShowDialog();
         }
 
         /// <summary>

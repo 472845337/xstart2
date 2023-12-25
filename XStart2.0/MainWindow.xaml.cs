@@ -13,6 +13,7 @@ using XStart.Const;
 using XStart.Services;
 using XStart.Utils;
 using XStart2._0.Helper;
+using XStart2._0.Services;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
 using XStart2._0.Windows;
@@ -25,9 +26,9 @@ namespace XStart2._0 {
         // 时钟定时器
         private readonly System.Windows.Threading.DispatcherTimer currentTimer = new System.Windows.Threading.DispatcherTimer();
         // 数据服务
-        public TypeService typeService = TypeService.Instance;
-        public ColumnService columnService = ColumnService.Instance;
-        public ProjectService projectService = ProjectService.Instance;
+        public TypeService typeService = ServiceFactory.GetTypeService();
+        public ColumnService columnService = ServiceFactory.GetColumnService();
+        public ProjectService projectService = ServiceFactory.GetProjectService();
         // 模型
         readonly MainViewModel mainViewModel = new MainViewModel();
         public MainWindow() {

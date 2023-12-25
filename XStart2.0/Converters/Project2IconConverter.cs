@@ -7,8 +7,12 @@ namespace XStart2._0.Converters {
         #region IValueConverter Members
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
-            if(null != value && value is XStart.Bean.Project project) {
-                return XStartService.BitmapToBitmapImage(XStartService.GetIconImage(project));
+            if(null != value) {
+                if (value is XStart.Bean.BackData.BackProject backProject) {
+                    return XStartService.BitmapToBitmapImage(XStartService.GetIconImage(backProject.Kind, backProject.Path, backProject.IconPath));
+                } else if (value is XStart.Bean.Project project) {
+                    return XStartService.BitmapToBitmapImage(XStartService.GetIconImage(project));
+                }
             }
             return null;
         }

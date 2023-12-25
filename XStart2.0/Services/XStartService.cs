@@ -50,26 +50,26 @@ namespace XStart.Services {
         }
 
         /// <summary>
-        /// 应用对应的图标
+        /// 
         /// </summary>
-        /// <param name="project"></param>
+        /// <param name="kind"></param>
+        /// <param name="path"></param>
+        /// <param name="iconPath"></param>
         /// <returns></returns>
-        public static System.Drawing.Bitmap GetIconImage(Project project) {
+        public static System.Drawing.Bitmap GetIconImage(string kind, string path, string iconPath) {
             try {
-                // 根据类型选择图标
-                string kind = project.Kind;
                 System.Drawing.Bitmap image = null;
-                if (!string.IsNullOrEmpty(project.IconPath)) {
-                    if (project.IconPath.StartsWith("#")) {
+                if (!string.IsNullOrEmpty(iconPath)) {
+                    if (iconPath.StartsWith("#")) {
                         // 系统功能图标
-                        image = Configs.iconDic[project.IconPath];
+                        image = Configs.iconDic[iconPath];
                     } else {
                         // 项目图标
-                        if (File.Exists(project.IconPath) || Directory.Exists(project.IconPath)) {
-                            if (project.IconPath.ToLower().EndsWith(".exe") || project.IconPath.ToLower().EndsWith(".ico")) {
-                                image = IconUtils.GetIcon(project.IconPath, true).ToBitmap();
+                        if (File.Exists(iconPath) || Directory.Exists(iconPath)) {
+                            if (iconPath.ToLower().EndsWith(".exe") || iconPath.ToLower().EndsWith(".ico")) {
+                                image = IconUtils.GetIcon(iconPath, true).ToBitmap();
                             } else {
-                                image = IconUtils.GetIcon(project.IconPath, true).ToBitmap();
+                                image = IconUtils.GetIcon(iconPath, true).ToBitmap();
                             }
                         } else {
                             image = Configs.ICON_APP;
@@ -77,7 +77,7 @@ namespace XStart.Services {
                     }
                 } else {
                     // IconPath为空，则取项目文件的图标
-                    string iconPath = project.Path;
+                    iconPath = path;
                     if (Project.KIND_FILE.Equals(kind) || Project.KIND_DIRECTORY.Equals(kind)) {
                         // 文件类型，判断是否exe或ico
                         if (iconPath.ToLower().EndsWith(".exe") || iconPath.ToLower().EndsWith(".ico")) {
@@ -94,7 +94,15 @@ namespace XStart.Services {
                 MessageBox.Show(ex.StackTrace);
                 return null;
             }
+        }
 
+        /// <summary>
+        /// 应用对应的图标
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        public static System.Drawing.Bitmap GetIconImage(Project project) {
+            return GetIconImage(project.Kind, project.Path, project.IconPath);
         }
 
         /// <summary>
