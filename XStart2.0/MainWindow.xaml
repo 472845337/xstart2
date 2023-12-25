@@ -66,15 +66,12 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="32"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <Border Grid.Column="0" Padding="3">
                                     <Image Source="{TemplateBinding Tag, Converter={StaticResource Project2IconConverter}}" Stretch="Fill" Margin="2"/>
                                 </Border>
                                 <TextBlock Grid.Column="1" Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="5 0 0 0"/>
-                                <ToggleButton Grid.Column="2" Style="{StaticResource GlassToggleButton}" Height="20" Background="Green"
-                                              IsChecked="{TemplateBinding Tag, Converter={StaticResource ProjectAutoRunConverter}}"/>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -248,7 +245,17 @@
                                                         </ItemsControl.ItemsPanel>
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <Button Content="{Binding Value.Name}" Style="{StaticResource AppButton}" ToolTip="{Binding Value.ToolTipContent}" Tag="{Binding Value}" Click="ProjectButton_Click"/>
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition/>
+                                                                        <ColumnDefinition Width="24"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Button Grid.Column="0" Content="{Binding Value.Name}" Style="{StaticResource AppButton}"
+                                                                        ToolTip="{Binding Value.ToolTipContent}" Tag="{Binding Value}"
+                                                                        Click="ProjectButton_Click" MouseDoubleClick="ProjectButton_DoubleClick"/>
+                                                                    <ToggleButton Grid.Column="1" Style="{StaticResource GlassToggleButton}" Height="20" Margin="2" Background="Green" Tag="{TemplateBinding Tag}"
+                                                                    IsChecked="{Binding Value.AutoRun, Converter={StaticResource ProjectAutoRunConverter}}" IsEnabled="{Binding Value.CanAutoRun}" ToolTip="{Binding Value.CanAutoRun, Converter={StaticResource ProjectAutoRunToolTipConverter}}" Click="ToggleAutoRun_Click" ToolTipService.ShowOnDisabled="True"/>
+                                                                </Grid>
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>

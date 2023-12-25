@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using Utils;
 using XStart.Bean;
 using XStart.Config;
 using XStart.Const;
@@ -155,10 +158,14 @@ namespace XStart2._0 {
                 column.IsExpanded = false;
                 XStartService.TypeDic[column.TypeSection].ColumnDic.Add(column.Section, column);
             }
-            // 加载应用配置
+            // 加载项目配置
             List<Project> projects = projectService.SelectList(new Project { OrderBy = "sort" });
 
             foreach (Project project in projects) {
+                if (Project.KIND_SYSTEM.Equals(project.Kind)) {
+                    // 系统应用不可自启动
+                    project.CanAutoRun = false;
+                }
                 project.Icon = XStartService.BitmapToBitmapImage(XStartService.GetIconImage(project));
                 if (string.IsNullOrEmpty(project.Name) || string.IsNullOrEmpty(project.TypeSection)
                     || string.IsNullOrEmpty(project.ColumnSection) || !XStartService.TypeDic.TryGetValue(project.TypeSection, out _)
@@ -171,7 +178,7 @@ namespace XStart2._0 {
             }
             #endregion
             #region 窗口相关数据初始化
-            LinkedHashMap<string, Project> autoRunApp = new LinkedHashMap<string, Project>();
+            List<Project> autoRunProjects = new List<Project>();
             CalculateWidthHeight();
             // 面板初始化
             foreach (KeyValuePair<string, XStart.Bean.Type> type in XStartService.TypeDic) {
@@ -198,8 +205,32 @@ namespace XStart2._0 {
                         Project projectValue = project.Value;
                         // 自启动应用
                         if (projectValue.AutoRun != null && (bool)projectValue.AutoRun) {
-                            autoRunApp.Add(projectValue.Section, projectValue);
+                            autoRunProjects.Add(ProjectUtils.Copy(projectValue));
                         }
+                    }
+                }
+            }
+            // 自启动
+            if (autoRunProjects.Count > 0) {
+                AutoRunWindow autoRunForm = new AutoRunWindow { AutoRunProjects = autoRunProjects, Topmost = true };
+                if (true == autoRunForm.ShowDialog()) {
+                    // 启动项目
+                    foreach (Project project in autoRunForm.Projects) {
+                        // 判断是否启动过
+                        List<Process> existList = ProcessUtils.GetProcessByName(ProcessUtils.GetProcessName(project.Path), project.Path);
+                        if (null == existList || existList.Count == 0) {
+                            try {
+                                ExecuteProject(project);
+                            } catch (Exception ex) {
+                                MessageBox.Show(ex.Message);
+                            }
+                        } else {
+                            NotifyUtils.ShowNotification($"项目【{project.Name}】已存在，取消自启动！");
+                        }
+                    }
+                } else {
+                    if (autoRunForm.IsExit) {
+                        Close();
                     }
                 }
             }
@@ -211,11 +242,17 @@ namespace XStart2._0 {
             mainViewModel.SelectedIndex = openTypeIndex < 0 ? 0 : openTypeIndex;
             #endregion
 
+            if (Configs.audio) {
+                AudioUtils.PlayWav(AudioUtils.START);
+            }
             Configs.inited = true;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
             /* 关闭后保存所有类别打开的栏目***************************************************************/
+            if (!Configs.inited) {
+                return;
+            }
             // 保存打开类别
             string setOpenType = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE);
             if (string.IsNullOrEmpty(Configs.openType) || !Configs.openType.Equals(setOpenType)) {
@@ -368,9 +405,9 @@ namespace XStart2._0 {
 
         private void ComputedColumnProjectWidth(Column column) {
             if (Visibility.Visible == column.VerticalScrollBar || ScrollBarVisibility.Visible == XStartService.TypeDic[column.TypeSection].VerticalScroll) {
-                column.ProjectWidth = (int)MainTabControl.ActualWidth - mainViewModel.TypeWidth - 40;
+                column.ProjectWidth = (int)MainTabControl.ActualWidth - mainViewModel.TypeWidth - 18;
             } else {
-                column.ProjectWidth = (int)MainTabControl.ActualWidth - mainViewModel.TypeWidth - 22;
+                column.ProjectWidth = (int)MainTabControl.ActualWidth - mainViewModel.TypeWidth;
             }
         }
 
@@ -757,7 +794,47 @@ namespace XStart2._0 {
         }
 
         private void ProjectButton_Click(object sender, RoutedEventArgs e) {
+            if (Constants.CLICK_TYPE_SINGLE.Equals(Configs.clickType)) {
+                // 运行项目
+                Project project = (Project)(sender as Button).Tag;
+                ExecuteProject(project);
+            }
+        }
+        private void ProjectButton_DoubleClick(object sender, RoutedEventArgs e) {
+            if (Constants.CLICK_TYPE_DOUBLE.Equals(Configs.clickType)) {
+                // 运行项目
+                Project project = (Project)(sender as Button).Tag;
+                ExecuteProject(project);
+            }
+        }
 
+        private void ExecuteProject(Project project) {
+            try {
+                // 获取该类别的应用是否配置确认信息，有确认信息，则弹出确认窗口
+                if (SystemAppParam.OperateParam.TryGetValue(project.Path, out SystemApp appOperateParam)) {
+                    if (null != appOperateParam && appOperateParam.Confirm) {
+                        if (MessageBoxResult.OK == MessageBox.Show(appOperateParam.ConfirmMsg, "警告", MessageBoxButton.OKCancel)) {
+                            return;
+                        }
+                    }
+                }
+                #region 应用是否需要生成相关文件
+                if (SystemAppParam.MSTSC.Equals(project.Path)) {
+                    // 远程桌面
+                    string rdpFilePath = Configs.AppStartPath + @$"rdp\{project.Section}.rdp";
+                    if (!File.Exists(rdpFilePath)) {
+                        RdpUtils.FreshRdp(project, Constants.OPERATE_CREATE);
+                    }
+                }
+                #endregion
+                // 执行该应用
+                string result = ProjectUtils.ExecuteApp(project);
+                if (!string.IsNullOrEmpty(result)) {
+                    NotifyUtils.ShowNotification(result);
+                }
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message, "错误");
+            }
         }
 
         private void DelCount<T>(TableService<T> t) where T : TableData {
@@ -832,6 +909,16 @@ namespace XStart2._0 {
             mainViewModel.CurrentTime = DateTime.Now.ToString("T");
         }
 
+        private void ToggleAutoRun_Click(object sender, RoutedEventArgs e) {
+            ToggleButton toggleButton = sender as ToggleButton;
+            Project project = toggleButton.Tag as Project;
+            Console.WriteLine(project.AutoRun);
+            // 切换项目自启动
+            project.AutoRun = toggleButton.IsChecked;
+            projectService.Update(new Project { Section = project.Section, AutoRun = project.AutoRun });
+            e.Handled = true;
+        }
+
         private void SaveSetting() {
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST, ref Configs.topMost, mainViewModel.TopMost);// 置顶
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_CLICK_TYPE, ref Configs.clickType, mainViewModel.ClickType);// 点击方式
@@ -857,7 +944,7 @@ namespace XStart2._0 {
                 if (fromInt != toInt) {
                     isChange = true;
                 }
-            }else if(from is uint fromUint && to is uint toUint) {
+            } else if (from is uint fromUint && to is uint toUint) {
                 if (fromUint != toUint) {
                     isChange = true;
                 }

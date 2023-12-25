@@ -8,45 +8,29 @@ namespace XStart.Bean {
 
         public List<BackType> Types { get; set; }
 
-        public class BackType {
-            // section
+        public class BackBase {
             public string Section { get; set; }
-            // 名称
             public string Name { get; set; }
-            // 排序
             public int? Sort { get; set; }
-            // 图标（symbol或exe 多图标的下标）
             public int? IconIndex { get; set; }
-            // 密码
             public string Password { get; set; }
-
+        }
+        public class BackType : BackBase {
+            public string FaIcon { get; set; }
+            public string FaIconColor { get; set; }
+            public string FaIconFontFamily { get; set; }
             public List<BackColumn> Columns { get; set; }
         }
-        public class BackColumn {
-            // section
-            public string Section { get; set; }
-            // 名称
-            public string Name { get; set; }
-            // 排序
-            public int? Sort { get; set; }
-            // 图标（symbol或exe 多图标的下标）
-            public int? IconIndex { get; set; }
+        public class BackColumn : BackBase {
+
             // 所属类别
             public string TypeSection { get; set; }
-            // 口令
-            public string Password { get; set; }
+
 
             public List<BackProject> Projects { get; set; }
         }
-        public class BackProject {
-            // section
-            public string Section { get; set; }
-            // 名称
-            public string Name { get; set; }
-            // 排序
-            public int? Sort { get; set; }
-            // 图标（symbol或exe 多图标的下标）
-            public int? IconIndex { get; set; }
+        public class BackProject : BackBase {
+
             public string TypeSection { get; set; }// 归属类别
             public string ColumnSection { get; set; }// 归属栏目
             public string Kind { get; set; }// 种类

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows;
 using XStart.Const;
+using XStart.Utils;
 using XStart2._0.ViewModels;
 
 namespace XStart2._0.Windows {
@@ -44,7 +46,8 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BackUp_Click(object sender, RoutedEventArgs e) {
-
+            BackUpWindow backUpWindow = new BackUpWindow() { WindowStartupLocation = WindowStartupLocation.CenterScreen};
+            backUpWindow.ShowDialog();
         }
         /// <summary>
         /// 恢复
@@ -61,7 +64,9 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void CreateDeskLink_Click(object sender, RoutedEventArgs e) {
-
+            string name = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
+            string path = Assembly.GetExecutingAssembly().Location;
+            FileUtils.CreateShortCutOnDesktop(name, path);
         }
     }
 }

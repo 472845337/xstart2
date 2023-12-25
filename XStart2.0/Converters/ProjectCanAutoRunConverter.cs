@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Windows.Data;
-using XStart.Services;
 
 namespace XStart2._0.Converters {
-    public class Project2IconConverter : IValueConverter {
+    public class ProjectCanAutoRunConverter : IValueConverter {
         #region IValueConverter Members
-
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
-            if(null != value && value is XStart.Bean.Project project) {
-                return XStartService.BitmapToBitmapImage(XStartService.GetIconImage(project));
-            }
-            return null;
+            XStart.Bean.Project project = (XStart.Bean.Project)value;
+            return null == project ? false : (object)project.CanAutoRun;
         }
+
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             throw new NotSupportedException();
         }
-
         #endregion
     }
 }

@@ -53,6 +53,8 @@ namespace XStart.Bean {
         private bool? autoRun;
         [TableParam("auto_run", "BIT")]
         public bool? AutoRun { get => autoRun; set { autoRun = value; OnPropertyChanged("AutoRun"); } }
+        // 系统应用不可随应用启动
+        public bool CanAutoRun { get; set; } = true;
         public string ToolTipContent {
             get {
                 if (SystemAppParam.MSTSC.Equals(Path)) {

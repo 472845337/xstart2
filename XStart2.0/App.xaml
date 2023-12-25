@@ -20,6 +20,8 @@
             <con:ProjectAutoRunConverter x:Key="ProjectAutoRunConverter"/>
             <con:ClickTypeConverter x:Key="ClickTypeConverter"/>
             <con:UrlOpenConverter x:Key="UrlOpenConverter"/>
+            <con:ProjectCanAutoRunConverter x:Key="ProjectCanAutoRunConverter"/>
+            <con:ProjectAutoRunToolTipConverter x:Key="ProjectAutoRunToolTipConverter"/>
             <Style x:Key="Btn_Style" TargetType="{x:Type Button}">
                 <Setter Property="Width" Value="60"/>
                 <Setter Property="Height" Value="28"/>

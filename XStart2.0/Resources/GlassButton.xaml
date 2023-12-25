@@ -251,9 +251,11 @@
                         <ContentPresenter Margin="0,2,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        
                         <Trigger Property="IsChecked" Value="False">
                             <Setter TargetName="BackgroundLayer" Property="Fill" Value="Red"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="BackgroundLayer" Property="Fill" Value="Gray"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="RefractionLayer" Property="Fill">
