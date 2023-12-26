@@ -4,7 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace XStart.Utils {
+namespace XStart2._0.Utils {
     class IconUtils {
         /// <summary>
         /// 获取exe文件中的图标

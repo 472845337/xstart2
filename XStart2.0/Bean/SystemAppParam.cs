@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace XStart.Bean {
+namespace XStart2._0.Bean {
     // 系统功能相关的参数
     static class SystemAppParam {
         public static Dictionary<string, SystemApp> OperateParam = new Dictionary<string, SystemApp>();

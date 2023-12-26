@@ -1,6 +1,5 @@
-﻿using XStart2._0.Bean;
-
-namespace XStart.Bean {
+﻿
+namespace XStart2._0.Bean {
     /// <summary>
     /// 类别数据对象
     /// </summary>

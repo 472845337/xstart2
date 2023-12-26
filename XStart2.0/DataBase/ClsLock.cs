@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace XStart.DataBase {
+namespace XStart2._0.DataBase {
     /// <summary>
     /// 使用using代替lock操作的对象，可指定写入和读取锁定模式
     /// </summary>

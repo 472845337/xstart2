@@ -1,4 +1,4 @@
-﻿namespace XStart.Const {
+﻿namespace XStart2._0.Const {
     class Constants {
         public const string APP_NAME = "XStart_APP";
 

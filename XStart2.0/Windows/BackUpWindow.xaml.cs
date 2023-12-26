@@ -1,13 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms;
-using XStart.Bean;
-using XStart.Services;
-using XStart.Utils;
+using XStart2._0.Bean;
+using XStart2._0.Services;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
 
@@ -32,7 +30,7 @@ namespace XStart2._0.Windows {
             // 将选择备份的数据写入对象
             foreach (CheckBoxTreeViewModel typeNode in vm.Items) {
                 string typeSection = typeNode.Section;
-                XStart.Bean.Type dataType = XStartService.TypeDic[typeSection];
+                Bean.Type dataType = XStartService.TypeDic[typeSection];
                 if (typeNode.Children.Count > 0) {
                     foreach (CheckBoxTreeViewModel columnNode in typeNode.Children) {
                         string columnSection = columnNode.Section;

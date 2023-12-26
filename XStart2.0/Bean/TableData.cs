@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace XStart.Bean {
+namespace XStart2._0.Bean {
     /// <summary>
     /// 快捷对象公共的属性
     /// </summary>

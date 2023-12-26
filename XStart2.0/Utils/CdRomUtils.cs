@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XStart.Utils {
+namespace XStart2._0.Utils {
     public class CdRomUtils {
         public static void OpenCdRom() {
             DllUtils.MciSendString("set cdaudio door open", null, 0, IntPtr.Zero);//打开光驱

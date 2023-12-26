@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace XStart.Bean {
+namespace XStart2._0.Bean {
     /// <summary>
     /// 备份用数据
     /// </summary>

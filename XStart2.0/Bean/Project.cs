@@ -1,8 +1,8 @@
 ﻿
 using System;
-using XStart.Const;
+using XStart2._0.Const;
 
-namespace XStart.Bean {
+namespace XStart2._0.Bean {
 
     [Serializable]
     [Table("t_app")]

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace XStart.Bean {
+namespace XStart2._0.Bean {
     /// <summary>
     /// 排序的字典
     /// </summary>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XStart.Bean {
+namespace XStart2._0.Bean {
     /// <summary>
     /// 数据表基础对象
     /// </summary>

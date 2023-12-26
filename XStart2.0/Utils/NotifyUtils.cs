@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using XStart2._0.ViewModels;
 using XStart2._0.Windows;
 
 namespace XStart2._0.Utils {
@@ -14,7 +15,13 @@ namespace XStart2._0.Utils {
             if (null == background) {
                 background = Colors.LightBlue;
             }
-            NotificationWindow notify = new NotificationWindow { NotifyTitle = title, NotifyBackground = background, NotifyContent = content, SaveTime = saveTime };
+            NotificationWindow notify = new NotificationWindow { SaveTime = saveTime };
+            NotifyData notifyData = new NotifyData {
+                Title = title,
+                Background = background.ToString(),
+                Content = content
+            };
+            notify.DataContext = notifyData;
             notify.Closed += (sender, e) => {
                 NotificationWindow closedDialog = sender as NotificationWindow;
                 _dialogs.Remove(closedDialog);
@@ -30,7 +37,7 @@ namespace XStart2._0.Utils {
             bool isContinueFind = _dialogs.Any(o => o.TopFrom == topFrom);
 
             while (isContinueFind) {
-                topFrom = topFrom - 100;//此处是NotifyWindow的高
+                topFrom -= 100;//此处是NotifyWindow的高
                 isContinueFind = _dialogs.Any(o => o.TopFrom == topFrom);
             }
             if (topFrom <= 0) {

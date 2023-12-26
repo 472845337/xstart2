@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
-using System.Windows;
-using XStart2._0.Bean;
+﻿using System.Windows;
 
-namespace XStart.Bean {
+namespace XStart2._0.Bean {
     /// <summary>
     /// 栏目数据
     /// </summary>

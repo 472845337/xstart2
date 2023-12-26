@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Controls;
-using System.Windows.Input;
-using XStart.Bean;
-using XStart.Config;
-using XStart.Const;
-using XStart.Services;
-using XStart.Utils;
+using XStart2._0.Services;
 using XStart2._0.Bean;
-using XStart2._0.Commands;
-using XStart2._0.Utils;
 
 namespace XStart2._0.ViewModels {
     public class MainViewModel : BaseViewModel {
@@ -20,6 +9,8 @@ namespace XStart2._0.ViewModels {
         public ProjectService projectService = ProjectService.Instance;
 
         public MainViewModel() {
+            mainHeight = 800;
+            mainWidth = 450;
             // 计算初始化信息
             avatar = "/Files/Images/DefaultUser.png";
             nickName = "昵称";
@@ -47,8 +38,8 @@ namespace XStart2._0.ViewModels {
         public string CurrentWeekDay { get => currentWeekDay; set { currentWeekDay = value; OnPropertyChanged("CurrentWeekDay"); } }
         #endregion
         #region 应用数据
-        private ObservableDictionary<string, XStart.Bean.Type> types;
-        public ObservableDictionary<string, XStart.Bean.Type> Types {
+        private ObservableDictionary<string, Bean.Type> types;
+        public ObservableDictionary<string, Bean.Type> Types {
             get => types;
             set { types = value; OnPropertyChanged("Types"); }
         }
@@ -56,10 +47,10 @@ namespace XStart2._0.ViewModels {
 
         #region 窗口相关
         // 主窗口高度
-        private double mainHeight = 800;
+        private double mainHeight;
         public double MainHeight { get => mainHeight;set { mainHeight = value; OnPropertyChanged("MainHeight"); } }
         // 主窗口宽度
-        private double mainWidth = 450;
+        private double mainWidth;
         public double MainWidth { get => mainWidth; set { mainWidth = value; OnPropertyChanged("MainWidth"); } }
         // 主窗口左边位置
         private double mainLeft;
@@ -68,8 +59,8 @@ namespace XStart2._0.ViewModels {
         private double mainTop;
         public double MainTop { get => mainTop; set { mainTop = value; OnPropertyChanged("MainTop"); } }
         // 类别宽度（TabControl的TabItem的宽度）
-        private int typeWidth;
-        public int TypeWidth { get => typeWidth; set { typeWidth = value; OnPropertyChanged("TypeWidth"); } }
+        private double typeWidth;
+        public double TypeWidth { get => typeWidth; set { typeWidth = value; OnPropertyChanged("TypeWidth"); } }
         // 类别名称是否展开
         private bool typeTabExpanded;
         public bool TypeTabExpanded { get => typeTabExpanded; set { typeTabExpanded = value; OnPropertyChanged("ByteTabExpanded"); } }

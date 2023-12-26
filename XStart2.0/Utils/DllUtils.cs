@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace XStart.Utils {
+namespace XStart2._0.Utils {
     public class DllUtils {
         public const string
             User32 = "user32.dll",

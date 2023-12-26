@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
-using XStart.Const;
-using XStart.Utils;
-using static XStart.Bean.SystemAppParam;
+using XStart2._0.Const;
+using XStart2._0.Utils;
+using static XStart2._0.Bean.SystemAppParam;
 
-namespace XStart.Config {
+namespace XStart2._0.Config {
     /// <summary>
     /// 系统缓存参数
     /// </summary>
@@ -27,17 +27,17 @@ namespace XStart.Config {
         public static string urlOpen = Constants.URL_OPEN_DEFAULT;
         public static string urlOpenCustomBrowser;
         public static bool exitWarn;// 退出提醒
-        public static int delCount = 0;
+        public static int delCount;
 
         public static System.IntPtr taskbarHandler = System.IntPtr.Zero;
 
         public static bool taskbarIsShow = true;
-        public static uint volume = 0x0000;
+        public static uint volume;
         public static bool waveMuted = false;
 
-        public static int micVolume = 0;
-        public static int lineInVolume = 0;
-        public static int cdPlayerVolume = 0;
+        public static int micVolume;
+        public static int lineInVolume;
+        public static int cdPlayerVolume;
         public static bool micMuted = false;
         public static bool lineInMuted = false;
         public static bool cdPlayerMuted = false;

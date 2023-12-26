@@ -2,7 +2,7 @@
 using System;
 using System.Text;
 
-namespace Utils {
+namespace XStart2._0.Utils {
     public static class CliWrapUtils {
 
         /// <summary>

@@ -4,8 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XStart.Bean;
-using XStart.Services;
 using XStart2._0.Bean;
 using XStart2._0.View;
 
@@ -25,10 +23,10 @@ namespace XStart2._0.ViewModels {
             set { items = value; OnPropertyChanged("Items"); }
         }
 
-        public void InitVmData(IEnumerable<XStart.Bean.Type> types) {
+        public void InitVmData(IEnumerable<Bean.Type> types) {
             Items = new ObservableCollection<CheckBoxTreeViewModel>();
             // 加载项目树
-            foreach (XStart.Bean.Type type in types) {
+            foreach (Bean.Type type in types) {
                 CheckBoxTreeViewModel typeTreeNode = new CheckBoxTreeViewModel { Section = type.Section, Header = type.Name, Children = new List<CheckBoxTreeViewModel>(), IsChecked = true, Data = type };
                 foreach (KeyValuePair<string, Column> columnKV in type.ColumnDic) {
                     CheckBoxTreeViewModel columnNode = new CheckBoxTreeViewModel() { Section = columnKV.Value.Section, Header = columnKV.Value.Name, Children = new List<CheckBoxTreeViewModel>(), IsChecked = true, Data = columnKV.Value };

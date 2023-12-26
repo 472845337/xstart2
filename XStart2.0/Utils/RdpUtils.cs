@@ -2,12 +2,12 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using XStart.Bean;
-using XStart.Config;
-using XStart.Const;
-using static XStart.Utils.DllUtils;
+using XStart2._0.Bean;
+using XStart2._0.Config;
+using XStart2._0.Const;
+using static XStart2._0.Utils.DllUtils;
 
-namespace Utils {
+namespace XStart2._0.Utils {
     public static class RdpUtils {
         /// <summary>
         /// 创建section的服务rdp文件

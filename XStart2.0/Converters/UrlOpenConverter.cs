@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Data;
-using XStart.Const;
 
 namespace XStart2._0.Converters {
     public class UrlOpenConverter : IValueConverter {

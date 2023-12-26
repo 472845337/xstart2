@@ -2,9 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Windows;
-using XStart.Bean;
-using XStart.Services;
-using XStart.Utils;
+using XStart2._0.Bean;
 using XStart2._0.Services;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;

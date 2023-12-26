@@ -26,15 +26,12 @@ namespace XStart2._0.Windows {
         private readonly NotifyData notifyData = new NotifyData();
         public NotificationWindow() {
             InitializeComponent();
-            DataContext = notifyData;
             Loaded += NotificationWindow_Loaded;
         }
 
 
         private void NotificationWindow_Loaded(object sender, RoutedEventArgs e) {
-            notifyData.Title = NotifyTitle;
-            notifyData.Background = NotifyBackground.ToString();
-            notifyData.Content = NotifyContent;
+
             if (sender is NotificationWindow self) {
                 self.UpdateLayout();
                 SystemSounds.Asterisk.Play();//播放提示声
@@ -46,7 +43,7 @@ namespace XStart2._0.Windows {
                     From = right,
                     To = right - self.ActualWidth//设定通知从右往左弹出
                 };
-                self.BeginAnimation(Window.LeftProperty, animation);//设定动画应用于窗体的Left属性
+                self.BeginAnimation(LeftProperty, animation);//设定动画应用于窗体的Left属性
 
                 Task.Factory.StartNew(delegate {
                     int seconds = self.SaveTime;//通知持续多少秒后消失
@@ -59,7 +56,7 @@ namespace XStart2._0.Windows {
                             To = right//通知从左往右收回
                         };
                         animation.Completed += (s, a) => { self.Close(); };//动画执行完毕，关闭当前窗体
-                        self.BeginAnimation(Window.LeftProperty, animation);
+                        self.BeginAnimation(LeftProperty, animation);
                     });
                 });
             }

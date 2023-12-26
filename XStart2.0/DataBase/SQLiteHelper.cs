@@ -6,7 +6,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Text;
 
-namespace XStart.DataBase {
+namespace XStart2._0.DataBase {
     public class SqLiteHelper {
         #region 字段
 

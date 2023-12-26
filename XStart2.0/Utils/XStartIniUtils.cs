@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using XStart.Config;
+using XStart2._0.Config;
 
-namespace XStart.Utils {
+namespace XStart2._0.Utils {
     internal static class XStartIniUtils {
 
 

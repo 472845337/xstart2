@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using XStart.Bean;
-using XStart.Config;
-using XStart.Const;
-using XStart.Utils;
 using XStart2._0.Bean;
+using XStart2._0.Config;
+using XStart2._0.Const;
+using XStart2._0.Utils;
 
-namespace XStart.Services {
+namespace XStart2._0.Services {
     public class XStartService {
 
         public static ObservableDictionary<string, Bean.Type> TypeDic = new ObservableDictionary<string, Bean.Type>();

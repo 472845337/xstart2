@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows;
-using XStart.Const;
-using XStart.Utils;
+using XStart2._0.Const;
+using XStart2._0.Utils;
 using XStart2._0.ViewModels;
 
 namespace XStart2._0.Windows {

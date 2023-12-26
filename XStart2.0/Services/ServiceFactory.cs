@@ -1,6 +1,4 @@
-﻿using XStart.Services;
-
-namespace XStart2._0.Services {
+﻿namespace XStart2._0.Services {
     public class ServiceFactory {
         public static TypeService typeService;
         public static ColumnService columnService;

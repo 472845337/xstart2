@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace XStart.Utils {
+namespace XStart2._0.Utils {
     public static class ProcessUtils {
 
         /// <summary>

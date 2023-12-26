@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace XStart.Utils {
+namespace XStart2._0.Utils {
     public class FileUtils {
         public static void CreateShortCut(string directory, string shortcutName, string targetPath, string description = null, string iconLocation = null) {
             if (!Directory.Exists(directory)) {

@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using XStart.Const;
+using XStart2._0.Const;
 using XStart2._0.Bean;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
@@ -153,14 +153,13 @@ namespace XStart2._0.Windows {
                 new FontAwesome{Name="FaceSmile", Value =  FaceSmile},
                 new FontAwesome{Name="Star", Value =  Star},
                 new FontAwesome{Name="Tag", Value =  FontAwesome6.Tag},
-                new FontAwesome{Name="Table", Value =  Table},
+                new FontAwesome{Name="Table", Value =  FontAwesome6.Table},
                 new FontAwesome{Name="Tv", Value =  Tv} };
         }
 
         private IEnumerable<FontAwesome> GetFontAwesomeFieldValue<T>() {
             T t = System.Activator.CreateInstance<T>();
             FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Static | BindingFlags.Public);
-            List<FontAwesome> fontAwesomeList = new List<FontAwesome>();
             foreach (FieldInfo info in fields) {
                 yield return new FontAwesome { Name = info.Name, Value = info.GetValue(t) as string };
             }

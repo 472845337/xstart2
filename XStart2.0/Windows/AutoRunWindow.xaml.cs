@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using XStart.Bean;
+using XStart2._0.Bean;
 using XStart2._0.ViewModels;
 
 namespace XStart2._0.Windows {

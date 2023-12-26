@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Data;
-using XStart.Const;
+using XStart2._0.Const;
 
 namespace XStart2._0.Converters {
     public class ClickTypeConverter : IValueConverter {

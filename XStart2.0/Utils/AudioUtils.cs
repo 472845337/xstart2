@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using XStart.Config;
-using XStart.Const;
+using XStart2._0.Config;
+using XStart2._0.Const;
 
-namespace XStart.Utils {
+namespace XStart2._0.Utils {
     class AudioUtils {
         public const int CHANGE = 0;
         public const int START = 1;

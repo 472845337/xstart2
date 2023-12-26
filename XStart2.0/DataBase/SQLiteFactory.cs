@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace XStart.DataBase {
+namespace XStart2._0.DataBase {
     internal static class SqLiteFactory {
         private static readonly Dictionary<string, SqLiteHelper> SqLiteHelperDic = new Dictionary<string, SqLiteHelper>();
         /// <summary>

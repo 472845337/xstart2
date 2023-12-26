@@ -4,7 +4,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace XStart.Utils {
+namespace XStart2._0.Utils {
     public static class AesUtils {
         private static readonly byte[] Key = Convert.FromBase64String("Yl+wNn/Be259rsps4D9DkkjK6FcrHPOUsBNVZF39Puo=");
         private static readonly byte[] Iv = Convert.FromBase64String("fuDv69y3hkjoKs6ncA7Xvg==");

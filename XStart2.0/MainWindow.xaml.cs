@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-using Utils;
-using XStart.Bean;
-using XStart.Config;
-using XStart.Const;
-using XStart.Services;
-using XStart.Utils;
+using XStart2._0.Bean;
+using XStart2._0.Config;
+using XStart2._0.Const;
 using XStart2._0.Helper;
 using XStart2._0.Services;
 using XStart2._0.Utils;
@@ -133,8 +132,8 @@ namespace XStart2._0 {
 
             #region 加载数据
             // 加载类别配置
-            List<XStart.Bean.Type> types = typeService.SelectList(new XStart.Bean.Type { OrderBy = "sort" });
-            foreach (XStart.Bean.Type type in types) {
+            List<Bean.Type> types = typeService.SelectList(new Bean.Type { OrderBy = "sort" });
+            foreach (Bean.Type type in types) {
                 if (string.IsNullOrEmpty(type.Name)) {
                     typeService.Delete(type.Section);
                     continue;
@@ -182,7 +181,7 @@ namespace XStart2._0 {
             List<Project> autoRunProjects = new List<Project>();
             CalculateWidthHeight();
             // 面板初始化
-            foreach (KeyValuePair<string, XStart.Bean.Type> type in XStartService.TypeDic) {
+            foreach (KeyValuePair<string, Bean.Type> type in XStartService.TypeDic) {
                 // 计算栏目高度
                 for (int i = 0; i < type.Value.ColumnDic.Count; i++) {
                     // 打开哪个栏目
@@ -211,30 +210,7 @@ namespace XStart2._0 {
                     }
                 }
             }
-            // 自启动
-            if (autoRunProjects.Count > 0) {
-                AutoRunWindow autoRunForm = new AutoRunWindow { AutoRunProjects = autoRunProjects, Topmost = true };
-                if (true == autoRunForm.ShowDialog()) {
-                    // 启动项目
-                    foreach (Project project in autoRunForm.Projects) {
-                        // 判断是否启动过
-                        List<Process> existList = ProcessUtils.GetProcessByName(ProcessUtils.GetProcessName(project.Path), project.Path);
-                        if (null == existList || existList.Count == 0) {
-                            try {
-                                ExecuteProject(project);
-                            } catch (Exception ex) {
-                                MessageBox.Show(ex.Message);
-                            }
-                        } else {
-                            NotifyUtils.ShowNotification($"项目【{project.Name}】已存在，取消自启动！");
-                        }
-                    }
-                } else {
-                    if (autoRunForm.IsExit) {
-                        Close();
-                    }
-                }
-            }
+            
             mainViewModel.TypeTabExpanded = true;
             mainViewModel.TypeTabToggleIcon = FontAwesome6.Outdent;
             mainViewModel.TypeWidth = 100;
@@ -245,6 +221,34 @@ namespace XStart2._0 {
 
             if (Configs.audio) {
                 AudioUtils.PlayWav(AudioUtils.START);
+            }
+            // 自启动
+            if (autoRunProjects.Count > 0) {
+                TaskCompletionSource<object> tc = new TaskCompletionSource<object>();
+                // 新线程
+                Dispatcher.Invoke(new Action(delegate {
+                    AutoRunWindow autoRunForm = new AutoRunWindow { AutoRunProjects = autoRunProjects, Topmost = true };
+                    if (true == autoRunForm.ShowDialog()) {
+                        // 启动项目
+                        foreach (Project project in autoRunForm.Projects) {
+                            // 判断是否启动过
+                            List<Process> existList = ProcessUtils.GetProcessByName(ProcessUtils.GetProcessName(project.Path), project.Path);
+                            if (null == existList || existList.Count == 0) {
+                                try {
+                                    ExecuteProject(project);
+                                } catch (Exception ex) {
+                                    MessageBox.Show(ex.Message);
+                                }
+                            } else {
+                                NotifyUtils.ShowNotification($"项目【{project.Name}】已存在，取消自启动！");
+                            }
+                        }
+                    } else {
+                        if (autoRunForm.IsExit) {
+                            Close();
+                        }
+                    }
+                }));
             }
             Configs.inited = true;
         }
@@ -260,11 +264,11 @@ namespace XStart2._0 {
                 XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE, Configs.openType);
             }
             // 保存打开栏目
-            foreach (KeyValuePair<string, XStart.Bean.Type> type in mainViewModel.Types) {
+            foreach (KeyValuePair<string, Bean.Type> type in mainViewModel.Types) {
                 foreach (KeyValuePair<string, Column> column in type.Value.ColumnDic) {
                     if (column.Value.IsExpanded) {
                         if (!column.Value.Section.Equals(XStartService.TypeDic[column.Value.TypeSection].OpenColumn)) {
-                            typeService.Update(new XStart.Bean.Type { Section = column.Value.TypeSection, OpenColumn = column.Value.Section });
+                            typeService.Update(new Bean.Type { Section = column.Value.TypeSection, OpenColumn = column.Value.Section });
                         }
                         break;
                     }
@@ -293,7 +297,7 @@ namespace XStart2._0 {
             // 回收相关资源
             Configs.Dispose();
             AudioUtils.Dispose();
-            XStart.DataBase.SqLiteFactory.CloseAllSqLite();
+            DataBase.SqLiteFactory.CloseAllSqLite();
         }
 
         /// <summary>
@@ -315,7 +319,7 @@ namespace XStart2._0 {
         /// <param name="typeSection">类别Section</param>
         /// <param name="columnSection">栏目Section</param>
         private void ExpandColumn(string typeSection, string columnSection) {
-            XStart.Bean.Type type = XStartService.TypeDic[typeSection];
+            Bean.Type type = XStartService.TypeDic[typeSection];
             foreach (Column c in type.ColumnDic.Values) {
                 if (!columnSection.Equals(c.Section) && c.IsExpanded) {
                     c.IsExpanded = false;
@@ -353,7 +357,7 @@ namespace XStart2._0 {
             if (Configs.inited) {
                 if (MainTabControl.SelectedIndex != -1) {
                     mainViewModel.SelectedIndex = MainTabControl.SelectedIndex;
-                    KeyValuePair<string, XStart.Bean.Type> type = (KeyValuePair<string, XStart.Bean.Type>)MainTabControl.SelectedItem;
+                    KeyValuePair<string, Bean.Type> type = (KeyValuePair<string, Bean.Type>)MainTabControl.SelectedItem;
                     // 记录下当前打开的类别（关闭时判断如果和配置中打开不一样，则保存配置）
                     Configs.openType = type.Value.Section;
                     // 如果当前类别有口令，并且没有记住口令则展示为锁定
@@ -371,7 +375,7 @@ namespace XStart2._0 {
         /// </summary>
         private void CalculateWidthHeight() {
             // 重新计算栏目高度
-            foreach (KeyValuePair<string, XStart.Bean.Type> type in XStartService.TypeDic) {
+            foreach (KeyValuePair<string, Bean.Type> type in XStartService.TypeDic) {
                 // 计算栏目高度
                 CalculateWidthHeight(type.Value.Section);
             }
@@ -382,7 +386,7 @@ namespace XStart2._0 {
         /// </summary>
         /// <param name="typeSection">类别Section</param>
         private void CalculateWidthHeight(string typeSection) {
-            XStart.Bean.Type type = XStartService.TypeDic[typeSection];
+            Bean.Type type = XStartService.TypeDic[typeSection];
             // 计算栏目高度
             int headerHeight = 38;
             // 当高度为小于一定高度時，将高度置为-1
@@ -406,9 +410,9 @@ namespace XStart2._0 {
 
         private void ComputedColumnProjectWidth(Column column) {
             if (Visibility.Visible == column.VerticalScrollBar || ScrollBarVisibility.Visible == XStartService.TypeDic[column.TypeSection].VerticalScroll) {
-                column.ProjectWidth = (int)MainTabControl.ActualWidth - mainViewModel.TypeWidth - 18;
+                column.ProjectWidth = (int)(MainTabControl.ActualWidth - mainViewModel.TypeWidth - 46);
             } else {
-                column.ProjectWidth = (int)MainTabControl.ActualWidth - mainViewModel.TypeWidth;
+                column.ProjectWidth = (int)(MainTabControl.ActualWidth - mainViewModel.TypeWidth - 28);
             }
         }
 
@@ -447,7 +451,7 @@ namespace XStart2._0 {
         private void ClearType(object sender, RoutedEventArgs e) {
             if (XStartService.TypeDic.Count > 0) {
                 if (MessageBoxResult.OK == MessageBox.Show("确认清空所有类别？", "警告", MessageBoxButton.OKCancel)) {
-                    foreach (KeyValuePair<string, XStart.Bean.Type> type in mainViewModel.Types) {
+                    foreach (KeyValuePair<string, Bean.Type> type in mainViewModel.Types) {
                         if (type.Value.Locked) {
                             MessageBox.Show($"[{type.Value.Name}]类别已锁，不可删除！", "错误");
                             return;
@@ -522,7 +526,7 @@ namespace XStart2._0 {
             if (true == projectTypeWindow.ShowDialog()) {
                 // 保存数据到类别库中
                 if (string.IsNullOrEmpty(projectTypeWindow.vm.Section)) {
-                    XStart.Bean.Type projectType = new XStart.Bean.Type {
+                    Bean.Type projectType = new Bean.Type {
                         Name = projectTypeWindow.vm.Name
                         , FaIcon = projectTypeWindow.vm.SelectedFa
                         , FaIconColor = projectTypeWindow.vm.SelectedIconColor
@@ -534,7 +538,7 @@ namespace XStart2._0 {
                     XStartService.TypeDic.Add(projectType.Section, projectType);
                     NotifyUtils.ShowNotification("新增类别成功！");
                 } else {
-                    XStart.Bean.Type projectType = XStartService.TypeDic[projectTypeWindow.vm.Section];
+                    Bean.Type projectType = XStartService.TypeDic[projectTypeWindow.vm.Section];
                     projectType.Name = projectTypeWindow.vm.Name;
                     projectType.FaIcon = projectTypeWindow.vm.SelectedFa;
                     projectType.FaIconColor = projectTypeWindow.vm.SelectedIconColor;
@@ -554,27 +558,27 @@ namespace XStart2._0 {
         private void UpdateTypeSecurity(object sender, RoutedEventArgs e) {
             Panel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Panel;
             string section = typePanel.Tag as string;
-            XStart.Bean.Type type = XStartService.TypeDic[section];
+            Bean.Type type = XStartService.TypeDic[section];
             UpdateSecurity(type);
         }
         private void RemoveTypeSecurity(object sender, RoutedEventArgs e) {
             Panel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Panel;
             string section = typePanel.Tag as string;
-            XStart.Bean.Type type = XStartService.TypeDic[section];
+            Bean.Type type = XStartService.TypeDic[section];
             RemoveSecurity(type);
         }
         // 类别锁定
         private void LockType(object sender, RoutedEventArgs e) {
             Panel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Panel;
             string section = typePanel.Tag as string;
-            XStart.Bean.Type type = XStartService.TypeDic[section];
+            Bean.Type type = XStartService.TypeDic[section];
             type.Locked = true;
         }
         // 解锁类别
         private void UnlockType(object sender, RoutedEventArgs e) {
             Button unlockButton = sender as Button;
             string typeSection = unlockButton.Tag as string;
-            XStart.Bean.Type type = XStartService.TypeDic[typeSection];
+            Bean.Type type = XStartService.TypeDic[typeSection];
             // 比较密码是否匹配
             if (type.Password.Equals(type.UnlockSecurity)) {
                 // 解锁当前类别窗口
@@ -881,7 +885,7 @@ namespace XStart2._0 {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ShowAbout(object sender, RoutedEventArgs e) {
-            NotifyUtils.ShowNotification("X启动2.0版", Colors.Gray, "关于");
+            NotifyUtils.ShowNotification("X启动2.0版", Colors.LightBlue, "关于");
         }
         /// <summary>
         /// 保存当前窗口尺寸配置

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XStart.Bean {
+namespace XStart2._0.Bean {
     internal class TableParam : Attribute {
         public readonly bool isKey;
         public readonly string param;

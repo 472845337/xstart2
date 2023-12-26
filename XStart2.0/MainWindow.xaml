@@ -291,6 +291,7 @@
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
+                        <MenuItem Header="取消所有自启动"/>
                         <MenuItem Header="恢复默认" />
                         <MenuItem Header="关于" Click="ShowAbout"/>
                         <MenuItem Header="退出程序" Click="Window_Close"/>

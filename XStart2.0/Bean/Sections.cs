@@ -1,5 +1,5 @@
 ﻿
-namespace XStart.Bean {
+namespace XStart2._0.Bean {
     // 数据共用的结构体
     public class Sections {
         public string TypeSection { get; set; }

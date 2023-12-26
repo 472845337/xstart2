@@ -4,14 +4,13 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using Utils;
-using XStart.Bean;
-using XStart.Config;
-using XStart.Const;
+using XStart2._0.Bean;
+using XStart2._0.Config;
+using XStart2._0.Const;
 using XStart2._0.Utils;
-using static XStart.Bean.SystemAppParam;
+using static XStart2._0.Bean.SystemAppParam;
 
-namespace XStart.Utils {
+namespace XStart2._0.Utils {
     public static class ProjectUtils {
 
         public static string ExecuteApp(Project project) {

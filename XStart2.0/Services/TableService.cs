@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Reflection;
 using System.Text;
-using XStart.Bean;
-using XStart.Config;
-using XStart.DataBase;
+using XStart2._0.Bean;
+using XStart2._0.Config;
+using XStart2._0.DataBase;
 
-namespace XStart.Services {
+namespace XStart2._0.Services {
     /// <summary>
     /// 操作http发送数据
     /// </summary>
