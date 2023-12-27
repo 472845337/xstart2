@@ -326,6 +326,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <Resource Include="Files\Images\*.png" />
+    <Resource Include="Files\xstart2.ico" />
     <Content Include="NAudio.dll" />
     <Content Include="System.Data.SQLite.dll" />
     <EmbeddedResource Include="X64\SQLite.Interop.dll">

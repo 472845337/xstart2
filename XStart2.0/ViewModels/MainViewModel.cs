@@ -92,6 +92,5 @@ namespace XStart2._0.ViewModels {
         private string urlOpenCustomBrowser;
         public string UrlOpenCustomBrowser { get => urlOpenCustomBrowser; set { urlOpenCustomBrowser = value; OnPropertyChanged("UrlOpenCustomBrowser"); } }
         #endregion
-
     }
 }

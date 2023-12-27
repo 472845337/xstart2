@@ -22,6 +22,8 @@ namespace XStart2._0 {
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
     public partial class MainWindow : Window {
+        private System.Windows.Threading.DispatcherTimer AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
+        private static bool IsAllShow = true;
         // 时钟定时器
         private readonly System.Windows.Threading.DispatcherTimer currentTimer = new System.Windows.Threading.DispatcherTimer();
         // 数据服务
@@ -30,6 +32,9 @@ namespace XStart2._0 {
         public ProjectService projectService = ServiceFactory.GetProjectService();
         // 模型
         readonly MainViewModel mainViewModel = new MainViewModel();
+        // 
+        System.Windows.Forms.NotifyIcon notifyIcon = null;
+        WindowState ws; //记录窗体状态
         public MainWindow() {
             InitializeComponent();
             Configs.Handler = new System.Windows.Interop.WindowInteropHelper(this).Handle;
@@ -38,6 +43,9 @@ namespace XStart2._0 {
             // Interval 获取或设置计时器刻度之间的时间段
             currentTimer.Interval = new TimeSpan(0, 0, 1);
             currentTimer.Start();
+
+            AutoHideTimer.Tick += new EventHandler(AutoHideTimer_Tick);
+            AutoHideTimer.Start();
             // 将模型赋值上下文
             DataContext = mainViewModel;
         }
@@ -210,7 +218,7 @@ namespace XStart2._0 {
                     }
                 }
             }
-            
+
             mainViewModel.TypeTabExpanded = true;
             mainViewModel.TypeTabToggleIcon = FontAwesome6.Outdent;
             mainViewModel.TypeWidth = 100;
@@ -250,7 +258,28 @@ namespace XStart2._0 {
                     }
                 }));
             }
+            // 任务栏图标
+            notifyIcon = new System.Windows.Forms.NotifyIcon();
+            System.Windows.Forms.NotifyIcon icon = new System.Windows.Forms.NotifyIcon();
+            Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Files/xstart2.ico")).Stream;
+
+            notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+            notifyIcon.Visible = true;
+            notifyIcon.DoubleClick += MainWindow_Show;
+
+            System.Windows.Forms.MenuItem showWindowMenuItem = new System.Windows.Forms.MenuItem("显示窗口");
+            showWindowMenuItem.Click += MainWindow_Show;
+            System.Windows.Forms.MenuItem closeWindowMenuItem = new System.Windows.Forms.MenuItem("退出");
+            closeWindowMenuItem.Click += WindowCloseMenu_Click;
+            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[] { showWindowMenuItem, closeWindowMenuItem });
             Configs.inited = true;
+            IsAllShow = true;
+        }
+
+        private void MainWindow_Show(object sender, EventArgs e) {
+            Visibility = Visibility.Visible;
+            ws = WindowState.Normal;
+            IsAllShow = true;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
@@ -282,11 +311,21 @@ namespace XStart2._0 {
             // 配置保存
             SaveSetting();
             if (Configs.exitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", "警告", MessageBoxButton.OKCancel)) {
+                // 取消退出
                 e.Cancel = true;
             } else {
+                // 退出
+                // 回收相关资源
+                Configs.Dispose();
+                AudioUtils.Dispose();
+                DataBase.SqLiteFactory.CloseAllSqLite();
                 e.Cancel = false;
             }
 
+        }
+
+        private void WindowCloseMenu_Click(object sender, EventArgs e) {
+            Close();
         }
 
         private void Window_Close(object sender, RoutedEventArgs e) {
@@ -294,10 +333,7 @@ namespace XStart2._0 {
         }
 
         private void Window_Closed(object sender, EventArgs e) {
-            // 回收相关资源
-            Configs.Dispose();
-            AudioUtils.Dispose();
-            DataBase.SqLiteFactory.CloseAllSqLite();
+
         }
 
         /// <summary>
@@ -917,7 +953,6 @@ namespace XStart2._0 {
         private void ToggleAutoRun_Click(object sender, RoutedEventArgs e) {
             ToggleButton toggleButton = sender as ToggleButton;
             Project project = toggleButton.Tag as Project;
-            Console.WriteLine(project.AutoRun);
             // 切换项目自启动
             project.AutoRun = toggleButton.IsChecked;
             projectService.Update(new Project { Section = project.Section, AutoRun = project.AutoRun });
@@ -959,5 +994,145 @@ namespace XStart2._0 {
                 from = to;
             }
         }
+
+        #region 窗口靠边隐藏
+        public void CancelAnchor() {
+            AutoHideTimer.IsEnabled = false;
+        }
+        public void EnableAnchor() {
+            AutoHideTimer.IsEnabled = true;
+        }
+        private void MainWindow_LocationChanged(object sender, EventArgs e) {
+            StopAnchor();
+        }
+
+        internal System.Windows.Forms.AnchorStyles stopAnchor = System.Windows.Forms.AnchorStyles.None;
+        /// <summary>
+        /// 计时器控制函数
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void AutoHideTimer_Tick(object sender, EventArgs e) {
+            Point toPoint = new Point(Left, Top);
+            DllUtils.Point curPoint = new DllUtils.Point();
+            DllUtils.GetCursorPos(ref curPoint); //获取鼠标相对桌面的位置
+            bool isMouseEnter = curPoint.X >= Left - 10
+                               && curPoint.X <= Left + Width + 10
+                               && curPoint.Y >= Top - 10
+                               && curPoint.Y <= Top + Height + 10;
+            switch (stopAnchor) {
+                case System.Windows.Forms.AnchorStyles.Top:
+                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - 5));
+                    break;
+                case System.Windows.Forms.AnchorStyles.Left:
+                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - 5), Top);
+                    break;
+                case System.Windows.Forms.AnchorStyles.Right:
+                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - Width, Top) : new Point(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - 2, Top);
+                    break;
+                case System.Windows.Forms.AnchorStyles.Bottom:
+                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(Left, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - Height) : new Point(Left, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - 2);
+                    break;
+            }
+            if (isMouseEnter) {
+                IsAllShow = false;
+            }
+            Animate2Location(this, toPoint);
+        }
+        private void StopAnchor() {
+            if (Top <= 0 && Left <= 0) {
+                stopAnchor = System.Windows.Forms.AnchorStyles.None;
+            } else if (Top <= 0) {
+                stopAnchor = System.Windows.Forms.AnchorStyles.Top;
+            } else if (Left <= 0) {
+                stopAnchor = System.Windows.Forms.AnchorStyles.Left;
+            } else if (Left >= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - Width) {
+                stopAnchor = System.Windows.Forms.AnchorStyles.Right;
+            } else if (Top >= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - Height) {
+                stopAnchor = System.Windows.Forms.AnchorStyles.Bottom;
+            } else {
+                stopAnchor = System.Windows.Forms.AnchorStyles.None;
+            }
+        }
+
+        readonly int step = 1;
+        private void Animate2Location(Window window, Point destination) {
+            double curLeft = window.Left;
+            double curTop = window.Top;
+            double indexX = (destination.X - curLeft) / 200;
+            double indexY = (destination.Y - curTop) / 200;
+            if (indexX == 0) {
+                indexX = destination.X > curLeft ? step : -step;
+            }
+            if (indexY == 0) {
+                indexY = destination.Y > curTop ? step : -step;
+            }
+            int index = 1;
+            bool xStop = false;
+            bool yStop = false;
+            double aniLocationX = curLeft;
+            double aniLocationY = curTop;
+            if (indexX == 0) {
+                xStop = true;
+            }
+            if (indexY == 0) {
+                yStop = true;
+            }
+            while (!xStop || !yStop) {
+                if (!xStop) {
+                    if (indexX < 0) {
+                        if (aniLocationX + indexX <= destination.X) {
+                            aniLocationX = destination.X;
+                            xStop = true;
+                        } else {
+                            aniLocationX += indexX;
+                        }
+                    } else {
+                        if (aniLocationX + indexX >= destination.X) {
+                            aniLocationX = destination.X;
+                            xStop = true;
+                        } else {
+                            aniLocationX += indexX;
+                        }
+                    }
+                }
+                if (!yStop) {
+                    if (indexY < 0) {
+                        if (aniLocationY + indexY < destination.Y) {
+                            aniLocationY = destination.Y;
+                            yStop = true;
+                        } else {
+                            aniLocationY += indexY;
+                        }
+                    } else {
+                        if (aniLocationY + indexY > destination.Y) {
+                            aniLocationY = destination.Y;
+                            yStop = true;
+                        } else {
+                            aniLocationY += indexY;
+                        }
+                    }
+                }
+                window.Left = aniLocationX;
+                window.Top = aniLocationY;
+                index++;
+            }
+        }
+
+        private void CloseBorderHide_Click(object sender, RoutedEventArgs e) {
+            // 保存配置
+            if (Configs.inited) {
+                Configs.closeBorderHide = mainViewModel.CloseBorderHide;
+                XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE, System.Convert.ToString(Configs.closeBorderHide));
+            }
+            if (!Configs.closeBorderHide) {
+                // 不隐藏
+                CancelAnchor();
+            } else {
+                EnableAnchor();
+            }
+
+        }
+        #endregion
     }
 }

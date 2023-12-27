@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows;
 
 namespace XStart2._0.Utils {
     public class DllUtils {
@@ -77,6 +78,21 @@ namespace XStart2._0.Utils {
             public IntPtr hwndApp;
 
             public string szPrompt;
+        }
+
+        public struct Point {
+            public int X;
+            public int Y;
+
+            // ReSharper disable once UnusedMember.Local
+            public Point(int x, int y) {
+                this.X = x;
+                this.Y = y;
+            }
+
+            public override string ToString() {
+                return $"X:{X},Y:{Y}";
+            }
         }
 
         /** 强制GC API函数**/
@@ -266,6 +282,8 @@ namespace XStart2._0.Utils {
 
         [DllImport(Crypt, CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern bool CryptProtectData(ref DATA_BLOB pDataIn, string szDataDescr, ref DATA_BLOB pOptionalEntropy, IntPtr pvReserved, ref CRYPTPROTECT_PROMPTSTRUCT pPromptStruct, int dwFlags, ref DATA_BLOB pDataOut);
-
+        
+        [DllImport(User32, CharSet = CharSet.Auto)]
+        public static extern bool GetCursorPos(ref Point pt);
     }
 }
