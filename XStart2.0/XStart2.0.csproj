@@ -137,6 +137,7 @@
     <Compile Include="Utils\WinApi.cs" />
     <Compile Include="Utils\XStartIniUtils.cs" />
     <Compile Include="ViewModels\AutoRunViewModel.cs" />
+    <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\ResumeViewModel.cs" />
     <Compile Include="ViewModels\BackUpViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
@@ -152,6 +153,9 @@
     <Compile Include="View\SliderButton.cs" />
     <Compile Include="Windows\AutoRunWindow.xaml.cs">
       <DependentUpon>AutoRunWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ProjectWindow.xaml.cs">
+      <DependentUpon>ProjectWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ResumeWindow.xaml.cs">
       <DependentUpon>ResumeWindow.xaml</DependentUpon>
@@ -218,6 +222,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\AutoRunWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ProjectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

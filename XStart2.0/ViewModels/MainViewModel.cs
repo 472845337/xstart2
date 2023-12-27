@@ -14,10 +14,6 @@ namespace XStart2._0.ViewModels {
             // 计算初始化信息
             avatar = "/Files/Images/DefaultUser.png";
             nickName = "昵称";
-            // 日期
-            CurrentDay = DateTime.Now.ToString("D");
-            CurrentTime = DateTime.Now.ToString("T");
-            CurrentWeekDay = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
         }
 
         #region 用户数据

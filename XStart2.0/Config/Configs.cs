@@ -14,6 +14,8 @@ namespace XStart2._0.Config {
         public static System.IntPtr Handler = System.IntPtr.Zero;
         public static bool inited = false;// 是否初始化
 
+        public static double typeWidth = 100;
+
         public static double mainHeight;
         public static double mainWidth;
         public static double mainTop;

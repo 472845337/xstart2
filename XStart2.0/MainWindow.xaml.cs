@@ -26,6 +26,7 @@ namespace XStart2._0 {
         private static bool IsAllShow = true;
         // 时钟定时器
         private readonly System.Windows.Threading.DispatcherTimer currentTimer = new System.Windows.Threading.DispatcherTimer();
+        private readonly System.Windows.Threading.DispatcherTimer currentDateTimer = new System.Windows.Threading.DispatcherTimer();
         // 数据服务
         public TypeService typeService = ServiceFactory.GetTypeService();
         public ColumnService columnService = ServiceFactory.GetColumnService();
@@ -43,6 +44,10 @@ namespace XStart2._0 {
             // Interval 获取或设置计时器刻度之间的时间段
             currentTimer.Interval = new TimeSpan(0, 0, 1);
             currentTimer.Start();
+            // 日期定时任务
+            currentDateTimer.Interval = new TimeSpan(0, 0, 1);
+            currentDateTimer.Tick += new EventHandler(CurrentDate_Tick);
+            currentDateTimer.Start();
 
             AutoHideTimer.Tick += new EventHandler(AutoHideTimer_Tick);
             AutoHideTimer.Start();
@@ -221,7 +226,7 @@ namespace XStart2._0 {
 
             mainViewModel.TypeTabExpanded = true;
             mainViewModel.TypeTabToggleIcon = FontAwesome6.Outdent;
-            mainViewModel.TypeWidth = 100;
+            mainViewModel.TypeWidth = Configs.typeWidth;
             mainViewModel.Types = XStartService.TypeDic;
             int openTypeIndex = mainViewModel.Types.IndexOf(openType);
             mainViewModel.SelectedIndex = openTypeIndex < 0 ? 0 : openTypeIndex;
@@ -849,6 +854,24 @@ namespace XStart2._0 {
             }
         }
 
+        private void AddProject_Click(object sender, RoutedEventArgs e) {
+            Console.WriteLine("添加项目");
+            // 当前栏目
+            FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
+            object tag = element.Tag;
+            string typeSection;
+            string columnSection;
+            if(tag is Column column) {
+                // 项目放置面板
+                typeSection = column.TypeSection;
+                columnSection = column.Section;
+            }else if (tag is Project project) {
+                typeSection = project.TypeSection;
+                columnSection = project.ColumnSection;
+            }
+
+        }
+
         private void ExecuteProject(Project project) {
             try {
                 // 获取该类别的应用是否配置确认信息，有确认信息，则弹出确认窗口
@@ -896,7 +919,7 @@ namespace XStart2._0 {
                 mainViewModel.TypeTabExpanded = false;
                 mainViewModel.TypeTabToggleIcon = FontAwesome6.Indent;
             } else {
-                mainViewModel.TypeWidth = 100;
+                mainViewModel.TypeWidth = Configs.typeWidth;
                 mainViewModel.TypeTabExpanded = true;
                 mainViewModel.TypeTabToggleIcon = FontAwesome6.Outdent;
             }
@@ -948,6 +971,19 @@ namespace XStart2._0 {
         //计时执行的程序
         private void CurrentTimer_Tick(object sender, EventArgs e) {
             mainViewModel.CurrentTime = DateTime.Now.ToString("T");
+        }
+        private void CurrentDate_Tick(object sender, EventArgs e) {
+            // 下次运行时间
+            TimeSpan timeToGo = GetTimeToNextMidnight(24);
+            currentDateTimer.Interval = timeToGo;
+            mainViewModel.CurrentDay = DateTime.Now.ToString("D");
+            mainViewModel.CurrentWeekDay = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
+        }
+
+        private TimeSpan GetTimeToNextMidnight(int hour) {
+            DateTime now = DateTime.Now;
+            DateTime nextMidnight = now.Date.AddHours(hour);
+            return nextMidnight - now;
         }
 
         private void ToggleAutoRun_Click(object sender, RoutedEventArgs e) {

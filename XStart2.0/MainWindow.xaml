@@ -51,16 +51,19 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Tag="{TemplateBinding Tag}">
                             <Border.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="添加项目"/>
+                                    <MenuItem Header="添加项目" Click="AddProject_Click"/>
                                     <MenuItem Header="修改项目"/>
                                     <MenuItem Header="删除项目"/>
                                     <Separator/>
                                     <MenuItem Header="剪切"/>
                                     <MenuItem Header="复制"/>
                                     <MenuItem Header="粘贴"/>
+                                    <Separator/>
+                                    <MenuItem Header="属性"/>
+                                    <MenuItem Header="发送到桌面"/>
                                 </ContextMenu>
                             </Border.ContextMenu>
                             <Grid>
@@ -237,7 +240,7 @@
                                                 <ScrollViewer Visibility="{Binding Value.Unlocked, Converter={StaticResource Boolean2VisibilityConverter}}" VerticalScrollBarVisibility="Auto" Height="{Binding Value.ColumnHeight}" ScrollChanged="ScrollChanged" Tag="{Binding Value}">
                                                     <ScrollViewer.ContextMenu>
                                                         <ContextMenu>
-                                                            <MenuItem Header="添加项目"/>
+                                                            <MenuItem Header="添加项目" Click="AddProject_Click"/>
                                                             <MenuItem Header="粘贴"/>
                                                             <MenuItem Header="清空本栏目"/>
                                                         </ContextMenu>
