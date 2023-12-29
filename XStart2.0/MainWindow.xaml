@@ -196,7 +196,7 @@
                                                     <ScrollViewer.ContextMenu>
                                                         <ContextMenu>
                                                             <MenuItem Header="添加项目" Click="AddProject_Click"/>
-                                                            <MenuItem Header="粘贴"/>
+                                                            <MenuItem Header="粘贴" Click="PasteProject_Click"/>
                                                             <MenuItem Header="清空本栏目"/>
                                                         </ContextMenu>
                                                     </ScrollViewer.ContextMenu>
@@ -222,12 +222,12 @@
                                                                                 <MenuItem Header="修改项目" Click="EditProject_Click"/>
                                                                                 <MenuItem Header="删除项目" Click="DeleteProject_Click"/>
                                                                                 <Separator/>
-                                                                                <MenuItem Header="剪切"/>
-                                                                                <MenuItem Header="复制"/>
-                                                                                <MenuItem Header="粘贴"/>
+                                                                                <MenuItem Header="剪切" Click="CutProject_Click"/>
+                                                                                <MenuItem Header="复制" Click="CopyProject_Click"/>
+                                                                                <MenuItem Header="粘贴" Click="PasteProject_Click"/>
                                                                                 <Separator/>
-                                                                                <MenuItem Header="属性"/>
-                                                                                <MenuItem Header="发送到桌面"/>
+                                                                                <MenuItem Header="属性" IsEnabled="{Binding Value.PropertyEnabled}" Click="Property_Click"/>
+                                                                                <MenuItem Header="发送到桌面" IsEnabled="{Binding Value.PropertyEnabled}" Click="Send2Desktop_Click"/>
                                                                             </ContextMenu>
                                                                         </Button.ContextMenu>
                                                                     </view:ImageButton>

@@ -32,8 +32,20 @@ namespace XStart2._0.Bean {
         // 栏目-对应Column中的section
         [TableParam("column_section", "VARCHAR")]
         public string ColumnSection { get; set; }// 归属栏目
+
+        private string kind;
         [TableParam("kind", "VARCHAR")]
-        public string Kind { get; set; }// 种类
+        public string Kind {
+            // 种类
+            get => kind; set {
+                kind = value; 
+                if (KIND_FILE.Equals(value) || KIND_DIRECTORY.Equals(value)) {
+                    PropertyEnabled = true;
+                } else {
+                    PropertyEnabled = false;
+                }
+            }
+        }
 
         private string path;
         [TableParam("path", "VARCHAR")]
@@ -58,6 +70,8 @@ namespace XStart2._0.Bean {
         public bool? AutoRun { get => autoRun; set { autoRun = value; OnPropertyChanged("AutoRun"); } }
         // 系统应用不可随应用启动
         public bool CanAutoRun { get; set; } = true;
+        public bool PropertyEnabled { get; set; } = true;
+        public string Operate { get; set; }
         public string ToolTipContent {
             get {
                 if (SystemProjectParam.MSTSC.Equals(Path)) {

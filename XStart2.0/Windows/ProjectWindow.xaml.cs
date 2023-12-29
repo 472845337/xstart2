@@ -52,8 +52,14 @@ namespace XStart2._0.Windows {
                 vm.HotKey = Project.HotKey;
                 vm.Remark = Project.Remark;
                 if (Project.Path.StartsWith("#")) {
+                    // 系统功能路径不可以变更
                     vm.PathEnable = false;
                 }
+            } else {
+                // 新增的时候不会传对象过来
+                Project = new Project();
+                Project.TypeSection = vm.TypeSection;
+                Project.ColumnSection = vm.ColumnSection;
             }
             DataContext = vm;
         }

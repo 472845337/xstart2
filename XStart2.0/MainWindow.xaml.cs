@@ -21,7 +21,7 @@ namespace XStart2._0 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window {
+    public partial class MainWindow : Window  {
         private readonly System.Windows.Threading.DispatcherTimer AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
         private static bool IsAllShow = true;
         // 时钟定时器
@@ -233,7 +233,7 @@ namespace XStart2._0 {
             mainViewModel.SelectedIndex = openTypeIndex < 0 ? 0 : openTypeIndex;
             #endregion
 
-            if (Configs.audio) {
+            if (mainViewModel.Audio) {
                 AudioUtils.PlayWav(AudioUtils.START);
             }
             // 自启动
@@ -374,7 +374,9 @@ namespace XStart2._0 {
                     }
                 }
             }
-            AudioUtils.PlayWav(AudioUtils.CHANGE);
+            if (mainViewModel.Audio) {
+                AudioUtils.PlayWav(AudioUtils.CHANGE);
+            }
         }
 
         /// <summary>
@@ -407,7 +409,9 @@ namespace XStart2._0 {
                         type.Value.Locked = true;
                     }
                 }
-                AudioUtils.PlayWav(AudioUtils.CHANGE);
+                if (mainViewModel.Audio) {
+                    AudioUtils.PlayWav(AudioUtils.CHANGE);
+                }
             }
         }
 
@@ -475,6 +479,9 @@ namespace XStart2._0 {
                 mainViewModel.UrlOpenCustomBrowser = settingVM.UrlOpenCustomBrowser;
                 SaveSetting();
             }
+            if (mainViewModel.TopMost) {
+                Topmost = true;
+            }
         }
         /// <summary>
         /// 添加类别
@@ -539,7 +546,7 @@ namespace XStart2._0 {
                 typeVm.SelectedFf = XStartService.TypeDic[typeSection].FaIconFontFamily;
             }
             typeVm.Title = "修改类别";
-            ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow(typeVm) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
+            ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow(typeVm) { WindowStartupLocation = WindowStartupLocation.CenterScreen, Topmost = true };
             OperateType(projectTypeWindow);
         }
 
@@ -564,6 +571,9 @@ namespace XStart2._0 {
         }
 
         private void OperateType(ProjectTypeWindow projectTypeWindow) {
+            if (Topmost) {
+                Topmost = false;
+            }
             if (true == projectTypeWindow.ShowDialog()) {
                 // 保存数据到类别库中
                 if (string.IsNullOrEmpty(projectTypeWindow.vm.Section)) {
@@ -589,6 +599,9 @@ namespace XStart2._0 {
                 }
             }
             projectTypeWindow.Close();
+            if (mainViewModel.TopMost) {
+                Topmost = true;
+            }
         }
 
         private void AddTypeSecurity(object sender, RoutedEventArgs e) {
@@ -788,6 +801,9 @@ namespace XStart2._0 {
             }
         }
         private void UpdateSecurity<T>(T t) where T : TableData {
+            if (Topmost) {
+                Topmost = false;
+            }
             UpdateSecurityWindow window = new UpdateSecurityWindow() {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 VM = new SecurityVM() { Title = "修改口令", Section = t.Section, CurSecurity = t.Password, Kind = Constants.TYPE, Operate = Constants.OPERATE_UPDATE }
@@ -804,9 +820,15 @@ namespace XStart2._0 {
                 t.Locked = true;
                 NotifyUtils.ShowNotification("口令修改成功！");
             }
+            if (mainViewModel.TopMost) {
+                Topmost = true;
+            }
         }
 
         private void RemoveSecurity<T>(T t) where T : TableData {
+            if (Topmost) {
+                Topmost = false;
+            }
             RemoveSecurityWindow window = new RemoveSecurityWindow() {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 VM = new SecurityVM() { Title = "移除口令", Section = t.Section, CurSecurity = t.Password, Kind = Constants.TYPE, Operate = Constants.OPERATE_REMOVE }
@@ -822,6 +844,9 @@ namespace XStart2._0 {
                 t.HasPassword = false;
                 t.Locked = false;
                 NotifyUtils.ShowNotification("口令移除成功！");
+            }
+            if (mainViewModel.TopMost) {
+                Topmost = true;
             }
         }
 
@@ -860,11 +885,11 @@ namespace XStart2._0 {
             object tag = element.Tag;
             string typeSection = string.Empty;
             string columnSection = string.Empty;
-            if(tag is Column column) {
+            if (tag is Column column) {
                 // 项目放置面板
                 typeSection = column.TypeSection;
                 columnSection = column.Section;
-            }else if (tag is Project project) {
+            } else if (tag is Project project) {
                 typeSection = project.TypeSection;
                 columnSection = project.ColumnSection;
             }
@@ -872,16 +897,18 @@ namespace XStart2._0 {
             if (true == projectWindow.ShowDialog()) {
                 projectWindow.Project.Icon = XStartService.GetIconImage(projectWindow.Project.Kind, projectWindow.Project.Path, projectWindow.Project.IconPath);
                 XStartService.AddNewApp(projectWindow.Project);
+                NotifyUtils.ShowNotification($"添加[{projectWindow.Project.Name}]成功！");
             }
         }
         // 编辑项目
         private void EditProject_Click(object sender, RoutedEventArgs e) {
-            FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
-            if (element.Tag is Project project) {
+            Project project = GetProjectByMenu(sender);
+            if (null != project) {
                 ProjectWindow projectWindow = new ProjectWindow("修改项目", project.TypeSection, project.ColumnSection) { Project = project };
                 if (true == projectWindow.ShowDialog()) {
                     projectWindow.Project.Icon = XStartService.GetIconImage(projectWindow.Project.Kind, projectWindow.Project.Path, projectWindow.Project.IconPath);
                     projectService.Update(projectWindow.Project);
+                    NotifyUtils.ShowNotification($"修改[{projectWindow.Project.Name}]成功！");
                 }
             } else {
                 MessageBox.Show("系统错误！");
@@ -889,10 +916,10 @@ namespace XStart2._0 {
         }
         // 删除项目
         private void DeleteProject_Click(object sender, RoutedEventArgs e) {
-            FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
-            if (MessageBoxResult.OK == MessageBox.Show("确认删除该项目？","警告", MessageBoxButton.OKCancel)) {
-                if(element.Tag is Project project) {
-                   int result = projectService.Delete(project.Section);
+            Project project = GetProjectByMenu(sender);
+            if (MessageBoxResult.OK == MessageBox.Show("确认删除该项目？", "警告", MessageBoxButton.OKCancel)) {
+                if (null != project) {
+                    int result = projectService.Delete(project.Section);
                     if (result > 0) {
                         if (SystemProjectParam.MSTSC.Equals(project.Path)) {
                             // 远程的rdp文件删除
@@ -1041,7 +1068,14 @@ namespace XStart2._0 {
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN, ref Configs.urlOpen, mainViewModel.UrlOpen);// 浏览器打开链接
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER, ref Configs.urlOpenCustomBrowser, mainViewModel.UrlOpenCustomBrowser);// 自定义浏览器
         }
-
+        /// <summary>
+        /// Config配置保存
+        /// </summary>
+        /// <typeparam name="T">数据类型</typeparam>
+        /// <param name="section">INI的section头</param>
+        /// <param name="key">INI的关键字</param>
+        /// <param name="from">原值</param>
+        /// <param name="to">新值</param>
         private void SaveConfig<T>(string section, string key, ref T from, T to) {
             bool isChange = false;
             if (from is bool fromBool && to is bool toBool) {
@@ -1086,24 +1120,26 @@ namespace XStart2._0 {
         /// <param name="e"></param>
         public void AutoHideTimer_Tick(object sender, EventArgs e) {
             Point toPoint = new Point(Left, Top);
+            double mouseDistance = 10;// 鼠标在边界距离多远范围
+            double resumeSize = 10;// 隐藏后剩余出来的边界大小
             DllUtils.Point curPoint = new DllUtils.Point();
             DllUtils.GetCursorPos(ref curPoint); //获取鼠标相对桌面的位置
-            bool isMouseEnter = curPoint.X >= Left - 10
-                               && curPoint.X <= Left + Width + 10
-                               && curPoint.Y >= Top - 10
-                               && curPoint.Y <= Top + Height + 10;
+            bool isMouseEnter = curPoint.X >= Left - mouseDistance
+                               && curPoint.X <= Left + Width + mouseDistance
+                               && curPoint.Y >= Top - mouseDistance
+                               && curPoint.Y <= Top + Height + mouseDistance;
             switch (stopAnchor) {
                 case System.Windows.Forms.AnchorStyles.Top:
-                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - 5));
+                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - resumeSize));
                     break;
                 case System.Windows.Forms.AnchorStyles.Left:
-                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - 5), Top);
+                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - resumeSize), Top);
                     break;
                 case System.Windows.Forms.AnchorStyles.Right:
-                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - Width, Top) : new Point(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - 2, Top);
+                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - Width, Top) : new Point(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - resumeSize, Top);
                     break;
                 case System.Windows.Forms.AnchorStyles.Bottom:
-                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(Left, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - Height) : new Point(Left, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - 2);
+                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(Left, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - Height) : new Point(Left, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - resumeSize);
                     break;
             }
             if (isMouseEnter) {
@@ -1206,5 +1242,76 @@ namespace XStart2._0 {
 
         }
         #endregion
+
+        private void Property_Click(object sender, RoutedEventArgs e) {
+            Project project = GetProjectByMenu(sender);
+            if (null != project) {
+                if (Project.KIND_FILE.Equals(project.Kind) || Project.KIND_DIRECTORY.Equals(project.Kind)) {
+                    WinUtils.ShowFileProperties(project.Path);
+                    
+                } else {
+                    MessageBox.Show("该项目不可查看属性！","提醒");
+                }
+            }
+        }
+
+        // 发送到桌面快捷方式
+        private void Send2Desktop_Click(object sender, RoutedEventArgs e) {
+            Project project = GetProjectByMenu(sender);
+            if (null != project) {
+                FileUtils.CreateShortCutOnDesktop(project.Name, project.Path);
+                NotifyUtils.ShowNotification("已发送快捷方式到桌面！");
+            } else {
+                MessageBox.Show("该项目不可发送到桌面快捷方式！", "提醒");
+            }
+        }
+
+        private void CutProject_Click(object sender, RoutedEventArgs e) {
+            Project project = GetProjectByMenu(sender);
+            project.Operate = Constants.OPERATE_CUT;
+            Clipboard.SetData("XStartApp", project);
+            // 缓存删除,但是数据不删除
+            XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic.Remove(project.Section);
+        }
+
+        private void CopyProject_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void PasteProject_Click(object sender, RoutedEventArgs e) {
+            // 当前栏目
+            FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
+            object tag = element.Tag;
+            string typeSection = string.Empty;
+            string columnSection = string.Empty;
+            if (tag is Column column) {
+                // 项目放置面板
+                typeSection = column.TypeSection;
+                columnSection = column.Section;
+            } else if (tag is Project project) {
+                // 选的已有项目粘贴
+                typeSection = project.TypeSection;
+                columnSection = project.ColumnSection;
+            }
+            if (Clipboard.ContainsData("XStartApp")) {
+                var obj = Clipboard.GetData("XStartApp");
+                var project = Clipboard.GetData("XStartApp") as Project;
+                string primarySection = project.Section;
+                project.TypeSection = typeSection;
+                project.ColumnSection = columnSection;
+                XStartService.AddNewApp(project);
+                // 如果是剪切操作，需要将原数据删除
+                if (Constants.OPERATE_CUT.Equals(project.Operate)) {
+                    projectService.Delete(primarySection);
+                }
+            } else {
+                MessageBox.Show("当前剪切板无应用数据！","提醒");
+            }
+        }
+
+        private Project GetProjectByMenu(object sender) {
+            FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
+            return element.Tag as Project;
+        }
     }
 }

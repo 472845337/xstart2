@@ -92,6 +92,7 @@
         public const string OPERATE_CREATE = "create";// 创建
         public const string OPERATE_UPDATE = "update";// 更新
         public const string OPERATE_REMOVE = "remove";// 移除
+        public const string OPERATE_CUT = "cut";// 剪切
 
         public const string FONT_FAMILY_FA_SOLID = "pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Solid";
         public const string FONT_FAMILY_FA_REGULAR = "pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Regular";

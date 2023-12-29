@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:XStart2._0.Windows"
         xmlns:helper="clr-namespace:XStart2._0.Helper"
         mc:Ignorable="d"
-        Title="系统功能" Height="400" Width="448" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="系统功能" Height="400" Width="458" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="TabItem">
             <Setter Property="Height" Value="28"/>
