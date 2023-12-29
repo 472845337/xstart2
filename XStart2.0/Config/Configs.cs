@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
+using System.Windows.Media.Imaging;
 using XStart2._0.Const;
 using XStart2._0.Utils;
-using static XStart2._0.Bean.SystemAppParam;
+using static XStart2._0.Bean.SystemProjectParam;
 
 namespace XStart2._0.Config {
     /// <summary>
@@ -44,164 +45,164 @@ namespace XStart2._0.Config {
         public static bool lineInMuted = false;
         public static bool cdPlayerMuted = false;
 
-        public static Bitmap ICON_ABOUT = IconUtils.GetIcon(AppStartPath + "Files/Icons/about.ico", true)?.ToBitmap();
-        public static Bitmap ICON_ADD = IconUtils.GetIcon(AppStartPath + "Files/Icons/add.ico", true)?.ToBitmap();
-        public static Bitmap ICON_APP = IconUtils.GetIcon(AppStartPath + "Files/Icons/app.ico", true)?.ToBitmap();
-        public static Bitmap ICON_BUTTOM = IconUtils.GetIcon(AppStartPath + "Files/Icons/buttom.ico", true)?.ToBitmap();
-        public static Bitmap ICON_CLEAR = IconUtils.GetIcon(AppStartPath + "Files/Icons/clear.ico", true)?.ToBitmap();
-        public static Bitmap ICON_COPY = IconUtils.GetIcon(AppStartPath + "Files/Icons/copy.ico", true)?.ToBitmap();
-        public static Bitmap ICON_CUT = IconUtils.GetIcon(AppStartPath + "Files/Icons/cut.ico", true)?.ToBitmap();
-        public static Bitmap ICON_DEFAULT = IconUtils.GetIcon(AppStartPath + "Files/Icons/default.ico", true)?.ToBitmap();
-        public static Bitmap ICON_DESKTOP = IconUtils.GetIcon(AppStartPath + "Files/Icons/desktop.ico", true)?.ToBitmap();
-        public static Bitmap ICON_DOWN = IconUtils.GetIcon(AppStartPath + "Files/Icons/down.ico", true)?.ToBitmap();
-        public static Bitmap ICON_FOLDER = IconUtils.GetIcon(AppStartPath + "Files/Icons/folder.ico", true)?.ToBitmap();
-        public static Bitmap ICON_EXIT = IconUtils.GetIcon(AppStartPath + "Files/Icons/exit.ico", true)?.ToBitmap();
-        public static Bitmap ICON_LOCK = IconUtils.GetIcon(AppStartPath + "Files/Icons/lock.ico", true)?.ToBitmap();
-        public static Bitmap ICON_PASTE = IconUtils.GetIcon(AppStartPath + "Files/Icons/paste.ico", true)?.ToBitmap();
-        public static Bitmap ICON_PREFERENCE = IconUtils.GetIcon(AppStartPath + "Files/Icons/preference.ico", true)?.ToBitmap();
-        public static Bitmap ICON_PROPERTY = IconUtils.GetIcon(AppStartPath + "Files/Icons/property.ico", true)?.ToBitmap();
-        public static Bitmap ICON_REMOVE = IconUtils.GetIcon(AppStartPath + "Files/Icons/remove.ico", true)?.ToBitmap();
-        public static Bitmap ICON_SECURITY_ADD = IconUtils.GetIcon(AppStartPath + "Files/Icons/security_add.ico", true)?.ToBitmap();
-        public static Bitmap ICON_SECURITY_DEL = IconUtils.GetIcon(AppStartPath + "Files/Icons/security_del.ico", true)?.ToBitmap();
-        public static Bitmap ICON_SECURITY_EDIT = IconUtils.GetIcon(AppStartPath + "Files/Icons/security_edit.ico", true)?.ToBitmap();
-        public static Bitmap ICON_SHOW = IconUtils.GetIcon(AppStartPath + "Files/Icons/show.ico", true)?.ToBitmap();
-        public static Bitmap ICON_THEME = IconUtils.GetIcon(AppStartPath + "Files/Icons/theme.ico", true)?.ToBitmap();
-        public static Bitmap ICON_TOP = IconUtils.GetIcon(AppStartPath + "Files/Icons/top.ico", true)?.ToBitmap();
-        public static Bitmap ICON_UP = IconUtils.GetIcon(AppStartPath + "Files/Icons/up.ico", true)?.ToBitmap();
-        public static Bitmap ICON_UPDATE = IconUtils.GetIcon(AppStartPath + "Files/Icons/update.ico", true)?.ToBitmap();
-        public static Bitmap ICON_FRESH = IconUtils.GetIcon(AppStartPath + "Files/Icons/Fresh.ico", true)?.ToBitmap();
+        public static BitmapImage ICON_ABOUT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/about.ico", true);
+        public static BitmapImage ICON_ADD = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/add.ico", true);
+        public static BitmapImage ICON_APP = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/app.ico", true);
+        public static BitmapImage ICON_BUTTOM = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/buttom.ico", true);
+        public static BitmapImage ICON_CLEAR = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/clear.ico", true);
+        public static BitmapImage ICON_COPY = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/copy.ico", true);
+        public static BitmapImage ICON_CUT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/cut.ico", true);
+        public static BitmapImage ICON_DEFAULT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/default.ico", true);
+        public static BitmapImage ICON_DESKTOP = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/desktop.ico", true);
+        public static BitmapImage ICON_DOWN = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/down.ico", true);
+        public static BitmapImage ICON_FOLDER = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/folder.ico", true);
+        public static BitmapImage ICON_EXIT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/exit.ico", true);
+        public static BitmapImage ICON_LOCK = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/lock.ico", true);
+        public static BitmapImage ICON_PASTE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/paste.ico", true);
+        public static BitmapImage ICON_PREFERENCE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/preference.ico", true);
+        public static BitmapImage ICON_PROPERTY = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/property.ico", true);
+        public static BitmapImage ICON_REMOVE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/remove.ico", true);
+        public static BitmapImage ICON_SECURITY_ADD = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/security_add.ico", true);
+        public static BitmapImage ICON_SECURITY_DEL = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/security_del.ico", true);
+        public static BitmapImage ICON_SECURITY_EDIT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/security_edit.ico", true);
+        public static BitmapImage ICON_SHOW = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/show.ico", true);
+        public static BitmapImage ICON_THEME = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/theme.ico", true);
+        public static BitmapImage ICON_TOP = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/top.ico", true);
+        public static BitmapImage ICON_UP = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/up.ico", true);
+        public static BitmapImage ICON_UPDATE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/update.ico", true);
+        public static BitmapImage ICON_FRESH = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/Fresh.ico", true);
 
-        public static Bitmap ICON_MYCOMPUTER = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/MyComputer.ico", true)?.ToBitmap();
-        public static Bitmap ICON_MYDOCUMENT = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/MyDocument.ico", true)?.ToBitmap();
-        public static Bitmap ICON_CONTROL = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/Control.ico", true)?.ToBitmap();
-        public static Bitmap ICON_RECYCLE_BIN = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/RecycleBin.ico", true)?.ToBitmap();
-        public static Bitmap ICON_IE = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/IE.ico", true)?.ToBitmap();
-        public static Bitmap ICON_NETWORK = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/Network.ico", true)?.ToBitmap();
-        public static Bitmap ICON_WINDOW_EXPLORER = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/WindowExplorer.ico", true)?.ToBitmap();
-        public static Bitmap ICON_PRINT_AND_FAX = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/PrintAndFax.ico", true)?.ToBitmap();
-        public static Bitmap ICON_REGEDIT = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/Regedit.ico", true)?.ToBitmap();
-        public static Bitmap ICON_CMD = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/Cmd.ico", true)?.ToBitmap();
-        public static Bitmap ICON_FOLDER_OPTIONS = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/FolderOptions.ico", true)?.ToBitmap();
-        public static Bitmap ICON_MSTSC = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/Mstsc.ico", true)?.ToBitmap();
+        public static BitmapImage ICON_MYCOMPUTER = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/MyComputer.ico", true);
+        public static BitmapImage ICON_MYDOCUMENT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/MyDocument.ico", true);
+        public static BitmapImage ICON_CONTROL = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Control.ico", true);
+        public static BitmapImage ICON_RECYCLE_BIN = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/RecycleBin.ico", true);
+        public static BitmapImage ICON_IE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/IE.ico", true);
+        public static BitmapImage ICON_NETWORK = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Network.ico", true);
+        public static BitmapImage ICON_WINDOW_EXPLORER = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/WindowExplorer.ico", true);
+        public static BitmapImage ICON_PRINT_AND_FAX = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/PrintAndFax.ico", true);
+        public static BitmapImage ICON_REGEDIT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Regedit.ico", true);
+        public static BitmapImage ICON_CMD = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Cmd.ico", true);
+        public static BitmapImage ICON_FOLDER_OPTIONS = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/FolderOptions.ico", true);
+        public static BitmapImage ICON_MSTSC = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Mstsc.ico", true);
 
-        public static Bitmap ICON_CLOSE_PC = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/ClosePC.ico", true)?.ToBitmap();
-        public static Bitmap ICON_RESTART_PC = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/RestartPC.ico", true)?.ToBitmap();
-        public static Bitmap ICON_LOGOUT_PC = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/logout.ico", true)?.ToBitmap();
-        public static Bitmap ICON_LOCK_PC = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/LockPC.ico", true)?.ToBitmap();
-        public static Bitmap ICON_STANDBY_PC = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/StandbyPC.ico", true)?.ToBitmap();
-        public static Bitmap ICON_SLEEP_PC = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/SleepPC.ico", true)?.ToBitmap();
-        public static Bitmap ICON_NET_END = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/NetEnd.ico", true)?.ToBitmap();
-        public static Bitmap ICON_SCREEN_SAVER = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/ScreenSaver.ico", true)?.ToBitmap();
-        public static Bitmap ICON_CD_ROM = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/CdRom.ico", true)?.ToBitmap();
-        public static Bitmap ICON_DESKTOP_ICON = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/DeskTopIcon.ico", true)?.ToBitmap();
-        public static Bitmap ICON_TASKBAR = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/TaskBar.ico", true)?.ToBitmap();
-        public static Bitmap ICON_TURNOFF_MONITOR = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/TurnoffMonitor.ico", true)?.ToBitmap();
-        public static Bitmap ICON_MEMORY = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/Memory.ico", true)?.ToBitmap();
-        public static Bitmap ICON_END_PROCESS = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/EndProcess.ico", true)?.ToBitmap();
-        public static Bitmap ICON_CUR_WINDOW = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/CurWindow.ico", true)?.ToBitmap();
+        public static BitmapImage ICON_CLOSE_PC = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/ClosePC.ico", true);
+        public static BitmapImage ICON_RESTART_PC = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/RestartPC.ico", true);
+        public static BitmapImage ICON_LOGOUT_PC = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/logout.ico", true);
+        public static BitmapImage ICON_LOCK_PC = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/LockPC.ico", true);
+        public static BitmapImage ICON_STANDBY_PC = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/StandbyPC.ico", true);
+        public static BitmapImage ICON_SLEEP_PC = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/SleepPC.ico", true);
+        public static BitmapImage ICON_NET_END = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/NetEnd.ico", true);
+        public static BitmapImage ICON_SCREEN_SAVER = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/ScreenSaver.ico", true);
+        public static BitmapImage ICON_CD_ROM = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/CdRom.ico", true);
+        public static BitmapImage ICON_DESKTOP_ICON = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/DeskTopIcon.ico", true);
+        public static BitmapImage ICON_TASKBAR = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/TaskBar.ico", true);
+        public static BitmapImage ICON_TURNOFF_MONITOR = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/TurnoffMonitor.ico", true);
+        public static BitmapImage ICON_MEMORY = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Memory.ico", true);
+        public static BitmapImage ICON_END_PROCESS = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/EndProcess.ico", true);
+        public static BitmapImage ICON_CUR_WINDOW = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/CurWindow.ico", true);
 
-        public static Bitmap ICON_VOLUME_ADD = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/VolumeAdd.ico", true)?.ToBitmap();
-        public static Bitmap ICON_VOLUME_REDUCE = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/VolumeReduce.ico", true)?.ToBitmap();
-        public static Bitmap ICON_SILENT_TOGGLE = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/VolumeSilent.ico", true)?.ToBitmap();
+        public static BitmapImage ICON_VOLUME_ADD = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/VolumeAdd.ico", true);
+        public static BitmapImage ICON_VOLUME_REDUCE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/VolumeReduce.ico", true);
+        public static BitmapImage ICON_SILENT_TOGGLE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/VolumeSilent.ico", true);
 
 
-        public static Bitmap ICON_ADD_OR_REMOVE_APP = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/AddOrRemoveApp.ico", true)?.ToBitmap();
-        public static Bitmap ICON_INTERNET_OPTIONS = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/InternetOptions.ico", true)?.ToBitmap();
-        public static Bitmap ICON_USER_ACCOUNT = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/UserAccount.ico", true)?.ToBitmap();
-        public static Bitmap ICON_REGION_LANGUAGE_OPTIONS = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/RegionLanguageOptions.ico", true)?.ToBitmap();
-        public static Bitmap ICON_PHONE_MODEM = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/PhoneModemOptions.ico", true)?.ToBitmap();
-        public static Bitmap ICON_ACCESSIBILITY_OPTIONS = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/AccessibilityOptions.ico", true)?.ToBitmap();
-        public static Bitmap ICON_POWER_OPTIONS = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/PowerOptions.ico", true)?.ToBitmap();
-        public static Bitmap ICON_GAME_CONTROLLER = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/GameController.ico", true)?.ToBitmap();
-        public static Bitmap ICON_SYSTEM_PROPERTIES = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/SystemProperties.ico", true)?.ToBitmap();
-        public static Bitmap ICON_ADD_HARDWARE = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/AddHardware.ico", true)?.ToBitmap();
-        public static Bitmap ICON_MOUSE = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/Mouse.ico", true)?.ToBitmap();
-        public static Bitmap ICON_KEYBOARD = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/KeyBoard.ico", true)?.ToBitmap();
-        public static Bitmap ICON_SOUND_AUDIO_EQUIPMENT = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/SoundAudioEquipment.ico", true)?.ToBitmap();
-        public static Bitmap ICON_VOLUME_CONTROL = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/VolumeControl.ico", true)?.ToBitmap();
-        public static Bitmap ICON_DATE_TIME = IconUtils.GetIcon(AppStartPath + "Files/Icons/System/DateTime.ico", true)?.ToBitmap();
+        public static BitmapImage ICON_ADD_OR_REMOVE_APP = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/AddOrRemoveApp.ico", true);
+        public static BitmapImage ICON_INTERNET_OPTIONS = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/InternetOptions.ico", true);
+        public static BitmapImage ICON_USER_ACCOUNT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/UserAccount.ico", true);
+        public static BitmapImage ICON_REGION_LANGUAGE_OPTIONS = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/RegionLanguageOptions.ico", true);
+        public static BitmapImage ICON_PHONE_MODEM = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/PhoneModemOptions.ico", true);
+        public static BitmapImage ICON_ACCESSIBILITY_OPTIONS = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/AccessibilityOptions.ico", true);
+        public static BitmapImage ICON_POWER_OPTIONS = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/PowerOptions.ico", true);
+        public static BitmapImage ICON_GAME_CONTROLLER = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/GameController.ico", true);
+        public static BitmapImage ICON_SYSTEM_PROPERTIES = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/SystemProperties.ico", true);
+        public static BitmapImage ICON_ADD_HARDWARE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/AddHardware.ico", true);
+        public static BitmapImage ICON_MOUSE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Mouse.ico", true);
+        public static BitmapImage ICON_KEYBOARD = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/KeyBoard.ico", true);
+        public static BitmapImage ICON_SOUND_AUDIO_EQUIPMENT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/SoundAudioEquipment.ico", true);
+        public static BitmapImage ICON_VOLUME_CONTROL = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/VolumeControl.ico", true);
+        public static BitmapImage ICON_DATE_TIME = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/DateTime.ico", true);
 
 
         // 需要初始化，在窗口加载后
-        public static Dictionary<string, Bitmap> iconDic = new Dictionary<string, Bitmap>();
-        public static int systemAppPage = 0;
-        public static bool addMulti = false;
+        public static Dictionary<string, BitmapImage> iconDic = new Dictionary<string, BitmapImage>();
+        public static int systemAppOpenPage = 0;
+        public static bool systemAppAddMulti = false;
 
         public static void InitIconDic() {
-            Configs.iconDic.Clear();
+            iconDic.Clear();
             #region 系统链接
-            Configs.iconDic.Add(MY_COMPUTER, Configs.ICON_MYCOMPUTER);
-            Configs.iconDic.Add(MY_DOCUMENT, Configs.ICON_MYDOCUMENT);
-            Configs.iconDic.Add(CONTROL, Configs.ICON_CONTROL);
-            Configs.iconDic.Add(RECYCLE_BIN, Configs.ICON_RECYCLE_BIN);
-            Configs.iconDic.Add(IE, Configs.ICON_IE);
-            Configs.iconDic.Add(INTERNET, Configs.ICON_NETWORK);
-            Configs.iconDic.Add(EXPLORER, Configs.ICON_WINDOW_EXPLORER);
-            Configs.iconDic.Add(PRINT_FAX, Configs.ICON_PRINT_AND_FAX);
-            Configs.iconDic.Add(REGEDIT, Configs.ICON_REGEDIT);
-            Configs.iconDic.Add(CMD, Configs.ICON_CMD);
-            Configs.iconDic.Add(FOLDER_OPTIONS, Configs.ICON_FOLDER_OPTIONS);
-            Configs.iconDic.Add(MSTSC, Configs.ICON_MSTSC);
+            iconDic.Add(MY_COMPUTER, ICON_MYCOMPUTER);
+            iconDic.Add(MY_DOCUMENT, ICON_MYDOCUMENT);
+            iconDic.Add(CONTROL, ICON_CONTROL);
+            iconDic.Add(RECYCLE_BIN, ICON_RECYCLE_BIN);
+            iconDic.Add(IE, ICON_IE);
+            iconDic.Add(INTERNET, ICON_NETWORK);
+            iconDic.Add(EXPLORER, ICON_WINDOW_EXPLORER);
+            iconDic.Add(PRINT_FAX, ICON_PRINT_AND_FAX);
+            iconDic.Add(REGEDIT, ICON_REGEDIT);
+            iconDic.Add(CMD, ICON_CMD);
+            iconDic.Add(FOLDER_OPTIONS, ICON_FOLDER_OPTIONS);
+            iconDic.Add(MSTSC, ICON_MSTSC);
             #endregion
             #region 系统操作
-            Configs.iconDic.Add(CLOSE_PC, Configs.ICON_CLOSE_PC);
-            Configs.iconDic.Add(RESTART_PC, Configs.ICON_RESTART_PC);
-            Configs.iconDic.Add(LOG_OUT, Configs.ICON_LOGOUT_PC);
-            Configs.iconDic.Add(LOCK_PC, Configs.ICON_LOCK_PC);
-            Configs.iconDic.Add(STANDBY_PC, Configs.ICON_STANDBY_PC);
-            Configs.iconDic.Add(SLEEP_PC, Configs.ICON_SLEEP_PC);
-            Configs.iconDic.Add(NET_END, Configs.ICON_NET_END);
-            Configs.iconDic.Add(SCREEN_SAVER, Configs.ICON_SCREEN_SAVER);
-            Configs.iconDic.Add(OPEN_CD_ROM, Configs.ICON_CD_ROM);
-            Configs.iconDic.Add(CLOSE_CD_ROM, Configs.ICON_CD_ROM);
-            Configs.iconDic.Add(SHOW_HIDE_TASKBAR, Configs.ICON_TASKBAR);
-            Configs.iconDic.Add(TURN_OFF_MONITOR, Configs.ICON_TURNOFF_MONITOR);
-            Configs.iconDic.Add(CLEAR_RECYCLE_BIN, Configs.ICON_RECYCLE_BIN);
-            Configs.iconDic.Add(CLEAR_IE_ADDRESS, Configs.ICON_RECYCLE_BIN);
-            Configs.iconDic.Add(CLEAR_IE_HISTORY, Configs.ICON_RECYCLE_BIN);
-            Configs.iconDic.Add(CLEAR_IE_COOKIES, Configs.ICON_RECYCLE_BIN);
-            Configs.iconDic.Add(CLEAR_RENT, Configs.ICON_RECYCLE_BIN);
-            Configs.iconDic.Add(CLEAR_SOME_DIRECTORY, Configs.ICON_RECYCLE_BIN);
-            Configs.iconDic.Add(CONTROL_APP_MEMORY, Configs.ICON_MEMORY);
-            Configs.iconDic.Add(END_PROCESS, Configs.ICON_END_PROCESS);
+            iconDic.Add(CLOSE_PC, ICON_CLOSE_PC);
+            iconDic.Add(RESTART_PC, ICON_RESTART_PC);
+            iconDic.Add(LOG_OUT, ICON_LOGOUT_PC);
+            iconDic.Add(LOCK_PC, ICON_LOCK_PC);
+            iconDic.Add(STANDBY_PC, ICON_STANDBY_PC);
+            iconDic.Add(SLEEP_PC, ICON_SLEEP_PC);
+            iconDic.Add(NET_END, ICON_NET_END);
+            iconDic.Add(SCREEN_SAVER, ICON_SCREEN_SAVER);
+            iconDic.Add(OPEN_CD_ROM, ICON_CD_ROM);
+            iconDic.Add(CLOSE_CD_ROM, ICON_CD_ROM);
+            iconDic.Add(SHOW_HIDE_TASKBAR, ICON_TASKBAR);
+            iconDic.Add(TURN_OFF_MONITOR, ICON_TURNOFF_MONITOR);
+            iconDic.Add(CLEAR_RECYCLE_BIN, ICON_RECYCLE_BIN);
+            iconDic.Add(CLEAR_IE_ADDRESS, ICON_RECYCLE_BIN);
+            iconDic.Add(CLEAR_IE_HISTORY, ICON_RECYCLE_BIN);
+            iconDic.Add(CLEAR_IE_COOKIES, ICON_RECYCLE_BIN);
+            iconDic.Add(CLEAR_RENT, ICON_RECYCLE_BIN);
+            iconDic.Add(CLEAR_SOME_DIRECTORY, ICON_RECYCLE_BIN);
+            iconDic.Add(CONTROL_APP_MEMORY, ICON_MEMORY);
+            iconDic.Add(END_PROCESS, ICON_END_PROCESS);
             #endregion
 
             #region 音量控制
-            Configs.iconDic.Add(VOLUME_ADD, Configs.ICON_VOLUME_ADD);
-            Configs.iconDic.Add(VOLUME_REDUCE, Configs.ICON_VOLUME_REDUCE);
-            Configs.iconDic.Add(VOLUME_SILENT_TOGGLE, Configs.ICON_SILENT_TOGGLE);
-            Configs.iconDic.Add(VOLUME_WAVE_ADD, Configs.ICON_VOLUME_ADD);
-            Configs.iconDic.Add(VOLUME_WAVE_REDUCE, Configs.ICON_VOLUME_REDUCE);
-            Configs.iconDic.Add(VOLUME_WAVE_SILENT_TOGGLE, Configs.ICON_SILENT_TOGGLE);
-            Configs.iconDic.Add(VOLUME_MIC_ADD, Configs.ICON_VOLUME_ADD);
-            Configs.iconDic.Add(VOLUME_MIC_REDUCE, Configs.ICON_VOLUME_REDUCE);
-            Configs.iconDic.Add(VOLUME_MIC_SILENT_TOGGLE, Configs.ICON_SILENT_TOGGLE);
-            Configs.iconDic.Add(VOLUME_LINE_IN_ADD, Configs.ICON_VOLUME_ADD);
-            Configs.iconDic.Add(VOLUME_LINE_IN_REDUCE, Configs.ICON_VOLUME_REDUCE);
-            Configs.iconDic.Add(VOLUME_LINE_IN_SILENT_TOGGLE, Configs.ICON_SILENT_TOGGLE);
-            Configs.iconDic.Add(VOLUME_CD_PLAYER_ADD, Configs.ICON_VOLUME_ADD);
-            Configs.iconDic.Add(VOLUME_CD_PLAYER_REDUCE, Configs.ICON_VOLUME_REDUCE);
-            Configs.iconDic.Add(VOLUME_CD_PLAYER_SILENT_TOGGLE, Configs.ICON_SILENT_TOGGLE);
+            iconDic.Add(VOLUME_ADD, ICON_VOLUME_ADD);
+            iconDic.Add(VOLUME_REDUCE, ICON_VOLUME_REDUCE);
+            iconDic.Add(VOLUME_SILENT_TOGGLE, ICON_SILENT_TOGGLE);
+            iconDic.Add(VOLUME_WAVE_ADD, ICON_VOLUME_ADD);
+            iconDic.Add(VOLUME_WAVE_REDUCE, ICON_VOLUME_REDUCE);
+            iconDic.Add(VOLUME_WAVE_SILENT_TOGGLE, ICON_SILENT_TOGGLE);
+            iconDic.Add(VOLUME_MIC_ADD, ICON_VOLUME_ADD);
+            iconDic.Add(VOLUME_MIC_REDUCE, ICON_VOLUME_REDUCE);
+            iconDic.Add(VOLUME_MIC_SILENT_TOGGLE, ICON_SILENT_TOGGLE);
+            iconDic.Add(VOLUME_LINE_IN_ADD, ICON_VOLUME_ADD);
+            iconDic.Add(VOLUME_LINE_IN_REDUCE, ICON_VOLUME_REDUCE);
+            iconDic.Add(VOLUME_LINE_IN_SILENT_TOGGLE, ICON_SILENT_TOGGLE);
+            iconDic.Add(VOLUME_CD_PLAYER_ADD, ICON_VOLUME_ADD);
+            iconDic.Add(VOLUME_CD_PLAYER_REDUCE, ICON_VOLUME_REDUCE);
+            iconDic.Add(VOLUME_CD_PLAYER_SILENT_TOGGLE, ICON_SILENT_TOGGLE);
             #endregion
 
             #region 控制面板
-            Configs.iconDic.Add(ADD_OR_REMOVE_APP, Configs.ICON_ADD_OR_REMOVE_APP);
-            Configs.iconDic.Add(INTERNET_OPTIONS, Configs.ICON_INTERNET_OPTIONS);
-            Configs.iconDic.Add(USER_ACCOUNT, Configs.ICON_USER_ACCOUNT);
-            Configs.iconDic.Add(REGION_LANGUAGE_OPTIONS, Configs.ICON_REGION_LANGUAGE_OPTIONS);
-            Configs.iconDic.Add(PHONE_AND_MODEM_OPTIONS, Configs.ICON_PHONE_MODEM);
-            Configs.iconDic.Add(ACCESSIBILITY_OPTIONS, Configs.ICON_ACCESSIBILITY_OPTIONS);
-            Configs.iconDic.Add(POWER_OPTIONS, Configs.ICON_POWER_OPTIONS);
-            Configs.iconDic.Add(GAME_CONTROLLER, Configs.ICON_GAME_CONTROLLER);
-            Configs.iconDic.Add(NETWORK_CONNECT, Configs.ICON_NETWORK);
-            Configs.iconDic.Add(SCREEN_SHOW, Configs.ICON_SCREEN_SAVER);
-            Configs.iconDic.Add(SYSTEM_PROPERTIES, Configs.ICON_SYSTEM_PROPERTIES);
-            Configs.iconDic.Add(ADD_HARDWARE, Configs.ICON_ADD_HARDWARE);
-            Configs.iconDic.Add(MOUSE, Configs.ICON_MOUSE);
-            Configs.iconDic.Add(KEYBOARD, Configs.ICON_KEYBOARD);
-            Configs.iconDic.Add(SOUND_AUDIO_EQUIPMENT, Configs.ICON_SOUND_AUDIO_EQUIPMENT);
-            Configs.iconDic.Add(VOLUME_CONTROL, Configs.ICON_VOLUME_CONTROL);
-            Configs.iconDic.Add(DATE_TIME, Configs.ICON_DATE_TIME);
+            iconDic.Add(ADD_OR_REMOVE_APP, ICON_ADD_OR_REMOVE_APP);
+            iconDic.Add(INTERNET_OPTIONS, ICON_INTERNET_OPTIONS);
+            iconDic.Add(USER_ACCOUNT, ICON_USER_ACCOUNT);
+            iconDic.Add(REGION_LANGUAGE_OPTIONS, ICON_REGION_LANGUAGE_OPTIONS);
+            iconDic.Add(PHONE_AND_MODEM_OPTIONS, ICON_PHONE_MODEM);
+            iconDic.Add(ACCESSIBILITY_OPTIONS, ICON_ACCESSIBILITY_OPTIONS);
+            iconDic.Add(POWER_OPTIONS, ICON_POWER_OPTIONS);
+            iconDic.Add(GAME_CONTROLLER, ICON_GAME_CONTROLLER);
+            iconDic.Add(NETWORK_CONNECT, ICON_NETWORK);
+            iconDic.Add(SCREEN_SHOW, ICON_SCREEN_SAVER);
+            iconDic.Add(SYSTEM_PROPERTIES, ICON_SYSTEM_PROPERTIES);
+            iconDic.Add(ADD_HARDWARE, ICON_ADD_HARDWARE);
+            iconDic.Add(MOUSE, ICON_MOUSE);
+            iconDic.Add(KEYBOARD, ICON_KEYBOARD);
+            iconDic.Add(SOUND_AUDIO_EQUIPMENT, ICON_SOUND_AUDIO_EQUIPMENT);
+            iconDic.Add(VOLUME_CONTROL, ICON_VOLUME_CONTROL);
+            iconDic.Add(DATE_TIME, ICON_DATE_TIME);
             #endregion
         }
         public static void Dispose() {
@@ -210,9 +211,9 @@ namespace XStart2._0.Config {
             var infos = configsType.GetFields(flag);
             foreach (var info in infos) {
                 if ("Bitmap".Equals(info.FieldType.Name)) {
-                    Bitmap imageInfo = (Bitmap)info.GetValue(new Configs());
+                    BitmapImage imageInfo = (BitmapImage)info.GetValue(new Configs());
                     if (null != imageInfo) {
-                        imageInfo.Dispose();
+                        imageInfo.Freeze();
                     }
                 }
             }

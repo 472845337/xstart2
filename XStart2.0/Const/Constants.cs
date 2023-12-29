@@ -56,7 +56,7 @@
         public const string KEY_URL_OPEN_CUSTOM_BROWSER = "UrlOpenCustomBrowser";
         public const string KEY_CLOSE_BORDER_HIDE = "CloseBorderHide";// 靠边自动隐藏
         public const string KEY_DEL_COUNT = "DelCount";// 删除次数
-        public const string KEY_SYSTEM_APP_PAGE = "SystemAppPage";
+        public const string KEY_SYSTEM_PROJECT_OPEN_PAGE = "SystemProjectOpenPage";
         public const string KEY_ADD_MULTI = "AddMulti";
 
         public const string KEY_LEFT = "Left";

@@ -55,9 +55,9 @@ namespace XStart2._0.Services {
         /// <param name="path"></param>
         /// <param name="iconPath"></param>
         /// <returns></returns>
-        public static System.Drawing.Bitmap GetIconImage(string kind, string path, string iconPath) {
+        public static BitmapImage GetIconImage(string kind, string path, string iconPath) {
             try {
-                System.Drawing.Bitmap image = null;
+                BitmapImage image = null;
                 if (!string.IsNullOrEmpty(iconPath)) {
                     if (iconPath.StartsWith("#")) {
                         // 系统功能图标
@@ -66,9 +66,9 @@ namespace XStart2._0.Services {
                         // 项目图标
                         if (File.Exists(iconPath) || Directory.Exists(iconPath)) {
                             if (iconPath.ToLower().EndsWith(".exe") || iconPath.ToLower().EndsWith(".ico")) {
-                                image = IconUtils.GetIcon(iconPath, true).ToBitmap();
+                                image = ImageUtils.BitmapToBitmapImage(IconUtils.GetIcon(iconPath, true).ToBitmap());
                             } else {
-                                image = IconUtils.GetIcon(iconPath, true).ToBitmap();
+                                image = ImageUtils.BitmapToBitmapImage(IconUtils.GetIcon(iconPath, true).ToBitmap());
                             }
                         } else {
                             image = Configs.ICON_APP;
@@ -80,12 +80,12 @@ namespace XStart2._0.Services {
                     if (Project.KIND_FILE.Equals(kind) || Project.KIND_DIRECTORY.Equals(kind)) {
                         // 文件类型，判断是否exe或ico
                         if (iconPath.ToLower().EndsWith(".exe") || iconPath.ToLower().EndsWith(".ico")) {
-                            image = IconUtils.GetIcon(iconPath, true).ToBitmap();
+                            image = ImageUtils.BitmapToBitmapImage(IconUtils.GetIcon(iconPath, true).ToBitmap());
                         } else {
-                            image = IconUtils.GetIcon(iconPath, true).ToBitmap();
+                            image = ImageUtils.BitmapToBitmapImage(IconUtils.GetIcon(iconPath, true).ToBitmap());
                         }
                     } else if (Project.KIND_URL.Equals(kind)) {
-                        image = IconUtils.GetIconImage(Configs.AppStartPath + Constants.ICON_URL)[0];
+                        image = ImageUtils.BitmapToBitmapImage(IconUtils.GetIconImage(Configs.AppStartPath + Constants.ICON_URL)[0]);
                     }
                 }
                 return image;
@@ -100,27 +100,10 @@ namespace XStart2._0.Services {
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
-        public static System.Drawing.Bitmap GetIconImage(Project project) {
+        public static BitmapImage GetIconImage(Project project) {
             return GetIconImage(project.Kind, project.Path, project.IconPath);
         }
 
-        /// <summary>
-        /// 将拿到的图标Bitmap转换成可以绑定的BitmapImage
-        /// </summary>
-        /// <param name="bitmap"></param>
-        /// <returns></returns>
-        public static BitmapImage BitmapToBitmapImage(System.Drawing.Bitmap bitmap) {
-            BitmapImage bitmapImage = new BitmapImage();
-            using (MemoryStream ms = new MemoryStream()) {
-                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = ms;
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.EndInit();
-                bitmapImage.Freeze();
-            }
-            return bitmapImage;
-        }
         /// <summary>
         /// 根据路径生成对应的类型
         /// </summary>

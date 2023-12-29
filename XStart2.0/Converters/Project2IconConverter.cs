@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Data;
 using XStart2._0.Services;
+using XStart2._0.Utils;
 
 namespace XStart2._0.Converters {
     public class Project2IconConverter : IValueConverter {
@@ -8,10 +9,10 @@ namespace XStart2._0.Converters {
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             if(null != value) {
-                if (value is XStart2._0.Bean.BackData.BackProject backProject) {
-                    return XStartService.BitmapToBitmapImage(XStartService.GetIconImage(backProject.Kind, backProject.Path, backProject.IconPath));
-                } else if (value is XStart2._0.Bean.Project project) {
-                    return XStartService.BitmapToBitmapImage(XStartService.GetIconImage(project));
+                if (value is Bean.BackData.BackProject backProject) {
+                    return XStartService.GetIconImage(backProject.Kind, backProject.Path, backProject.IconPath);
+                } else if (value is Bean.Project project) {
+                    return XStartService.GetIconImage(project);
                 }
             }
             return null;

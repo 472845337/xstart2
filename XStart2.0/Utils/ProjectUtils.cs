@@ -8,7 +8,7 @@ using XStart2._0.Bean;
 using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Utils;
-using static XStart2._0.Bean.SystemAppParam;
+using static XStart2._0.Bean.SystemProjectParam;
 
 namespace XStart2._0.Utils {
     public static class ProjectUtils {
@@ -154,7 +154,7 @@ namespace XStart2._0.Utils {
                             break;
                         default:
                             // 调用exe执行的功能
-                            if (OperateParam.TryGetValue(project.Path, out SystemApp appOperateParam) && !string.IsNullOrEmpty(appOperateParam.Execute)) {
+                            if (OperateParam.TryGetValue(project.Path, out SystemProject appOperateParam) && !string.IsNullOrEmpty(appOperateParam.Execute)) {
                                 Process.Start(appOperateParam.Execute, appOperateParam.Param);
                                 break;
                             } else {

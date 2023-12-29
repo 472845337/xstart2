@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:XStart2._0.View"
         mc:Ignorable="d"
-        Title="选项" Height="360" Width="500" Icon="Files/xstart2.ico">
+        Title="选项" Height="360" Width="500" Icon="../Files/xstart2.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

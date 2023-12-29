@@ -22,7 +22,7 @@ namespace XStart2._0 {
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
     public partial class MainWindow : Window {
-        private System.Windows.Threading.DispatcherTimer AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
+        private readonly System.Windows.Threading.DispatcherTimer AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
         private static bool IsAllShow = true;
         // 时钟定时器
         private readonly System.Windows.Threading.DispatcherTimer currentTimer = new System.Windows.Threading.DispatcherTimer();
@@ -123,12 +123,12 @@ namespace XStart2._0 {
             #endregion
 
             #region 系统功能图标和操作
-            string systemAppPage = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_SYSTEM_APP_PAGE);
-            Configs.systemAppPage = string.IsNullOrEmpty(systemAppPage) ? 0 : Convert.ToInt32(systemAppPage);
+            string systemProjectOpenPage = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_SYSTEM_PROJECT_OPEN_PAGE);
+            Configs.systemAppOpenPage = string.IsNullOrEmpty(systemProjectOpenPage) ? 0 : Convert.ToInt32(systemProjectOpenPage);
             string addMulti = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_ADD_MULTI);
-            Configs.addMulti = !string.IsNullOrEmpty(addMulti) && Convert.ToBoolean(addMulti);
+            Configs.systemAppAddMulti = !string.IsNullOrEmpty(addMulti) && Convert.ToBoolean(addMulti);
             Configs.InitIconDic();
-            SystemAppParam.InitOperate();
+            SystemProjectParam.InitOperate();
             Configs.taskbarHandler = DllUtils.FindWindow("Shell_TrayWnd", null);
             Configs.taskbarIsShow = (DllUtils.GetWindowLong(Configs.taskbarHandler, WinApi.GWL_STYLE) & WinApi.WS_VISIBLE) == WinApi.WS_VISIBLE;
             DllUtils.waveOutGetVolume(0, out uint volume);
@@ -179,7 +179,8 @@ namespace XStart2._0 {
                     // 系统应用不可自启动
                     project.CanAutoRun = false;
                 }
-                project.Icon = XStartService.BitmapToBitmapImage(XStartService.GetIconImage(project));
+                project.Icon = XStartService.GetIconImage(project.Kind, project.Path, project.IconPath);
+                //project.Icon = XStartService.GetIconImage(project);
                 if (string.IsNullOrEmpty(project.Name) || string.IsNullOrEmpty(project.TypeSection)
                     || string.IsNullOrEmpty(project.ColumnSection) || !XStartService.TypeDic.TryGetValue(project.TypeSection, out _)
                     || !XStartService.TypeDic[project.TypeSection].ColumnDic.TryGetValue(project.ColumnSection, out _)) {
@@ -406,7 +407,6 @@ namespace XStart2._0 {
                         type.Value.Locked = true;
                     }
                 }
-
                 AudioUtils.PlayWav(AudioUtils.CHANGE);
             }
         }
@@ -846,7 +846,7 @@ namespace XStart2._0 {
                 ExecuteProject(project);
             }
         }
-        private void ProjectButton_DoubleClick(object sender, RoutedEventArgs e) {
+        private void ProjectButton_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             if (Constants.CLICK_TYPE_DOUBLE.Equals(Configs.clickType)) {
                 // 运行项目
                 Project project = (Project)(sender as Button).Tag;
@@ -855,12 +855,11 @@ namespace XStart2._0 {
         }
 
         private void AddProject_Click(object sender, RoutedEventArgs e) {
-            Console.WriteLine("添加项目");
             // 当前栏目
             FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
             object tag = element.Tag;
-            string typeSection;
-            string columnSection;
+            string typeSection = string.Empty;
+            string columnSection = string.Empty;
             if(tag is Column column) {
                 // 项目放置面板
                 typeSection = column.TypeSection;
@@ -869,13 +868,52 @@ namespace XStart2._0 {
                 typeSection = project.TypeSection;
                 columnSection = project.ColumnSection;
             }
-
+            ProjectWindow projectWindow = new ProjectWindow("添加项目", typeSection, columnSection);
+            if (true == projectWindow.ShowDialog()) {
+                projectWindow.Project.Icon = XStartService.GetIconImage(projectWindow.Project.Kind, projectWindow.Project.Path, projectWindow.Project.IconPath);
+                XStartService.AddNewApp(projectWindow.Project);
+            }
+        }
+        // 编辑项目
+        private void EditProject_Click(object sender, RoutedEventArgs e) {
+            FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
+            Project project = element.Tag as Project;
+            if(null != project) {
+                ProjectWindow projectWindow = new ProjectWindow("修改项目", project.TypeSection, project.ColumnSection) { Project = project };
+                if(true == projectWindow.ShowDialog()) {
+                    projectWindow.Project.Icon = XStartService.GetIconImage(projectWindow.Project.Kind, projectWindow.Project.Path, projectWindow.Project.IconPath);
+                    projectService.Update(projectWindow.Project);
+                }
+            } else {
+                MessageBox.Show("系统错误！");
+            }
+        }
+        // 删除项目
+        private void DeleteProject_Click(object sender, RoutedEventArgs e) {
+            FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
+            if (MessageBoxResult.OK == MessageBox.Show("确认删除该项目？","警告", MessageBoxButton.OKCancel)) {
+                object tag = element.Tag;
+                if(tag is Project project) {
+                   int result = projectService.Delete(project.Section);
+                    if (result > 0) {
+                        if (SystemProjectParam.MSTSC.Equals(project.Path)) {
+                            // 远程的rdp文件删除
+                            RdpUtils.DeleteProfiles(Configs.AppStartPath + @$"rdp\{project.Section}.rdp");
+                        }
+                        DelCount(projectService);
+                        XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic.Remove(project.Section);
+                        NotifyUtils.ShowNotification($"{project.Name}项目删除成功！");
+                    } else {
+                        MessageBox.Show($"{project.Name}项目删除失败！");
+                    }
+                }
+            }
         }
 
         private void ExecuteProject(Project project) {
             try {
                 // 获取该类别的应用是否配置确认信息，有确认信息，则弹出确认窗口
-                if (SystemAppParam.OperateParam.TryGetValue(project.Path, out SystemApp appOperateParam)) {
+                if (SystemProjectParam.OperateParam.TryGetValue(project.Path, out Bean.SystemProject appOperateParam)) {
                     if (null != appOperateParam && appOperateParam.Confirm) {
                         if (MessageBoxResult.OK == MessageBox.Show(appOperateParam.ConfirmMsg, "警告", MessageBoxButton.OKCancel)) {
                             return;
@@ -883,7 +921,7 @@ namespace XStart2._0 {
                     }
                 }
                 #region 应用是否需要生成相关文件
-                if (SystemAppParam.MSTSC.Equals(project.Path)) {
+                if (SystemProjectParam.MSTSC.Equals(project.Path)) {
                     // 远程桌面
                     string rdpFilePath = Configs.AppStartPath + @$"rdp\{project.Section}.rdp";
                     if (!File.Exists(rdpFilePath)) {

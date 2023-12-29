@@ -34,10 +34,13 @@ namespace XStart2._0.Bean {
         public string ColumnSection { get; set; }// 归属栏目
         [TableParam("kind", "VARCHAR")]
         public string Kind { get; set; }// 种类
+
+        private string path;
         [TableParam("path", "VARCHAR")]
-        public string Path { get; set; }// 应用路径或链接url
+        public string Path { get =>path; set { path = value; OnPropertyChanged("Path"); } }// 应用路径或链接url
+        private string iconPath;
         [TableParam("icon_path", "VARCHAR")]
-        public string IconPath { get; set; }// 图标
+        public string IconPath { get=>iconPath; set { iconPath = value; OnPropertyChanged("IconPath"); } }// 图标
         [TableParam("font_color", "VARCHAR")]
         public string FontColor { get; set; }// 字体颜色
         [TableParam("arguments", "VARCHAR")]
@@ -57,7 +60,7 @@ namespace XStart2._0.Bean {
         public bool CanAutoRun { get; set; } = true;
         public string ToolTipContent {
             get {
-                if (SystemAppParam.MSTSC.Equals(Path)) {
+                if (SystemProjectParam.MSTSC.Equals(Path)) {
                     string[] argumentArray = Arguments.Split(Constants.SPLIT_CHAR);
                     return $"远程->{argumentArray[0]}:{argumentArray[1]}";
                 } else {

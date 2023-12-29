@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Media.Imaging;
 
 namespace XStart2._0.Utils {
     class IconUtils {
@@ -69,6 +70,11 @@ namespace XStart2._0.Utils {
             Icon icon = Icon.FromHandle(shfi.hIcon).Clone() as Icon;
             DllUtils.DestroyIcon(shfi.hIcon); //释放资源
             return icon;
+        }
+
+        public static BitmapImage GetBitmapImage(string fileName, bool isLargeIcon) {
+            Icon icon = GetIcon(fileName, isLargeIcon);
+            return ImageUtils.BitmapToBitmapImage(icon?.ToBitmap());
         }
         /// <summary>
         /// 绘制方块图

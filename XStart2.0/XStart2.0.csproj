@@ -121,6 +121,7 @@
     <Compile Include="Utils\CdRomUtils.cs" />
     <Compile Include="Utils\CliWrapUtils.cs" />
     <Compile Include="Utils\FileUtils.cs" />
+    <Compile Include="Utils\ImageUtils.cs" />
     <Compile Include="Utils\ProcessUtils.cs" />
     <Compile Include="Utils\ProjectUtils.cs" />
     <Compile Include="Utils\AudioUtils.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Utils\NotifyUtils.cs" />
     <Compile Include="Utils\RdpUtils.cs" />
     <Compile Include="Utils\WinApi.cs" />
+    <Compile Include="Utils\WinUtils.cs" />
     <Compile Include="Utils\XStartIniUtils.cs" />
     <Compile Include="ViewModels\AutoRunViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
@@ -150,9 +152,17 @@
     <Compile Include="ViewModels\ProjectTypeVM.cs" />
     <Compile Include="ViewModels\SecurityVM.cs" />
     <Compile Include="ViewModels\SettingViewModel.cs" />
+    <Compile Include="ViewModels\SystemProjectViewModel.cs" />
+    <Compile Include="View\ImageButton.cs" />
     <Compile Include="View\SliderButton.cs" />
     <Compile Include="Windows\AutoRunWindow.xaml.cs">
       <DependentUpon>AutoRunWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ControlAppMemory.xaml.cs">
+      <DependentUpon>ControlAppMemory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MstscWindow.xaml.cs">
+      <DependentUpon>MstscWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ProjectWindow.xaml.cs">
       <DependentUpon>ProjectWindow.xaml</DependentUpon>
@@ -171,6 +181,9 @@
     </Compile>
     <Compile Include="Windows\RemoveSecurityWindow.xaml.cs">
       <DependentUpon>RemoveSecurityWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SystemProjectWindow.xaml.cs">
+      <DependentUpon>SystemProjectWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\UpdateSecurityWindow.xaml.cs">
       <DependentUpon>UpdateSecurityWindow.xaml</DependentUpon>
@@ -203,7 +216,7 @@
     <Compile Include="Bean\Column.cs" />
     <Compile Include="Bean\LinkedHashMap.cs" />
     <Compile Include="Bean\Sections.cs" />
-    <Compile Include="Bean\SystemAppParam.cs" />
+    <Compile Include="Bean\SystemProjectParam.cs" />
     <Compile Include="Bean\Table.cs" />
     <Compile Include="Bean\TableData.cs" />
     <Compile Include="Bean\TableParam.cs" />
@@ -222,6 +235,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\AutoRunWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ControlAppMemory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MstscWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -248,6 +269,10 @@
     <Page Include="Windows\RemoveSecurityWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\SystemProjectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\UpdateSecurityWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

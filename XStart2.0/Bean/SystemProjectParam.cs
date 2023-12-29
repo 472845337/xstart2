@@ -2,8 +2,8 @@
 
 namespace XStart2._0.Bean {
     // 系统功能相关的参数
-    static class SystemAppParam {
-        public static Dictionary<string, SystemApp> OperateParam = new Dictionary<string, SystemApp>();
+    static class SystemProjectParam {
+        public static Dictionary<string, SystemProject> OperateParam = new Dictionary<string, SystemProject>();
 
         public const string MY_COMPUTER = "#MyComputer";
         public const string MY_DOCUMENT = "#MyDocument";
@@ -110,56 +110,56 @@ namespace XStart2._0.Bean {
         *   语音： sapi.cpl
         */
         public static void InitOperate() {
-            OperateParam.Add(MY_COMPUTER, new SystemApp("explorer.exe", "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"));
-            OperateParam.Add(MY_DOCUMENT, new SystemApp("explorer.exe", "::{450D8FBA-AD25-11D0-98A8-0800361B1103}"));
-            OperateParam.Add(CONTROL, new SystemApp("rundll32.exe", "shell32.dll,Control_RunDLL"));
-            OperateParam.Add(RECYCLE_BIN, new SystemApp("explorer.exe", "::{645FF040-5081-101B-9F08-00AA002F954E}"));
-            OperateParam.Add(IE, new SystemApp("iexplorer.exe", string.Empty));
-            OperateParam.Add(INTERNET, new SystemApp("explorer.exe", "::{208D2C60-3AEA-1069-A2D7-08002B30309D}"));
-            OperateParam.Add(EXPLORER, new SystemApp("explorer.exe", string.Empty));
-            OperateParam.Add(PRINT_FAX, new SystemApp("explorer.exe", "::{2227A280-3AEA-1069-A2DE-08002B30309D}"));
-            OperateParam.Add(REGEDIT, new SystemApp("regedit.exe", string.Empty));
-            OperateParam.Add(CMD, new SystemApp("cmd.exe", string.Empty));
-            OperateParam.Add(FOLDER_OPTIONS, new SystemApp("rundll32.exe", "shell32.dll,Options_RunDLL"));
-            OperateParam.Add(CLOSE_PC, new SystemApp("shutdown.exe", "/s /t 5", true, "确认关闭计算机吗?"));
-            OperateParam.Add(RESTART_PC, new SystemApp("shutdown.exe", "/r /t 5", true, "确认重启计算机吗?"));
-            OperateParam.Add(LOG_OUT, new SystemApp("shutdown.exe", "/l /t 5", true, "确认注销当前用户吗?"));
-            OperateParam.Add(LOCK_PC, new SystemApp("rundll32.exe", "user32.dll,LockWorkStation"));
-            OperateParam.Add(STANDBY_PC, new SystemApp("rundll32.exe", "powrprof.dll,SetSuspendState 0,1,0"));
-            OperateParam.Add(SLEEP_PC, new SystemApp("shutdown.exe", "/h /t 0"));
-            OperateParam.Add(SCREEN_SAVER, new SystemApp("scrnsave.scr", string.Empty));
-            OperateParam.Add(CLEAR_RECYCLE_BIN, new SystemApp(true, "确认清空回收站?"));
-            OperateParam.Add(CLEAR_IE_HISTORY, new SystemApp("RunDll32.exe", "InetCpl.cpl, ClearMyTracksByProcess 1", true, "确认清空IE历史记录?"));
-            OperateParam.Add(CLEAR_IE_COOKIES, new SystemApp("RunDll32.exe", "InetCpl.cpl, ClearMyTracksByProcess 2", true, "确认清空IE cookies?"));
-            OperateParam.Add(ADD_OR_REMOVE_APP, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL appwiz.cpl,,1"));
-            OperateParam.Add(INTERNET_OPTIONS, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL inetcpl.cpl"));
-            OperateParam.Add(CLEAR_SOME_DIRECTORY, new SystemApp(true, "确认清空指定目录?"));
+            OperateParam.Add(MY_COMPUTER, new SystemProject("explorer.exe", "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"));
+            OperateParam.Add(MY_DOCUMENT, new SystemProject("explorer.exe", "::{450D8FBA-AD25-11D0-98A8-0800361B1103}"));
+            OperateParam.Add(CONTROL, new SystemProject("rundll32.exe", "shell32.dll,Control_RunDLL"));
+            OperateParam.Add(RECYCLE_BIN, new SystemProject("explorer.exe", "::{645FF040-5081-101B-9F08-00AA002F954E}"));
+            OperateParam.Add(IE, new SystemProject("iexplorer.exe", string.Empty));
+            OperateParam.Add(INTERNET, new SystemProject("explorer.exe", "::{208D2C60-3AEA-1069-A2D7-08002B30309D}"));
+            OperateParam.Add(EXPLORER, new SystemProject("explorer.exe", string.Empty));
+            OperateParam.Add(PRINT_FAX, new SystemProject("explorer.exe", "::{2227A280-3AEA-1069-A2DE-08002B30309D}"));
+            OperateParam.Add(REGEDIT, new SystemProject("regedit.exe", string.Empty));
+            OperateParam.Add(CMD, new SystemProject("cmd.exe", string.Empty));
+            OperateParam.Add(FOLDER_OPTIONS, new SystemProject("rundll32.exe", "shell32.dll,Options_RunDLL"));
+            OperateParam.Add(CLOSE_PC, new SystemProject("shutdown.exe", "/s /t 5", true, "确认关闭计算机吗?"));
+            OperateParam.Add(RESTART_PC, new SystemProject("shutdown.exe", "/r /t 5", true, "确认重启计算机吗?"));
+            OperateParam.Add(LOG_OUT, new SystemProject("shutdown.exe", "/l /t 5", true, "确认注销当前用户吗?"));
+            OperateParam.Add(LOCK_PC, new SystemProject("rundll32.exe", "user32.dll,LockWorkStation"));
+            OperateParam.Add(STANDBY_PC, new SystemProject("rundll32.exe", "powrprof.dll,SetSuspendState 0,1,0"));
+            OperateParam.Add(SLEEP_PC, new SystemProject("shutdown.exe", "/h /t 0"));
+            OperateParam.Add(SCREEN_SAVER, new SystemProject("scrnsave.scr", string.Empty));
+            OperateParam.Add(CLEAR_RECYCLE_BIN, new SystemProject(true, "确认清空回收站?"));
+            OperateParam.Add(CLEAR_IE_HISTORY, new SystemProject("RunDll32.exe", "InetCpl.cpl, ClearMyTracksByProcess 1", true, "确认清空IE历史记录?"));
+            OperateParam.Add(CLEAR_IE_COOKIES, new SystemProject("RunDll32.exe", "InetCpl.cpl, ClearMyTracksByProcess 2", true, "确认清空IE cookies?"));
+            OperateParam.Add(ADD_OR_REMOVE_APP, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL appwiz.cpl,,1"));
+            OperateParam.Add(INTERNET_OPTIONS, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL inetcpl.cpl"));
+            OperateParam.Add(CLEAR_SOME_DIRECTORY, new SystemProject(true, "确认清空指定目录?"));
             //OperateParam.Add(USER_ACCOUNT, new SystemApp("netplwiz.exe", ""));
-            OperateParam.Add(USER_ACCOUNT, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL nusrmgr.cpl"));
-            OperateParam.Add(REGION_LANGUAGE_OPTIONS, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL intl.cpl"));
-            OperateParam.Add(PHONE_AND_MODEM_OPTIONS, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL telephon.cpl"));
-            OperateParam.Add(ACCESSIBILITY_OPTIONS, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL access.cpl"));
-            OperateParam.Add(POWER_OPTIONS, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL powercfg.cpl"));
-            OperateParam.Add(GAME_CONTROLLER, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL joy.cpl"));
-            OperateParam.Add(NETWORK_CONNECT, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL ncpa.cpl"));
-            OperateParam.Add(SCREEN_SHOW, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL desk.cpl"));
-            OperateParam.Add(SYSTEM_PROPERTIES, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL sysdm.cpl"));
-            OperateParam.Add(ADD_HARDWARE, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL hdwwiz.cpl"));
-            OperateParam.Add(MOUSE, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL main.cpl"));
-            OperateParam.Add(KEYBOARD, new SystemApp("Control.exe", "keyboard"));
-            OperateParam.Add(SOUND_AUDIO_EQUIPMENT, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL mmsys.cpl"));
-            OperateParam.Add(VOLUME_CONTROL, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL mmsys.cpl,,1"));
-            OperateParam.Add(DATE_TIME, new SystemApp("RunDll32.exe", "shell32.dll,Control_RunDLL timedate.cpl"));
+            OperateParam.Add(USER_ACCOUNT, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL nusrmgr.cpl"));
+            OperateParam.Add(REGION_LANGUAGE_OPTIONS, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL intl.cpl"));
+            OperateParam.Add(PHONE_AND_MODEM_OPTIONS, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL telephon.cpl"));
+            OperateParam.Add(ACCESSIBILITY_OPTIONS, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL access.cpl"));
+            OperateParam.Add(POWER_OPTIONS, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL powercfg.cpl"));
+            OperateParam.Add(GAME_CONTROLLER, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL joy.cpl"));
+            OperateParam.Add(NETWORK_CONNECT, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL ncpa.cpl"));
+            OperateParam.Add(SCREEN_SHOW, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL desk.cpl"));
+            OperateParam.Add(SYSTEM_PROPERTIES, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL sysdm.cpl"));
+            OperateParam.Add(ADD_HARDWARE, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL hdwwiz.cpl"));
+            OperateParam.Add(MOUSE, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL main.cpl"));
+            OperateParam.Add(KEYBOARD, new SystemProject("Control.exe", "keyboard"));
+            OperateParam.Add(SOUND_AUDIO_EQUIPMENT, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL mmsys.cpl"));
+            OperateParam.Add(VOLUME_CONTROL, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL mmsys.cpl,,1"));
+            OperateParam.Add(DATE_TIME, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL timedate.cpl"));
         }
     }
 
-    public class SystemApp {
+    public class SystemProject {
         /// <summary>
         /// 执行exe文件的构造函数
         /// </summary>
         /// <param name="execute">执行的exe名</param>
         /// <param name="param">执行的参数</param>
-        public SystemApp(string execute, string param) {
+        public SystemProject(string execute, string param) {
             Execute = execute;
             Param = param;
         }
@@ -169,7 +169,7 @@ namespace XStart2._0.Bean {
         /// </summary>
         /// <param name="confirm">是否确认</param>
         /// <param name="confirmMsg">确认信息</param>
-        public SystemApp(bool confirm, string confirmMsg) {
+        public SystemProject(bool confirm, string confirmMsg) {
             Confirm = confirm;
             ConfirmMsg = confirmMsg;
         }
@@ -181,7 +181,7 @@ namespace XStart2._0.Bean {
         /// <param name="param">执行的参数</param>
         /// <param name="confirm">是否确认</param>
         /// <param name="confirmMsg">确认信息</param>
-        public SystemApp(string execute, string param, bool confirm, string confirmMsg) {
+        public SystemProject(string execute, string param, bool confirm, string confirmMsg) {
             Execute = execute;
             Param = param;
             Confirm = confirm;

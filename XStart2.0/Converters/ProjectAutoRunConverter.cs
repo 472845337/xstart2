@@ -24,7 +24,7 @@ namespace XStart2._0.Converters {
 
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
-            throw new NotSupportedException();
+            return (bool)value;
         }
         #endregion
     }

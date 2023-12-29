@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace XStart2._0.Helper {
     // 自定义的属性值
@@ -40,15 +41,26 @@ namespace XStart2._0.Helper {
         #endregion
 
         #region 按钮图标
-        public static string GetButtonIcon(DependencyObject obj) {
-            return (string)obj.GetValue(ButtonIconProperty);
+        public static BitmapImage GetButtonIcon(DependencyObject obj) {
+            return (BitmapImage)obj.GetValue(ButtonIconProperty);
         }
 
-        public static void SetButtonIcon(DependencyObject obj, string value) {
+        public static void SetButtonIcon(DependencyObject obj, BitmapImage value) {
             obj.SetValue(ButtonIconProperty, value);
         }
 
-        public static readonly DependencyProperty ButtonIconProperty = DependencyProperty.Register("ButtonIcon", typeof(string), typeof(ElementParamHelper), new PropertyMetadata(string.Empty));
+        public static readonly DependencyProperty ButtonIconProperty = DependencyProperty.Register("ButtonIcon", typeof(BitmapImage), typeof(ElementParamHelper), new PropertyMetadata(null));
+        #endregion
+        #region 按钮名称
+        public static string GetButtonName(DependencyObject obj) {
+            return (string)obj.GetValue(ButtonIconProperty);
+        }
+
+        public static void SetButtonName(DependencyObject obj, string value) {
+            obj.SetValue(ButtonIconProperty, value);
+        }
+
+        public static readonly DependencyProperty ButtonNameProperty = DependencyProperty.Register("ButtonName", typeof(string), typeof(ElementParamHelper), new PropertyMetadata(string.Empty));
         #endregion
     }
 }
