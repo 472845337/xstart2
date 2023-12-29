@@ -47,39 +47,7 @@
             </Setter>
             <EventSetter Event="Expanded" Handler="Expander_Expanded_Handler"/>
         </Style>
-        <!-- 项目按钮样式 -->
-        <Style x:Key="AppButton" TargetType="{x:Type view:ImageButton}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type view:ImageButton}">
-                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="32"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0" Padding="3">
-                                    <Image Source="{TemplateBinding ButtonIcon}" Stretch="Fill" Margin="2"/>
-                                </Border>
-                                <TextBlock Grid.Column="1" Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="5 0 0 0"/>
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="AliceBlue"/>
-                                <Setter Property="Cursor" Value="Hand"/>
-                                <Setter Property="BorderBrush" Value="LightGray"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="False">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Cursor" Value=""/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        
         <ContextMenu x:Key="TypeTabContextMenu">
             <ContextMenu.Items>
                 <MenuItem Name="AddType" Header="添加类别" Click="AddType"/>

@@ -877,10 +877,9 @@ namespace XStart2._0 {
         // 编辑项目
         private void EditProject_Click(object sender, RoutedEventArgs e) {
             FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
-            Project project = element.Tag as Project;
-            if(null != project) {
+            if (element.Tag is Project project) {
                 ProjectWindow projectWindow = new ProjectWindow("修改项目", project.TypeSection, project.ColumnSection) { Project = project };
-                if(true == projectWindow.ShowDialog()) {
+                if (true == projectWindow.ShowDialog()) {
                     projectWindow.Project.Icon = XStartService.GetIconImage(projectWindow.Project.Kind, projectWindow.Project.Path, projectWindow.Project.IconPath);
                     projectService.Update(projectWindow.Project);
                 }
@@ -892,8 +891,7 @@ namespace XStart2._0 {
         private void DeleteProject_Click(object sender, RoutedEventArgs e) {
             FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
             if (MessageBoxResult.OK == MessageBox.Show("确认删除该项目？","警告", MessageBoxButton.OKCancel)) {
-                object tag = element.Tag;
-                if(tag is Project project) {
+                if(element.Tag is Project project) {
                    int result = projectService.Delete(project.Section);
                     if (result > 0) {
                         if (SystemProjectParam.MSTSC.Equals(project.Path)) {

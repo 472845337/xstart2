@@ -51,6 +51,9 @@ namespace XStart2._0.Windows {
                 vm.RunStartPath = Project.RunStartPath;
                 vm.HotKey = Project.HotKey;
                 vm.Remark = Project.Remark;
+                if (Project.Path.StartsWith("#")) {
+                    vm.PathEnable = false;
+                }
             }
             DataContext = vm;
         }
