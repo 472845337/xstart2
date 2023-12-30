@@ -1,27 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using XStart2._0.Bean;
-using XStart2._0.View;
 
 namespace XStart2._0.ViewModels {
     class ResumeViewModel : BaseViewModel {
 
-        private string selectBackUpFilePath;
-        public string SelectBackUpFilePath { get => selectBackUpFilePath; set { selectBackUpFilePath = value; OnPropertyChanged("SelectBackUpFilePath"); } }
+        public string SelectBackUpFilePath { get; set; }
 
-        private bool isOverride = true;
-        public bool IsOverride { get => isOverride; set { isOverride = value; OnPropertyChanged("IsOverride"); } }
+        public bool IsOverride { get; set; } = true;
 
-        private ObservableCollection<CheckBoxTreeViewModel> items;
-
-        public ObservableCollection<CheckBoxTreeViewModel> Items {
-            get => items;
-            set { items = value; OnPropertyChanged("Items"); }
-        }
+        public ObservableCollection<CheckBoxTreeViewModel> Items { get; set; }
 
         public void InitVmData(IEnumerable<Bean.Type> types) {
             Items = new ObservableCollection<CheckBoxTreeViewModel>();

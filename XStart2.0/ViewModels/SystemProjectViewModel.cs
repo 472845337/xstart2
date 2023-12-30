@@ -1,40 +1,28 @@
-﻿using System;
+﻿using PropertyChanged;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using System.Windows.Media.Imaging;
-using XStart2._0.Config;
-using XStart2._0.Const;
-using XStart2._0.Utils;
+
 
 namespace XStart2._0.ViewModels {
     public class SystemProjectViewModel : BaseViewModel{
         // 初始化时赋值
+        [DoNotNotify]
         public string TypeSection { get; set; }
         // 初始化时赋值
+        [DoNotNotify]
         public string ColumnSection { get; set; }
 
-        private List<SystemProject> systemLinks;
-        public List<SystemProject> SystemLinks { get => systemLinks;set { systemLinks = value; OnPropertyChanged("SystemLinks"); } }
-        private List<SystemProject> systemOperates;
-        public List<SystemProject> SystemOperates { get => systemOperates; set { systemOperates = value; OnPropertyChanged("SystemOperates"); } }
-        private List<SystemProject> systemAudioNormals;
-        public List<SystemProject> SystemAudioNormals { get => systemAudioNormals;set { systemAudioNormals = value; OnPropertyChanged("SystemAudioNormals"); } }
-        private List<SystemProject> systemAudioWaves;
-        public List<SystemProject> SystemAudioWaves { get => systemAudioWaves; set { systemAudioWaves = value; OnPropertyChanged("SystemAudioWaves"); } }
-        private List<SystemProject> systemAudioMics;
-        public List<SystemProject> SystemAudioMics { get => systemAudioMics; set { systemAudioMics = value; OnPropertyChanged("SystemAudioMics"); } }
-        private List<SystemProject> systemAudioLines;
-        public List<SystemProject> SystemAudioLines { get => systemAudioLines; set { systemAudioLines = value; OnPropertyChanged("SystemAudioLines"); } }
-        private List<SystemProject> systemAudioCdRoms;
-        public List<SystemProject> SystemAudioCdRoms { get => systemAudioCdRoms; set { systemAudioCdRoms = value; OnPropertyChanged("SystemAudioCdRoms"); } }
-        private List<SystemProject> systemControls;
-        public List<SystemProject> SystemControls { get => systemControls; set { systemControls = value; OnPropertyChanged("SystemControls"); } }
-        private bool multiAdd;
-        public bool MultiAdd { get => multiAdd; set { multiAdd = value;OnPropertyChanged("MultiAdd"); } }
-        private int openPage;
-        public int OpenPage { get => openPage; set { openPage = value; OnPropertyChanged("OpenPage");  } }
+        public List<SystemProject> SystemLinks { get; set; }
+        public List<SystemProject> SystemOperates { get; set; }
+        public List<SystemProject> SystemAudioNormals { get; set; }
+        public List<SystemProject> SystemAudioWaves { get; set; }
+        public List<SystemProject> SystemAudioMics { get; set; }
+        public List<SystemProject> SystemAudioLines { get; set; }
+        public List<SystemProject> SystemAudioCdRoms { get; set; }
+        public List<SystemProject> SystemControls { get; set; }
+        public bool MultiAdd { get; set; }
+        public int OpenPage { get; set; }
 
     }
 

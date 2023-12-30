@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using PropertyChanged;
+using System.Windows;
 
 namespace XStart2._0.Bean {
     /// <summary>
@@ -9,26 +10,23 @@ namespace XStart2._0.Bean {
 
         public const string KEY_TYPE_SECTION = "TypeSection";
         public const string KEY_PASSWORD = "Password";
+        [DoNotNotify]
         [TableParam("type_section", "VARCHAR")]
         public string TypeSection { get; set; }
+        [DoNotNotify]
         [TableParam("start_open", "BIT")]
         public bool? StartOpen { get; set; }
+        [DoNotNotify]
         public bool SaveSecurity { get; set; }
         // 垂直滚动条显示状态
-        private Visibility verticalScrollBar;
-        public Visibility VerticalScrollBar { get => verticalScrollBar; set { verticalScrollBar = value; OnPropertyChanged("VerticalScrollBar"); } }
+        public Visibility VerticalScrollBar { get; set; }
         // 栏目高度
-        private int columnHeight;
-        public int ColumnHeight { get => columnHeight; set { columnHeight = value; OnPropertyChanged("ColumnHeight"); } }
+        public int ColumnHeight { get; set; }
         // 栏目是否展开
-        private bool isExpanded;
-        public bool IsExpanded { get => isExpanded; set { isExpanded = value; OnPropertyChanged("IsExpanded"); } }
-
-        private int projectWidth;
-        public int ProjectWidth { get => projectWidth; set { projectWidth = value; OnPropertyChanged("ProjectWidth"); } }
-
-
-        private ObservableDictionary<string, Project> projectDic = new ObservableDictionary<string, Project>();
-        public ObservableDictionary<string, Project> ProjectDic { get => projectDic; set { projectDic = value; OnPropertyChanged("ProjectDic"); } }
+        public bool IsExpanded { get; set; }
+        // 项目宽度
+        public int ProjectWidth { get; set; }
+        // 栏目中的项目字典
+        public ObservableDictionary<string, Project> ProjectDic { get; set; } = new ObservableDictionary<string, Project>();
     }
 }

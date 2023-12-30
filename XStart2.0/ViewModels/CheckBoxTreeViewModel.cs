@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XStart2._0.View;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace XStart2._0.ViewModels {
-    public class CheckBoxTreeViewModel : BaseViewModel {
+    /// <summary>
+    ///  这个继承BaseViewModel后，没有效果，先使用原有的逻辑
+    /// </summary>
+    public class CheckBoxTreeViewModel : INotifyPropertyChanged {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
         private bool? _IsChecked = false;
         private string _Section;
         private string _Header = string.Empty;

@@ -67,6 +67,7 @@ namespace XStart2._0.Windows {
         private void ConfirmBtn_Click(object sender, RoutedEventArgs e) {
             Project.Name = vm.Name;
             Project.Path = vm.Path;
+            Project.Kind = vm.Kind;
             Project.IconIndex = vm.IconIndex;
             Project.IconPath = vm.IconPath;
             Project.Arguments = vm.Arguments;
@@ -113,7 +114,7 @@ namespace XStart2._0.Windows {
                 string dirName = Path.GetDirectoryName(folderPath);
                 vm.PathEnable = true;
                 vm.ArgumentsEnable = true;
-                vm.Path = dirName;
+                vm.Path = folderPath;
                 vm.Kind = Project.KIND_DIRECTORY;
                 // 名称自动赋值,普通目录和磁盘名不同的处理方式
                 if (string.IsNullOrEmpty(vm.Name)) {
@@ -128,10 +129,10 @@ namespace XStart2._0.Windows {
                 }
                 // 图标自动赋值
                 if (string.IsNullOrEmpty(vm.IconPath)) {
-                    vm.IconPath = dirName;
+                    vm.IconPath = string.IsNullOrEmpty(dirName)?folderPath: dirName;
                     Project project = new Project {
-                        Path = dirName,
-                        IconPath = dirName,
+                        Path = vm.Path,
+                        IconPath = vm.IconPath,
                         Kind = vm.Kind
                     };
                     vm.Project = project;

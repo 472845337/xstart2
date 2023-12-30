@@ -1,4 +1,5 @@
 ﻿
+using PropertyChanged;
 using System;
 using XStart2._0.Const;
 
@@ -27,13 +28,16 @@ namespace XStart2._0.Bean {
         public const string KIND_REMOTE = "remote";// 远程
 
         // 归属类-对应Type中的section
+        [DoNotNotify]
         [TableParam("type_section", "VARCHAR")]
         public string TypeSection { get; set; }// 归属类别
         // 栏目-对应Column中的section
+        [DoNotNotify]
         [TableParam("column_section", "VARCHAR")]
         public string ColumnSection { get; set; }// 归属栏目
 
         private string kind;
+        [DoNotNotify]
         [TableParam("kind", "VARCHAR")]
         public string Kind {
             // 种类
@@ -47,12 +51,10 @@ namespace XStart2._0.Bean {
             }
         }
 
-        private string path;
         [TableParam("path", "VARCHAR")]
-        public string Path { get =>path; set { path = value; OnPropertyChanged("Path"); } }// 应用路径或链接url
-        private string iconPath;
+        public string Path { get; set; }// 应用路径或链接url
         [TableParam("icon_path", "VARCHAR")]
-        public string IconPath { get=>iconPath; set { iconPath = value; OnPropertyChanged("IconPath"); } }// 图标
+        public string IconPath { get; set; }// 图标
         [TableParam("font_color", "VARCHAR")]
         public string FontColor { get; set; }// 字体颜色
         [TableParam("arguments", "VARCHAR")]
@@ -65,12 +67,12 @@ namespace XStart2._0.Bean {
         public string Remark { get; set; }// 备注
 
         // 随应用启动
-        private bool? autoRun;
         [TableParam("auto_run", "BIT")]
-        public bool? AutoRun { get => autoRun; set { autoRun = value; OnPropertyChanged("AutoRun"); } }
+        public bool? AutoRun { get; set; }
         // 系统应用不可随应用启动
         public bool CanAutoRun { get; set; } = true;
         public bool PropertyEnabled { get; set; } = true;
+        [DoNotNotify]
         public string Operate { get; set; }
         public string ToolTipContent {
             get {
@@ -82,8 +84,7 @@ namespace XStart2._0.Bean {
                 }
             }
         }
-
-        private System.Windows.Media.Imaging.BitmapImage icon;
-        public System.Windows.Media.Imaging.BitmapImage Icon { get => icon; set { icon = value;OnPropertyChanged("Icon"); } }
+        [DoNotNotify]
+        public System.Windows.Media.Imaging.BitmapImage Icon { get; set; }
     }
 }

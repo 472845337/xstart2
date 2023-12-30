@@ -16,13 +16,9 @@ namespace XStart2._0.ViewModels {
             WeekDay = lc.ChineseWeek;
         }
 
-        private string lunarYear;
-        public string LunarYear { get => lunarYear; set { lunarYear = value; OnPropertyChanged("LunarYear"); } }
-        private string lunarMonth;
-        public string LunarMonth { get => lunarMonth; set { lunarMonth = value; OnPropertyChanged("LunarMonth"); } }
-        private string lunarDay;
-        public string LunarDay { get => lunarDay; set { lunarDay = value; OnPropertyChanged("LunarDay"); } }
-        private string weekDay;
-        public string WeekDay { get => weekDay; set { weekDay = value; OnPropertyChanged("WeekDay"); } }
+        public string LunarYear { get; set; }
+        public string LunarMonth { get; set; }
+        public string LunarDay { get; set; }
+        public string WeekDay { get; set; }
     }
 }

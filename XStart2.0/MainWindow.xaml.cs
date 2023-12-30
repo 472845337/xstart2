@@ -637,7 +637,6 @@ namespace XStart2._0 {
             if (type.Password.Equals(type.UnlockSecurity)) {
                 // 解锁当前类别窗口
                 type.Locked = false;
-                type.Unlocked = true;
                 type.UnlockSecurity = string.Empty;
             } else {
                 MessageBox.Show("口令不匹配", "错误");
@@ -1307,6 +1306,7 @@ namespace XStart2._0 {
             } else {
                 MessageBox.Show("当前剪切板无应用数据！","提醒");
             }
+            e.Handled = true;
         }
 
         private Project GetProjectByMenu(object sender) {

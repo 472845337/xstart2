@@ -1,36 +1,22 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace XStart2._0.ViewModels {
-    public class ProjectTypeVM : INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+    public class ProjectTypeVM : BaseViewModel {
         // 窗口的标题
-        private string title;
-        public string Title { get => title; set { title = value; OnPropertyChanged("Title"); } }
+        public string Title { get; set; }
         // 类别的section
-        private string section;
-        public string Section { get => section; set { section = value; OnPropertyChanged("Section"); } }
+        public string Section { get; set; }
         // 类别名称
-        private string name;
-        public string Name { get => name; set { name = value; OnPropertyChanged("Name"); } }
+        public string Name { get; set; }
         // 类别所选FontAwesome Icon
-        private string selectedFa;
-        public string SelectedFa { get => selectedFa; set { selectedFa = value; OnPropertyChanged("SelectedFa"); } }
+        public string SelectedFa { get; set; }
         // 类别Icon颜色
-        private string selectedIconColor = "LightSeaGreen";
-        public string SelectedIconColor { get => selectedIconColor; set { selectedIconColor = value; OnPropertyChanged("SelectedIconColor"); } }
+        public string SelectedIconColor { get; set; } = "LightSeaGreen";
         // 类别所选FontAwesome字体
-        private string selectedFf = "{pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Solid}";
-        public string SelectedFf { get => selectedFf; set { selectedFf = value; OnPropertyChanged("SelectedFf"); } }
+        public string SelectedFf { get; set; } = "{pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Solid}";
 
-        private List<string> popularFas;
-        public List<string> PopularFas { get => popularFas; set { popularFas = value; OnPropertyChanged("PopularFas"); } }
+        public List<string> PopularFas { get; set; }
 
-        private bool moreButtonEnable = true;
-        public bool MoreButtonEnable { get => moreButtonEnable; set { moreButtonEnable = value; OnPropertyChanged("MoreButtonEnable"); } }
+        public bool MoreButtonEnable { get; set; } = true;
     }
 }
