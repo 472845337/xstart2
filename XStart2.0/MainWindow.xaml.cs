@@ -895,6 +895,9 @@ namespace XStart2._0 {
             ProjectWindow projectWindow = new ProjectWindow("添加项目", typeSection, columnSection);
             if (true == projectWindow.ShowDialog()) {
                 projectWindow.Project.Icon = XStartService.GetIconImage(projectWindow.Project.Kind, projectWindow.Project.Path, projectWindow.Project.IconPath);
+                if (string.IsNullOrEmpty(projectWindow.Project.Kind)) {
+                    projectWindow.Project.Kind = XStartService.KindOfPath(projectWindow.Project.Path);
+                }
                 XStartService.AddNewApp(projectWindow.Project);
                 NotifyUtils.ShowNotification($"添加[{projectWindow.Project.Name}]成功！");
             }
@@ -906,6 +909,9 @@ namespace XStart2._0 {
                 ProjectWindow projectWindow = new ProjectWindow("修改项目", project.TypeSection, project.ColumnSection) { Project = project };
                 if (true == projectWindow.ShowDialog()) {
                     projectWindow.Project.Icon = XStartService.GetIconImage(projectWindow.Project.Kind, projectWindow.Project.Path, projectWindow.Project.IconPath);
+                    if (string.IsNullOrEmpty(projectWindow.Project.Kind)) {
+                        projectWindow.Project.Kind = XStartService.KindOfPath(projectWindow.Project.Path);
+                    }
                     projectService.Update(projectWindow.Project);
                     NotifyUtils.ShowNotification($"修改[{projectWindow.Project.Name}]成功！");
                 }
