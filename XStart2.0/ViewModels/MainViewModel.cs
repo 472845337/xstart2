@@ -1,6 +1,7 @@
-﻿using System;
-using XStart2._0.Services;
+﻿using XStart2._0.Services;
 using XStart2._0.Bean;
+using PropertyChanged;
+using XStart2._0.Const;
 
 namespace XStart2._0.ViewModels {
     public class MainViewModel : BaseViewModel {
@@ -41,12 +42,23 @@ namespace XStart2._0.ViewModels {
         public double MainLeft { get; set; }
         // 主窗口顶部位置
         public double MainTop { get; set; }
+        // 类别名称是否展开
+        [OnChangedMethod(nameof(ChangeTypeTab))]
+        public bool TypeTabExpanded { get; set; }
         // 类别宽度（TabControl的TabItem的宽度）
         public double TypeWidth { get; set; }
-        // 类别名称是否展开
-        public bool TypeTabExpanded { get; set; }
         // 类别名称开关图标
         public string TypeTabToggleIcon { get; set; }
+
+        public void ChangeTypeTab() {
+            if (TypeTabExpanded) {
+                TypeWidth = Constants.TYPE_EXPAND_WIDTH;
+                TypeTabToggleIcon = Utils.FontAwesome6.Outdent;
+            } else {
+                TypeWidth = Constants.TYPE_COLLAPSE_WIDTH;
+                TypeTabToggleIcon = Utils.FontAwesome6.Indent;
+            }
+        }
         #endregion
 
         #region 窗口相关设置

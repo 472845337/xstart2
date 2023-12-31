@@ -125,7 +125,7 @@ namespace XStart2._0.Bean {
             OperateParam.Add(RESTART_PC, new SystemProject("shutdown.exe", "/r /t 5", true, "确认重启计算机吗?"));
             OperateParam.Add(LOG_OUT, new SystemProject("shutdown.exe", "/l /t 5", true, "确认注销当前用户吗?"));
             OperateParam.Add(LOCK_PC, new SystemProject("rundll32.exe", "user32.dll,LockWorkStation"));
-            OperateParam.Add(STANDBY_PC, new SystemProject("rundll32.exe", "powrprof.dll,SetSuspendState 0,1,0"));
+            OperateParam.Add(STANDBY_PC, new SystemProject("rundll32.exe", "powrprof.dll,SetSuspendState 0,1,0", true, "确认进入待机吗?"));
             OperateParam.Add(SLEEP_PC, new SystemProject("shutdown.exe", "/h /t 0"));
             OperateParam.Add(SCREEN_SAVER, new SystemProject("scrnsave.scr", string.Empty));
             OperateParam.Add(CLEAR_RECYCLE_BIN, new SystemProject(true, "确认清空回收站?"));

@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -65,24 +64,36 @@ namespace XStart2._0.Windows {
         }
 
         private void ConfirmBtn_Click(object sender, RoutedEventArgs e) {
-            Project.Name = vm.Name;
-            Project.Path = vm.Path;
-            Project.Kind = vm.Kind;
-            Project.IconIndex = vm.IconIndex;
-            Project.IconPath = vm.IconPath;
-            Project.Arguments = vm.Arguments;
-            Project.RunStartPath = vm.RunStartPath;
-            Project.HotKey = vm.HotKey;
-            Project.Remark = vm.Remark;
-            DialogResult = true;
+            string errMsg = null;
+            if (string.IsNullOrEmpty(vm.Name)) {
+                errMsg = "项目名称不能为空！";
+            }else if (string.IsNullOrEmpty(vm.Path)) {
+                errMsg = "项目路径不能为空！";
+            }
+            if (!string.IsNullOrEmpty(errMsg)) {
+                MessageBox.Show(errMsg, Constants.MESSAGE_BOX_TITLE_ERROR);
+            } else {
+                Project.Name = vm.Name;
+                Project.Path = vm.Path;
+                Project.Kind = vm.Kind;
+                Project.IconIndex = vm.IconIndex;
+                Project.IconPath = vm.IconPath;
+                Project.Arguments = vm.Arguments;
+                Project.RunStartPath = vm.RunStartPath;
+                Project.HotKey = vm.HotKey;
+                Project.Remark = vm.Remark;
+                DialogResult = true;
+            }
+            e.Handled = true;
         }
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e) {
             DialogResult = false;
+            e.Handled = true;
         }
         // 选择文件
         private void FileBtn_Click(object sender, RoutedEventArgs e) {
-            OpenFileDialog ofd = new OpenFileDialog() { Filter = "所有文件|*.*|可执行文件|.exe|音频文件|*.mp3;*.wav;*.wma;*.ape;*.flac|视频文件|*.avi;*.mp4;*.wmv;*.mkv;*.rmvb;*.mov;*.flv|图片文件|*.jpg;*.jpeg;*.gif;*.bmp;*.png;*.jfif|文档文件|*.doc;*.xls;*.ppt;*.docx;*.xlsx;*pptx;*.rtf;*.txt;*.pdf" };
+            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "所有文件|*.*|可执行文件|.exe|音频文件|*.mp3;*.wav;*.wma;*.ape;*.flac|视频文件|*.avi;*.mp4;*.wmv;*.mkv;*.rmvb;*.mov;*.flv|图片文件|*.jpg;*.jpeg;*.gif;*.bmp;*.png;*.jfif|文档文件|*.doc;*.xls;*.ppt;*.docx;*.xlsx;*pptx;*.rtf;*.txt;*.pdf" };
             if (System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
                 string filePath = ofd.FileName;
                 vm.PathEnable = true;
@@ -108,7 +119,7 @@ namespace XStart2._0.Windows {
         }
         // 选择目录
         private void FolderBtn_Click(object sender, RoutedEventArgs e) {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
             if (System.Windows.Forms.DialogResult.OK == fbd.ShowDialog()) {
                 string folderPath = fbd.SelectedPath;
                 string dirName = Path.GetDirectoryName(folderPath);
@@ -167,7 +178,7 @@ namespace XStart2._0.Windows {
         }
 
         private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            OpenFileDialog ofd = new OpenFileDialog() { Filter = "带图标文件|*.exe;*.ico" };
+            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "带图标文件|*.exe;*.ico" };
             if(System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
                 vm.IconPath = ofd.FileName;
                 vm.Project = new Project() { IconPath = ofd.FileName };

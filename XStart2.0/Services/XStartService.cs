@@ -133,6 +133,7 @@ namespace XStart2._0.Services {
             project.Sort = sort;
             // 保存应用信息
             ProjectService.Instance.Insert(project);
+            project.InitIcon();
             TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic.Add(project.Section, project);
         }
     }

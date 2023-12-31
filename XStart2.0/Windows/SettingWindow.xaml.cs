@@ -70,6 +70,7 @@ namespace XStart2._0.Windows {
             string name = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
             string path = Assembly.GetExecutingAssembly().Location;
             FileUtils.CreateShortCutOnDesktop(name, path);
+            NotifyUtils.ShowNotification("桌面快捷方式创建成功！");
         }
     }
 }

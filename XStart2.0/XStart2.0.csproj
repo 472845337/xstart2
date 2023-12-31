@@ -97,6 +97,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bean\FontAwesome.cs" />
+    <Compile Include="Bean\CopyProject.cs" />
     <Compile Include="Converters\ProjectAutoRunToolTipConverter.cs" />
     <Compile Include="Converters\ProjectCanAutoRunConverter.cs" />
     <Compile Include="Converters\UrlOpenConverter.cs" />

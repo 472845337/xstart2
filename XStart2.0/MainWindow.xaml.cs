@@ -21,7 +21,7 @@ namespace XStart2._0 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window  {
+    public partial class MainWindow : Window {
         private readonly System.Windows.Threading.DispatcherTimer AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
         private static bool IsAllShow = true;
         // 时钟定时器
@@ -67,20 +67,11 @@ namespace XStart2._0 {
             string widthStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SIZE, Constants.KEY_WIDTH);
 
             // 尺寸
-            if (!string.IsNullOrEmpty(heightStr)) {
-                mainViewModel.MainHeight = Convert.ToDouble(heightStr);
-            }
-            if (!string.IsNullOrEmpty(widthStr)) {
-                mainViewModel.MainWidth = Convert.ToDouble(widthStr);
-            }
+            mainViewModel.MainHeight = string.IsNullOrEmpty(heightStr) ? Constants.MAIN_HEIGHT : Convert.ToDouble(heightStr);
+            mainViewModel.MainWidth = string.IsNullOrEmpty(widthStr) ? Constants.MAIN_WIDTH : Convert.ToDouble(widthStr);
             // 位置
-            if (!string.IsNullOrEmpty(leftStr)) {
-                mainViewModel.MainLeft = Convert.ToDouble(leftStr);
-            }
-            if (!string.IsNullOrEmpty(topStr)) {
-                mainViewModel.MainTop = Convert.ToDouble(topStr);
-            }
-
+            mainViewModel.MainLeft = string.IsNullOrEmpty(leftStr) ? Constants.MAIN_LEFT : Convert.ToDouble(leftStr);
+            mainViewModel.MainTop = string.IsNullOrEmpty(topStr) ? Constants.MAIN_TOP : Convert.ToDouble(topStr);
 
             Configs.mainHeight = mainViewModel.MainHeight;
             Configs.mainWidth = mainViewModel.MainWidth;
@@ -88,6 +79,7 @@ namespace XStart2._0 {
             Configs.mainTop = mainViewModel.MainTop;
             #endregion
             #region 加载设置项
+            string typeTabExpandStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_TYPE_TAB_EXPAND);
             string topMostStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST);
             string openType = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE);// 上次最后打开的类别
             string clickType = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_CLICK_TYPE);// 点击方式，单击、双击
@@ -98,7 +90,7 @@ namespace XStart2._0 {
             string urlOpen = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN);
             string urlOpenCustomBrowser = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER);
 
-            // 置顶
+            Configs.typeTabExpand = string.IsNullOrEmpty(typeTabExpandStr) || Convert.ToBoolean(typeTabExpandStr);
             Configs.topMost = !string.IsNullOrEmpty(topMostStr) && Convert.ToBoolean(topMostStr);
             Configs.openType = openType;
             Configs.clickType = string.IsNullOrEmpty(clickType) ? Constants.CLICK_TYPE_SINGLE : clickType;
@@ -109,6 +101,8 @@ namespace XStart2._0 {
             if (!string.IsNullOrEmpty(urlOpen)) { Configs.urlOpen = urlOpen; }
             Configs.urlOpenCustomBrowser = urlOpenCustomBrowser;
 
+            mainViewModel.TypeTabExpanded = Configs.typeTabExpand;
+            mainViewModel.ChangeTypeTab();// 初始化时要先触发一次
             mainViewModel.TopMost = Configs.topMost;
             mainViewModel.ClickType = Configs.clickType;
             mainViewModel.Audio = Configs.audio;
@@ -175,12 +169,8 @@ namespace XStart2._0 {
             List<Project> projects = projectService.SelectList(new Project { OrderBy = "sort" });
 
             foreach (Project project in projects) {
-                if (Project.KIND_SYSTEM.Equals(project.Kind)) {
-                    // 系统应用不可自启动
-                    project.CanAutoRun = false;
-                }
-                project.Icon = XStartService.GetIconImage(project.Kind, project.Path, project.IconPath);
-                //project.Icon = XStartService.GetIconImage(project);
+                // 初始化项目的图示
+                project.InitIcon();
                 if (string.IsNullOrEmpty(project.Name) || string.IsNullOrEmpty(project.TypeSection)
                     || string.IsNullOrEmpty(project.ColumnSection) || !XStartService.TypeDic.TryGetValue(project.TypeSection, out _)
                     || !XStartService.TypeDic[project.TypeSection].ColumnDic.TryGetValue(project.ColumnSection, out _)) {
@@ -224,10 +214,6 @@ namespace XStart2._0 {
                     }
                 }
             }
-
-            mainViewModel.TypeTabExpanded = true;
-            mainViewModel.TypeTabToggleIcon = FontAwesome6.Outdent;
-            mainViewModel.TypeWidth = Configs.typeWidth;
             mainViewModel.Types = XStartService.TypeDic;
             int openTypeIndex = mainViewModel.Types.IndexOf(openType);
             mainViewModel.SelectedIndex = openTypeIndex < 0 ? 0 : openTypeIndex;
@@ -316,7 +302,7 @@ namespace XStart2._0 {
             }
             // 配置保存
             SaveSetting();
-            if (Configs.exitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", "警告", MessageBoxButton.OKCancel)) {
+            if (Configs.exitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                 // 取消退出
                 e.Cancel = true;
             } else {
@@ -488,7 +474,7 @@ namespace XStart2._0 {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AddType(object sender, RoutedEventArgs e) {
+        private void AddType_Click(object sender, RoutedEventArgs e) {
             ProjectTypeVM typeVm = new ProjectTypeVM {
                 Title = "添加类别"
             };
@@ -496,17 +482,17 @@ namespace XStart2._0 {
             OperateType(projectTypeWindow);
         }
 
-        private void ClearType(object sender, RoutedEventArgs e) {
+        private void ClearType_Click(object sender, RoutedEventArgs e) {
             if (XStartService.TypeDic.Count > 0) {
-                if (MessageBoxResult.OK == MessageBox.Show("确认清空所有类别？", "警告", MessageBoxButton.OKCancel)) {
+                if (MessageBoxResult.OK == MessageBox.Show("确认清空所有类别？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                     foreach (KeyValuePair<string, Bean.Type> type in mainViewModel.Types) {
                         if (type.Value.Locked) {
-                            MessageBox.Show($"[{type.Value.Name}]类别已锁，不可删除！", "错误");
+                            MessageBox.Show($"[{type.Value.Name}]类别已锁，不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
                             return;
                         }
                         foreach (KeyValuePair<string, Column> k in type.Value.ColumnDic) {
                             if (k.Value.Locked) {
-                                MessageBox.Show($"类别[{type.Value.Name}]下栏目[{k.Value.Name}]已锁，不可删除！", "错误");
+                                MessageBox.Show($"类别[{type.Value.Name}]下栏目[{k.Value.Name}]已锁，不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
                                 return;
                             }
                         }
@@ -515,7 +501,7 @@ namespace XStart2._0 {
                     NotifyUtils.ShowNotification("清空完成！");
                 }
             } else {
-                MessageBox.Show("当前无需清空！", "提示");
+                MessageBox.Show("当前无需清空！", Constants.MESSAGE_BOX_TITLE_ERROR);
             }
         }
 
@@ -532,7 +518,7 @@ namespace XStart2._0 {
             XStartService.TypeDic.Remove(section);
         }
 
-        private void UpdateType(object sender, RoutedEventArgs e) {
+        private void UpdateType_Click(object sender, RoutedEventArgs e) {
             Panel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Panel;
             string typeSection = typePanel.Tag as string;
             ProjectTypeVM typeVm = new ProjectTypeVM() {
@@ -550,17 +536,18 @@ namespace XStart2._0 {
             OperateType(projectTypeWindow);
         }
 
-        private void DeleteType(object sender, RoutedEventArgs e) {
+        private void DeleteType_Click(object sender, RoutedEventArgs e) {
             Panel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Panel;
             string section = typePanel.Tag as string;
-            if (MessageBoxResult.OK == MessageBox.Show("确认删除该类别？", "提示", MessageBoxButton.OKCancel)) {
-                if (XStartService.TypeDic[section].Locked) {
-                    MessageBox.Show("当前类别已锁，不可删除！", "错误");
-                    return;
-                }
+            if (XStartService.TypeDic[section].Locked) {
+                MessageBox.Show("当前类别已锁，不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                return;
+            }
+            if (MessageBoxResult.OK == MessageBox.Show("确认删除该类别？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                
                 foreach (KeyValuePair<string, Column> k in XStartService.TypeDic[section].ColumnDic) {
                     if (k.Value.Locked) {
-                        MessageBox.Show($"当前类别栏目[{k.Value.Name}]已锁，不可删除！", "错误");
+                        MessageBox.Show($"当前类别栏目[{k.Value.Name}]已锁，不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
                         return;
                     }
                 }
@@ -604,32 +591,36 @@ namespace XStart2._0 {
             }
         }
 
-        private void AddTypeSecurity(object sender, RoutedEventArgs e) {
+        private void AddTypeSecurity_Click(object sender, RoutedEventArgs e) {
             Panel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Panel;
             string section = typePanel.Tag as string;
             AddSecurity(XStartService.TypeDic[section]);
+            e.Handled = true;
         }
-        private void UpdateTypeSecurity(object sender, RoutedEventArgs e) {
+        private void UpdateTypeSecurity_Click(object sender, RoutedEventArgs e) {
             Panel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Panel;
             string section = typePanel.Tag as string;
             Bean.Type type = XStartService.TypeDic[section];
             UpdateSecurity(type);
+            e.Handled = true;
         }
-        private void RemoveTypeSecurity(object sender, RoutedEventArgs e) {
+        private void RemoveTypeSecurity_Click(object sender, RoutedEventArgs e) {
             Panel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Panel;
             string section = typePanel.Tag as string;
             Bean.Type type = XStartService.TypeDic[section];
             RemoveSecurity(type);
+            e.Handled = true;
         }
         // 类别锁定
-        private void LockType(object sender, RoutedEventArgs e) {
+        private void LockType_Click(object sender, RoutedEventArgs e) {
             Panel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Panel;
             string section = typePanel.Tag as string;
             Bean.Type type = XStartService.TypeDic[section];
             type.Locked = true;
+            e.Handled = true;
         }
         // 解锁类别
-        private void UnlockType(object sender, RoutedEventArgs e) {
+        private void UnlockType_Click(object sender, RoutedEventArgs e) {
             Button unlockButton = sender as Button;
             string typeSection = unlockButton.Tag as string;
             Bean.Type type = XStartService.TypeDic[typeSection];
@@ -639,17 +630,38 @@ namespace XStart2._0 {
                 type.Locked = false;
                 type.UnlockSecurity = string.Empty;
             } else {
-                MessageBox.Show("口令不匹配", "错误");
+                MessageBox.Show("口令不匹配", Constants.MESSAGE_BOX_TITLE_ERROR);
                 type.UnlockSecurity = string.Empty;
             }
+            e.Handled = true;
         }
 
+        // 清空类别下的所有栏目
+        private void ClearColumn_Click(object sender, RoutedEventArgs e) {
+            Panel typePanel = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Panel;
+            string typeSection = typePanel.Tag as string;
+            if (mainViewModel.Types[typeSection].ColumnDic.Count > 0) {
+                if (MessageBoxResult.OK == MessageBox.Show($"确认清空【{mainViewModel.Types[typeSection].Name}】类别下的所有栏目?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                    foreach(KeyValuePair<string, Column> column in mainViewModel.Types[typeSection].ColumnDic) {
+                        if (column.Value.Locked) {
+                            MessageBox.Show($"该类别下的栏目【{column.Value.Name}】已锁定不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                            e.Handled = true;
+                            return;
+                        }
+                    }
+                    RemoveTypeColumns(typeSection);
+                }
+            } else {
+                MessageBox.Show("当前类别下没有栏目！", Constants.MESSAGE_BOX_TITLE_ERROR);
+            }
+            e.Handled = true;
+        }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AddColumn(object sender, RoutedEventArgs e) {
+        private void AddColumn_Click(object sender, RoutedEventArgs e) {
             FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
             // 需要判断是现有栏目发起的，还是类别空白发起的
             string typeSection = string.Empty;
@@ -671,7 +683,7 @@ namespace XStart2._0 {
             CalculateWidthHeight(typeSection);
         }
 
-        private void UpdateColumn(object sender, RoutedEventArgs e) {
+        private void UpdateColumn_Click(object sender, RoutedEventArgs e) {
             Expander curExpander = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Expander;
             string columnSection = curExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
             string typeSection = curExpander.GetValue(ElementParamHelper.TypeSectionProperty) as string;
@@ -684,12 +696,12 @@ namespace XStart2._0 {
             ColumnWindow window = new ColumnWindow(vm) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
             OperateColumn(window);
         }
-        private void DeleteColumn(object sender, RoutedEventArgs e) {
+        private void DeleteColumn_Click(object sender, RoutedEventArgs e) {
             Expander curExpander = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Expander;
             string columnSection = curExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
             string typeSection = curExpander.GetValue(ElementParamHelper.TypeSectionProperty) as string;
             Column column = XStartService.TypeDic[typeSection].ColumnDic[columnSection];
-            if (MessageBoxResult.OK == MessageBox.Show("确认删除栏目:" + column.Name, "警告", MessageBoxButton.OKCancel)) {
+            if (MessageBoxResult.OK == MessageBox.Show("确认删除栏目:" + column.Name, Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                 columnService.Delete(columnSection);
                 XStartService.TypeDic[typeSection].ColumnDic.Remove(columnSection);
                 NotifyUtils.ShowNotification("删除栏目成功！");
@@ -728,7 +740,7 @@ namespace XStart2._0 {
             columnWindow.Close();
         }
 
-        private void AddColumnSecurity(object sender, RoutedEventArgs e) {
+        private void AddColumnSecurity_Click(object sender, RoutedEventArgs e) {
             Expander curExpander = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Expander;
             string columnSection = curExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
             string typeSection = curExpander.GetValue(ElementParamHelper.TypeSectionProperty) as string;
@@ -738,7 +750,7 @@ namespace XStart2._0 {
         }
 
         // 修改口令
-        private void UpdateColumnSecurity(object sender, RoutedEventArgs e) {
+        private void UpdateColumnSecurity_Click(object sender, RoutedEventArgs e) {
             Expander curExpander = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Expander;
             string columnSection = curExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
             string typeSection = curExpander.GetValue(ElementParamHelper.TypeSectionProperty) as string;
@@ -746,7 +758,7 @@ namespace XStart2._0 {
             Column column = XStartService.TypeDic[typeSection].ColumnDic[columnSection];
             UpdateSecurity(column);
         }
-        private void RemoveColumnSecurity(object sender, RoutedEventArgs e) {
+        private void RemoveColumnSecurity_Click(object sender, RoutedEventArgs e) {
             // 移除口令
             Expander curExpander = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Expander;
             string columnSection = curExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
@@ -755,7 +767,7 @@ namespace XStart2._0 {
             RemoveSecurity(column);
         }
         // 栏目锁定
-        private void LockColumn(object sender, RoutedEventArgs e) {
+        private void LockColumn_Click(object sender, RoutedEventArgs e) {
             Expander curExpander = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Expander;
             string columnSection = curExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
             string typeSection = curExpander.GetValue(ElementParamHelper.TypeSectionProperty) as string;
@@ -763,7 +775,7 @@ namespace XStart2._0 {
             column.Locked = true;
         }
         // 解锁栏目
-        private void UnlockColumn(object sender, RoutedEventArgs e) {
+        private void UnlockColumn_Click(object sender, RoutedEventArgs e) {
             Button unlockButton = sender as Button;
             string columnSection = unlockButton.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
             string typeSection = unlockButton.GetValue(ElementParamHelper.TypeSectionProperty) as string;
@@ -774,7 +786,7 @@ namespace XStart2._0 {
                 column.Locked = false;
                 column.UnlockSecurity = string.Empty;
             } else {
-                MessageBox.Show("口令不匹配", "错误");
+                MessageBox.Show("口令不匹配", Constants.MESSAGE_BOX_TITLE_ERROR);
                 column.UnlockSecurity = string.Empty;
             }
         }
@@ -851,31 +863,44 @@ namespace XStart2._0 {
 
 
         // 移除类别（左侧TreeMenu,TabControl的UIPage,TypeDic中数据，Ini文件）
-        private void RemoveTypeData(string section) {
-            // 数据删除
-            typeService.Delete(section);
-            foreach (KeyValuePair<string, Column> column in XStartService.TypeDic[section].ColumnDic) {
+        private void RemoveTypeData(string typeSection) {
+            // 栏目数据删除
+            RemoveTypeColumns(typeSection);
+            // 类别删除
+            typeService.Delete(typeSection);
+            DelCount(typeService);
+            // 页面数据删除
+            mainViewModel.Types.Remove(typeSection);
+        }
+
+        private void RemoveTypeColumns(string typeSection) {
+            foreach (KeyValuePair<string, Column> column in XStartService.TypeDic[typeSection].ColumnDic) {
                 columnService.Delete(column.Value.Section);
+                DelCount(columnService);
                 foreach (KeyValuePair<string, Project> project in column.Value.ProjectDic) {
                     projectService.Delete(project.Value.Section);
+                    DelCount(projectService);
                 }
             }
-            XStartService.TypeDic.Remove(section);
+            mainViewModel.Types[typeSection].ColumnDic.Clear();
         }
 
         private void ProjectButton_Click(object sender, RoutedEventArgs e) {
-            if (Constants.CLICK_TYPE_SINGLE.Equals(Configs.clickType)) {
+            if (Constants.CLICK_TYPE_SINGLE.Equals(mainViewModel.ClickType)) {
                 // 运行项目
-                Project project = (Project)(sender as Button).Tag;
-                ExecuteProject(project);
+                ProjectButton_Open(sender);
             }
         }
         private void ProjectButton_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-            if (Constants.CLICK_TYPE_DOUBLE.Equals(Configs.clickType)) {
+            if (Constants.CLICK_TYPE_DOUBLE.Equals(mainViewModel.ClickType)) {
                 // 运行项目
-                Project project = (Project)(sender as Button).Tag;
-                ExecuteProject(project);
+                ProjectButton_Open(sender);
             }
+        }
+        // 打开项目
+        private void ProjectButton_Open(object sender) {
+            Project project = (Project)(sender as Button).Tag;
+            ExecuteProject(project);
         }
 
         private void AddProject_Click(object sender, RoutedEventArgs e) {
@@ -894,7 +919,6 @@ namespace XStart2._0 {
             }
             ProjectWindow projectWindow = new ProjectWindow("添加项目", typeSection, columnSection);
             if (true == projectWindow.ShowDialog()) {
-                projectWindow.Project.Icon = XStartService.GetIconImage(projectWindow.Project.Kind, projectWindow.Project.Path, projectWindow.Project.IconPath);
                 if (string.IsNullOrEmpty(projectWindow.Project.Kind)) {
                     projectWindow.Project.Kind = XStartService.KindOfPath(projectWindow.Project.Path);
                 }
@@ -922,7 +946,7 @@ namespace XStart2._0 {
         // 删除项目
         private void DeleteProject_Click(object sender, RoutedEventArgs e) {
             Project project = GetProjectByMenu(sender);
-            if (MessageBoxResult.OK == MessageBox.Show("确认删除该项目？", "警告", MessageBoxButton.OKCancel)) {
+            if (MessageBoxResult.OK == MessageBox.Show("确认删除该项目？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                 if (null != project) {
                     int result = projectService.Delete(project.Section);
                     if (result > 0) {
@@ -945,7 +969,7 @@ namespace XStart2._0 {
                 // 获取该类别的应用是否配置确认信息，有确认信息，则弹出确认窗口
                 if (SystemProjectParam.OperateParam.TryGetValue(project.Path, out Bean.SystemProject appOperateParam)) {
                     if (null != appOperateParam && appOperateParam.Confirm) {
-                        if (MessageBoxResult.OK == MessageBox.Show(appOperateParam.ConfirmMsg, "警告", MessageBoxButton.OKCancel)) {
+                        if (MessageBoxResult.Cancel == MessageBox.Show(appOperateParam.ConfirmMsg, Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                             return;
                         }
                     }
@@ -965,10 +989,11 @@ namespace XStart2._0 {
                     NotifyUtils.ShowNotification(result);
                 }
             } catch (Exception ex) {
-                MessageBox.Show(ex.Message, "错误");
+                MessageBox.Show(ex.Message, Constants.MESSAGE_BOX_TITLE_ERROR);
             }
         }
 
+        // 计删除次数
         private void DelCount<T>(TableService<T> t) where T : TableData {
             if (Configs.delCount > Constants.DEL_COUNT_LIMIT) {
                 Configs.delCount = 0;
@@ -980,17 +1005,9 @@ namespace XStart2._0 {
 
         }
 
+        // 切换类别栏名称显示
         private void ToggleTabItem(object sender, RoutedEventArgs e) {
-            if (mainViewModel.TypeTabExpanded) {
-                // 类别是展开的
-                mainViewModel.TypeWidth = 28;
-                mainViewModel.TypeTabExpanded = false;
-                mainViewModel.TypeTabToggleIcon = FontAwesome6.Indent;
-            } else {
-                mainViewModel.TypeWidth = Configs.typeWidth;
-                mainViewModel.TypeTabExpanded = true;
-                mainViewModel.TypeTabToggleIcon = FontAwesome6.Outdent;
-            }
+            mainViewModel.TypeTabExpanded = !mainViewModel.TypeTabExpanded;
         }
 
         /// <summary>
@@ -1006,6 +1023,50 @@ namespace XStart2._0 {
             ComputedColumnProjectWidth(column);
         }
 
+        // 取消所有项目自启动
+        private void CancelAllAutoRun_Click(object sender, RoutedEventArgs e) {
+            List<Project> autoRunProjects = new List<Project>();
+            foreach (KeyValuePair<string, Bean.Type> typeDic in mainViewModel.Types) {
+                foreach (KeyValuePair<string, Column> columnDic in typeDic.Value.ColumnDic) {
+                    foreach (KeyValuePair<string, Project> projectDic in columnDic.Value.ProjectDic) {
+                        if (true == projectDic.Value.AutoRun) {
+                            autoRunProjects.Add(projectDic.Value);
+                        }
+                    }
+                }
+            }
+            if (autoRunProjects.Count > 0) {
+                foreach (Project project in autoRunProjects) {
+                    project.AutoRun = false;
+                    projectService.Update(new Project() { Section = project.Section, AutoRun = false });
+                }
+                NotifyUtils.ShowNotification("已取消所有项目自启动！");
+            } else {
+                MessageBox.Show("当前无自启动项目！", Constants.MESSAGE_BOX_TITLE_ERROR);
+            }
+            e.Handled = true;
+        }
+
+        // 恢复默认配置
+        private void RestoreDefault_Click(object sender, RoutedEventArgs e) {
+            if(MessageBoxResult.OK == MessageBox.Show("确认恢复默认配置？", Constants.MESSAGE_BOX_TITLE_WARN)) {
+                mainViewModel.MainHeight = Constants.MAIN_HEIGHT;
+                mainViewModel.MainWidth = Constants.MAIN_WIDTH;
+                mainViewModel.MainLeft = Constants.MAIN_LEFT;
+                mainViewModel.MainTop = Constants.MAIN_TOP;
+                mainViewModel.TypeTabExpanded = true;
+                mainViewModel.TopMost = false;
+                mainViewModel.Audio = true;
+                mainViewModel.ClickType = Constants.CLICK_TYPE_SINGLE;
+                mainViewModel.CloseBorderHide = false;
+                mainViewModel.AutoRun = true;
+                mainViewModel.ExitWarn = true;
+                mainViewModel.UrlOpen = Constants.URL_OPEN_DEFAULT;
+            }
+            e.Handled = true;
+        }
+
+
         /// <summary>
         /// 显示关于窗口
         /// </summary>
@@ -1013,6 +1074,7 @@ namespace XStart2._0 {
         /// <param name="e"></param>
         private void ShowAbout(object sender, RoutedEventArgs e) {
             NotifyUtils.ShowNotification("X启动2.0版", Colors.LightBlue, "关于");
+            e.Handled = true;
         }
         /// <summary>
         /// 保存当前窗口尺寸配置
@@ -1064,6 +1126,7 @@ namespace XStart2._0 {
         }
 
         private void SaveSetting() {
+            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_TYPE_TAB_EXPAND, ref Configs.typeTabExpand, mainViewModel.TypeTabExpanded);// 类别标题是否展开
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST, ref Configs.topMost, mainViewModel.TopMost);// 置顶
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_CLICK_TYPE, ref Configs.clickType, mainViewModel.ClickType);// 点击方式
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_AUDIO, ref Configs.audio, mainViewModel.Audio);// 音效开关
@@ -1125,8 +1188,8 @@ namespace XStart2._0 {
         /// <param name="e"></param>
         public void AutoHideTimer_Tick(object sender, EventArgs e) {
             Point toPoint = new Point(Left, Top);
-            double mouseDistance = 10;// 鼠标在边界距离多远范围
-            double resumeSize = 10;// 隐藏后剩余出来的边界大小
+            double mouseDistance = 5;// 鼠标在边界距离多远范围
+            double resumeSize = 5;// 隐藏后剩余出来的边界大小
             DllUtils.Point curPoint = new DllUtils.Point();
             DllUtils.GetCursorPos(ref curPoint); //获取鼠标相对桌面的位置
             bool isMouseEnter = curPoint.X >= Left - mouseDistance
@@ -1253,9 +1316,9 @@ namespace XStart2._0 {
             if (null != project) {
                 if (Project.KIND_FILE.Equals(project.Kind) || Project.KIND_DIRECTORY.Equals(project.Kind)) {
                     WinUtils.ShowFileProperties(project.Path);
-                    
+
                 } else {
-                    MessageBox.Show("该项目不可查看属性！","提醒");
+                    MessageBox.Show("该项目不可查看属性！", Constants.MESSAGE_BOX_TITLE_ERROR);
                 }
             }
         }
@@ -1267,17 +1330,20 @@ namespace XStart2._0 {
                 FileUtils.CreateShortCutOnDesktop(project.Name, project.Path);
                 NotifyUtils.ShowNotification("已发送快捷方式到桌面！");
             } else {
-                MessageBox.Show("该项目不可发送到桌面快捷方式！", "提醒");
+                MessageBox.Show("该项目不可发送到桌面快捷方式！", Constants.MESSAGE_BOX_TITLE_ERROR);
             }
         }
 
         private void CutProject_Click(object sender, RoutedEventArgs e) {
             Project project = GetProjectByMenu(sender);
             project.Operate = Constants.OPERATE_CUT;
-            Clipboard.SetData("XStartApp", project);
+            Clipboard.SetData("XStartApp", new CopyProject { Name =project.Name,Section = project.Section, TypeSection = project.TypeSection,ColumnSection=project.ColumnSection
+            , Path = project.Path, Kind = project.Kind, IconIndex = project.IconIndex, FontColor = project.FontColor, IconPath = project.IconPath
+            , Arguments = project.Arguments, HotKey = project.HotKey, Remark = project.Remark, Operate = Constants.OPERATE_CUT});
             // 缓存删除,但是数据不删除
             XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic.Remove(project.Section);
         }
+
 
         private void CopyProject_Click(object sender, RoutedEventArgs e) {
 
@@ -1299,18 +1365,21 @@ namespace XStart2._0 {
                 columnSection = project.ColumnSection;
             }
             if (Clipboard.ContainsData("XStartApp")) {
-                var obj = Clipboard.GetData("XStartApp");
-                var project = Clipboard.GetData("XStartApp") as Project;
+
+                CopyProject project = Clipboard.GetData("XStartApp") as CopyProject;
                 string primarySection = project.Section;
-                project.TypeSection = typeSection;
-                project.ColumnSection = columnSection;
-                XStartService.AddNewApp(project);
+
+                XStartService.AddNewApp(new Project {
+                    Name = project.Name, TypeSection = typeSection, ColumnSection = columnSection
+            , Path = project.Path, Kind = project.Kind, IconIndex = project.IconIndex, FontColor = project.FontColor, IconPath = project.IconPath
+            , Arguments = project.Arguments, HotKey = project.HotKey, Remark = project.Remark
+                });
                 // 如果是剪切操作，需要将原数据删除
                 if (Constants.OPERATE_CUT.Equals(project.Operate)) {
                     projectService.Delete(primarySection);
                 }
             } else {
-                MessageBox.Show("当前剪切板无应用数据！","提醒");
+                MessageBox.Show("当前剪切板无应用数据！", Constants.MESSAGE_BOX_TITLE_ERROR);
             }
             e.Handled = true;
         }

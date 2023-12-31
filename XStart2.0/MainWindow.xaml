@@ -50,8 +50,8 @@
         
         <ContextMenu x:Key="TypeTabContextMenu">
             <ContextMenu.Items>
-                <MenuItem Name="AddType" Header="添加类别" Click="AddType"/>
-                <MenuItem Name="ClearType" Header="清空所有类别" Click="ClearType"/>
+                <MenuItem Name="AddType" Header="添加类别" Click="AddType_Click"/>
+                <MenuItem Name="ClearType" Header="清空所有类别" Click="ClearType_Click"/>
             </ContextMenu.Items>
         </ContextMenu>
         <Style x:Key="AddColumnMenuItemStyle" TargetType="{x:Type MenuItem}">
@@ -101,21 +101,21 @@
                                >
                         <DockPanel.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="添加类别" Click="AddType"/>
-                                <MenuItem Header="修改类别" Click="UpdateType" IsEnabled="{Binding Value.Unlocked}"/>
-                                <MenuItem Header="删除类别" Click="DeleteType" IsEnabled="{Binding Value.Unlocked}"/>
+                                <MenuItem Header="添加类别" Click="AddType_Click"/>
+                                <MenuItem Header="修改类别" Click="UpdateType_Click" IsEnabled="{Binding Value.Unlocked}"/>
+                                <MenuItem Header="删除类别" Click="DeleteType_Click" IsEnabled="{Binding Value.Unlocked}"/>
                                 <Separator/>
-                                <MenuItem Header="添加口令" IsEnabled="{Binding Value.HasPassword, Converter={StaticResource InverseBooleanConverter}}" Click="AddTypeSecurity"/>
-                                <MenuItem Header="修改口令" IsEnabled="{Binding Value.HasPassword}" Click="UpdateTypeSecurity"/>
-                                <MenuItem Header="移除口令" IsEnabled="{Binding Value.HasPassword}" Click="RemoveTypeSecurity"/>
-                                <MenuItem Header="锁定" IsEnabled="{Binding Value.CanLock}" Click="LockType"/>
+                                <MenuItem Header="添加口令" IsEnabled="{Binding Value.HasPassword, Converter={StaticResource InverseBooleanConverter}}" Click="AddTypeSecurity_Click"/>
+                                <MenuItem Header="修改口令" IsEnabled="{Binding Value.HasPassword}" Click="UpdateTypeSecurity_Click"/>
+                                <MenuItem Header="移除口令" IsEnabled="{Binding Value.HasPassword}" Click="RemoveTypeSecurity_Click"/>
+                                <MenuItem Header="锁定" IsEnabled="{Binding Value.CanLock}" Click="LockType_Click"/>
                                 <Separator/>
                                 <MenuItem Header="至顶" IsEnabled="{Binding Value.Unlocked}"/>
                                 <MenuItem Header="上移" IsEnabled="{Binding Value.Unlocked}"/>
                                 <MenuItem Header="下移" IsEnabled="{Binding Value.Unlocked}"/>
                                 <MenuItem Header="至底" IsEnabled="{Binding Value.Unlocked}"/>
                                 <Separator/>
-                                <MenuItem Header="清空栏目" IsEnabled="{Binding Value.Unlocked}"/>
+                                <MenuItem Header="清空栏目" IsEnabled="{Binding Value.Unlocked}" Click="ClearColumn_Click"/>
                             </ContextMenu>
                         </DockPanel.ContextMenu>
                         <TextBlock DockPanel.Dock="Left" Width="28" Text="{Binding Value.FaIcon}" FontFamily="{Binding Value.FaIconFontFamily}" Foreground="{Binding Value.FaIconColor}" FontSize="18" Padding="5"/>
@@ -140,14 +140,14 @@
                                 <PasswordBox PasswordChar="*" Grid.Row="0" Grid.Column="1" helper:PasswordBoxHelper.Attach ="True" helper:PasswordBoxHelper.Password="{Binding Value.UnlockSecurity,Mode=TwoWay}" FontSize="14" Height="30" VerticalContentAlignment="Center" Margin="5"/>
                                 <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
                                     <CheckBox Content="记住口令" IsChecked="{Binding Value.RememberSecurity}" Margin="5" VerticalAlignment="Center"/>
-                                    <Button Style="{StaticResource Btn_Style}" Content="确定" Click="UnlockType" Tag="{Binding Value.Section}"/>
+                                    <Button Style="{StaticResource Btn_Style}" Content="确定" Click="UnlockType_Click" Tag="{Binding Value.Section}"/>
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
                         <ScrollViewer Visibility="{Binding Value.Unlocked, Converter={StaticResource Boolean2VisibilityConverter}}" VerticalScrollBarVisibility="{Binding Value.VerticalScroll}" Tag="{Binding Value.Section}">
                             <ScrollViewer.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="添加栏目" Click="AddColumn"/>
+                                    <MenuItem Header="添加栏目" Click="AddColumn_Click"/>
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
                             <ItemsControl ItemsSource="{Binding Value.ColumnDic}">
@@ -162,14 +162,14 @@
                                           Header="{Binding Value.Name}" IsExpanded="{Binding Value.IsExpanded}" Style="{StaticResource ExpandablePanelStyle}" BorderBrush="Transparent">
                                             <Expander.ContextMenu>
                                                 <ContextMenu>
-                                                    <MenuItem Header="添加栏目" Click="AddColumn"/>
-                                                    <MenuItem Header="修改栏目" Click="UpdateColumn"/>
-                                                    <MenuItem Header="删除栏目" Click="DeleteColumn"/>
+                                                    <MenuItem Header="添加栏目" Click="AddColumn_Click"/>
+                                                    <MenuItem Header="修改栏目" Click="UpdateColumn_Click"/>
+                                                    <MenuItem Header="删除栏目" Click="DeleteColumn_Click"/>
                                                     <Separator/>
-                                                    <MenuItem Header="添加口令" IsEnabled="{Binding Value.HasPassword, Converter={StaticResource InverseBooleanConverter}}" Click="AddColumnSecurity"/>
-                                                    <MenuItem Header="修改口令" IsEnabled="{Binding Value.HasPassword}" Click="UpdateColumnSecurity"/>
-                                                    <MenuItem Header="移除口令" IsEnabled="{Binding Value.HasPassword}" Click="RemoveColumnSecurity"/>
-                                                    <MenuItem Header="锁定" IsEnabled="{Binding Value.CanLock}" Click="LockColumn"/>
+                                                    <MenuItem Header="添加口令" IsEnabled="{Binding Value.HasPassword, Converter={StaticResource InverseBooleanConverter}}" Click="AddColumnSecurity_Click"/>
+                                                    <MenuItem Header="修改口令" IsEnabled="{Binding Value.HasPassword}" Click="UpdateColumnSecurity_Click"/>
+                                                    <MenuItem Header="移除口令" IsEnabled="{Binding Value.HasPassword}" Click="RemoveColumnSecurity_Click"/>
+                                                    <MenuItem Header="锁定" IsEnabled="{Binding Value.CanLock}" Click="LockColumn_Click"/>
                                                 </ContextMenu>
                                             </Expander.ContextMenu>
                                             <Grid>
@@ -187,7 +187,7 @@
                                                         <PasswordBox PasswordChar="*" Grid.Row="0" Grid.Column="1" helper:PasswordBoxHelper.Attach ="True" helper:PasswordBoxHelper.Password="{Binding Value.UnlockSecurity,Mode=TwoWay}" FontSize="14" Height="30" VerticalContentAlignment="Center" Margin="5"/>
                                                         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
                                                             <CheckBox Content="记住口令" IsChecked="{Binding Value.RememberSecurity}" Margin="5" VerticalAlignment="Center"/>
-                                                            <Button Style="{StaticResource Btn_Style}" Content="确定" Click="UnlockColumn"
+                                                            <Button Style="{StaticResource Btn_Style}" Content="确定" Click="UnlockColumn_Click"
                                                                     helper:ElementParamHelper.TypeSection="{Binding Value.TypeSection}" helper:ElementParamHelper.ColumnSection="{Binding Value.Section}"/>
                                                         </StackPanel>
                                                     </Grid>
@@ -269,8 +269,8 @@
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
-                        <MenuItem Header="取消所有自启动"/>
-                        <MenuItem Header="恢复默认" />
+                        <MenuItem Header="取消所有自启动" Click="CancelAllAutoRun_Click"/>
+                        <MenuItem Header="恢复默认" Click="RestoreDefault_Click"/>
                         <MenuItem Header="关于" Click="ShowAbout"/>
                         <MenuItem Header="退出程序" Click="Window_Close"/>
                     </MenuItem>

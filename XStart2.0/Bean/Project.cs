@@ -2,6 +2,7 @@
 using PropertyChanged;
 using System;
 using XStart2._0.Const;
+using XStart2._0.Services;
 
 namespace XStart2._0.Bean {
 
@@ -42,10 +43,13 @@ namespace XStart2._0.Bean {
         public string Kind {
             // 种类
             get => kind; set {
-                kind = value; 
+                kind = value;
                 if (KIND_FILE.Equals(value) || KIND_DIRECTORY.Equals(value)) {
                     PropertyEnabled = true;
                 } else {
+                    if (KIND_SYSTEM.Equals(value)) {
+                        CanAutoRun = false;
+                    }
                     PropertyEnabled = false;
                 }
             }
@@ -84,7 +88,10 @@ namespace XStart2._0.Bean {
                 }
             }
         }
-        [DoNotNotify]
         public System.Windows.Media.Imaging.BitmapImage Icon { get; set; }
+
+        public void InitIcon() {
+            Icon = XStartService.GetIconImage(Kind, Path, IconPath);
+        }
     }
 }

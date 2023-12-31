@@ -45,6 +45,7 @@
         public const string SECTION_CONFIG = "Config";
         public const string SECTION_SYSTEM_APP = "SystemApp";
 
+        public const string KEY_TYPE_TAB_EXPAND = "TypeTabExpand";
         public const string KEY_CLICK_TYPE = "ClickType";
         public const string KEY_TOP_MOST = "TopMost";
         public const string KEY_AUDIO = "Audio";
@@ -72,13 +73,13 @@
         public const string COLUMN = "column";
         public const string PROJECT = "project";
 
+        public const double MAIN_HEIGHT = 800;
+        public const double MAIN_WIDTH = 400;
+        public const double MAIN_LEFT = 300;
+        public const double MAIN_TOP = 50;
 
-        public const int COL_PANEL_W_INV = 8;
-        public const int COL_TITLE_H = 36;
-        public const int COL_H = 45;
-
-        public const int APP_PANEL_W_INV = 12;
-        public const int APP_PANEL_H = 40;
+        public const double TYPE_EXPAND_WIDTH = 100;
+        public const double TYPE_COLLAPSE_WIDTH = 28;
 
         public const uint VOLUME_WAVE_STEP = 6553;
         public const int VOLUME_STEP = 5;
@@ -98,6 +99,10 @@
         public const string FONT_FAMILY_FA_REGULAR = "pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Regular";
         public const string FONT_FAMILY_FA_BRANDS = "pack://application:,,,/Resources/Fonts/#Font Awesome 6 Brands Regular";
         public const string FONT_FAMILY_FA_V4 = "pack://application:,,,/Resources/Fonts/#FontAwesome";
+
+        public const string MESSAGE_BOX_TITLE_ERROR = "错误";
+        public const string MESSAGE_BOX_TITLE_WARN = "警告";
+        public const string MESSAGE_BOX_TITLE_INFO = "提醒";
 
     }
 }
