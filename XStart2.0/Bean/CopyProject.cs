@@ -3,6 +3,9 @@ using System;
 
 namespace XStart2._0.Bean {
 
+    /// <summary>
+    /// 项目复制用的对象，不可以使用Project，否则剪切板无法识别
+    /// </summary>
     [Serializable]
     public class CopyProject {
 

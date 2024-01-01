@@ -544,7 +544,7 @@ namespace XStart2._0 {
                 return;
             }
             if (MessageBoxResult.OK == MessageBox.Show("确认删除该类别？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
-                
+
                 foreach (KeyValuePair<string, Column> k in XStartService.TypeDic[section].ColumnDic) {
                     if (k.Value.Locked) {
                         MessageBox.Show($"当前类别栏目[{k.Value.Name}]已锁，不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
@@ -642,7 +642,7 @@ namespace XStart2._0 {
             string typeSection = typePanel.Tag as string;
             if (mainViewModel.Types[typeSection].ColumnDic.Count > 0) {
                 if (MessageBoxResult.OK == MessageBox.Show($"确认清空【{mainViewModel.Types[typeSection].Name}】类别下的所有栏目?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
-                    foreach(KeyValuePair<string, Column> column in mainViewModel.Types[typeSection].ColumnDic) {
+                    foreach (KeyValuePair<string, Column> column in mainViewModel.Types[typeSection].ColumnDic) {
                         if (column.Value.Locked) {
                             MessageBox.Show($"该类别下的栏目【{column.Value.Name}】已锁定不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
                             e.Handled = true;
@@ -877,12 +877,22 @@ namespace XStart2._0 {
             foreach (KeyValuePair<string, Column> column in XStartService.TypeDic[typeSection].ColumnDic) {
                 columnService.Delete(column.Value.Section);
                 DelCount(columnService);
-                foreach (KeyValuePair<string, Project> project in column.Value.ProjectDic) {
-                    projectService.Delete(project.Value.Section);
-                    DelCount(projectService);
-                }
+                RemoveColumnProjects(typeSection, column.Value.Section);
             }
             mainViewModel.Types[typeSection].ColumnDic.Clear();
+        }
+
+        private void RemoveColumnProjects(string typeSection, string columnSection) {
+            foreach (KeyValuePair<string, Project> project in XStartService.TypeDic[typeSection].ColumnDic[columnSection].ProjectDic) {
+                if (SystemProjectParam.MSTSC.Equals(project.Value.Path)) {
+                    // 远程的rdp文件删除
+                    RdpUtils.DeleteProfiles(Configs.AppStartPath + @$"rdp\{project.Value.Section}.rdp");
+                }
+                projectService.Delete(project.Value.Section);
+                DelCount(projectService);
+
+            }
+            mainViewModel.Types[typeSection].ColumnDic[columnSection].ProjectDic.Clear();
         }
 
         private void ProjectButton_Click(object sender, RoutedEventArgs e) {
@@ -925,6 +935,34 @@ namespace XStart2._0 {
                 XStartService.AddNewApp(projectWindow.Project);
                 NotifyUtils.ShowNotification($"添加[{projectWindow.Project.Name}]成功！");
             }
+        }
+
+        private void ClearProject_Click(object sender, RoutedEventArgs e) {
+            // 当前栏目
+            FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
+
+            object tag = element.Tag;
+            string typeSection = string.Empty;
+            string columnSection = string.Empty;
+            if (tag is Column column) {
+                // 项目放置面板
+                typeSection = column.TypeSection;
+                columnSection = column.Section;
+            } else if (tag is Project project) {
+                typeSection = project.TypeSection;
+                columnSection = project.ColumnSection;
+            }
+            if (mainViewModel.Types[typeSection].ColumnDic[columnSection].ProjectDic.Count > 0) {
+                if (MessageBoxResult.OK == MessageBox.Show("确认清空栏目所有项目？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                    RemoveColumnProjects(typeSection, columnSection);
+                    NotifyUtils.ShowNotification("项目清空成功！");
+                }
+            } else {
+                MessageBox.Show("当前栏目无项目！", Constants.MESSAGE_BOX_TITLE_ERROR);
+            }
+
+
+            e.Handled = true;
         }
         // 编辑项目
         private void EditProject_Click(object sender, RoutedEventArgs e) {
@@ -1049,7 +1087,7 @@ namespace XStart2._0 {
 
         // 恢复默认配置
         private void RestoreDefault_Click(object sender, RoutedEventArgs e) {
-            if(MessageBoxResult.OK == MessageBox.Show("确认恢复默认配置？", Constants.MESSAGE_BOX_TITLE_WARN)) {
+            if (MessageBoxResult.OK == MessageBox.Show("确认恢复默认配置？", Constants.MESSAGE_BOX_TITLE_WARN)) {
                 mainViewModel.MainHeight = Constants.MAIN_HEIGHT;
                 mainViewModel.MainWidth = Constants.MAIN_WIDTH;
                 mainViewModel.MainLeft = Constants.MAIN_LEFT;
@@ -1125,6 +1163,7 @@ namespace XStart2._0 {
             e.Handled = true;
         }
 
+        #region 保存配置项
         private void SaveSetting() {
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_TYPE_TAB_EXPAND, ref Configs.typeTabExpand, mainViewModel.TypeTabExpanded);// 类别标题是否展开
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST, ref Configs.topMost, mainViewModel.TopMost);// 置顶
@@ -1168,6 +1207,7 @@ namespace XStart2._0 {
                 from = to;
             }
         }
+        #endregion
 
         #region 窗口靠边隐藏
         public void CancelAnchor() {
@@ -1316,7 +1356,6 @@ namespace XStart2._0 {
             if (null != project) {
                 if (Project.KIND_FILE.Equals(project.Kind) || Project.KIND_DIRECTORY.Equals(project.Kind)) {
                     WinUtils.ShowFileProperties(project.Path);
-
                 } else {
                     MessageBox.Show("该项目不可查看属性！", Constants.MESSAGE_BOX_TITLE_ERROR);
                 }
@@ -1336,17 +1375,25 @@ namespace XStart2._0 {
 
         private void CutProject_Click(object sender, RoutedEventArgs e) {
             Project project = GetProjectByMenu(sender);
-            project.Operate = Constants.OPERATE_CUT;
-            Clipboard.SetData("XStartApp", new CopyProject { Name =project.Name,Section = project.Section, TypeSection = project.TypeSection,ColumnSection=project.ColumnSection
-            , Path = project.Path, Kind = project.Kind, IconIndex = project.IconIndex, FontColor = project.FontColor, IconPath = project.IconPath
-            , Arguments = project.Arguments, HotKey = project.HotKey, Remark = project.Remark, Operate = Constants.OPERATE_CUT});
-            // 缓存删除,但是数据不删除
+            project.Operate = Constants.OPERATE_CUT;// 粘贴完成后，原数据将删除
+            WriteProject2Clipboard(project);
+            // 缓存删除,但是数据不删除(在粘贴时判断)
             XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic.Remove(project.Section);
         }
 
 
         private void CopyProject_Click(object sender, RoutedEventArgs e) {
+            Project project = GetProjectByMenu(sender);
+            project.Operate = Constants.OPERATE_COPY;// 目前无逻辑处理
+            WriteProject2Clipboard(project);
+        }
 
+        private void WriteProject2Clipboard(Project project) {
+            Clipboard.SetData("XStartApp", new CopyProject {
+                Name = project.Name, Section = project.Section, TypeSection = project.TypeSection, ColumnSection = project.ColumnSection
+            , Path = project.Path, Kind = project.Kind, IconIndex = project.IconIndex, FontColor = project.FontColor, IconPath = project.IconPath
+            , Arguments = project.Arguments, HotKey = project.HotKey, Remark = project.Remark, Operate = project.Operate
+            });
         }
 
         private void PasteProject_Click(object sender, RoutedEventArgs e) {
@@ -1365,10 +1412,8 @@ namespace XStart2._0 {
                 columnSection = project.ColumnSection;
             }
             if (Clipboard.ContainsData("XStartApp")) {
-
                 CopyProject project = Clipboard.GetData("XStartApp") as CopyProject;
                 string primarySection = project.Section;
-
                 XStartService.AddNewApp(new Project {
                     Name = project.Name, TypeSection = typeSection, ColumnSection = columnSection
             , Path = project.Path, Kind = project.Kind, IconIndex = project.IconIndex, FontColor = project.FontColor, IconPath = project.IconPath

@@ -197,7 +197,7 @@
                                                         <ContextMenu>
                                                             <MenuItem Header="添加项目" Click="AddProject_Click"/>
                                                             <MenuItem Header="粘贴" Click="PasteProject_Click"/>
-                                                            <MenuItem Header="清空本栏目"/>
+                                                            <MenuItem Header="清空本栏目" Click="ClearProject_Click"/>
                                                         </ContextMenu>
                                                     </ScrollViewer.ContextMenu>
                                                     <ItemsControl ItemsSource="{Binding Value.ProjectDic}">
