@@ -13,7 +13,7 @@ namespace XStart2._0.ViewModels {
             MainHeight = 800;
             MainWidth = 450;
             // 计算初始化信息
-            Avatar = "/Files/Images/DefaultUser.png";
+            Avatar = "/Files/Images/Avatar/DefaultUser.png";
             NickName = "昵称";
         }
 

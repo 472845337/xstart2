@@ -35,7 +35,6 @@ namespace XStart2._0 {
         readonly MainViewModel mainViewModel = new MainViewModel();
         // 
         System.Windows.Forms.NotifyIcon notifyIcon = null;
-        WindowState ws; //记录窗体状态
         public MainWindow() {
             InitializeComponent();
             Configs.Handler = new System.Windows.Interop.WindowInteropHelper(this).Handle;
@@ -60,6 +59,17 @@ namespace XStart2._0 {
         /// </summary>
         /// <param name="param"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e) {
+            #region 用户头像和昵称
+            string avatar = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_AVATAR);
+            string nickName = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_NICKNAME);
+            if (!string.IsNullOrEmpty(avatar)) {
+                mainViewModel.Avatar = avatar;
+            }
+            if (!string.IsNullOrEmpty(nickName)) {
+                mainViewModel.NickName = nickName;
+            }
+            #endregion
+
             #region 窗口相关加载，尺寸，位置，置顶
             string leftStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_LOCATION, Constants.KEY_LEFT);
             string topStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_LOCATION, Constants.KEY_TOP);
@@ -270,7 +280,6 @@ namespace XStart2._0 {
 
         private void MainWindow_Show(object sender, EventArgs e) {
             Visibility = Visibility.Visible;
-            ws = WindowState.Normal;
             IsAllShow = true;
         }
 
@@ -306,8 +315,7 @@ namespace XStart2._0 {
                 // 取消退出
                 e.Cancel = true;
             } else {
-                // 退出
-                // 回收相关资源
+                // 退出时回收相关资源
                 Configs.Dispose();
                 AudioUtils.Dispose();
                 DataBase.SqLiteFactory.CloseAllSqLite();
@@ -1118,10 +1126,8 @@ namespace XStart2._0 {
         /// 保存当前窗口尺寸配置
         /// </summary>
         public void SaveFormSize() {
-            double height = Height;
-            double width = Width;
-            XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_SIZE, Constants.KEY_HEIGHT, Convert.ToString(height));
-            XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_SIZE, Constants.KEY_WIDTH, Convert.ToString(width));
+            SaveConfig(Constants.SECTION_SIZE, Constants.KEY_HEIGHT, ref Configs.mainHeight, mainViewModel.MainHeight);
+            SaveConfig(Constants.SECTION_SIZE, Constants.KEY_WIDTH, ref Configs.mainWidth, mainViewModel.MainWidth);
         }
 
         /// <summary>
@@ -1129,12 +1135,8 @@ namespace XStart2._0 {
         /// </summary>
         public void SaveFormLocation() {
             // 保存当前位置
-            if (0 == Configs.mainLeft || mainViewModel.MainLeft != Configs.mainLeft) {
-                XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_LOCATION, Constants.KEY_LEFT, Convert.ToString(mainViewModel.MainLeft));
-            }
-            if (0 == Configs.mainTop || mainViewModel.MainTop != Configs.mainTop) {
-                XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_LOCATION, Constants.KEY_TOP, Convert.ToString(mainViewModel.MainTop));
-            }
+            SaveConfig(Constants.SECTION_LOCATION, Constants.KEY_LEFT,ref Configs.mainLeft, mainViewModel.MainLeft);
+            SaveConfig(Constants.SECTION_LOCATION, Constants.KEY_TOP, ref Configs.mainTop, mainViewModel.MainTop);
         }
         //计时执行的程序
         private void CurrentTimer_Tick(object sender, EventArgs e) {
@@ -1433,5 +1435,22 @@ namespace XStart2._0 {
             FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
             return element.Tag as Project;
         }
+        
+        #region 用户头像和昵称修改
+        private void User_Click(object sender, RoutedEventArgs e) {
+            UserWindow userWindow = new UserWindow(mainViewModel.Avatar, mainViewModel.NickName) { WindowStartupLocation = WindowStartupLocation.CenterScreen};
+            if(true == userWindow.ShowDialog()) {
+                // 保存配置项
+                if (!mainViewModel.Avatar.Equals(userWindow.vm.Avatar)) {
+                    XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_AVATAR, userWindow.vm.Avatar);
+                    mainViewModel.Avatar = userWindow.vm.Avatar;
+                }
+                if (!mainViewModel.NickName.Equals(userWindow.vm.NickName)) {
+                    XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_NICKNAME, userWindow.vm.NickName);
+                    mainViewModel.NickName = userWindow.vm.NickName;
+                }
+            }
+        }
+        #endregion
     }
 }

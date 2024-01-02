@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XStart2._0.Windows"
         mc:Ignorable="d"
-        Title="远程" Height="240" Width="380" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="远程" Height="210" Width="380" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="60"/>
@@ -19,16 +19,16 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Text="地址" Style="{StaticResource FormLabel_Style}"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Address}"/>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="端口" Style="{StaticResource FormLabel_Style}"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource FormValue_Style}"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Port}"/>
         <TextBlock Grid.Row="2" Grid.Column="0" Text="用户名" Style="{StaticResource FormLabel_Style}"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource FormValue_Style}"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Account}"/>
         <TextBlock Grid.Row="3" Grid.Column="0" Text="密码" Style="{StaticResource FormLabel_Style}"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource FormValue_Style}"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Password}"/>
         <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Style="{StaticResource BtnConfirm_Style}"/>
-            <Button Style="{StaticResource BtnCancel_Style}"/>
+            <Button Style="{StaticResource BtnConfirm_Style}" Click="Confirm_Click"/>
+            <Button Style="{StaticResource BtnCancel_Style}" Click="Cancel_Click"/>
         </StackPanel>
     </Grid>
 </Window>

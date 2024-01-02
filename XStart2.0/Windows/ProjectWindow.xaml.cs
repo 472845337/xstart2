@@ -23,7 +23,7 @@ namespace XStart2._0.Windows {
     /// ProjectWindow.xaml 的交互逻辑
     /// </summary>
     public partial class ProjectWindow : Window {
-        ProjectViewModel vm = new ProjectViewModel();
+        readonly ProjectViewModel vm = new ProjectViewModel();
         public Project Project { get; set; }
         public ProjectWindow() {
             InitializeComponent();
@@ -52,13 +52,19 @@ namespace XStart2._0.Windows {
                 vm.Remark = Project.Remark;
                 if (Project.Path.StartsWith("#")) {
                     // 系统功能路径不可以变更
-                    vm.PathEnable = false;
+                    vm.PathReadonly = true;
+                    if (SystemProjectParam.MSTSC.Equals(Project.Path)) {
+                        // 远程桌面应用
+                        vm.ArgumentsReadonly = true;
+                        ArgumentsTextBox.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(MstscProject_ArgumentsTextBoxMouseLeftButtonUp), true);
+                    }
                 }
             } else {
                 // 新增的时候不会传对象过来
-                Project = new Project();
-                Project.TypeSection = vm.TypeSection;
-                Project.ColumnSection = vm.ColumnSection;
+                Project = new Project {
+                    TypeSection = vm.TypeSection,
+                    ColumnSection = vm.ColumnSection
+                };
             }
             DataContext = vm;
         }
@@ -70,9 +76,7 @@ namespace XStart2._0.Windows {
             }else if (string.IsNullOrEmpty(vm.Path)) {
                 errMsg = "项目路径不能为空！";
             }
-            if (!string.IsNullOrEmpty(errMsg)) {
-                MessageBox.Show(errMsg, Constants.MESSAGE_BOX_TITLE_ERROR);
-            } else {
+            if (string.IsNullOrEmpty(errMsg)) {
                 Project.Name = vm.Name;
                 Project.Path = vm.Path;
                 Project.Kind = vm.Kind;
@@ -83,6 +87,8 @@ namespace XStart2._0.Windows {
                 Project.HotKey = vm.HotKey;
                 Project.Remark = vm.Remark;
                 DialogResult = true;
+            } else {
+                MessageBox.Show(errMsg, Constants.MESSAGE_BOX_TITLE_ERROR);
             }
             e.Handled = true;
         }
@@ -96,8 +102,8 @@ namespace XStart2._0.Windows {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "所有文件|*.*|可执行文件|.exe|音频文件|*.mp3;*.wav;*.wma;*.ape;*.flac|视频文件|*.avi;*.mp4;*.wmv;*.mkv;*.rmvb;*.mov;*.flv|图片文件|*.jpg;*.jpeg;*.gif;*.bmp;*.png;*.jfif|文档文件|*.doc;*.xls;*.ppt;*.docx;*.xlsx;*pptx;*.rtf;*.txt;*.pdf" };
             if (System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
                 string filePath = ofd.FileName;
-                vm.PathEnable = true;
-                vm.ArgumentsEnable = true;
+                vm.PathReadonly = false;
+                vm.ArgumentsReadonly = false;
                 vm.Path = filePath;
                 // 自动判断kind
                 vm.Kind = Project.KIND_FILE;
@@ -123,8 +129,8 @@ namespace XStart2._0.Windows {
             if (System.Windows.Forms.DialogResult.OK == fbd.ShowDialog()) {
                 string folderPath = fbd.SelectedPath;
                 string dirName = Path.GetDirectoryName(folderPath);
-                vm.PathEnable = true;
-                vm.ArgumentsEnable = true;
+                vm.PathReadonly = false;
+                vm.ArgumentsReadonly = false;
                 vm.Path = folderPath;
                 vm.Kind = Project.KIND_DIRECTORY;
                 // 名称自动赋值,普通目录和磁盘名不同的处理方式
@@ -135,12 +141,12 @@ namespace XStart2._0.Windows {
                         vm.Name = $"{driveInfo.VolumeLabel}({folderPath.Substring(0, folderPath.IndexOf(":"))})";
                     } else {
                         // 选择的普通目录
-                        vm.Name = Path.GetFileName(dirName);
+                        vm.Name = Path.GetFileName(folderPath);
                     }
                 }
                 // 图标自动赋值
                 if (string.IsNullOrEmpty(vm.IconPath)) {
-                    vm.IconPath = string.IsNullOrEmpty(dirName)?folderPath: dirName;
+                    vm.IconPath = folderPath;
                     Project project = new Project {
                         Path = vm.Path,
                         IconPath = vm.IconPath,
@@ -154,8 +160,8 @@ namespace XStart2._0.Windows {
         private void SystemBtn_Click(object sender, RoutedEventArgs e) {
             SystemProjectWindow spw = new SystemProjectWindow(vm.TypeSection, vm.ColumnSection, Configs.systemAppAddMulti, Configs.systemAppOpenPage) { };
             if (true == spw.ShowDialog()) {
-                vm.PathEnable = false;
-                vm.ArgumentsEnable = false;
+                vm.PathReadonly = true;
+                vm.ArgumentsReadonly = true;
                 vm.Name = spw.Project.Name;
                 vm.Path = spw.Project.Path;
                 vm.Kind = spw.Project.Kind;
@@ -182,6 +188,18 @@ namespace XStart2._0.Windows {
             if(System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
                 vm.IconPath = ofd.FileName;
                 vm.Project = new Project() { IconPath = ofd.FileName };
+            }
+        }
+
+        private void MstscProject_ArgumentsTextBoxMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            string[] argumentArray = vm.Arguments.Split(Constants.SPLIT_CHAR);
+            string address = argumentArray[0];
+            string port = argumentArray[1];
+            string account = argumentArray[2];
+            string password = argumentArray[3];
+            MstscWindow mstsc = new MstscWindow(address, port, account, password){ Topmost = true };
+            if (true == mstsc.ShowDialog()) {
+                vm.Arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}";
             }
         }
     }

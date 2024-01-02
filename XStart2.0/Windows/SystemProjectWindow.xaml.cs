@@ -38,6 +38,8 @@ namespace XStart2._0.Windows {
 
         private void Window_Loaded(object sender, EventArgs e) {
             DataContext = vm;
+
+            #region 系统链接
             List<ViewModels.SystemProject> systemLinks = new List<ViewModels.SystemProject>();
             ViewModels.SystemProject myComputer = new ViewModels.SystemProject() { Name = "MyComputerButton", Content = "我的电脑", Image = Configs.ICON_MYCOMPUTER };
             ViewModels.SystemProject myDocument = new ViewModels.SystemProject() { Name = "MyDocumentButton", Content = "我的文档", Image = Configs.ICON_MYDOCUMENT };
@@ -63,7 +65,9 @@ namespace XStart2._0.Windows {
             systemLinks.Add(cmdButton);
             systemLinks.Add(folderOptionsButton);
             systemLinks.Add(mstscButton);
+            #endregion
 
+            #region 系统操作
             List<ViewModels.SystemProject> systemOperates = new List<ViewModels.SystemProject>();
             ViewModels.SystemProject closePcButton = new ViewModels.SystemProject() { Name = "ClosePcButton", Content = "关闭计算机", Image = Configs.ICON_CLOSE_PC };
             ViewModels.SystemProject restartPcButton = new ViewModels.SystemProject() { Name = "RestartPcButton", Content = "重启计算机", Image = Configs.ICON_RESTART_PC };
@@ -105,7 +109,9 @@ namespace XStart2._0.Windows {
             systemOperates.Add(clearSomeDirectoryButton);
             systemOperates.Add(controlAppMemoryButton);
             systemOperates.Add(endProcessButton);
+            #endregion
 
+            #region 音量控制
             List<ViewModels.SystemProject> systemAudioNormals = new List<ViewModels.SystemProject>();
             ViewModels.SystemProject volumeAddButton = new ViewModels.SystemProject() { Name = "VolumeAddButton", Content = "音量增加", Image = Configs.ICON_VOLUME_ADD };
             ViewModels.SystemProject volumeReduceButton = new ViewModels.SystemProject() { Name = "VolumeReduceButton", Content = "音量减少", Image = Configs.ICON_VOLUME_REDUCE };
@@ -145,7 +151,9 @@ namespace XStart2._0.Windows {
             systemAudioCdRoms.Add(volumeCdRomAddButton);
             systemAudioCdRoms.Add(volumeCdRomReduceButton);
             systemAudioCdRoms.Add(volumeCdRomSilentToggleButton);
+            #endregion
 
+            #region 控制面板
             List<ViewModels.SystemProject> systemControls = new List<ViewModels.SystemProject>();
             ViewModels.SystemProject addOrRemoveAppButton = new ViewModels.SystemProject() { Name = "AddOrRemoveAppButton", Content = "添加或删除程序", Image = Configs.ICON_ADD_OR_REMOVE_APP };
             ViewModels.SystemProject internetOptionsButton = new ViewModels.SystemProject() { Name = "InternetOptionsButton", Content = "Internet选项", Image = Configs.ICON_INTERNET_OPTIONS };
@@ -181,6 +189,7 @@ namespace XStart2._0.Windows {
             systemControls.Add(soundAudioEquipmentButton);
             systemControls.Add(volumeControlButton);
             systemControls.Add(dateTimeButton);
+            #endregion
 
             vm.SystemLinks = systemLinks;
             vm.SystemOperates = systemOperates;
@@ -228,8 +237,8 @@ namespace XStart2._0.Windows {
                 Topmost = false;
                 MstscWindow mstsc = new MstscWindow() {  Topmost = true };
                 if (true == mstsc.ShowDialog()) {
-                    name = $"{mstsc.Address}远程";
-                    arguments = $"{mstsc.Address}{Constants.SPLIT_CHAR}{mstsc.Port}{Constants.SPLIT_CHAR}{mstsc.Account}{Constants.SPLIT_CHAR}{mstsc.Password}";
+                    name = $"{mstsc.vm.Address}远程";
+                    arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}";
                 } else {
                     isAdd = false;
                 }

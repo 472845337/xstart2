@@ -40,11 +40,15 @@
         public const string AUDIO_START = "Files/Audio/Start.wav";
 
         public const string SET_FILE = "Config/Ini/Set.ini";
+
+        public const string SECTION_USER = "User";
         public const string SECTION_LOCATION = "Location";
         public const string SECTION_SIZE = "Size";
         public const string SECTION_CONFIG = "Config";
         public const string SECTION_SYSTEM_APP = "SystemApp";
 
+        public const string KEY_USER_AVATAR = "Avatar";
+        public const string KEY_USER_NICKNAME = "NickName";
         public const string KEY_TYPE_TAB_EXPAND = "TypeTabExpand";
         public const string KEY_CLICK_TYPE = "ClickType";
         public const string KEY_TOP_MOST = "TopMost";

@@ -12,13 +12,13 @@ namespace XStart2._0.ViewModels {
         public string Name { get; set; }
 
         public string Path { get; set; }
-        public bool PathEnable { get; set; } = true;
+        public bool PathReadonly { get; set; } = false;
         public int? IconIndex { get; set; }
         public string IconPath { get; set; }
         public string FontColor { get; set; }
         public string Arguments { get; set; }
         // 参数是否可调
-        public bool ArgumentsEnable { get; set; } = true;
+        public bool ArgumentsReadonly { get; set; } = false;
         public string RunStartPath { get; set; }
         public string HotKey { get; set; }
 
