@@ -58,13 +58,13 @@ namespace XStart2._0.Windows {
         /// <param name="e"></param>
         private void ResumeConfirm_Click(object sender, RoutedEventArgs e) {
             bool isOverride = vm.IsOverride;
-            if(null == vm.Items || vm.Items.Count == 0) {
-                MessageBox.Show("请先选择备份文件!","提示");
+            if (null == vm.Items || vm.Items.Count == 0) {
+                MessageBox.Show("请先选择备份文件!", "提示");
                 return;
             }
             foreach (CheckBoxTreeViewModel backTypeVM in vm.Items) {
                 BackData.BackType backType = backTypeVM.Data as BackData.BackType;
-                
+
                 foreach (CheckBoxTreeViewModel backColumnVM in backTypeVM.Children) {
                     BackData.BackColumn backColumn = backColumnVM.Data as BackData.BackColumn;
 
@@ -72,18 +72,19 @@ namespace XStart2._0.Windows {
                         BackData.BackProject backProject = backProjectVM.Data as BackData.BackProject;
 
                         if (true == backProjectVM.IsChecked) {
-                            Project project = new Project { TypeSection = backProject.TypeSection, ColumnSection = backProject.ColumnSection
+                            Project project = new Project {
+                                TypeSection = backProject.TypeSection, ColumnSection = backProject.ColumnSection
                             , Section = backProject.Section, Name = backProject.Name, Sort = backProject.Sort, IconPath = backProject.IconPath
                             , IconIndex = backProject.IconIndex, Kind = backProject.Kind, Path = backProject.Path, FontColor = backProject.FontColor
                             , Arguments = backProject.Arguments, RunStartPath = backProject.RunStartPath, HotKey = backProject.HotKey, Remark = backProject.Remark
                             };
-                            if(null == XStartService.TypeDic[backColumn.TypeSection]) {
+                            if (null == XStartService.TypeDic[backColumn.TypeSection]) {
                                 // 先创建类别
                                 Type type = new Type { Section = backType.Section, Name = backType.Name, Sort = backType.Sort, FaIcon = backType.FaIcon, FaIconColor = backType.FaIconColor, FaIconFontFamily = backType.FaIconFontFamily, Password = backType.Password };
                                 typeService.Insert(type);
                                 XStartService.TypeDic.Add(type.Section, type);
                             }
-                            if(null == XStartService.TypeDic[backColumn.TypeSection].ColumnDic[backColumn.Section]) {
+                            if (null == XStartService.TypeDic[backColumn.TypeSection].ColumnDic[backColumn.Section]) {
                                 // 先创建栏目
                                 Column column = new Column { TypeSection = backColumn.TypeSection, Section = backColumn.Section, Name = backColumn.Name, Sort = backColumn.Sort, Password = backColumn.Password };
                                 columnService.Insert(column);
@@ -112,7 +113,7 @@ namespace XStart2._0.Windows {
                             }
                         }
                     }
-                    if(true == backColumnVM.IsChecked) {
+                    if (true == backColumnVM.IsChecked) {
                         Column column = new Column { TypeSection = backColumn.TypeSection, Section = backColumn.Section, Name = backColumn.Name, Sort = backColumn.Sort, Password = backColumn.Password };
                         if (null == XStartService.TypeDic[backColumn.TypeSection]) {
                             // 先创建类别
@@ -154,7 +155,7 @@ namespace XStart2._0.Windows {
                         XStartService.TypeDic.Add(type.Section, type);
                     }
                 }
-               
+
             }
             NotifyUtils.ShowNotification("恢复文件写入成功");
             DialogResult = true;

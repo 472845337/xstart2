@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows;
 
 namespace XStart2._0.Utils {
     public class DllUtils {
@@ -282,7 +281,7 @@ namespace XStart2._0.Utils {
 
         [DllImport(Crypt, CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern bool CryptProtectData(ref DATA_BLOB pDataIn, string szDataDescr, ref DATA_BLOB pOptionalEntropy, IntPtr pvReserved, ref CRYPTPROTECT_PROMPTSTRUCT pPromptStruct, int dwFlags, ref DATA_BLOB pDataOut);
-        
+
         [DllImport(User32, CharSet = CharSet.Auto)]
         public static extern bool GetCursorPos(ref Point pt);
     }

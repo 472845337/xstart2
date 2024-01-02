@@ -22,7 +22,7 @@ namespace XStart2._0.Bean {
         public string TypeSection { get; set; }// 归属类别
         // 栏目-对应Column中的section
         public string ColumnSection { get; set; }// 归属栏目
-        public string Kind {get;set;}
+        public string Kind { get; set; }
 
         public string Path { get; set; }// 应用路径或链接url
         public string IconPath { get; set; }// 图标

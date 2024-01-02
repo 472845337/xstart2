@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 
 
 namespace XStart2._0.ViewModels {
-    public class SystemProjectViewModel : BaseViewModel{
+    public class SystemProjectViewModel : BaseViewModel {
         // 初始化时赋值
         [DoNotNotify]
         public string TypeSection { get; set; }

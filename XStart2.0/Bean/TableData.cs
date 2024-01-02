@@ -1,8 +1,6 @@
 ﻿
 using PropertyChanged;
 using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace XStart2._0.Bean {
     /// <summary>
@@ -22,7 +20,7 @@ namespace XStart2._0.Bean {
         public string Section { get; set; }
         // 名称
         [TableParam("name", "VARCHAR")]
-        public string Name { get; set;  }
+        public string Name { get; set; }
         // 排序
         [DoNotNotify]
         [TableParam("sort", "INT")]

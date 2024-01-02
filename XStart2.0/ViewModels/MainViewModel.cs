@@ -1,7 +1,7 @@
-﻿using XStart2._0.Services;
+﻿using PropertyChanged;
 using XStart2._0.Bean;
-using PropertyChanged;
 using XStart2._0.Const;
+using XStart2._0.Services;
 
 namespace XStart2._0.ViewModels {
     public class MainViewModel : BaseViewModel {
@@ -63,7 +63,7 @@ namespace XStart2._0.ViewModels {
 
         #region 窗口相关设置
         public int SelectedIndex { get; set; }
-        public double TabControlActualHeight { get; set;  }
+        public double TabControlActualHeight { get; set; }
         public bool TopMost { get; set; }
         // 音效开关
         public bool Audio { get; set; }

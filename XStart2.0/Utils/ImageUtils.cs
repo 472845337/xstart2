@@ -9,7 +9,7 @@ namespace XStart2._0.Utils {
         /// <param name="bitmap"></param>
         /// <returns></returns>
         public static BitmapImage BitmapToBitmapImage(System.Drawing.Bitmap bitmap) {
-            if(null == bitmap) {
+            if (null == bitmap) {
                 return null;
             }
             BitmapImage bitmapImage = new BitmapImage();

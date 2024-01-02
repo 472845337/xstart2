@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 using XStart2._0.Const;

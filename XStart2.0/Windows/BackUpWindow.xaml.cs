@@ -89,10 +89,10 @@ namespace XStart2._0.Windows {
                 }
             }
             if (backData.Types.Count == 0) {
-                System.Windows.MessageBox.Show("未选择任何备份数据！","错误");
+                System.Windows.MessageBox.Show("未选择任何备份数据！", "错误");
             } else {
                 // 将数据转成Json串
-                
+
                 string backupJson = JsonConvert.SerializeObject(backData, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                 string encryptBackupJson = AesUtils.EntryptContent(backupJson);
                 // 写入文件
@@ -139,7 +139,7 @@ namespace XStart2._0.Windows {
             return result;
         }
 
-        
+
 
         private BackData.BackColumn GetColumn(string typeSection, string columnSection, BackData backData) {
             BackData.BackColumn result = null;

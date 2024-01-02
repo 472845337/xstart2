@@ -3,9 +3,9 @@
         public static TypeService typeService;
         public static ColumnService columnService;
         public static ProjectService projectService;
-        
+
         public static TypeService GetTypeService() {
-            if(null == typeService) {
+            if (null == typeService) {
                 typeService = TypeService.Instance;
             }
             return typeService;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XStart2._0.Utils;
+﻿using XStart2._0.Utils;
 
 namespace XStart2._0.ViewModels {
     public class CalendarVM : BaseViewModel {

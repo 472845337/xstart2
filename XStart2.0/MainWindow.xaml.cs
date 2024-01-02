@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -1135,7 +1134,7 @@ namespace XStart2._0 {
         /// </summary>
         public void SaveFormLocation() {
             // 保存当前位置
-            SaveConfig(Constants.SECTION_LOCATION, Constants.KEY_LEFT,ref Configs.mainLeft, mainViewModel.MainLeft);
+            SaveConfig(Constants.SECTION_LOCATION, Constants.KEY_LEFT, ref Configs.mainLeft, mainViewModel.MainLeft);
             SaveConfig(Constants.SECTION_LOCATION, Constants.KEY_TOP, ref Configs.mainTop, mainViewModel.MainTop);
         }
         //计时执行的程序
@@ -1435,11 +1434,11 @@ namespace XStart2._0 {
             FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
             return element.Tag as Project;
         }
-        
+
         #region 用户头像和昵称修改
         private void User_Click(object sender, RoutedEventArgs e) {
-            UserWindow userWindow = new UserWindow(mainViewModel.Avatar, mainViewModel.NickName) { WindowStartupLocation = WindowStartupLocation.CenterScreen};
-            if(true == userWindow.ShowDialog()) {
+            UserWindow userWindow = new UserWindow(mainViewModel.Avatar, mainViewModel.NickName) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
+            if (true == userWindow.ShowDialog()) {
                 // 保存配置项
                 if (!mainViewModel.Avatar.Equals(userWindow.vm.Avatar)) {
                     XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_AVATAR, userWindow.vm.Avatar);

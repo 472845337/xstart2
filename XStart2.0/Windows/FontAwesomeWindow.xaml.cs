@@ -4,8 +4,8 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using XStart2._0.Const;
 using XStart2._0.Bean;
+using XStart2._0.Const;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
 using static XStart2._0.Utils.FontAwesome6;
@@ -65,7 +65,7 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void EnterKey(object sender, System.Windows.Input.KeyEventArgs e) {
-            if(System.Windows.Input.Key.Enter == e.Key) {
+            if (System.Windows.Input.Key.Enter == e.Key) {
                 System.Windows.Controls.TextBox textBox = sender as System.Windows.Controls.TextBox;
                 // 文本框需要先失去焦点，才可以获取到文本内容
                 textBox.MoveFocus(new System.Windows.Input.TraversalRequest(System.Windows.Input.FocusNavigationDirection.Next));
@@ -79,7 +79,7 @@ namespace XStart2._0.Windows {
         /// <param name="e"></param>
         private void QueryFontAwesome(object sender, RoutedEventArgs e) {
             if (!string.IsNullOrEmpty(VM.QueryFontAwesomeName)) {
-               
+
                 VM.QueryFontAwesomes.Clear();
                 VM.QueryFontAwesomeResult = string.Empty;
                 // 匹配名称
@@ -109,7 +109,7 @@ namespace XStart2._0.Windows {
                 }
                 VM.QueryFontAwesomeResult = $"查询到{VM.QueryFontAwesomes.Count}个图标";
                 // 展开查询选项
-                if(5 != FontAwesomeTabControl.SelectedIndex) {
+                if (5 != FontAwesomeTabControl.SelectedIndex) {
                     FontAwesomeTabControl.SelectedIndex = 5;
                 }
             }
@@ -120,7 +120,7 @@ namespace XStart2._0.Windows {
         /// </summary>
         /// <returns></returns>
         private List<FontAwesome> GetCustomFontAwesome() {
-            return new List<FontAwesome> { 
+            return new List<FontAwesome> {
                 new FontAwesome{Name="Comments", Value =  Comments }
                 , new FontAwesome{Name="Check", Value =  Check}
                 , new FontAwesome{Name="Xmark", Value =  Xmark},

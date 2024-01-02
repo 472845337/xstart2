@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using XStart2._0.ViewModels;
 
 namespace XStart2._0.Windows {
@@ -33,7 +21,7 @@ namespace XStart2._0.Windows {
         private void SelectAvatar_Click(object sender, RoutedEventArgs e) {
             // 选择图片文件
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "图片文件|*.jpg;*.jpeg;*.bmp;*.png;*.gif" };
-            if(System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
+            if (System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
                 string avatarFileName = ofd.FileName;
                 vm.Avatar = avatarFileName;
             }

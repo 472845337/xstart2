@@ -26,7 +26,7 @@ namespace XStart2._0.Windows {
 
         private void SelectAll_Click(object sender, RoutedEventArgs e) {
             CheckBox cb = sender as CheckBox;
-            foreach(Project p in AutoRunProjects) {
+            foreach (Project p in AutoRunProjects) {
                 p.AutoRun = cb.IsChecked;
             }
         }
@@ -39,7 +39,7 @@ namespace XStart2._0.Windows {
             } else {
                 MessageBox.Show("未选择启动项目", "警告");
             }
-            
+
         }
 
         private void Ignore_Click(object sender, RoutedEventArgs e) {

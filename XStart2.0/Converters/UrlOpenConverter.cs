@@ -10,7 +10,7 @@ namespace XStart2._0.Converters {
             }
             string checkValue = (string)value;
             string targetValue = (string)parameter;
-            if(checkValue.Equals(targetValue)) {
+            if (checkValue.Equals(targetValue)) {
                 return true;
             } else {
                 return false;

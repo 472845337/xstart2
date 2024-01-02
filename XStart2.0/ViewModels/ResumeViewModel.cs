@@ -29,7 +29,7 @@ namespace XStart2._0.ViewModels {
         }
 
         public void InitVmData(List<BackData.BackType> types) {
-            if(null == Items) {
+            if (null == Items) {
                 Items = new ObservableCollection<CheckBoxTreeViewModel>();
             } else {
                 Items.Clear();

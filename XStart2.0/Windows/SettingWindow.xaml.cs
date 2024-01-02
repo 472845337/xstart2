@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Windows;
 using XStart2._0.Const;
 using XStart2._0.Utils;
@@ -27,7 +26,7 @@ namespace XStart2._0.Windows {
         private void SettingWindow_Loaded(object sender, RoutedEventArgs e) {
             DataContext = settingVM;
         }
-        
+
         private void SaveSetting_Click(object sender, RoutedEventArgs e) {
             // 如果配置了自定义浏览器，则校验是否选中了浏览器地址
             if (Constants.URL_OPEN_CUSTOM.Equals(settingVM.UrlOpen) && string.IsNullOrEmpty(settingVM.UrlOpenCustomBrowser)) {
@@ -46,7 +45,7 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BackUp_Click(object sender, RoutedEventArgs e) {
-            BackUpWindow backUpWindow = new BackUpWindow() { WindowStartupLocation = WindowStartupLocation.CenterScreen};
+            BackUpWindow backUpWindow = new BackUpWindow() { WindowStartupLocation = WindowStartupLocation.CenterScreen };
             backUpWindow.ShowDialog();
         }
         /// <summary>

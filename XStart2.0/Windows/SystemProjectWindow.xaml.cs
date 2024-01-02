@@ -25,11 +25,12 @@ namespace XStart2._0.Windows {
         }
 
         public SystemProjectWindow(string typeSection, string columnSection, bool addMulti, int openPage) {
-            vm = new SystemProjectViewModel();
-            vm.TypeSection = typeSection;
-            vm.ColumnSection = columnSection;
-            vm.MultiAdd = addMulti;
-            vm.OpenPage = openPage;
+            vm = new SystemProjectViewModel {
+                TypeSection = typeSection,
+                ColumnSection = columnSection,
+                MultiAdd = addMulti,
+                OpenPage = openPage
+            };
 
             InitializeComponent();
             Loaded += Window_Loaded;
@@ -217,7 +218,7 @@ namespace XStart2._0.Windows {
                     name = $"清空{Path.GetFileName(Path.GetDirectoryName(dir))}目录";
                     arguments = Path.GetDirectoryName(dir);
                 } else {
-                    MessageBox.Show("未选择目录!","错误");
+                    MessageBox.Show("未选择目录!", "错误");
                     isAdd = false;
                 }
                 Topmost = true;
@@ -235,7 +236,7 @@ namespace XStart2._0.Windows {
             } else if (SystemProjectParam.MSTSC.Equals(path)) {
                 // 远程桌面
                 Topmost = false;
-                MstscWindow mstsc = new MstscWindow() {  Topmost = true };
+                MstscWindow mstsc = new MstscWindow() { Topmost = true };
                 if (true == mstsc.ShowDialog()) {
                     name = $"{mstsc.vm.Address}远程";
                     arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}";
@@ -247,8 +248,10 @@ namespace XStart2._0.Windows {
 
             if (isAdd) {
                 // 创建系统功能项目对象（不可自启动）
-                Project app = new Project { TypeSection = vm.TypeSection, ColumnSection = vm.ColumnSection, 
-                    Kind = Project.KIND_SYSTEM, Name = name, Path = path, IconPath = path, Arguments = arguments, CanAutoRun = false };
+                Project app = new Project {
+                    TypeSection = vm.TypeSection, ColumnSection = vm.ColumnSection,
+                    Kind = Project.KIND_SYSTEM, Name = name, Path = path, IconPath = path, Arguments = arguments, CanAutoRun = false
+                };
                 if (vm.MultiAdd) {
                     // 直接添加应用
                     XStartService.AddNewApp(app);

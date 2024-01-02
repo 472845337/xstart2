@@ -45,8 +45,7 @@ namespace XStart2._0.Helper {
         }
 
         private static void OnAttachPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e) {
-            PasswordBox passwordBox = sender as PasswordBox;
-            if (passwordBox == null) {
+            if (!(sender is PasswordBox passwordBox)) {
                 return;
             }
             if ((bool)e.OldValue) {

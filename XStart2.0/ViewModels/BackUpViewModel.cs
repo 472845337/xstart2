@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using XStart2._0.Bean;
 using XStart2._0.Services;
-using XStart2._0.View;
 
 namespace XStart2._0.ViewModels {
     class BackUpViewModel : BaseViewModel {

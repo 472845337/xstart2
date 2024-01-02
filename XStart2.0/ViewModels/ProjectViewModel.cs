@@ -2,7 +2,7 @@
 using XStart2._0.Bean;
 
 namespace XStart2._0.ViewModels {
-    public class ProjectViewModel : BaseViewModel{
+    public class ProjectViewModel : BaseViewModel {
         public string Title { get; set; }
         [DoNotNotify]
         public string TypeSection { get; set; }

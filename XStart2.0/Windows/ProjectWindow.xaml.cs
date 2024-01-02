@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using XStart2._0.Bean;
 using XStart2._0.Config;
 using XStart2._0.Const;
-using XStart2._0.Services;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
 
@@ -73,7 +63,7 @@ namespace XStart2._0.Windows {
             string errMsg = null;
             if (string.IsNullOrEmpty(vm.Name)) {
                 errMsg = "项目名称不能为空！";
-            }else if (string.IsNullOrEmpty(vm.Path)) {
+            } else if (string.IsNullOrEmpty(vm.Path)) {
                 errMsg = "项目路径不能为空！";
             }
             if (string.IsNullOrEmpty(errMsg)) {
@@ -185,7 +175,7 @@ namespace XStart2._0.Windows {
 
         private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "带图标文件|*.exe;*.ico" };
-            if(System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
+            if (System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
                 vm.IconPath = ofd.FileName;
                 vm.Project = new Project() { IconPath = ofd.FileName };
             }
@@ -197,7 +187,7 @@ namespace XStart2._0.Windows {
             string port = argumentArray[1];
             string account = argumentArray[2];
             string password = argumentArray[3];
-            MstscWindow mstsc = new MstscWindow(address, port, account, password){ Topmost = true };
+            MstscWindow mstsc = new MstscWindow(address, port, account, password) { Topmost = true };
             if (true == mstsc.ShowDialog()) {
                 vm.Arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}";
             }
