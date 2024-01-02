@@ -1202,6 +1202,10 @@ namespace XStart2._0 {
                 if (fromUint != toUint) {
                     isChange = true;
                 }
+            }else if(from is double fromDouble && to is double toDouble) {
+                if(fromDouble != toDouble) {
+                    isChange = true;
+                }
             }
             if (isChange) {
                 XStartIniUtils.IniWriteValue(Constants.SET_FILE, section, key, Convert.ToString(to));
