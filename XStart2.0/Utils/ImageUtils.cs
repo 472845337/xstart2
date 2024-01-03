@@ -23,5 +23,13 @@ namespace XStart2._0.Utils {
             }
             return bitmapImage;
         }
+
+        public static BitmapImage File2BitmapImage(string filename) {
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            image.UriSource = new System.Uri(@filename);
+            image.EndInit();
+            return image;
+        }
     }
 }

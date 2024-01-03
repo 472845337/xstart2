@@ -44,32 +44,7 @@ namespace XStart2._0.Config {
         public static bool lineInMuted = false;
         public static bool cdPlayerMuted = false;
 
-        public static BitmapImage ICON_ABOUT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/about.ico", true);
-        public static BitmapImage ICON_ADD = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/add.ico", true);
         public static BitmapImage ICON_APP = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/app.ico", true);
-        public static BitmapImage ICON_BUTTOM = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/buttom.ico", true);
-        public static BitmapImage ICON_CLEAR = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/clear.ico", true);
-        public static BitmapImage ICON_COPY = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/copy.ico", true);
-        public static BitmapImage ICON_CUT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/cut.ico", true);
-        public static BitmapImage ICON_DEFAULT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/default.ico", true);
-        public static BitmapImage ICON_DESKTOP = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/desktop.ico", true);
-        public static BitmapImage ICON_DOWN = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/down.ico", true);
-        public static BitmapImage ICON_FOLDER = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/folder.ico", true);
-        public static BitmapImage ICON_EXIT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/exit.ico", true);
-        public static BitmapImage ICON_LOCK = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/lock.ico", true);
-        public static BitmapImage ICON_PASTE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/paste.ico", true);
-        public static BitmapImage ICON_PREFERENCE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/preference.ico", true);
-        public static BitmapImage ICON_PROPERTY = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/property.ico", true);
-        public static BitmapImage ICON_REMOVE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/remove.ico", true);
-        public static BitmapImage ICON_SECURITY_ADD = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/security_add.ico", true);
-        public static BitmapImage ICON_SECURITY_DEL = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/security_del.ico", true);
-        public static BitmapImage ICON_SECURITY_EDIT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/security_edit.ico", true);
-        public static BitmapImage ICON_SHOW = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/show.ico", true);
-        public static BitmapImage ICON_THEME = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/theme.ico", true);
-        public static BitmapImage ICON_TOP = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/top.ico", true);
-        public static BitmapImage ICON_UP = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/up.ico", true);
-        public static BitmapImage ICON_UPDATE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/update.ico", true);
-        public static BitmapImage ICON_FRESH = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/Fresh.ico", true);
 
         public static BitmapImage ICON_MYCOMPUTER = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/MyComputer.ico", true);
         public static BitmapImage ICON_MYDOCUMENT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/MyDocument.ico", true);

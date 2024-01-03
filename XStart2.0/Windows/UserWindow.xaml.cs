@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Media.Imaging;
+using XStart2._0.Utils;
 using XStart2._0.ViewModels;
 
 namespace XStart2._0.Windows {
@@ -7,10 +9,10 @@ namespace XStart2._0.Windows {
     /// </summary>
     public partial class UserWindow : Window {
         public UserViewModel vm = new UserViewModel();
-        public UserWindow(string avatar, string nickName) {
+        public UserWindow(string avatarPath, string nickName) {
             InitializeComponent();
             Loaded += Window_Loaded;
-            vm.Avatar = avatar;
+            vm.AvatarPath = avatarPath;
             vm.NickName = nickName;
         }
 
@@ -23,7 +25,7 @@ namespace XStart2._0.Windows {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "图片文件|*.jpg;*.jpeg;*.bmp;*.png;*.gif" };
             if (System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
                 string avatarFileName = ofd.FileName;
-                vm.Avatar = avatarFileName;
+                vm.AvatarPath = avatarFileName;
             }
         }
 

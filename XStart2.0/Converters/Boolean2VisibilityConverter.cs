@@ -11,7 +11,7 @@ namespace XStart2._0.Converters {
             }
             bool boolValue = (bool)value;
 
-            return boolValue ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+            return boolValue ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {

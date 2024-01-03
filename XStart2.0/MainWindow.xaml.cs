@@ -32,8 +32,6 @@ namespace XStart2._0 {
         public ProjectService projectService = ServiceFactory.GetProjectService();
         // 模型
         readonly MainViewModel mainViewModel = new MainViewModel();
-        // 
-        System.Windows.Forms.NotifyIcon notifyIcon = null;
         public MainWindow() {
             InitializeComponent();
             Configs.Handler = new System.Windows.Interop.WindowInteropHelper(this).Handle;
@@ -59,14 +57,17 @@ namespace XStart2._0 {
         /// <param name="param"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             #region 用户头像和昵称
-            string avatar = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_AVATAR);
+            string avatarPath = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_AVATAR);
             string nickName = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_NICKNAME);
-            if (!string.IsNullOrEmpty(avatar)) {
-                mainViewModel.Avatar = avatar;
+            if (!string.IsNullOrEmpty(avatarPath)) {
+                if (!File.Exists(avatarPath)) {
+                    avatarPath = Configs.AppStartPath + Constants.AVATAR_PATH_NOTEXIST;
+                }
+            } else {
+                avatarPath = Configs.AppStartPath + Constants.AVATAR_PATH_DEFAULT;
             }
-            if (!string.IsNullOrEmpty(nickName)) {
-                mainViewModel.NickName = nickName;
-            }
+            mainViewModel.AvatarPath = avatarPath;
+            mainViewModel.NickName = string.IsNullOrEmpty(nickName) ? Constants.NICKNAME_DEFAULT : nickName;
             #endregion
 
             #region 窗口相关加载，尺寸，位置，置顶
@@ -236,10 +237,10 @@ namespace XStart2._0 {
                 TaskCompletionSource<object> tc = new TaskCompletionSource<object>();
                 // 新线程
                 Dispatcher.Invoke(new Action(delegate {
-                    AutoRunWindow autoRunForm = new AutoRunWindow { AutoRunProjects = autoRunProjects, Topmost = true };
-                    if (true == autoRunForm.ShowDialog()) {
+                    AutoRunWindow autoRunWindow = new AutoRunWindow { AutoRunProjects = autoRunProjects, Topmost = true };
+                    if (true == autoRunWindow.ShowDialog()) {
                         // 启动项目
-                        foreach (Project project in autoRunForm.Projects) {
+                        foreach (Project project in autoRunWindow.Projects) {
                             // 判断是否启动过
                             List<Process> existList = ProcessUtils.GetProcessByName(ProcessUtils.GetProcessName(project.Path), project.Path);
                             if (null == existList || existList.Count == 0) {
@@ -252,27 +253,24 @@ namespace XStart2._0 {
                                 NotifyUtils.ShowNotification($"项目【{project.Name}】已存在，取消自启动！");
                             }
                         }
-                    } else {
-                        if (autoRunForm.IsExit) {
-                            Close();
-                        }
                     }
+                    autoRunWindow.Close();
                 }));
             }
             // 任务栏图标
-            notifyIcon = new System.Windows.Forms.NotifyIcon();
-            System.Windows.Forms.NotifyIcon icon = new System.Windows.Forms.NotifyIcon();
-            Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Files/xstart2.ico")).Stream;
+            //notifyIcon = new System.Windows.Forms.NotifyIcon();
+            //System.Windows.Forms.NotifyIcon icon = new System.Windows.Forms.NotifyIcon();
+            //Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Files/xstart2.ico")).Stream;
 
-            notifyIcon.Icon = new System.Drawing.Icon(iconStream);
-            notifyIcon.Visible = true;
-            notifyIcon.DoubleClick += MainWindow_Show;
+            //notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+            //notifyIcon.Visible = true;
+            //notifyIcon.DoubleClick += MainWindow_Show;
 
-            System.Windows.Forms.MenuItem showWindowMenuItem = new System.Windows.Forms.MenuItem("显示窗口");
-            showWindowMenuItem.Click += MainWindow_Show;
-            System.Windows.Forms.MenuItem closeWindowMenuItem = new System.Windows.Forms.MenuItem("退出");
-            closeWindowMenuItem.Click += WindowCloseMenu_Click;
-            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[] { showWindowMenuItem, closeWindowMenuItem });
+            //System.Windows.Forms.MenuItem showWindowMenuItem = new System.Windows.Forms.MenuItem("显示窗口") ;
+            //showWindowMenuItem.Click += MainWindow_Show;
+            //System.Windows.Forms.MenuItem closeWindowMenuItem = new System.Windows.Forms.MenuItem("退出");
+            //closeWindowMenuItem.Click += WindowCloseMenu_Click;
+            //notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[] { showWindowMenuItem, closeWindowMenuItem });
             Configs.inited = true;
             IsAllShow = true;
         }
@@ -308,6 +306,16 @@ namespace XStart2._0 {
                 SaveFormSize();
                 SaveFormLocation();
             }
+            // 自启动
+            Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (mainViewModel.AutoRun) {
+                registryKey.SetValue(Constants.APP_NAME, System.Reflection.Assembly.GetExecutingAssembly().Location, Microsoft.Win32.RegistryValueKind.String);
+            } else {
+                registryKey.DeleteValue(Constants.APP_NAME, false);
+            }
+            registryKey.Dispose();
+            // 剪切板内容清除
+            Clipboard.Clear();
             // 配置保存
             SaveSetting();
             if (Configs.exitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
@@ -318,21 +326,19 @@ namespace XStart2._0 {
                 Configs.Dispose();
                 AudioUtils.Dispose();
                 DataBase.SqLiteFactory.CloseAllSqLite();
+                AutoHideTimer.Stop();
+                currentDateTimer.Stop();
+                currentTimer.Stop();
                 e.Cancel = false;
             }
 
         }
 
+        private void WindowShowMenu_Click(object sender, RoutedEventArgs e) {
+            MainWindow_Show(sender, null);
+        }
         private void WindowCloseMenu_Click(object sender, EventArgs e) {
             Close();
-        }
-
-        private void Window_Close(object sender, RoutedEventArgs e) {
-            Close();
-        }
-
-        private void Window_Closed(object sender, EventArgs e) {
-
         }
 
         /// <summary>
@@ -472,6 +478,7 @@ namespace XStart2._0 {
                 mainViewModel.UrlOpenCustomBrowser = settingVM.UrlOpenCustomBrowser;
                 SaveSetting();
             }
+            settingWindow.Close();
             if (mainViewModel.TopMost) {
                 Topmost = true;
             }
@@ -800,44 +807,46 @@ namespace XStart2._0 {
 
         private void AddSecurity<T>(T t) where T : TableData {
             // 添加口令
-            AddSecurityWindow window = new AddSecurityWindow() {
+            AddSecurityWindow addSecurityWindow = new AddSecurityWindow() {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 VM = new SecurityVM() { Title = "添加口令", Section = t.Section, Kind = Constants.TYPE, Operate = Constants.OPERATE_CREATE }
             };
-            if (true == window.ShowDialog()) {
+            if (true == addSecurityWindow.ShowDialog()) {
                 // 保存口令
                 T newT = Activator.CreateInstance<T>();
                 newT.Section = t.Section;
-                newT.Password = window.VM.Security;
+                newT.Password = addSecurityWindow.VM.Security;
                 new TableService<T>().Update(newT);
                 // 更新数据
-                t.Password = window.VM.Security;
+                t.Password = addSecurityWindow.VM.Security;
                 t.HasPassword = true;
                 t.Locked = true;
                 t.RememberSecurity = false;
                 NotifyUtils.ShowNotification("口令添加成功！");
             }
+            addSecurityWindow.Close();
         }
         private void UpdateSecurity<T>(T t) where T : TableData {
             if (Topmost) {
                 Topmost = false;
             }
-            UpdateSecurityWindow window = new UpdateSecurityWindow() {
+            UpdateSecurityWindow updateSecurityWindow = new UpdateSecurityWindow() {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 VM = new SecurityVM() { Title = "修改口令", Section = t.Section, CurSecurity = t.Password, Kind = Constants.TYPE, Operate = Constants.OPERATE_UPDATE }
             };
-            if (true == window.ShowDialog()) {
+            if (true == updateSecurityWindow.ShowDialog()) {
                 T newT = Activator.CreateInstance<T>();
                 newT.Section = t.Section;
-                newT.Password = window.VM.Security;
+                newT.Password = updateSecurityWindow.VM.Security;
                 // 保存口令
                 new TableService<T>().Update(newT);
                 // 更新数据
-                t.Password = window.VM.Security;
+                t.Password = updateSecurityWindow.VM.Security;
                 t.HasPassword = true;
                 t.Locked = true;
                 NotifyUtils.ShowNotification("口令修改成功！");
             }
+            updateSecurityWindow.Close();
             if (mainViewModel.TopMost) {
                 Topmost = true;
             }
@@ -847,11 +856,11 @@ namespace XStart2._0 {
             if (Topmost) {
                 Topmost = false;
             }
-            RemoveSecurityWindow window = new RemoveSecurityWindow() {
+            RemoveSecurityWindow removeSecurityWindow = new RemoveSecurityWindow() {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 VM = new SecurityVM() { Title = "移除口令", Section = t.Section, CurSecurity = t.Password, Kind = Constants.TYPE, Operate = Constants.OPERATE_REMOVE }
             };
-            if (true == window.ShowDialog()) {
+            if (true == removeSecurityWindow.ShowDialog()) {
                 T newT = Activator.CreateInstance<T>();
                 newT.Section = t.Section;
                 newT.Password = string.Empty;
@@ -863,6 +872,7 @@ namespace XStart2._0 {
                 t.Locked = false;
                 NotifyUtils.ShowNotification("口令移除成功！");
             }
+            removeSecurityWindow.Close();
             if (mainViewModel.TopMost) {
                 Topmost = true;
             }
@@ -942,23 +952,31 @@ namespace XStart2._0 {
                 XStartService.AddNewApp(projectWindow.Project);
                 NotifyUtils.ShowNotification($"添加[{projectWindow.Project.Name}]成功！");
             }
+            projectWindow.Close();
         }
 
         private void ClearProject_Click(object sender, RoutedEventArgs e) {
             // 当前栏目
             FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
 
-            object tag = element.Tag;
+
             string typeSection = string.Empty;
             string columnSection = string.Empty;
-            if (tag is Column column) {
-                // 项目放置面板
-                typeSection = column.TypeSection;
-                columnSection = column.Section;
-            } else if (tag is Project project) {
-                typeSection = project.TypeSection;
-                columnSection = project.ColumnSection;
+            if (element is Expander columnExpander) {
+                typeSection = columnExpander.GetValue(ElementParamHelper.TypeSectionProperty) as string;
+                columnSection = columnExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
+            } else {
+                object tag = element.Tag;
+                if (tag is Column column) {
+                    // 项目放置面板
+                    typeSection = column.TypeSection;
+                    columnSection = column.Section;
+                } else if (tag is Project project) {
+                    typeSection = project.TypeSection;
+                    columnSection = project.ColumnSection;
+                }
             }
+
             if (mainViewModel.Types[typeSection].ColumnDic[columnSection].ProjectDic.Count > 0) {
                 if (MessageBoxResult.OK == MessageBox.Show("确认清空栏目所有项目？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                     RemoveColumnProjects(typeSection, columnSection);
@@ -984,6 +1002,7 @@ namespace XStart2._0 {
                     projectService.Update(projectWindow.Project);
                     NotifyUtils.ShowNotification($"修改[{projectWindow.Project.Name}]成功！");
                 }
+                projectWindow.Close();
             } else {
                 MessageBox.Show("系统错误！");
             }
@@ -1118,7 +1137,16 @@ namespace XStart2._0 {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ShowAbout(object sender, RoutedEventArgs e) {
-            NotifyUtils.ShowNotification("X启动2.0版", Colors.LightBlue, "关于");
+            System.Text.StringBuilder aboutSb = new System.Text.StringBuilder();
+            //读取文件内容
+            using (FileStream fs = File.OpenRead(Configs.AppStartPath + Constants.ABOUT_FILE)) {
+                byte[] b = new byte[1024];
+                System.Text.UTF8Encoding temp = new System.Text.UTF8Encoding(true);
+                while (fs.Read(b, 0, b.Length) > 0) {
+                    aboutSb.Append(temp.GetString(b));
+                }
+            }
+            NotifyUtils.ShowNotification(aboutSb.ToString(), Colors.LightBlue, "关于");
             e.Handled = true;
         }
         /// <summary>
@@ -1202,8 +1230,8 @@ namespace XStart2._0 {
                 if (fromUint != toUint) {
                     isChange = true;
                 }
-            }else if(from is double fromDouble && to is double toDouble) {
-                if(fromDouble != toDouble) {
+            } else if (from is double fromDouble && to is double toDouble) {
+                if (fromDouble != toDouble) {
                     isChange = true;
                 }
             }
@@ -1356,6 +1384,11 @@ namespace XStart2._0 {
         }
         #endregion
 
+        private void FreshRdp_Click(object sender, RoutedEventArgs e) {
+            Project project = GetProjectByMenu(sender);
+            RdpUtils.FreshRdp(project, Constants.OPERATE_UPDATE);
+            NotifyUtils.ShowNotification("RDP文件刷新成功！");
+        }
         private void Property_Click(object sender, RoutedEventArgs e) {
             Project project = GetProjectByMenu(sender);
             if (null != project) {
@@ -1441,19 +1474,99 @@ namespace XStart2._0 {
 
         #region 用户头像和昵称修改
         private void User_Click(object sender, RoutedEventArgs e) {
-            UserWindow userWindow = new UserWindow(mainViewModel.Avatar, mainViewModel.NickName) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
+            UserWindow userWindow = new UserWindow(mainViewModel.AvatarPath, mainViewModel.NickName) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
             if (true == userWindow.ShowDialog()) {
                 // 保存配置项
-                if (!mainViewModel.Avatar.Equals(userWindow.vm.Avatar)) {
-                    XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_AVATAR, userWindow.vm.Avatar);
-                    mainViewModel.Avatar = userWindow.vm.Avatar;
+                if (!mainViewModel.AvatarPath.Equals(userWindow.vm.AvatarPath)) {
+                    XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_AVATAR, userWindow.vm.AvatarPath);
+                    mainViewModel.AvatarPath = userWindow.vm.AvatarPath;
                 }
                 if (!mainViewModel.NickName.Equals(userWindow.vm.NickName)) {
                     XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_NICKNAME, userWindow.vm.NickName);
                     mainViewModel.NickName = userWindow.vm.NickName;
                 }
             }
+            userWindow.Close();
         }
+        #endregion
+
+        #region 项目拖拽
+        // 拖拽到类别上自动打开该类别
+        private void Type_DragEnter(object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+                e.Effects = DragDropEffects.All;
+                DockPanel typePanel = sender as DockPanel;
+                string typeSection = typePanel.Tag as string;
+                int index = mainViewModel.Types.IndexOf(typeSection);
+                mainViewModel.SelectedIndex = index;
+            } else {
+                e.Effects = DragDropEffects.None;
+            }
+            e.Handled = true;
+        }
+
+        private void Project_DragDrop(object sender, DragEventArgs e) {
+            Array array = (Array)e.Data.GetData(DataFormats.FileDrop);
+            if (array.Length > 5) {
+                MessageBox.Show("最多拖拽5个项目！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                e.Effects = DragDropEffects.None;
+                return;
+            }
+            FrameworkElement ele = sender as FrameworkElement;
+            string typeSection, columnSection;
+
+            if (ele is Expander columnExpander) {
+                typeSection = columnExpander.GetValue(ElementParamHelper.TypeSectionProperty) as string;
+                columnSection = columnExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
+            } else if (ele is ScrollViewer projectScrollViewer) {
+                Column column = projectScrollViewer.Tag as Column;
+                typeSection = column.TypeSection;
+                columnSection = column.Section;
+            } else {
+                MessageBox.Show("不支持的拖拽！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                return;
+            }
+            int dragCount = 0;
+            // 遍历拖进来的所有数据生成
+            foreach (object o in array) {
+                string path = o.ToString();
+                Project project = new Project();
+                // 如果是.lnk文件，读取里面的数据
+                string ext = Path.GetExtension(path);
+                if (ext.ToLower().Equals(".lnk")) {
+                    // 快捷方式的文件处理
+                    FileUtils.ShortCutUtil shortCut = FileUtils.ReadShortCut(path);
+                    project.Kind = XStartService.KindOfPath(shortCut.TargetPath);
+                    project.Path = shortCut.TargetPath;
+                    string iconLocation = shortCut.IconLocation;
+                    if (string.IsNullOrEmpty(iconLocation)) {
+                        project.IconPath = shortCut.TargetPath;
+                    } else {
+                        string[] iconArray = iconLocation.Split(',');
+                        project.IconPath = iconArray[0];
+                        project.IconIndex = Convert.ToInt32(iconArray[1]);
+                    }
+                    project.Name = Path.GetFileName(shortCut.FullName).Replace(".lnk", string.Empty).Replace(".LNK", string.Empty);
+                    project.RunStartPath = shortCut.WorkingDirectory;
+                    project.Remark = shortCut.Description;
+                    project.HotKey = shortCut.Hotkey;
+                } else {
+                    project.Kind = XStartService.KindOfPath(path);
+                    project.Path = path;
+                    project.IconPath = path;
+                    project.IconIndex = 0;
+                    project.Name = Path.GetFileNameWithoutExtension(path);
+                    project.RunStartPath = Path.GetDirectoryName(path);
+                }
+                project.TypeSection = typeSection;
+                project.ColumnSection = columnSection;
+                XStartService.AddNewApp(project);
+                dragCount++;
+            }
+            NotifyUtils.ShowNotification($"成功添加【{dragCount}】个项目！");
+            e.Handled = true;
+        }
+
         #endregion
     }
 }

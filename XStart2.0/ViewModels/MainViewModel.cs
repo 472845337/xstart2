@@ -1,7 +1,9 @@
 ﻿using PropertyChanged;
 using XStart2._0.Bean;
+using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Services;
+using XStart2._0.Utils;
 
 namespace XStart2._0.ViewModels {
     public class MainViewModel : BaseViewModel {
@@ -12,14 +14,17 @@ namespace XStart2._0.ViewModels {
         public MainViewModel() {
             MainHeight = 800;
             MainWidth = 450;
-            // 计算初始化信息
-            Avatar = "/Files/Images/Avatar/DefaultUser.png";
-            NickName = "昵称";
         }
 
         #region 用户数据
+        [DoNotNotify]
+        private string avatarPath;
+        public string AvatarPath { get=>avatarPath; set { avatarPath = value; SetAvatar(); } }
+        private void SetAvatar() {
+            Avatar = ImageUtils.File2BitmapImage(avatarPath);
+        }
         // 头像
-        public string Avatar { get; set; }
+        public System.Windows.Media.Imaging.BitmapImage Avatar { get; set; }
         // 昵称
         public string NickName { get; set; }
         #endregion
@@ -53,10 +58,10 @@ namespace XStart2._0.ViewModels {
         public void ChangeTypeTab() {
             if (TypeTabExpanded) {
                 TypeWidth = Constants.TYPE_EXPAND_WIDTH;
-                TypeTabToggleIcon = Utils.FontAwesome6.Outdent;
+                TypeTabToggleIcon = FontAwesome6.Outdent;
             } else {
                 TypeWidth = Constants.TYPE_COLLAPSE_WIDTH;
-                TypeTabToggleIcon = Utils.FontAwesome6.Indent;
+                TypeTabToggleIcon = FontAwesome6.Indent;
             }
         }
         #endregion

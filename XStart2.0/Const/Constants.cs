@@ -1,38 +1,13 @@
 ﻿namespace XStart2._0.Const {
     class Constants {
-        public const string APP_NAME = "XStart_APP";
-
-        public const string EVENT_CLICK = "Click";
-        public const string EVENT_DOUBLE_CLICK = "DoubleClick";
+        public const string APP_NAME = "XStart2_APP";
 
         public const string URL_OPEN_DEFAULT = "UrlDefault";// 系统默认浏览器打开
         public const string URL_OPEN_EDGE = "UrlEdge";// 微软浏览器打开
         public const string URL_OPEN_CUSTOM = "UrlCustom";// 自定义浏览器打开
 
-        public const string TYPE_SECURITY_PANEL = "TypeSecurityPanel";// 该类别加密面板
-        public const string COLUMN_PANEL = "ColumnPanel";// 放置栏目的面板
-        public const string COLUMN_PANEL_MENU = "ColumnPanelMenu";
-
-        public const string COLUMN_SECURITY_PANEL = "ColumnSecurityPanel";// 栏目加密面板
-        public const string COLUMN_TITLE_PANEL = "ColumnTitlePanel";// 每个栏目一个小面板
-        public const string COLUMN_TITLE_PANEL_MENU = "ColumnTitlePanelMenu";
-        public const string APP_PANEL = "AppPanel";// 放置应用的面板
-        public const string APP_PANEL_MENU = "AppPanelMenu";// 放置应用的面板
-
-        public const string APP_BUTTON_PANEL = "AppButtonPanel";// 按钮面板
-        public const string APP_BUTTON = "AppButton";// 应用按钮
-        public const string APP_AUTORUN_BULB = "AppAutoRunBulb";// 应用自启动泡
-        public const string APP_BUTTON_MENU = "AppButtonMenu";// 应用按钮菜单
-
         public const string CLICK_TYPE_SINGLE = "1";// 单击
         public const string CLICK_TYPE_DOUBLE = "2";// 双击
-
-
-        public const string COLUMN_FRESH_HEIGHT = "height";
-        public const string COLUMN_FRESH_WIDTH = "width";
-
-        public const string FRESH_MENU = "menu";
-        public const string FRESH_SORT = "sort";
 
         public const string ABOUT_FILE = "Files/Doc/about.txt";
         public const string ICON_URL = "Files/Icons/url.ico";
@@ -109,5 +84,9 @@
         public const string MESSAGE_BOX_TITLE_WARN = "警告";
         public const string MESSAGE_BOX_TITLE_INFO = "提醒";
 
+        public const string AVATAR_PATH_DEFAULT = "Files/Images/Avatar/DefaultUser.png";
+        public const string AVATAR_PATH_NOTEXIST = "Files/Images/Avatar/NotExist.png";
+
+        public const string NICKNAME_DEFAULT = "我的昵称";
     }
 }

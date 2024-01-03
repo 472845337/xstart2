@@ -55,6 +55,7 @@ namespace XStart2._0.Bean {
             }
         }
 
+        [OnChangedMethod(nameof(SetIsMstsc))]
         [TableParam("path", "VARCHAR")]
         public string Path { get; set; }// 应用路径或链接url
         [TableParam("icon_path", "VARCHAR")]
@@ -76,6 +77,7 @@ namespace XStart2._0.Bean {
         // 系统应用不可随应用启动
         public bool CanAutoRun { get; set; } = true;
         public bool PropertyEnabled { get; set; } = true;
+        public bool IsMstsc { get; set; } = false;
         [DoNotNotify]
         public string Operate { get; set; }
         public string ToolTipContent {
@@ -92,6 +94,10 @@ namespace XStart2._0.Bean {
 
         public void InitIcon() {
             Icon = XStartService.GetIconImage(Kind, Path, IconPath);
+        }
+
+        private void SetIsMstsc() {
+            IsMstsc = SystemProjectParam.MSTSC.Equals(Path);
         }
     }
 }
