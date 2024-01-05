@@ -15,10 +15,6 @@ namespace XStart2._0.Windows {
     public partial class ProjectWindow : Window {
         readonly ProjectViewModel vm = new ProjectViewModel();
         public Project Project { get; set; }
-        public ProjectWindow() {
-            InitializeComponent();
-            Loaded += Window_Loaded;
-        }
 
         public ProjectWindow(string title, string typeSection, string columnSection) {
             InitializeComponent();
@@ -40,15 +36,7 @@ namespace XStart2._0.Windows {
                 vm.RunStartPath = Project.RunStartPath;
                 vm.HotKey = Project.HotKey;
                 vm.Remark = Project.Remark;
-                if (Project.Path.StartsWith("#")) {
-                    // 系统功能路径不可以变更
-                    vm.PathReadonly = true;
-                    if (SystemProjectParam.MSTSC.Equals(Project.Path)) {
-                        // 远程桌面应用
-                        vm.ArgumentsReadonly = true;
-                        ArgumentsTextBox.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(MstscProject_ArgumentsTextBoxMouseLeftButtonUp), true);
-                    }
-                }
+                SystemPathSpecialArguments(vm.Path);
             } else {
                 // 新增的时候不会传对象过来
                 Project = new Project {
@@ -57,6 +45,26 @@ namespace XStart2._0.Windows {
                 };
             }
             DataContext = vm;
+        }
+
+        private void SystemPathSpecialArguments(string path) {
+            if (path.StartsWith("#")) {
+                // 系统功能路径不可以变更
+                vm.PathReadonly = true;
+                if (SystemProjectParam.CLEAR_SOME_DIRECTORY.Equals(path)) {
+                    // 清空目录
+                    vm.ArgumentsReadonly = true;
+                    ArgumentsTextBox.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(ClearSomeDirectory_ArgumentsTextBoxMouseLeftButtonUp), true);
+                } else if (SystemProjectParam.MSTSC.Equals(path)) {
+                    // 远程桌面应用
+                    vm.ArgumentsReadonly = true;
+                    ArgumentsTextBox.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(MstscProject_ArgumentsTextBoxMouseLeftButtonUp), true);
+                } else if (SystemProjectParam.CONTROL_APP_MEMORY.Equals(path)) {
+                    // 控制应用内存
+                    vm.ArgumentsReadonly = true;
+                    ArgumentsTextBox.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(ControlAppMemoryProject_ArgumentsTextBoxMouseLeftButtonUp), true);
+                }
+            }
         }
 
         private void ConfirmBtn_Click(object sender, RoutedEventArgs e) {
@@ -162,7 +170,8 @@ namespace XStart2._0.Windows {
                 vm.HotKey = spw.Project.HotKey;
                 vm.Remark = spw.Project.Remark;
                 Project = spw.Project;
-            }
+                SystemPathSpecialArguments(vm.Path);
+             }
             if (Configs.systemAppAddMulti != spw.MultiAdd) {
                 Configs.systemAppAddMulti = spw.MultiAdd;
                 IniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_ADD_MULTI, Convert.ToString(spw.MultiAdd));
@@ -182,6 +191,16 @@ namespace XStart2._0.Windows {
             }
         }
 
+        private void ClearSomeDirectory_ArgumentsTextBoxMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            string directory = vm.Arguments;
+            using System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog() { SelectedPath = directory};
+            if (System.Windows.Forms.DialogResult.OK == fbd.ShowDialog()) {
+                string dir = fbd.SelectedPath;
+                vm.Name = $"清空{Path.GetFileName(Path.GetDirectoryName(dir))}目录";
+                vm.Arguments = Path.GetDirectoryName(dir);
+            }
+        }
+
         private void MstscProject_ArgumentsTextBoxMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             string[] argumentArray = vm.Arguments.Split(Constants.SPLIT_CHAR);
             string address = argumentArray[0];
@@ -193,6 +212,19 @@ namespace XStart2._0.Windows {
                 vm.Arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}";
             }
             mstsc.Close();
+        }
+
+        private void ControlAppMemoryProject_ArgumentsTextBoxMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            string[] argumentArray = vm.Arguments.Split(Constants.SPLIT_CHAR);
+            string path = argumentArray[0];
+            string minMemory = argumentArray[1];
+            string maxMemory = argumentArray[2];
+            ControlAppMemoryWindow cam = new ControlAppMemoryWindow(path, minMemory, maxMemory) { Topmost = true };
+            if (true == cam.ShowDialog()) {
+                vm.Name = $"控制{cam.vm.AppName}内存";
+                vm.Arguments = $"{cam.vm.AppName}{Constants.SPLIT_CHAR}{cam.vm.MinMemory}{Constants.SPLIT_CHAR}{cam.vm.MaxMemory}";
+            }
+            cam.Close();
         }
     }
 }

@@ -20,9 +20,6 @@ namespace XStart2._0.Windows {
         public bool MultiAdd { get; set; }
         public int OpenPage { get; set; }
         public Project Project { get; set; }
-        public SystemProjectWindow() {
-            InitializeComponent();
-        }
 
         public SystemProjectWindow(string typeSection, string columnSection, bool addMulti, int openPage) {
             vm = new SystemProjectViewModel {
@@ -225,10 +222,10 @@ namespace XStart2._0.Windows {
             } else if (SystemProjectParam.CONTROL_APP_MEMORY.Equals(path)) {
                 Topmost = false;
                 // 控制程序内存
-                ControlAppMemory cam = new ControlAppMemory() { Topmost = true };
+                ControlAppMemoryWindow cam = new ControlAppMemoryWindow() { Topmost = true };
                 if (true == cam.ShowDialog()) {
-                    name = $"控制{cam.AppName}内存";
-                    arguments = $"{cam.AppName}#{cam.MinMemory}#{cam.MaxMemory}";
+                    name = $"控制{cam.vm.AppName}内存";
+                    arguments = $"{cam.vm.AppName}{Constants.SPLIT_CHAR}{cam.vm.MinMemory}{Constants.SPLIT_CHAR}{cam.vm.MaxMemory}";
                 } else {
                     isAdd = false;
                 }

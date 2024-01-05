@@ -80,7 +80,6 @@ namespace XStart2._0.Config {
         public static BitmapImage ICON_VOLUME_REDUCE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/VolumeReduce.ico", true);
         public static BitmapImage ICON_SILENT_TOGGLE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/VolumeSilent.ico", true);
 
-
         public static BitmapImage ICON_ADD_OR_REMOVE_APP = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/AddOrRemoveApp.ico", true);
         public static BitmapImage ICON_INTERNET_OPTIONS = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/InternetOptions.ico", true);
         public static BitmapImage ICON_USER_ACCOUNT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/UserAccount.ico", true);
@@ -183,8 +182,8 @@ namespace XStart2._0.Config {
         public static void Dispose() {
             BindingFlags flag = BindingFlags.Static | BindingFlags.Public;
             System.Type configsType = typeof(Configs);
-            var infos = configsType.GetFields(flag);
-            foreach (var info in infos) {
+            FieldInfo[] infos = configsType.GetFields(flag);
+            foreach (FieldInfo info in infos) {
                 if ("Bitmap".Equals(info.FieldType.Name)) {
                     BitmapImage imageInfo = (BitmapImage)info.GetValue(new Configs());
                     if (null != imageInfo) {

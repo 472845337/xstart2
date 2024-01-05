@@ -20,9 +20,8 @@ namespace XStart2._0 {
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
     public partial class MainWindow : Window {
-        private readonly System.Windows.Threading.DispatcherTimer AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
-        private static bool IsAllShow = true;
         // 时钟定时器
+        private readonly System.Windows.Threading.DispatcherTimer AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
         private readonly System.Windows.Threading.DispatcherTimer currentTimer = new System.Windows.Threading.DispatcherTimer();
         private readonly System.Windows.Threading.DispatcherTimer currentDateTimer = new System.Windows.Threading.DispatcherTimer();
         // 数据服务
@@ -31,6 +30,7 @@ namespace XStart2._0 {
         public ProjectService projectService = ServiceFactory.GetProjectService();
         // 模型
         readonly MainViewModel mainViewModel = new MainViewModel();
+        private static bool IsAllShow = true;
         System.Windows.Forms.NotifyIcon notifyIcon = null;
         public MainWindow() {
             InitializeComponent();

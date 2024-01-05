@@ -63,15 +63,15 @@ namespace XStart2._0.Utils {
                             }
                             break;
                         case CONTROL_APP_MEMORY: {
-                                string[] arguments = project.Arguments.Split('#');
-                                int minSize = arguments.Length > 1 ? Convert.ToInt32(arguments[1]) : 0;
-                                int maxSize = arguments.Length > 1 ? Convert.ToInt32(arguments[2]) : Convert.ToInt32(arguments[1]);
+                                string[] arguments = project.Arguments.Split(Constants.SPLIT_CHAR);
+                                int minMemory = arguments.Length > 1 ? Convert.ToInt32(arguments[1]) : 0;
+                                int maxMemory = arguments.Length > 1 ? Convert.ToInt32(arguments[2]) : Convert.ToInt32(arguments[1]);
                                 Process[] processes = Process.GetProcessesByName(arguments[0]);
                                 foreach (Process process in processes) {
                                     try {
-                                        DllUtils.SetProcessWorkingSetSize(process.MainWindowHandle, minSize * 1024 * 1024, maxSize * 104 * 1024);
-                                    } catch (Exception) {
-
+                                        DllUtils.SetProcessWorkingSetSize(process.MainWindowHandle, minMemory * 1024 * 1024, maxMemory * 1024 * 1024);
+                                    } catch (Exception ex) {
+                                        System.Windows.MessageBox.Show(ex.Message, Constants.MESSAGE_BOX_TITLE_ERROR);
                                     }
                                 }
                             }
@@ -81,8 +81,8 @@ namespace XStart2._0.Utils {
                                 foreach (Process process in processes) {
                                     try {
                                         process.Kill();
-                                    } catch (Exception) {
-
+                                    } catch (Exception ex) {
+                                        System.Windows.MessageBox.Show(ex.Message, Constants.MESSAGE_BOX_TITLE_ERROR);
                                     }
                                 }
                             }

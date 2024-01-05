@@ -149,6 +149,7 @@
     <Compile Include="Utils\WinUtils.cs" />
     <Compile Include="Utils\XStartIniUtils.cs" />
     <Compile Include="ViewModels\AutoRunViewModel.cs" />
+    <Compile Include="ViewModels\ControlAppMemoryViewModel.cs" />
     <Compile Include="ViewModels\MstscViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\ResumeViewModel.cs" />
@@ -173,8 +174,8 @@
     <Compile Include="Windows\UserWindow.xaml.cs">
       <DependentUpon>UserWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ControlAppMemory.xaml.cs">
-      <DependentUpon>ControlAppMemory.xaml</DependentUpon>
+    <Compile Include="Windows\ControlAppMemoryWindow.xaml.cs">
+      <DependentUpon>ControlAppMemoryWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MstscWindow.xaml.cs">
       <DependentUpon>MstscWindow.xaml</DependentUpon>
@@ -261,7 +262,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\ControlAppMemory.xaml">
+    <Page Include="Windows\ControlAppMemoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

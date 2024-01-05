@@ -1,5 +1,5 @@
 ﻿namespace XStart2._0.Utils {
-    class FontAwesome4 {
+    public class FontAwesome4 {
         public const string Glass = "\uf000";
         public const string Music = "\uf001";
         public const string Search = "\uf002";
