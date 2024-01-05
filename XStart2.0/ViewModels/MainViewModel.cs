@@ -1,6 +1,5 @@
 ﻿using PropertyChanged;
 using XStart2._0.Bean;
-using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Services;
 using XStart2._0.Utils;
@@ -19,7 +18,7 @@ namespace XStart2._0.ViewModels {
         #region 用户数据
         [DoNotNotify]
         private string avatarPath;
-        public string AvatarPath { get=>avatarPath; set { avatarPath = value; SetAvatar(); } }
+        public string AvatarPath { get => avatarPath; set { avatarPath = value; SetAvatar(); } }
         private void SetAvatar() {
             Avatar = ImageUtils.File2BitmapImage(avatarPath);
         }

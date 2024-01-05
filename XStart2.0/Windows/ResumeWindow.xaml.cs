@@ -33,7 +33,7 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void SelectBackupFile_Click(object sender, RoutedEventArgs e) {
-            System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "xsb文件|*.xsb" };
+            using System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "xsb文件|*.xsb" };
             if (System.Windows.Forms.DialogResult.OK == openFileDialog.ShowDialog()) {
                 string encryptBackupJson = File.ReadAllText(openFileDialog.FileName, Encoding.UTF8);
                 string backupJson = AesUtils.DecryptContent(encryptBackupJson);

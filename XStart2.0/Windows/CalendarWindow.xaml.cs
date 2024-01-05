@@ -6,7 +6,7 @@ namespace XStart2._0.Windows {
     /// CalendarWindow.xaml 的交互逻辑
     /// </summary>
     public partial class CalendarWindow : Window {
-        CalendarVM vm = new CalendarVM();
+        readonly CalendarVM vm = new CalendarVM();
         public CalendarWindow() {
             InitializeComponent();
 

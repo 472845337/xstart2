@@ -96,7 +96,7 @@ namespace XStart2._0.Windows {
                 string backupJson = JsonConvert.SerializeObject(backData, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                 string encryptBackupJson = AesUtils.EntryptContent(backupJson);
                 // 写入文件
-                SaveFileDialog fileDialog = new SaveFileDialog() { Filter = "X启动备份文件|.xsb" };
+                using SaveFileDialog fileDialog = new SaveFileDialog() { Filter = "X启动备份文件|.xsb" };
                 if (System.Windows.Forms.DialogResult.OK == fileDialog.ShowDialog()) {
                     File.WriteAllText(fileDialog.FileName, encryptBackupJson, Encoding.UTF8);
                     NotifyUtils.ShowNotification("备份成功！");

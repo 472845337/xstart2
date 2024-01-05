@@ -89,7 +89,7 @@ namespace XStart2._0.Windows {
         }
         // 选择文件
         private void FileBtn_Click(object sender, RoutedEventArgs e) {
-            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "所有文件|*.*|可执行文件|.exe|音频文件|*.mp3;*.wav;*.wma;*.ape;*.flac|视频文件|*.avi;*.mp4;*.wmv;*.mkv;*.rmvb;*.mov;*.flv|图片文件|*.jpg;*.jpeg;*.gif;*.bmp;*.png;*.jfif|文档文件|*.doc;*.xls;*.ppt;*.docx;*.xlsx;*pptx;*.rtf;*.txt;*.pdf" };
+            using System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "所有文件|*.*|可执行文件|.exe|音频文件|*.mp3;*.wav;*.wma;*.ape;*.flac|视频文件|*.avi;*.mp4;*.wmv;*.mkv;*.rmvb;*.mov;*.flv|图片文件|*.jpg;*.jpeg;*.gif;*.bmp;*.png;*.jfif|文档文件|*.doc;*.xls;*.ppt;*.docx;*.xlsx;*pptx;*.rtf;*.txt;*.pdf" };
             if (System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
                 string filePath = ofd.FileName;
                 vm.PathReadonly = false;
@@ -115,7 +115,7 @@ namespace XStart2._0.Windows {
         }
         // 选择目录
         private void FolderBtn_Click(object sender, RoutedEventArgs e) {
-            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+            using System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
             if (System.Windows.Forms.DialogResult.OK == fbd.ShowDialog()) {
                 string folderPath = fbd.SelectedPath;
                 string dirName = Path.GetDirectoryName(folderPath);
@@ -171,10 +171,11 @@ namespace XStart2._0.Windows {
                 Configs.systemAppOpenPage = spw.OpenPage;
                 IniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_SYSTEM_PROJECT_OPEN_PAGE, Convert.ToString(spw.OpenPage));
             }
+            spw.Close();
         }
 
         private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "带图标文件|*.exe;*.ico" };
+            using System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "带图标文件|*.exe;*.ico" };
             if (System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
                 vm.IconPath = ofd.FileName;
                 vm.Project = new Project() { IconPath = ofd.FileName };
@@ -191,6 +192,7 @@ namespace XStart2._0.Windows {
             if (true == mstsc.ShowDialog()) {
                 vm.Arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}";
             }
+            mstsc.Close();
         }
     }
 }

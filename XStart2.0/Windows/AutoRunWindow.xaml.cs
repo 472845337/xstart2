@@ -10,7 +10,7 @@ namespace XStart2._0.Windows {
     /// AutoRunWindow.xaml 的交互逻辑
     /// </summary>
     public partial class AutoRunWindow : Window {
-        AutoRunViewModel vm = new AutoRunViewModel();
+        readonly AutoRunViewModel vm = new AutoRunViewModel();
         public List<Project> AutoRunProjects { get; set; }
         public List<Project> Projects { get; set; }
         public bool IsExit { get; set; } = false;

@@ -16,7 +16,7 @@ namespace XStart2._0.Windows {
     /// SystemProjectWindow.xaml 的交互逻辑
     /// </summary>
     public partial class SystemProjectWindow : Window {
-        SystemProjectViewModel vm;
+        readonly SystemProjectViewModel vm;
         public bool MultiAdd { get; set; }
         public int OpenPage { get; set; }
         public Project Project { get; set; }
@@ -212,7 +212,7 @@ namespace XStart2._0.Windows {
             if (SystemProjectParam.CLEAR_SOME_DIRECTORY.Equals(path)) {
                 Topmost = false;
                 // 清空某目录打开目录窗口选择目录
-                System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+                using System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
                 if (System.Windows.Forms.DialogResult.OK == fbd.ShowDialog()) {
                     string dir = fbd.SelectedPath;
                     name = $"清空{Path.GetFileName(Path.GetDirectoryName(dir))}目录";
@@ -232,6 +232,7 @@ namespace XStart2._0.Windows {
                 } else {
                     isAdd = false;
                 }
+                cam.Close();
                 Topmost = true;
             } else if (SystemProjectParam.MSTSC.Equals(path)) {
                 // 远程桌面
@@ -243,6 +244,7 @@ namespace XStart2._0.Windows {
                 } else {
                     isAdd = false;
                 }
+                mstsc.Close();
                 Topmost = true;
             }
 

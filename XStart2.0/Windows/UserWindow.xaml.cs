@@ -1,6 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Media.Imaging;
-using XStart2._0.Utils;
 using XStart2._0.ViewModels;
 
 namespace XStart2._0.Windows {
@@ -22,7 +20,7 @@ namespace XStart2._0.Windows {
 
         private void SelectAvatar_Click(object sender, RoutedEventArgs e) {
             // 选择图片文件
-            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "图片文件|*.jpg;*.jpeg;*.bmp;*.png;*.gif" };
+            using System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "图片文件|*.jpg;*.jpeg;*.bmp;*.png;*.gif" };
             if (System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
                 string avatarFileName = ofd.FileName;
                 vm.AvatarPath = avatarFileName;

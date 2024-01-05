@@ -29,6 +29,7 @@ namespace XStart2._0.Config {
         public static string urlOpen = Constants.URL_OPEN_DEFAULT;
         public static string urlOpenCustomBrowser;
         public static bool exitWarn;// 退出提醒
+        public static bool forceExit = false;// 直接退出
         public static int delCount;
 
         public static System.IntPtr taskbarHandler = System.IntPtr.Zero;

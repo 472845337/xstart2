@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -32,6 +31,7 @@ namespace XStart2._0 {
         public ProjectService projectService = ServiceFactory.GetProjectService();
         // 模型
         readonly MainViewModel mainViewModel = new MainViewModel();
+        System.Windows.Forms.NotifyIcon notifyIcon = null;
         public MainWindow() {
             InitializeComponent();
             Configs.Handler = new System.Windows.Interop.WindowInteropHelper(this).Handle;
@@ -234,7 +234,6 @@ namespace XStart2._0 {
             }
             // 自启动
             if (autoRunProjects.Count > 0) {
-                TaskCompletionSource<object> tc = new TaskCompletionSource<object>();
                 // 新线程
                 Dispatcher.Invoke(new Action(delegate {
                     AutoRunWindow autoRunWindow = new AutoRunWindow { AutoRunProjects = autoRunProjects, Topmost = true };
@@ -258,26 +257,29 @@ namespace XStart2._0 {
                 }));
             }
             // 任务栏图标
-            //notifyIcon = new System.Windows.Forms.NotifyIcon();
-            //System.Windows.Forms.NotifyIcon icon = new System.Windows.Forms.NotifyIcon();
-            //Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Files/xstart2.ico")).Stream;
+            notifyIcon = new System.Windows.Forms.NotifyIcon();
+            System.Windows.Forms.NotifyIcon icon = new System.Windows.Forms.NotifyIcon();
+            Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Files/xstart2.ico")).Stream;
 
-            //notifyIcon.Icon = new System.Drawing.Icon(iconStream);
-            //notifyIcon.Visible = true;
-            //notifyIcon.DoubleClick += MainWindow_Show;
+            notifyIcon.Icon = new System.Drawing.Icon(iconStream);
+            notifyIcon.Visible = true;
+            notifyIcon.DoubleClick += MainWindow_Show;
 
-            //System.Windows.Forms.MenuItem showWindowMenuItem = new System.Windows.Forms.MenuItem("显示窗口") ;
-            //showWindowMenuItem.Click += MainWindow_Show;
-            //System.Windows.Forms.MenuItem closeWindowMenuItem = new System.Windows.Forms.MenuItem("退出");
-            //closeWindowMenuItem.Click += WindowCloseMenu_Click;
-            //notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[] { showWindowMenuItem, closeWindowMenuItem });
+            System.Windows.Forms.MenuItem showWindowMenuItem = new System.Windows.Forms.MenuItem("显示窗口");
+            showWindowMenuItem.Click += MainWindow_Show;
+            System.Windows.Forms.MenuItem closeWindowMenuItem = new System.Windows.Forms.MenuItem("退出");
+            closeWindowMenuItem.Click += WindowCloseMenu_Click;
+            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[] { showWindowMenuItem, closeWindowMenuItem });
             Configs.inited = true;
             IsAllShow = true;
         }
 
         private void MainWindow_Show(object sender, EventArgs e) {
-            Visibility = Visibility.Visible;
             IsAllShow = true;
+            // 将窗口置为当前并显示
+            IntPtr handle = new System.Windows.Interop.WindowInteropHelper(this).Handle;
+            DllUtils.ShowWindow(handle, WinApi.SW_NORMAL);
+            DllUtils.SwitchToThisWindow(handle, true);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
@@ -318,7 +320,7 @@ namespace XStart2._0 {
             Clipboard.Clear();
             // 配置保存
             SaveSetting();
-            if (Configs.exitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+            if (!Configs.forceExit && Configs.exitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                 // 取消退出
                 e.Cancel = true;
             } else {
@@ -329,16 +331,19 @@ namespace XStart2._0 {
                 AutoHideTimer.Stop();
                 currentDateTimer.Stop();
                 currentTimer.Stop();
+                notifyIcon.Dispose();
                 e.Cancel = false;
             }
-
         }
 
         private void WindowShowMenu_Click(object sender, RoutedEventArgs e) {
             MainWindow_Show(sender, null);
         }
         private void WindowCloseMenu_Click(object sender, EventArgs e) {
-            Close();
+            if (!Configs.exitWarn || MessageBoxResult.OK == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                Configs.forceExit = true;
+                Application.Current.Shutdown();
+            }
         }
 
         /// <summary>
@@ -577,12 +582,12 @@ namespace XStart2._0 {
             }
             if (true == projectTypeWindow.ShowDialog()) {
                 // 保存数据到类别库中
-                if (string.IsNullOrEmpty(projectTypeWindow.vm.Section)) {
+                if (string.IsNullOrEmpty(projectTypeWindow.VM.Section)) {
                     Bean.Type projectType = new Bean.Type {
-                        Name = projectTypeWindow.vm.Name
-                        , FaIcon = projectTypeWindow.vm.SelectedFa
-                        , FaIconColor = projectTypeWindow.vm.SelectedIconColor
-                        , FaIconFontFamily = projectTypeWindow.vm.SelectedFf.ToString()
+                        Name = projectTypeWindow.VM.Name
+                        , FaIcon = projectTypeWindow.VM.SelectedFa
+                        , FaIconColor = projectTypeWindow.VM.SelectedIconColor
+                        , FaIconFontFamily = projectTypeWindow.VM.SelectedFf.ToString()
                     };
                     projectType.Section = Guid.NewGuid().ToString();
                     projectType.Sort = XStartService.TypeDic[XStartService.TypeDic.Count - 1].Sort + 1;
@@ -590,11 +595,11 @@ namespace XStart2._0 {
                     XStartService.TypeDic.Add(projectType.Section, projectType);
                     NotifyUtils.ShowNotification("新增类别成功！");
                 } else {
-                    Bean.Type projectType = XStartService.TypeDic[projectTypeWindow.vm.Section];
-                    projectType.Name = projectTypeWindow.vm.Name;
-                    projectType.FaIcon = projectTypeWindow.vm.SelectedFa;
-                    projectType.FaIconColor = projectTypeWindow.vm.SelectedIconColor;
-                    projectType.FaIconFontFamily = projectTypeWindow.vm.SelectedFf.ToString();
+                    Bean.Type projectType = XStartService.TypeDic[projectTypeWindow.VM.Section];
+                    projectType.Name = projectTypeWindow.VM.Name;
+                    projectType.FaIcon = projectTypeWindow.VM.SelectedFa;
+                    projectType.FaIconColor = projectTypeWindow.VM.SelectedIconColor;
+                    projectType.FaIconFontFamily = projectTypeWindow.VM.SelectedFf.ToString();
                     typeService.Update(projectType);
                     NotifyUtils.ShowNotification("修改类别成功！");
                 }

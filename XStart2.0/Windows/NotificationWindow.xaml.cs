@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using XStart2._0.ViewModels;
 
 namespace XStart2._0.Windows {
     /// <summary>
@@ -23,7 +22,6 @@ namespace XStart2._0.Windows {
         // 保留时长，多少秒
         public int SaveTime { get; set; } = 5;
 
-        private readonly NotifyData notifyData = new NotifyData();
         public NotificationWindow() {
             InitializeComponent();
             Loaded += NotificationWindow_Loaded;

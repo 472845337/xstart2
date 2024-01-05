@@ -7,7 +7,6 @@
         xmlns:local="clr-namespace:XStart2._0"
         xmlns:helper="clr-namespace:XStart2._0.Helper"
         xmlns:view="clr-namespace:XStart2._0.View"
-        xmlns:tb="http://www.hardcodet.net/taskbar"
         mc:Ignorable="d"
         Title="X启动" Height="{Binding MainHeight, Mode=TwoWay}" Width="{Binding MainWidth, Mode=TwoWay}"
         MinHeight="500" MinWidth="300" Left="{Binding MainLeft, Mode=TwoWay}"
@@ -447,21 +446,5 @@
                 </Menu>
             </StatusBarItem>
         </StatusBar>
-        <tb:TaskbarIcon IconSource="Files/xstart2.ico" ToolTipText="X启动2.0" TrayMouseDoubleClick="WindowShowMenu_Click">
-            <tb:TaskbarIcon.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="显示窗口" Click="WindowShowMenu_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Files/Icons/App/show.ico"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="退出" Click="WindowCloseMenu_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Files/Icons/App/exit.ico"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </ContextMenu>
-            </tb:TaskbarIcon.ContextMenu>
-        </tb:TaskbarIcon>
     </Grid>
 </Window>

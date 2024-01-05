@@ -47,6 +47,7 @@ namespace XStart2._0.Windows {
         private void BackUp_Click(object sender, RoutedEventArgs e) {
             BackUpWindow backUpWindow = new BackUpWindow() { WindowStartupLocation = WindowStartupLocation.CenterScreen };
             backUpWindow.ShowDialog();
+            backUpWindow.Close();
         }
         /// <summary>
         /// 恢复
@@ -58,6 +59,7 @@ namespace XStart2._0.Windows {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
             resumeWindow.ShowDialog();
+            resumeWindow.Close();
         }
 
         /// <summary>
