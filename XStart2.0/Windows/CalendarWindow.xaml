@@ -5,8 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XStart2._0.Windows"
         mc:Ignorable="d"
-        Title="日历" Height="250" Width="360">
+        Title="日历" Height="250" Width="320" WindowStartupLocation="CenterScreen">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <Calendar SelectedDatesChanged="Calendar_SelectedDatesChanged" SelectionMode="SingleDate" IsTodayHighlighted="True"/>
+            <TextBlock>
+                <Run Text="{Binding CurDay}"/>
+                <Run Text="{Binding CurTime}"/>
+            </TextBlock>
+        </StackPanel>
+        <Grid Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="年" Style="{StaticResource FormLabel_Style}"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding LunarYear}" IsReadOnly="True" Style="{StaticResource FormValue_Style}"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="月" Style="{StaticResource FormLabel_Style}"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LunarMonth}" IsReadOnly="True" Style="{StaticResource FormValue_Style}"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="日" Style="{StaticResource FormLabel_Style}"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LunarDay}" IsReadOnly="True" Style="{StaticResource FormValue_Style}"/>
+        </Grid>
     </Grid>
 </Window>

@@ -51,7 +51,6 @@ namespace XStart2._0.Utils {
         public static Icon GetIcon(string fileName, bool isLargeIcon) {
             DllUtils.SHFILEINFO shfi = new DllUtils.SHFILEINFO();
             uint fileInfo;
-
             if (isLargeIcon) {
                 if (File.Exists(fileName)) {
                     fileInfo = (uint)WinApi.FileInfoFlags.SHGFI_ICON | (uint)WinApi.FileInfoFlags.SHGFI_USEFILEATTRIBUTES | (uint)WinApi.FileInfoFlags.SHGFI_LARGEICON;

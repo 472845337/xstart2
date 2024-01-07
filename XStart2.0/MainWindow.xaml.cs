@@ -336,9 +336,6 @@ namespace XStart2._0 {
             }
         }
 
-        private void WindowShowMenu_Click(object sender, RoutedEventArgs e) {
-            MainWindow_Show(sender, null);
-        }
         private void WindowCloseMenu_Click(object sender, EventArgs e) {
             if (!Configs.exitWarn || MessageBoxResult.OK == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                 Configs.forceExit = true;
@@ -1573,5 +1570,10 @@ namespace XStart2._0 {
         }
 
         #endregion
+
+        private void Calendar_Click(object sender, RoutedEventArgs e) {
+            CalendarWindow cal = new CalendarWindow();
+            cal.Show();
+        }
     }
 }

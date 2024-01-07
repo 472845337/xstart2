@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
+using XStart2._0.Utils;
 using XStart2._0.ViewModels;
 
 namespace XStart2._0.Windows {
@@ -11,6 +14,17 @@ namespace XStart2._0.Windows {
             InitializeComponent();
 
 
+        }
+
+        private void Calendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e) {
+            Calendar cal = sender as Calendar;
+            if (cal.SelectedDate.HasValue) {
+                DateTime dateTime = cal.SelectedDate.Value;
+                LunarCalendar lunarCalendar = new LunarCalendar(dateTime);
+                vm.LunarYear = lunarCalendar.GetEraYear();
+                vm.LunarMonth = lunarCalendar.GetEraMonth();
+                vm.LunarDay = lunarCalendar.GetEraDay();
+            }
         }
     }
 }

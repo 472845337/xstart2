@@ -96,7 +96,7 @@
             </StackPanel>
             <!-- 小工具 -->
             <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5">
-                <Image Source="/Files/Images/Calendar.png" Height="25" Margin="2" Cursor="Hand"/>
+                <Image Source="/Files/Images/Calendar.png" Height="25" Margin="2" Cursor="Hand" MouseLeftButtonUp="Calendar_Click"/>
                 <Image Source="/Files/Images/NotePad.png" Height="25" Margin="2" Cursor="Hand"/>
                 <Image Source="/Files/Images/Weather.png" Height="25" Margin="2" Cursor="Hand"/>
             </WrapPanel>
@@ -331,7 +331,8 @@
                                                                     </Grid.ColumnDefinitions>
                                                                     <view:ImageButton Grid.Column="0" Content="{Binding Value.Name}" Style="{StaticResource AppButton}"
                                                                         ToolTip="{Binding Value.ToolTipContent}" Tag="{Binding Value}"
-                                                                        Click="ProjectButton_Click" MouseDoubleClick="ProjectButton_DoubleClick" ButtonIcon="{Binding Value.Icon}">
+                                                                        Click="ProjectButton_Click" MouseDoubleClick="ProjectButton_DoubleClick"
+                                                                                      ButtonIcon="{Binding Value.Icon}">
                                                                         <Button.ContextMenu>
                                                                             <ContextMenu>
                                                                                 <MenuItem Header="添加项目" Click="AddProject_Click">

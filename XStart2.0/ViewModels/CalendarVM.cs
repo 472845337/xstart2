@@ -10,7 +10,8 @@ namespace XStart2._0.ViewModels {
             LunarDay = lc.GetEraDay();
             WeekDay = lc.ChineseWeek;
         }
-
+        public string CurDay { get; set; }
+        public string CurTime { get; set; }
         public string LunarYear { get; set; }
         public string LunarMonth { get; set; }
         public string LunarDay { get; set; }
