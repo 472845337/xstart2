@@ -16,6 +16,15 @@ namespace XStart2._0.Bean {
         [DoNotNotify]
         [TableParam("start_open", "BIT")]
         public bool? StartOpen { get; set; }
+        // 图标尺寸
+        [TableParam("icon_size", "INT")]
+        public double? IconSize { get; set; }
+        // 是否横排
+        [TableParam("Orientation", "VARCHAR")]
+        public string Orientation { get; set; }
+        // 隐藏标题
+        [TableParam("Hide_Title", "INT")]
+        public bool? HideTitle { get; set; }
         [DoNotNotify]
         public bool SaveSecurity { get; set; }
         // 垂直滚动条显示状态

@@ -12,7 +12,7 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <TabControl Grid.Row="0">
-            <TabItem Header="基本">
+            <TabItem Header="基本" Style="{StaticResource TabItem_Style}">
                 <WrapPanel>
                     <Grid Margin="5">
                         <Grid.ColumnDefinitions>
@@ -56,7 +56,24 @@
                     </Grid>
                 </WrapPanel>
             </TabItem>
-            <TabItem Header="打开方式">
+            <TabItem Header="样式" Style="{StaticResource TabItem_Style}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Grid.Row="0" Header="图标大小">
+                        <StackPanel Margin="5">
+                            <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="小图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Small',Mode=TwoWay}"/>
+                            <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="中等图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Mid',Mode=TwoWay}"/>
+                            <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="大图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Large',Mode=TwoWay}"/>
+                            <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="超大图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Huge',Mode=TwoWay}"/>
+                            <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="巨型图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Jumbo',Mode=TwoWay}"/>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="打开方式" Style="{StaticResource TabItem_Style}" VerticalAlignment="Top">
                 <StackPanel>
                     <Grid Margin="5">
                         <Grid.ColumnDefinitions>
@@ -69,9 +86,9 @@
                     </Grid>
                     <GroupBox Header="网址打开">
                         <StackPanel>
-                            <RadioButton GroupName="UrlOpen" Content="使用系统默认浏览器" Margin="5" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlDefault',Mode=TwoWay}"/>
-                            <RadioButton GroupName="UrlOpen" Content="使用Edge" Margin="5" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlEdge',Mode=TwoWay}"/>
-                            <RadioButton GroupName="UrlOpen" Content="使用自定义浏览器" Margin="5" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlCustom',Mode=TwoWay}"/>
+                            <RadioButton GroupName="UrlOpen" Content="使用系统默认浏览器" Style="{StaticResource RadioButton_Style}" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlDefault',Mode=TwoWay}"/>
+                            <RadioButton GroupName="UrlOpen" Content="使用Edge" Style="{StaticResource RadioButton_Style}" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlEdge',Mode=TwoWay}"/>
+                            <RadioButton GroupName="UrlOpen" Content="使用自定义浏览器" Style="{StaticResource RadioButton_Style}" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlCustom',Mode=TwoWay}"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -84,7 +101,7 @@
                     </GroupBox>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="其他">
+            <TabItem Header="其他" Style="{StaticResource TabItem_Style}">
                 <WrapPanel>
                     <Button Style="{StaticResource BtnConfirm_Style}" Content="备份" Width="80" Margin="5" Click="BackUp_Click"/>
                     <Button Style="{StaticResource BtnConfirm_Style}" Content="恢复" Width="80" Margin="5" Click="Recover_Click"/>

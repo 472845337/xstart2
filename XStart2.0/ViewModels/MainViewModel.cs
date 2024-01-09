@@ -77,6 +77,25 @@ namespace XStart2._0.ViewModels {
         public string ClickType { get; set; }
         public string UrlOpen { get; set; }
         public string UrlOpenCustomBrowser { get; set; }
+        [OnChangedMethod(nameof(ChangeIconSize))]
+        public double IconSize { get; set; }
+
+        private void ChangeIconSize() {
+            if (Config.Configs.inited) {
+                Config.Configs.InitIconDic(IconSize);
+                foreach(var type in XStartService.TypeDic) {
+                    foreach(var column in type.Value.ColumnDic) {
+                        if(null == column.Value.IconSize) {
+                            // 非自定义的栏目才修改图标大小
+                            foreach(var project in column.Value.ProjectDic) {
+                                project.Value.IconSize = IconSize;
+                                project.Value.Icon = XStartService.GetIconImage(project.Value.Kind, project.Value.Path, project.Value.IconPath, IconSize);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         #endregion
     }
 }

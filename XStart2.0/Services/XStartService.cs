@@ -55,7 +55,7 @@ namespace XStart2._0.Services {
         /// <param name="path"></param>
         /// <param name="iconPath"></param>
         /// <returns></returns>
-        public static BitmapImage GetIconImage(string kind, string path, string iconPath) {
+        public static BitmapImage GetIconImage(string kind, string path, string iconPath, double size) {
             try {
                 BitmapImage image = null;
                 if (!string.IsNullOrEmpty(iconPath)) {
@@ -65,27 +65,18 @@ namespace XStart2._0.Services {
                     } else {
                         // 项目图标
                         if (File.Exists(iconPath) || Directory.Exists(iconPath)) {
-                            if (iconPath.ToLower().EndsWith(".exe") || iconPath.ToLower().EndsWith(".ico")) {
-                                image = ImageUtils.BitmapToBitmapImage(IconUtils.GetIcon(iconPath, true).ToBitmap());
-                            } else {
-                                image = ImageUtils.BitmapToBitmapImage(IconUtils.GetIcon(iconPath, true).ToBitmap());
-                            }
+                            image = IconUtils.GetBitmapImage(iconPath, size);
                         } else {
-                            image = Configs.ICON_APP;
+                            image = IconUtils.GetBitmapImage(Configs.AppStartPath + Constants.ICON_APP, size);
                         }
                     }
                 } else {
                     // IconPath为空，则取项目文件的图标
                     iconPath = path;
                     if (Project.KIND_FILE.Equals(kind) || Project.KIND_DIRECTORY.Equals(kind)) {
-                        // 文件类型，判断是否exe或ico
-                        if (iconPath.ToLower().EndsWith(".exe") || iconPath.ToLower().EndsWith(".ico")) {
-                            image = ImageUtils.BitmapToBitmapImage(IconUtils.GetIcon(iconPath, true).ToBitmap());
-                        } else {
-                            image = ImageUtils.BitmapToBitmapImage(IconUtils.GetIcon(iconPath, true).ToBitmap());
-                        }
+                        image = IconUtils.GetBitmapImage(iconPath, size);
                     } else if (Project.KIND_URL.Equals(kind)) {
-                        image = ImageUtils.BitmapToBitmapImage(IconUtils.GetIconImage(Configs.AppStartPath + Constants.ICON_URL)[0]);
+                        image = IconUtils.GetBitmapImage(Configs.AppStartPath + Constants.ICON_INTERNET, size);
                     }
                 }
                 return image;
@@ -101,7 +92,7 @@ namespace XStart2._0.Services {
         /// <param name="project"></param>
         /// <returns></returns>
         public static BitmapImage GetIconImage(Project project) {
-            return GetIconImage(project.Kind, project.Path, project.IconPath);
+            return GetIconImage(project.Kind, project.Path, project.IconPath, project.IconSize);
         }
 
         /// <summary>

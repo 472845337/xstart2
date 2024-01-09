@@ -80,6 +80,8 @@ namespace XStart2._0.Bean {
         public bool IsMstsc { get; set; } = false;
         [DoNotNotify]
         public string Operate { get; set; }
+        // 图标尺寸
+        public double IconSize { get; set; }
         public string ToolTipContent {
             get {
                 if (SystemProjectParam.MSTSC.Equals(Path)) {
@@ -93,7 +95,7 @@ namespace XStart2._0.Bean {
         public System.Windows.Media.Imaging.BitmapImage Icon { get; set; }
 
         public void InitIcon() {
-            Icon = XStartService.GetIconImage(Kind, Path, IconPath);
+            Icon = XStartService.GetIconImage(Kind, Path, IconPath, IconSize);
         }
 
         private void SetIsMstsc() {

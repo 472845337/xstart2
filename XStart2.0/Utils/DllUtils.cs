@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using XStart2._0.Interfaces;
 
 namespace XStart2._0.Utils {
     public class DllUtils {
@@ -230,6 +231,8 @@ namespace XStart2._0.Utils {
 
         [DllImport(Shell32, EntryPoint = "SHGetFileInfo", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbFileInfo, uint uFlags);
+        [DllImport(Shell32, EntryPoint = "#727")]
+        public extern static int SHGetImageList(int iImageList, ref Guid riid, out IImageList ppv);
         [DllImport(Shell32)]
         public static extern IntPtr SHGetStockIconInfo(uint siid, uint uFlags, ref SHSTOCKICONINFO psii);
 

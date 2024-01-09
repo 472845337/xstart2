@@ -99,6 +99,7 @@ namespace XStart2._0 {
             string closeBorderHide = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE);
             string urlOpen = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN);
             string urlOpenCustomBrowser = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER);
+            string iconSize = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_ICON_SIZE);
 
             Configs.typeTabExpand = string.IsNullOrEmpty(typeTabExpandStr) || Convert.ToBoolean(typeTabExpandStr);
             Configs.topMost = !string.IsNullOrEmpty(topMostStr) && Convert.ToBoolean(topMostStr);
@@ -110,6 +111,7 @@ namespace XStart2._0 {
             Configs.closeBorderHide = string.IsNullOrEmpty(closeBorderHide) || Convert.ToBoolean(closeBorderHide);
             if (!string.IsNullOrEmpty(urlOpen)) { Configs.urlOpen = urlOpen; }
             Configs.urlOpenCustomBrowser = urlOpenCustomBrowser;
+            Configs.iconSize = string.IsNullOrEmpty(iconSize)? Constants.ICON_SIZE_32 : Convert.ToDouble(iconSize);
 
             mainViewModel.TypeTabExpanded = Configs.typeTabExpand;
             mainViewModel.ChangeTypeTab();// 初始化时要先触发一次
@@ -121,6 +123,7 @@ namespace XStart2._0 {
             mainViewModel.CloseBorderHide = Configs.closeBorderHide;
             mainViewModel.UrlOpen = Configs.urlOpen;
             mainViewModel.UrlOpenCustomBrowser = Configs.urlOpenCustomBrowser;
+            mainViewModel.IconSize = Configs.iconSize;
             // 系统其他配置
             string delCount = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_DEL_COUNT);// 数据库执行多少次删除后执行VACUUM
             Configs.delCount = string.IsNullOrEmpty(delCount) ? 0 : Convert.ToInt32(delCount);
@@ -131,7 +134,7 @@ namespace XStart2._0 {
             Configs.systemAppOpenPage = string.IsNullOrEmpty(systemProjectOpenPage) ? 0 : Convert.ToInt32(systemProjectOpenPage);
             string addMulti = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_ADD_MULTI);
             Configs.systemAppAddMulti = !string.IsNullOrEmpty(addMulti) && Convert.ToBoolean(addMulti);
-            Configs.InitIconDic();
+            Configs.InitIconDic(Configs.iconSize);
             SystemProjectParam.InitOperate();
             Configs.taskbarHandler = DllUtils.FindWindow("Shell_TrayWnd", null);
             Configs.taskbarIsShow = (DllUtils.GetWindowLong(Configs.taskbarHandler, WinApi.GWL_STYLE) & WinApi.WS_VISIBLE) == WinApi.WS_VISIBLE;
@@ -179,7 +182,9 @@ namespace XStart2._0 {
             List<Project> projects = projectService.SelectList(new Project { OrderBy = "sort" });
 
             foreach (Project project in projects) {
+                Column column = XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection];
                 // 初始化项目的图示
+                project.IconSize = null != column.IconSize ? (double)column.IconSize : Configs.iconSize;
                 project.InitIcon();
                 if (string.IsNullOrEmpty(project.Name) || string.IsNullOrEmpty(project.TypeSection)
                     || string.IsNullOrEmpty(project.ColumnSection) || !XStartService.TypeDic.TryGetValue(project.TypeSection, out _)
@@ -478,6 +483,7 @@ namespace XStart2._0 {
                 mainViewModel.ClickType = settingVM.ClickType;
                 mainViewModel.UrlOpen = settingVM.UrlOpen;
                 mainViewModel.UrlOpenCustomBrowser = settingVM.UrlOpenCustomBrowser;
+                mainViewModel.IconSize = settingVM.IconSize;
                 SaveSetting();
             }
             settingWindow.Close();
@@ -997,7 +1003,7 @@ namespace XStart2._0 {
             if (null != project) {
                 ProjectWindow projectWindow = new ProjectWindow("修改项目", project.TypeSection, project.ColumnSection) { Project = project };
                 if (true == projectWindow.ShowDialog()) {
-                    projectWindow.Project.Icon = XStartService.GetIconImage(projectWindow.Project.Kind, projectWindow.Project.Path, projectWindow.Project.IconPath);
+                    projectWindow.Project.Icon = XStartService.GetIconImage(projectWindow.Project.Kind, projectWindow.Project.Path, projectWindow.Project.IconPath, projectWindow.Project.IconSize);
                     if (string.IsNullOrEmpty(projectWindow.Project.Kind)) {
                         projectWindow.Project.Kind = XStartService.KindOfPath(projectWindow.Project.Path);
                     }
@@ -1128,6 +1134,7 @@ namespace XStart2._0 {
                 mainViewModel.AutoRun = true;
                 mainViewModel.ExitWarn = true;
                 mainViewModel.UrlOpen = Constants.URL_OPEN_DEFAULT;
+                mainViewModel.IconSize = Constants.ICON_SIZE_32;
             }
             e.Handled = true;
         }
@@ -1205,6 +1212,7 @@ namespace XStart2._0 {
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE, ref Configs.closeBorderHide, mainViewModel.CloseBorderHide);// 靠边隐藏
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN, ref Configs.urlOpen, mainViewModel.UrlOpen);// 浏览器打开链接
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER, ref Configs.urlOpenCustomBrowser, mainViewModel.UrlOpenCustomBrowser);// 自定义浏览器
+            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_ICON_SIZE, ref Configs.iconSize, mainViewModel.IconSize);// 图标尺寸
         }
         /// <summary>
         /// Config配置保存
@@ -1263,7 +1271,7 @@ namespace XStart2._0 {
         /// <param name="e"></param>
         public void AutoHideTimer_Tick(object sender, EventArgs e) {
             Point toPoint = new Point(Left, Top);
-            double mouseDistance = 5;// 鼠标在边界距离多远范围
+            double mouseDistance = 2;// 鼠标在边界距离多远范围
             double resumeSize = 5;// 隐藏后剩余出来的边界大小
             DllUtils.Point curPoint = new DllUtils.Point();
             DllUtils.GetCursorPos(ref curPoint); //获取鼠标相对桌面的位置

@@ -10,7 +10,9 @@
         public const string CLICK_TYPE_DOUBLE = "2";// 双击
 
         public const string ABOUT_FILE = "Files/Doc/about.txt";
+        public const string ICON_APP = "Files/Icons/app.ico";
         public const string ICON_URL = "Files/Icons/url.ico";
+        public const string ICON_INTERNET = "Files/Icons/internet.ico";
         public const string AUDIO_CHANGE = "Files/Audio/Change.wav";
         public const string AUDIO_START = "Files/Audio/Start.wav";
 
@@ -34,6 +36,7 @@
         public const string KEY_OPEN_TYPE = "OpenType";// 启动后打开
         public const string KEY_URL_OPEN = "UrlOpen";
         public const string KEY_URL_OPEN_CUSTOM_BROWSER = "UrlOpenCustomBrowser";
+        public const string KEY_ICON_SIZE = "IconSize";// 图标尺寸
         public const string KEY_CLOSE_BORDER_HIDE = "CloseBorderHide";// 靠边自动隐藏
         public const string KEY_DEL_COUNT = "DelCount";// 删除次数
         public const string KEY_SYSTEM_PROJECT_OPEN_PAGE = "SystemProjectOpenPage";
@@ -88,5 +91,17 @@
         public const string AVATAR_PATH_NOTEXIST = "Files/Images/Avatar/NotExist.png";
 
         public const string NICKNAME_DEFAULT = "我的昵称";
+
+        public const double ICON_SIZE_32 = 32;
+        public const double ICON_SIZE_48 = 48;
+        public const double ICON_SIZE_72 = 72;
+        public const double ICON_SIZE_128 = 128;
+        public const double ICON_SIZE_256 = 256;
+
+        public const string ICON_SIZE_STR_SMALL = "Small";
+        public const string ICON_SIZE_STR_MID = "Mid";
+        public const string ICON_SIZE_STR_LARGE = "Large";
+        public const string ICON_SIZE_STR_HUGE = "Huge";
+        public const string ICON_SIZE_STR_JUMBO = "Jumbo";
     }
 }

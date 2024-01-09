@@ -9,5 +9,6 @@ namespace XStart2._0.ViewModels {
         public string ClickType { get; set; }
         public string UrlOpen { get; set; }
         public string UrlOpenCustomBrowser { get; set; }
+        public double IconSize { get; set; }
     }
 }

@@ -23,6 +23,7 @@
             <con:UrlOpenConverter x:Key="UrlOpenConverter"/>
             <con:ProjectCanAutoRunConverter x:Key="ProjectCanAutoRunConverter"/>
             <con:ProjectAutoRunToolTipConverter x:Key="ProjectAutoRunToolTipConverter"/>
+            <con:IconSizeConverter x:Key="IconSizeConverter"/>
             <Style x:Key="Btn_Style" TargetType="{x:Type Button}">
                 <Setter Property="Width" Value="60"/>
                 <Setter Property="Height" Value="28"/>
@@ -68,6 +69,13 @@
                 <Setter Property="HorizontalAlignment" Value="Center"/>
                 <Setter Property="TextWrapping" Value="NoWrap"/>
                 <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+            </Style>
+            <Style x:Key="RadioButton_Style" TargetType="RadioButton">
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+            <Style x:Key="TabItem_Style" TargetType="TabItem">
+                <Setter Property="Width" Value="60"/>
+                <Setter Property="Height" Value="26"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

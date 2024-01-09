@@ -332,7 +332,7 @@
                                                                     <view:ImageButton Grid.Column="0" Content="{Binding Value.Name}" Style="{StaticResource AppButton}"
                                                                         ToolTip="{Binding Value.ToolTipContent}" Tag="{Binding Value}"
                                                                         Click="ProjectButton_Click" MouseDoubleClick="ProjectButton_DoubleClick"
-                                                                                      ButtonIcon="{Binding Value.Icon}">
+                                                                                      ButtonIcon="{Binding Value.Icon}" IconSize="{Binding Value.IconSize}">
                                                                         <Button.ContextMenu>
                                                                             <ContextMenu>
                                                                                 <MenuItem Header="添加项目" Click="AddProject_Click">

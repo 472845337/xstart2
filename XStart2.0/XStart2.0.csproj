@@ -103,6 +103,7 @@
     <Compile Include="Bean\CopyProject.cs" />
     <Compile Include="Converters\ProjectAutoRunToolTipConverter.cs" />
     <Compile Include="Converters\ProjectCanAutoRunConverter.cs" />
+    <Compile Include="Converters\IconSizeConverter.cs" />
     <Compile Include="Converters\UrlOpenConverter.cs" />
     <Compile Include="Converters\ClickTypeConverter.cs" />
     <Compile Include="Converters\ProjectAutoRunConverter.cs" />
@@ -120,6 +121,11 @@
     <Compile Include="DataBase\SQLiteFactory.cs" />
     <Compile Include="DataBase\SQLiteHelper.cs" />
     <Compile Include="Helper\PasswordBoxHelper.cs" />
+    <Compile Include="Interfaces\IImageList.cs" />
+    <Compile Include="Interfaces\IMAGEINFO.cs" />
+    <Compile Include="Interfaces\IMAGELISTDRAWPARAMS.cs" />
+    <Compile Include="Interfaces\POINT.cs" />
+    <Compile Include="Interfaces\RECT.cs" />
     <Compile Include="Services\ProjectService.cs" />
     <Compile Include="Services\ColumnService.cs" />
     <Compile Include="Services\ServiceFactory.cs" />

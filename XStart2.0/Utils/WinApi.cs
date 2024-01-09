@@ -325,10 +325,11 @@
             SHGFI_LINKOVERLAY = 0x000008000,  //  put a link overlay on icon
             SHGFI_SELECTED = 0x000010000,  //  show icon in selected state
             SHGFI_ATTR_SPECIFIED = 0x000020000,  //  get only specified attributes
-            SHGFI_LARGEICON = 0x000000000,  //  get large icon
-            SHGFI_SMALLICON = 0x000000001,  //  get small icon
-            SHGFI_OPENICON = 0x000000002,  //  get open icon
-            SHGFI_SHELLICONSIZE = 0x000000004,  //  get shell size icon
+            SHGFI_LARGEICON = 0x000000000,  //  get large icon 32x32
+            SHGFI_SMALLICON = 0x000000001,  //  get small icon 16x16
+            SHGFI_OPENICON = 0x000000002,  //  get open icon 48x48
+            SHGFI_SYSSMALL = 0x000000003, // get icon based off of GetSystemMetrics
+            SHGFI_SHELLICONSIZE = 0x000000004,  //  get shell size icon 256x256
             SHGFI_PIDL = 0x000000008,  //  pszPath is a pidl
             SHGFI_USEFILEATTRIBUTES = 0x000000010,  //  use passed dwFileAttribute
             SHGFI_ADDOVERLAYS = 0x000000020,  //  apply the appropriate overlays

@@ -4,6 +4,8 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
+using XStart2._0.Const;
+using XStart2._0.Interfaces;
 
 namespace XStart2._0.Utils {
     class IconUtils {
@@ -44,36 +46,61 @@ namespace XStart2._0.Utils {
         /// <summary>
         /// 获取文件类型或目录的关联图标
         /// </summary>
+        /// <remarks>
+        /// 目前获取到的图标大小有 32*32,48*48,72*72,128*128,256*256
+        /// 其中 
+        /// 32*32->SHGFI_LARGEICON
+        /// 48*48->SHGFI_OPENICON
+        /// 72*72/128*128/256*256->SHGFI_SHELLICONSIZE
+        /// </remarks>
         /// <param name="fileName">文件类型的扩展名或文件的绝对路径</param>
         /// <param name="type">类型 file/dir</param>
         /// <param name="isLargeIcon">是否返回大图标</param>
         /// <returns>获取到的图标</returns>
-        public static Icon GetIcon(string fileName, bool isLargeIcon) {
+        public static Bitmap GetIcon(string fileName, double iconSize) {
             DllUtils.SHFILEINFO shfi = new DllUtils.SHFILEINFO();
-            uint fileInfo;
-            if (isLargeIcon) {
-                if (File.Exists(fileName)) {
-                    fileInfo = (uint)WinApi.FileInfoFlags.SHGFI_ICON | (uint)WinApi.FileInfoFlags.SHGFI_USEFILEATTRIBUTES | (uint)WinApi.FileInfoFlags.SHGFI_LARGEICON;
-                } else {
-                    fileInfo = (uint)WinApi.FileInfoFlags.SHGFI_ICON | (uint)WinApi.FileInfoFlags.SHGFI_LARGEICON;
-                }
+            uint fileInfo = (uint)WinApi.FileInfoFlags.SHGFI_ICON;
+            bool isLarge = false;
+            if (Constants.ICON_SIZE_32 == iconSize) {
+                fileInfo |= (uint)WinApi.FileInfoFlags.SHGFI_LARGEICON;
+            } else if (Constants.ICON_SIZE_48 == iconSize) {
+                fileInfo |= (uint)WinApi.FileInfoFlags.SHGFI_OPENICON;
             } else {
-                if (File.Exists(fileName)) {
-                    fileInfo = (uint)WinApi.FileInfoFlags.SHGFI_ICON | (uint)WinApi.FileInfoFlags.SHGFI_USEFILEATTRIBUTES | (uint)WinApi.FileInfoFlags.SHGFI_SMALLICON;
-                } else {
-                    fileInfo = (uint)WinApi.FileInfoFlags.SHGFI_ICON | (uint)WinApi.FileInfoFlags.SHGFI_SMALLICON;
-                }
+                isLarge = true;
+                fileInfo |= (uint)WinApi.FileInfoFlags.SHGFI_SHELLICONSIZE;
+            }
+            if (File.Exists(fileName)) {
+                fileInfo |= (uint)WinApi.FileInfoFlags.SHGFI_USEFILEATTRIBUTES;
             }
             IntPtr _IconIntPtr = DllUtils.SHGetFileInfo(fileName, 0, ref shfi, (uint)Marshal.SizeOf(shfi), fileInfo);
             if (_IconIntPtr.Equals(IntPtr.Zero)) return null;
-            Icon icon = Icon.FromHandle(shfi.hIcon).Clone() as Icon;
+            Icon icon;
+            if (isLarge) {
+                int iconIndex = shfi.iIcon;
+
+                // Get the System IImageList object from the Shell:
+                Guid iidImageList = new Guid("46EB5926-582E-4017-9FDF-E8998DAA0950");
+
+                IImageList iml;
+                int size = 0x4;
+                DllUtils.SHGetImageList(size, ref iidImageList, out iml); // writes iml
+
+                IntPtr hIcon = IntPtr.Zero;
+                int ILD_TRANSPARENT = 1;
+                iml.GetIcon(iconIndex, ILD_TRANSPARENT, ref hIcon);
+                icon = Icon.FromHandle(hIcon).Clone() as Icon;
+            } else {
+                icon = Icon.FromHandle(shfi.hIcon).Clone() as Icon;
+            }
+            Bitmap bs = icon.ToBitmap();
+            icon.Dispose();
             DllUtils.DestroyIcon(shfi.hIcon); //释放资源
-            return icon;
+            DllUtils.SendMessage(shfi.hIcon, WinApi.WM_CLOSE, 0, 0);
+            return bs;
         }
 
-        public static BitmapImage GetBitmapImage(string fileName, bool isLargeIcon) {
-            Icon icon = GetIcon(fileName, isLargeIcon);
-            return ImageUtils.BitmapToBitmapImage(icon?.ToBitmap());
+        public static BitmapImage GetBitmapImage(string fileName, double iconSize) {
+            return ImageUtils.BitmapToBitmapImage(GetIcon(fileName, iconSize));
         }
         /// <summary>
         /// 绘制方块图
