@@ -21,6 +21,7 @@ namespace XStart2._0.Utils {
                 bitmapImage.EndInit();
                 bitmapImage.Freeze();
             }
+            bitmap.Dispose();
             return bitmapImage;
         }
 
@@ -29,6 +30,7 @@ namespace XStart2._0.Utils {
             image.BeginInit();
             image.UriSource = new System.Uri(@filename);
             image.EndInit();
+            image.Freeze();
             return image;
         }
     }

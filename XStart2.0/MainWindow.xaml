@@ -403,15 +403,15 @@
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
-        <StatusBar Grid.Row="2">
+        <StatusBar Grid.Row="2" Height="30">
             <StatusBarItem>
                 <Menu DockPanel.Dock="Left">
                     <MenuItem>
                         <MenuItem.Header>
-                            <TextBlock Text="{Binding TypeTabToggleIcon}" Foreground="BlueViolet" FontFamily="{StaticResource FontAwesomeSolid}" FontSize="16" ToolTip="类别名称显示切换" MouseLeftButtonUp="ToggleTabItem"/>
+                            <TextBlock Text="{Binding TypeTabToggleIcon}" Foreground="BlueViolet" FontFamily="{StaticResource FontAwesomeSolid}" FontSize="18" ToolTip="类别名称显示切换" MouseLeftButtonUp="ToggleTabItem"/>
                         </MenuItem.Header>
                     </MenuItem>
-                    <MenuItem Header="菜单">
+                    <MenuItem Header="菜单" Width="42" Height="24">
                         <MenuItem IsCheckable="True" IsChecked="{Binding TopMost}" Header="置顶" Style="{StaticResource MenuStyleKey}"/>
                         <MenuItem IsCheckable="True" IsChecked="{Binding Audio}" Header="音效" Style="{StaticResource MenuStyleKey}"/>
                         <MenuItem IsCheckable="True" IsChecked="{Binding CloseBorderHide}" Header="靠边隐藏" Style="{StaticResource MenuStyleKey}" Click="CloseBorderHide_Click"/>

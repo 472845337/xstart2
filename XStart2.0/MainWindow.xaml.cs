@@ -271,7 +271,8 @@ namespace XStart2._0 {
                     autoRunWindow.Close();
                 }));
             }
-            // 任务栏图标
+
+            #region 任务栏图标
             notifyIcon = new System.Windows.Forms.NotifyIcon();
             System.Windows.Forms.NotifyIcon icon = new System.Windows.Forms.NotifyIcon();
             Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Files/xstart2.ico")).Stream;
@@ -285,6 +286,8 @@ namespace XStart2._0 {
             System.Windows.Forms.MenuItem closeWindowMenuItem = new System.Windows.Forms.MenuItem("退出");
             closeWindowMenuItem.Click += WindowCloseMenu_Click;
             notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[] { showWindowMenuItem, closeWindowMenuItem });
+            #endregion
+
             Configs.inited = true;
             IsAllShow = true;
         }
@@ -777,6 +780,9 @@ namespace XStart2._0 {
         }
 
         private void OperateColumn(ColumnWindow columnWindow) {
+            if (Topmost) {
+                Topmost = false;
+            }
             if (true == columnWindow.ShowDialog()) {
                 // 保存数据到类别库中
                 if (string.IsNullOrEmpty(columnWindow.vm.Section)) {
@@ -816,6 +822,9 @@ namespace XStart2._0 {
                 }
             }
             columnWindow.Close();
+            if (mainViewModel.TopMost) {
+                Topmost = true;
+            }
         }
 
         private void AddColumnSecurity_Click(object sender, RoutedEventArgs e) {
@@ -870,6 +879,9 @@ namespace XStart2._0 {
         }
 
         private void AddSecurity<T>(T t) where T : TableData {
+            if (Topmost) {
+                Topmost = false;
+            }
             // 添加口令
             AddSecurityWindow addSecurityWindow = new AddSecurityWindow() {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
@@ -889,6 +901,9 @@ namespace XStart2._0 {
                 NotifyUtils.ShowNotification("口令添加成功！");
             }
             addSecurityWindow.Close();
+            if (mainViewModel.TopMost) {
+                Topmost = true;
+            }
         }
         private void UpdateSecurity<T>(T t) where T : TableData {
             if (Topmost) {
@@ -995,6 +1010,9 @@ namespace XStart2._0 {
         }
 
         private void AddProject_Click(object sender, RoutedEventArgs e) {
+            if (Topmost) {
+                Topmost = false;
+            }
             // 当前栏目
             FrameworkElement element = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as FrameworkElement;
             object tag = element.Tag;
@@ -1017,6 +1035,9 @@ namespace XStart2._0 {
                 NotifyUtils.ShowNotification($"添加[{projectWindow.Project.Name}]成功！");
             }
             projectWindow.Close();
+            if (mainViewModel.TopMost) {
+                Topmost = true;
+            }
         }
 
         private void ClearProject_Click(object sender, RoutedEventArgs e) {
@@ -1049,12 +1070,13 @@ namespace XStart2._0 {
             } else {
                 MessageBox.Show("当前栏目无项目！", Constants.MESSAGE_BOX_TITLE_ERROR);
             }
-
-
             e.Handled = true;
         }
         // 编辑项目
         private void EditProject_Click(object sender, RoutedEventArgs e) {
+            if (Topmost) {
+                Topmost = false;
+            }
             Project project = GetProjectByMenu(sender);
             if (null != project) {
                 ProjectWindow projectWindow = new ProjectWindow("修改项目", project.TypeSection, project.ColumnSection) { Project = project };
@@ -1069,6 +1091,9 @@ namespace XStart2._0 {
                 projectWindow.Close();
             } else {
                 MessageBox.Show("系统错误！");
+            }
+            if (mainViewModel.TopMost) {
+                Topmost = true;
             }
         }
         // 删除项目
