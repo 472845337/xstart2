@@ -58,15 +58,51 @@ namespace XStart2._0.Config {
         public static int systemAppOpenPage = 0;
         public static bool systemAppAddMulti = false;
 
+        public static Dictionary<string, string> iconPathDic = new Dictionary<string, string>() {
+            { APP, "Files/Icons/app.ico"}, {URL, "Files/Icons/url.ico"},{MY_COMPUTER, "Files/Icons/System/MyComputer.ico"},{MY_DOCUMENT, "Files/Icons/System/MyDocument.ico"},
+            {CONTROL,  "Files/Icons/System/Control.ico"},{ RECYCLE_BIN,"Files/Icons/System/RecycleBin.ico"},{IE,"Files/Icons/System/IE.ico"},
+            { INTERNET, "Files/Icons/System/Network.ico"},{EXPLORER, "Files/Icons/System/WindowExplorer.ico"},{PRINT_FAX, "Files/Icons/System/PrintAndFax.ico"},
+            { REGEDIT,"Files/Icons/System/Regedit.ico"},{CMD,"Files/Icons/System/Cmd.ico"},{FOLDER_OPTIONS,"Files/Icons/System/FolderOptions.ico"},
+            {MSTSC,"Files/Icons/System/Mstsc.ico"}, {CLOSE_PC,"Files/Icons/System/ClosePC.ico"}, {RESTART_PC,"Files/Icons/System/RestartPC.ico"},
+            {LOG_OUT,"Files/Icons/System/logout.ico"},            {LOCK_PC,"Files/Icons/System/LockPC.ico"},            {STANDBY_PC,"Files/Icons/System/StandbyPC.ico"},
+            {SLEEP_PC,"Files/Icons/System/SleepPC.ico"},            {NET_END,"Files/Icons/System/NetEnd.ico"},            {SCREEN_SAVER, "Files/Icons/System/ScreenSaver.ico"},
+            {OPEN_CD_ROM,"Files/Icons/System/CdRom.ico"},            {CLOSE_CD_ROM,"Files/Icons/System/CdRom.ico"},            {SHOW_HIDE_TASKBAR,"Files/Icons/System/TaskBar.ico"},
+            {TURN_OFF_MONITOR,"Files/Icons/System/TurnoffMonitor.ico"},            {CLEAR_RECYCLE_BIN, "Files/Icons/System/RecycleBin.ico"},            {CLEAR_IE_ADDRESS, "Files/Icons/System/RecycleBin.ico"},
+            {CLEAR_IE_HISTORY, "Files/Icons/System/RecycleBin.ico"},            {CLEAR_IE_COOKIES, "Files/Icons/System/RecycleBin.ico"},            {CLEAR_RENT, "Files/Icons/System/RecycleBin.ico"},
+            {CLEAR_SOME_DIRECTORY, "Files/Icons/System/RecycleBin.ico"},            {CONTROL_APP_MEMORY,"Files/Icons/System/Memory.ico"},            {END_PROCESS,"Files/Icons/System/EndProcess.ico"},
+            {VOLUME_ADD, "Files/Icons/System/VolumeAdd.ico"},            {VOLUME_REDUCE, "Files/Icons/System/VolumeReduce.ico"},            {VOLUME_SILENT_TOGGLE, "Files/Icons/System/VolumeSilent.ico"},
+            {VOLUME_WAVE_ADD, "Files/Icons/System/VolumeAdd.ico"},            {VOLUME_WAVE_REDUCE, "Files/Icons/System/VolumeReduce.ico"},            {VOLUME_WAVE_SILENT_TOGGLE, "Files/Icons/System/VolumeSilent.ico"},
+            {VOLUME_MIC_ADD, "Files/Icons/System/VolumeAdd.ico"},            {VOLUME_MIC_REDUCE, "Files/Icons/System/VolumeReduce.ico"},            {VOLUME_MIC_SILENT_TOGGLE, "Files/Icons/System/VolumeSilent.ico"},
+            {VOLUME_LINE_IN_ADD, "Files/Icons/System/VolumeAdd.ico"},            {VOLUME_LINE_IN_REDUCE, "Files/Icons/System/VolumeReduce.ico"},            {VOLUME_LINE_IN_SILENT_TOGGLE, "Files/Icons/System/VolumeSilent.ico"},
+            {VOLUME_CD_PLAYER_ADD, "Files/Icons/System/VolumeAdd.ico"},            {VOLUME_CD_PLAYER_REDUCE, "Files/Icons/System/VolumeReduce.ico"},            {VOLUME_CD_PLAYER_SILENT_TOGGLE, "Files/Icons/System/VolumeSilent.ico"},
+            {ADD_OR_REMOVE_APP,"Files/Icons/System/AddOrRemoveApp.ico"},            {INTERNET_OPTIONS,"Files/Icons/System/InternetOptions.ico"},            {USER_ACCOUNT,"Files/Icons/System/UserAccount.ico"},
+            {REGION_LANGUAGE_OPTIONS,"Files/Icons/System/RegionLanguageOptions.ico"},
+            {PHONE_AND_MODEM_OPTIONS,"Files/Icons/System/PhoneModemOptions.ico"},
+            {ACCESSIBILITY_OPTIONS,"Files/Icons/System/AccessibilityOptions.ico"},
+            {POWER_OPTIONS,"Files/Icons/System/PowerOptions.ico"},
+            {GAME_CONTROLLER,"Files/Icons/System/GameController.ico"},
+            {NETWORK_CONNECT, "Files/Icons/System/Network.ico"},
+            {SCREEN_SHOW, "Files/Icons/System/ScreenSaver.ico"},
+            {SYSTEM_PROPERTIES,"Files/Icons/System/SystemProperties.ico"},
+            {ADD_HARDWARE,"Files/Icons/System/AddHardware.ico"},
+            {MOUSE,"Files/Icons/System/Mouse.ico"},
+            {KEYBOARD,"Files/Icons/System/KeyBoard.ico"},
+            {SOUND_AUDIO_EQUIPMENT,"Files/Icons/System/SoundAudioEquipment.ico"},
+            {VOLUME_CONTROL,"Files/Icons/System/VolumeControl.ico"},
+            {DATE_TIME,"Files/Icons/System/DateTime.ico"}
+        };
+
         public static void InitIconDic() {
+            // 小图标启动就初始化
             InitIconDic(Constants.ICON_SIZE_32);
-            InitIconDic(Constants.ICON_SIZE_48);
-            InitIconDic(Constants.ICON_SIZE_72);
-            InitIconDic(Constants.ICON_SIZE_128);
-            InitIconDic(Constants.ICON_SIZE_256);
+            //InitIconDic(Constants.ICON_SIZE_48);
+            //InitIconDic(Constants.ICON_SIZE_72);
+            //InitIconDic(Constants.ICON_SIZE_128);
+            //InitIconDic(Constants.ICON_SIZE_256);
         }
 
-        public static Dictionary<string, BitmapImage> GetIconDicBySize(int size) {
+
+        private static Dictionary<string, BitmapImage> GetIconDicBySize(int size) {
             Dictionary<string, BitmapImage> iconDic = null;
             if (Constants.ICON_SIZE_32 == size) {
                 iconDic = iconDic32;
@@ -82,93 +118,23 @@ namespace XStart2._0.Config {
             return iconDic;
         }
 
+        public static BitmapImage GetIcon(int size, string key) {
+            Dictionary<string, BitmapImage> iconDic = GetIconDicBySize(size);
+            if (Constants.ICON_SIZE_32 != size) {
+                // 加载
+                if (!iconDic.ContainsKey(key)) {
+                    iconDic.Add(key, IconUtils.GetBitmapImage(AppStartPath + iconPathDic[key], size));
+                }
+            }
+            return iconDic[key];
+        }
+
         private static void InitIconDic(int size) {
             Dictionary<string, BitmapImage> iconDic = GetIconDicBySize(size);
             ClearIconDic(iconDic);
-            iconDic.Add(APP, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/app.ico", size));
-            iconDic.Add(URL, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/url.ico", size));
-
-            var recycleBin = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/RecycleBin.ico", size);
-            var network = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Network.ico", size);
-            var screen = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/ScreenSaver.ico", size);
-            var volumeAdd = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/VolumeAdd.ico", size);
-            var volumeReduce = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/VolumeReduce.ico", size);
-            var volumeSilent = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/VolumeSilent.ico", size);
-            #region 系统链接
-            iconDic.Add(MY_COMPUTER, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/MyComputer.ico", size));
-            iconDic.Add(MY_DOCUMENT, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/MyDocument.ico", size));
-            iconDic.Add(CONTROL, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Control.ico", size));
-            iconDic.Add(RECYCLE_BIN, recycleBin);
-            iconDic.Add(IE, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/IE.ico", size));
-            iconDic.Add(INTERNET, network);
-            iconDic.Add(EXPLORER, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/WindowExplorer.ico", size));
-            iconDic.Add(PRINT_FAX, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/PrintAndFax.ico", size));
-            iconDic.Add(REGEDIT, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Regedit.ico", size));
-            iconDic.Add(CMD, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Cmd.ico", size));
-            iconDic.Add(FOLDER_OPTIONS, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/FolderOptions.ico", size));
-            iconDic.Add(MSTSC, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Mstsc.ico", size));
-            #endregion
-            #region 系统操作
-            iconDic.Add(CLOSE_PC, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/ClosePC.ico", size));
-            iconDic.Add(RESTART_PC, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/RestartPC.ico", size));
-            iconDic.Add(LOG_OUT, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/logout.ico", size));
-            iconDic.Add(LOCK_PC, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/LockPC.ico", size));
-            iconDic.Add(STANDBY_PC, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/StandbyPC.ico", size));
-            iconDic.Add(SLEEP_PC, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/SleepPC.ico", size));
-            iconDic.Add(NET_END, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/NetEnd.ico", size));
-            iconDic.Add(SCREEN_SAVER, screen);
-            iconDic.Add(OPEN_CD_ROM, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/CdRom.ico", size));
-            iconDic.Add(CLOSE_CD_ROM, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/CdRom.ico", size));
-            iconDic.Add(SHOW_HIDE_TASKBAR, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/TaskBar.ico", size));
-            iconDic.Add(TURN_OFF_MONITOR, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/TurnoffMonitor.ico", size));
-
-            iconDic.Add(CLEAR_RECYCLE_BIN, recycleBin);
-            iconDic.Add(CLEAR_IE_ADDRESS, recycleBin);
-            iconDic.Add(CLEAR_IE_HISTORY, recycleBin);
-            iconDic.Add(CLEAR_IE_COOKIES, recycleBin);
-            iconDic.Add(CLEAR_RENT, recycleBin);
-            iconDic.Add(CLEAR_SOME_DIRECTORY, recycleBin);
-            iconDic.Add(CONTROL_APP_MEMORY, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Memory.ico", size));
-            iconDic.Add(END_PROCESS, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/EndProcess.ico", size));
-            #endregion
-
-            #region 音量控制
-            iconDic.Add(VOLUME_ADD, volumeAdd);
-            iconDic.Add(VOLUME_REDUCE, volumeReduce);
-            iconDic.Add(VOLUME_SILENT_TOGGLE, volumeSilent);
-            iconDic.Add(VOLUME_WAVE_ADD, volumeAdd);
-            iconDic.Add(VOLUME_WAVE_REDUCE, volumeReduce);
-            iconDic.Add(VOLUME_WAVE_SILENT_TOGGLE, volumeSilent);
-            iconDic.Add(VOLUME_MIC_ADD, volumeAdd);
-            iconDic.Add(VOLUME_MIC_REDUCE, volumeReduce);
-            iconDic.Add(VOLUME_MIC_SILENT_TOGGLE, volumeSilent);
-            iconDic.Add(VOLUME_LINE_IN_ADD, volumeAdd);
-            iconDic.Add(VOLUME_LINE_IN_REDUCE, volumeReduce);
-            iconDic.Add(VOLUME_LINE_IN_SILENT_TOGGLE, volumeSilent);
-            iconDic.Add(VOLUME_CD_PLAYER_ADD, volumeAdd);
-            iconDic.Add(VOLUME_CD_PLAYER_REDUCE, volumeReduce);
-            iconDic.Add(VOLUME_CD_PLAYER_SILENT_TOGGLE, volumeSilent);
-            #endregion
-
-            #region 控制面板
-            iconDic.Add(ADD_OR_REMOVE_APP, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/AddOrRemoveApp.ico", size));
-            iconDic.Add(INTERNET_OPTIONS, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/InternetOptions.ico", size));
-            iconDic.Add(USER_ACCOUNT, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/UserAccount.ico", size));
-            iconDic.Add(REGION_LANGUAGE_OPTIONS, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/RegionLanguageOptions.ico", size));
-            iconDic.Add(PHONE_AND_MODEM_OPTIONS, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/PhoneModemOptions.ico", size));
-            iconDic.Add(ACCESSIBILITY_OPTIONS, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/AccessibilityOptions.ico", size));
-            iconDic.Add(POWER_OPTIONS, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/PowerOptions.ico", size));
-            iconDic.Add(GAME_CONTROLLER, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/GameController.ico", size));
-            iconDic.Add(NETWORK_CONNECT, network);
-            iconDic.Add(SCREEN_SHOW, screen);
-            iconDic.Add(SYSTEM_PROPERTIES, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/SystemProperties.ico", size));
-            iconDic.Add(ADD_HARDWARE, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/AddHardware.ico", size));
-            iconDic.Add(MOUSE, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Mouse.ico", size));
-            iconDic.Add(KEYBOARD, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/KeyBoard.ico", size));
-            iconDic.Add(SOUND_AUDIO_EQUIPMENT, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/SoundAudioEquipment.ico", size));
-            iconDic.Add(VOLUME_CONTROL, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/VolumeControl.ico", size));
-            iconDic.Add(DATE_TIME, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/DateTime.ico", size));
-            #endregion
+            foreach (var iconPath in iconPathDic) {
+                iconDic.Add(iconPath.Key, IconUtils.GetBitmapImage(AppStartPath + iconPath.Value, size));
+            }
         }
         public static void Dispose() {
             BindingFlags flag = BindingFlags.Static | BindingFlags.Public;

@@ -61,13 +61,13 @@ namespace XStart2._0.Services {
                 if (!string.IsNullOrEmpty(iconPath)) {
                     if (iconPath.StartsWith("#")) {
                         // 系统功能图标
-                        image = Configs.GetIconDicBySize(size)[iconPath];
+                        image = Configs.GetIcon(size, iconPath);
                     } else {
                         // 项目图标
                         if (File.Exists(iconPath) || Directory.Exists(iconPath)) {
                             image = IconUtils.GetBitmapImage(iconPath, size);
                         } else {
-                            image = Configs.GetIconDicBySize(size)[SystemProjectParam.APP];
+                            image = Configs.GetIcon(size, SystemProjectParam.APP);
                         }
                     }
                 } else {
@@ -76,7 +76,7 @@ namespace XStart2._0.Services {
                     if (Project.KIND_FILE.Equals(kind) || Project.KIND_DIRECTORY.Equals(kind)) {
                         image = IconUtils.GetBitmapImage(iconPath, size);
                     } else if (Project.KIND_URL.Equals(kind)) {
-                        image = Configs.GetIconDicBySize(size)[SystemProjectParam.URL];
+                        image = Configs.GetIcon(size, SystemProjectParam.URL);
                     }
                 }
                 return image;
