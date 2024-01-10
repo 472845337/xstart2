@@ -55,19 +55,19 @@ namespace XStart2._0.Services {
         /// <param name="path"></param>
         /// <param name="iconPath"></param>
         /// <returns></returns>
-        public static BitmapImage GetIconImage(string kind, string path, string iconPath, double size) {
+        public static BitmapImage GetIconImage(string kind, string path, string iconPath, int size) {
             try {
                 BitmapImage image = null;
                 if (!string.IsNullOrEmpty(iconPath)) {
                     if (iconPath.StartsWith("#")) {
                         // 系统功能图标
-                        image = Configs.iconDic[iconPath];
+                        image = Configs.GetIconDicBySize(size)[iconPath];
                     } else {
                         // 项目图标
                         if (File.Exists(iconPath) || Directory.Exists(iconPath)) {
                             image = IconUtils.GetBitmapImage(iconPath, size);
                         } else {
-                            image = IconUtils.GetBitmapImage(Configs.AppStartPath + Constants.ICON_APP, size);
+                            image = Configs.GetIconDicBySize(size)[SystemProjectParam.APP];
                         }
                     }
                 } else {
@@ -76,7 +76,7 @@ namespace XStart2._0.Services {
                     if (Project.KIND_FILE.Equals(kind) || Project.KIND_DIRECTORY.Equals(kind)) {
                         image = IconUtils.GetBitmapImage(iconPath, size);
                     } else if (Project.KIND_URL.Equals(kind)) {
-                        image = IconUtils.GetBitmapImage(Configs.AppStartPath + Constants.ICON_INTERNET, size);
+                        image = Configs.GetIconDicBySize(size)[SystemProjectParam.URL];
                     }
                 }
                 return image;
@@ -124,7 +124,6 @@ namespace XStart2._0.Services {
             project.Sort = sort;
             // 保存应用信息
             ProjectService.Instance.Insert(project);
-            project.InitIcon();
             TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic.Add(project.Section, project);
         }
     }

@@ -28,7 +28,10 @@ namespace XStart2._0.Config {
         public static bool closeBorderHide = true;// 靠边自动隐藏
         public static string urlOpen = Constants.URL_OPEN_DEFAULT;
         public static string urlOpenCustomBrowser;
-        public static double iconSize;
+        public static int iconSize;
+        public static string orientation;
+        public static bool hideTitle;
+        public static bool oneLineMulti;
         public static bool exitWarn;// 退出提醒
         public static bool forceExit = false;// 直接退出
         public static int delCount;
@@ -46,68 +49,45 @@ namespace XStart2._0.Config {
         public static bool lineInMuted = false;
         public static bool cdPlayerMuted = false;
 
-        public static BitmapImage ICON_APP = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/app.ico", Constants.ICON_SIZE_32);
-
-        public static BitmapImage ICON_MYCOMPUTER = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/MyComputer.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_MYDOCUMENT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/MyDocument.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_CONTROL = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Control.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_RECYCLE_BIN = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/RecycleBin.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_IE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/IE.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_NETWORK = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Network.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_WINDOW_EXPLORER = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/WindowExplorer.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_PRINT_AND_FAX = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/PrintAndFax.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_REGEDIT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Regedit.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_CMD = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Cmd.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_FOLDER_OPTIONS = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/FolderOptions.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_MSTSC = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Mstsc.ico", Constants.ICON_SIZE_32);
-
-        public static BitmapImage ICON_CLOSE_PC = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/ClosePC.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_RESTART_PC = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/RestartPC.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_LOGOUT_PC = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/logout.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_LOCK_PC = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/LockPC.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_STANDBY_PC = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/StandbyPC.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_SLEEP_PC = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/SleepPC.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_NET_END = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/NetEnd.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_SCREEN_SAVER = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/ScreenSaver.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_CD_ROM = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/CdRom.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_DESKTOP_ICON = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/DeskTopIcon.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_TASKBAR = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/TaskBar.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_TURNOFF_MONITOR = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/TurnoffMonitor.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_MEMORY = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Memory.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_END_PROCESS = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/EndProcess.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_CUR_WINDOW = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/CurWindow.ico", Constants.ICON_SIZE_32);
-
-        public static BitmapImage ICON_VOLUME_ADD = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/VolumeAdd.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_VOLUME_REDUCE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/VolumeReduce.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_SILENT_TOGGLE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/VolumeSilent.ico", Constants.ICON_SIZE_32);
-
-        public static BitmapImage ICON_ADD_OR_REMOVE_APP = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/AddOrRemoveApp.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_INTERNET_OPTIONS = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/InternetOptions.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_USER_ACCOUNT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/UserAccount.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_REGION_LANGUAGE_OPTIONS = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/RegionLanguageOptions.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_PHONE_MODEM = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/PhoneModemOptions.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_ACCESSIBILITY_OPTIONS = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/AccessibilityOptions.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_POWER_OPTIONS = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/PowerOptions.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_GAME_CONTROLLER = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/GameController.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_SYSTEM_PROPERTIES = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/SystemProperties.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_ADD_HARDWARE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/AddHardware.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_MOUSE = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Mouse.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_KEYBOARD = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/KeyBoard.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_SOUND_AUDIO_EQUIPMENT = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/SoundAudioEquipment.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_VOLUME_CONTROL = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/VolumeControl.ico", Constants.ICON_SIZE_32);
-        public static BitmapImage ICON_DATE_TIME = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/DateTime.ico", Constants.ICON_SIZE_32);
-
-
         // 需要初始化，在窗口加载后
-        public static Dictionary<string, BitmapImage> iconDic = new Dictionary<string, BitmapImage>();
+        public static Dictionary<string, BitmapImage> iconDic32 = new Dictionary<string, BitmapImage>();
+        public static Dictionary<string, BitmapImage> iconDic48 = new Dictionary<string, BitmapImage>();
+        public static Dictionary<string, BitmapImage> iconDic72 = new Dictionary<string, BitmapImage>();
+        public static Dictionary<string, BitmapImage> iconDic128 = new Dictionary<string, BitmapImage>();
+        public static Dictionary<string, BitmapImage> iconDic256 = new Dictionary<string, BitmapImage>();
         public static int systemAppOpenPage = 0;
         public static bool systemAppAddMulti = false;
 
-        public static void InitIconDic(double size) {
-            foreach(KeyValuePair<string, BitmapImage> icon in iconDic) {
-                icon.Value.Freeze();
+        public static void InitIconDic() {
+            InitIconDic(Constants.ICON_SIZE_32);
+            InitIconDic(Constants.ICON_SIZE_48);
+            InitIconDic(Constants.ICON_SIZE_72);
+            InitIconDic(Constants.ICON_SIZE_128);
+            InitIconDic(Constants.ICON_SIZE_256);
+        }
+
+        public static Dictionary<string, BitmapImage> GetIconDicBySize(int size) {
+            Dictionary<string, BitmapImage> iconDic = null;
+            if (Constants.ICON_SIZE_32 == size) {
+                iconDic = iconDic32;
+            } else if (Constants.ICON_SIZE_48 == size) {
+                iconDic = iconDic48;
+            } else if (Constants.ICON_SIZE_72 == size) {
+                iconDic = iconDic72;
+            } else if (Constants.ICON_SIZE_128 == size) {
+                iconDic = iconDic128;
+            } else if (Constants.ICON_SIZE_256 == size) {
+                iconDic = iconDic256;
             }
-            iconDic.Clear();
+            return iconDic;
+        }
+
+        private static void InitIconDic(int size) {
+            Dictionary<string, BitmapImage> iconDic = GetIconDicBySize(size);
+            ClearIconDic(iconDic);
+            iconDic.Add(APP, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/app.ico", size));
+            iconDic.Add(URL, IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/url.ico", size));
+
             var recycleBin = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/RecycleBin.ico", size);
             var network = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/Network.ico", size);
             var screen = IconUtils.GetBitmapImage(AppStartPath + "Files/Icons/System/ScreenSaver.ico", size);
@@ -202,6 +182,18 @@ namespace XStart2._0.Config {
                     }
                 }
             }
+            ClearIconDic(iconDic32);
+            ClearIconDic(iconDic48);
+            ClearIconDic(iconDic72);
+            ClearIconDic(iconDic128);
+            ClearIconDic(iconDic256);
+        }
+
+        private static void ClearIconDic(Dictionary<string, BitmapImage> iconDic) {
+            foreach (KeyValuePair<string, BitmapImage> icon in iconDic) {
+                icon.Value.Freeze();
+            }
+            iconDic.Clear();
         }
     }
 }

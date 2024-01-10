@@ -100,6 +100,9 @@ namespace XStart2._0 {
             string urlOpen = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN);
             string urlOpenCustomBrowser = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER);
             string iconSize = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_ICON_SIZE);
+            string orientation = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_ORIENTATION);// 排列方式
+            string hideTitle = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_HIDE_TITLE);// 标题隐藏
+            string oneLineMulti = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_ONE_LINE_MULTI);// 一行多个
 
             Configs.typeTabExpand = string.IsNullOrEmpty(typeTabExpandStr) || Convert.ToBoolean(typeTabExpandStr);
             Configs.topMost = !string.IsNullOrEmpty(topMostStr) && Convert.ToBoolean(topMostStr);
@@ -111,7 +114,10 @@ namespace XStart2._0 {
             Configs.closeBorderHide = string.IsNullOrEmpty(closeBorderHide) || Convert.ToBoolean(closeBorderHide);
             if (!string.IsNullOrEmpty(urlOpen)) { Configs.urlOpen = urlOpen; }
             Configs.urlOpenCustomBrowser = urlOpenCustomBrowser;
-            Configs.iconSize = string.IsNullOrEmpty(iconSize)? Constants.ICON_SIZE_32 : Convert.ToDouble(iconSize);
+            Configs.iconSize = string.IsNullOrEmpty(iconSize) ? Constants.ICON_SIZE_32 : Convert.ToInt32(iconSize);
+            Configs.orientation = string.IsNullOrEmpty(orientation) ? Constants.ORIENTATION_HORIZONTAL : orientation;
+            Configs.hideTitle = !string.IsNullOrEmpty(hideTitle) && Convert.ToBoolean(hideTitle);
+            Configs.oneLineMulti = !string.IsNullOrEmpty(oneLineMulti) && Convert.ToBoolean(oneLineMulti);
 
             mainViewModel.TypeTabExpanded = Configs.typeTabExpand;
             mainViewModel.ChangeTypeTab();// 初始化时要先触发一次
@@ -124,6 +130,9 @@ namespace XStart2._0 {
             mainViewModel.UrlOpen = Configs.urlOpen;
             mainViewModel.UrlOpenCustomBrowser = Configs.urlOpenCustomBrowser;
             mainViewModel.IconSize = Configs.iconSize;
+            mainViewModel.Orientation = Configs.orientation;
+            mainViewModel.HideTitle = Configs.hideTitle;
+            mainViewModel.OneLineMulti = Configs.oneLineMulti;
             // 系统其他配置
             string delCount = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_DEL_COUNT);// 数据库执行多少次删除后执行VACUUM
             Configs.delCount = string.IsNullOrEmpty(delCount) ? 0 : Convert.ToInt32(delCount);
@@ -134,7 +143,7 @@ namespace XStart2._0 {
             Configs.systemAppOpenPage = string.IsNullOrEmpty(systemProjectOpenPage) ? 0 : Convert.ToInt32(systemProjectOpenPage);
             string addMulti = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_ADD_MULTI);
             Configs.systemAppAddMulti = !string.IsNullOrEmpty(addMulti) && Convert.ToBoolean(addMulti);
-            Configs.InitIconDic(Configs.iconSize);
+            Configs.InitIconDic();
             SystemProjectParam.InitOperate();
             Configs.taskbarHandler = DllUtils.FindWindow("Shell_TrayWnd", null);
             Configs.taskbarIsShow = (DllUtils.GetWindowLong(Configs.taskbarHandler, WinApi.GWL_STYLE) & WinApi.WS_VISIBLE) == WinApi.WS_VISIBLE;
@@ -184,8 +193,9 @@ namespace XStart2._0 {
             foreach (Project project in projects) {
                 Column column = XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection];
                 // 初始化项目的图示
-                project.IconSize = null != column.IconSize ? (double)column.IconSize : Configs.iconSize;
-                project.InitIcon();
+                project.IconSize = null != column.IconSize ? (int)column.IconSize : Configs.iconSize;
+                project.Orientation = string.IsNullOrEmpty(column.Orientation) ? Configs.orientation : column.Orientation;
+                project.HideTitle = null == column.HideTitle ? Configs.hideTitle : (bool)column.HideTitle;
                 if (string.IsNullOrEmpty(project.Name) || string.IsNullOrEmpty(project.TypeSection)
                     || string.IsNullOrEmpty(project.ColumnSection) || !XStartService.TypeDic.TryGetValue(project.TypeSection, out _)
                     || !XStartService.TypeDic[project.TypeSection].ColumnDic.TryGetValue(project.ColumnSection, out _)) {
@@ -459,12 +469,32 @@ namespace XStart2._0 {
             }
         }
 
-        private void ComputedColumnProjectWidth(Column column) {
-            if (Visibility.Visible == column.VerticalScrollBar || ScrollBarVisibility.Visible == XStartService.TypeDic[column.TypeSection].VerticalScroll) {
-                column.ProjectWidth = (int)(MainTabControl.ActualWidth - mainViewModel.TypeWidth - 46);
-            } else {
-                column.ProjectWidth = (int)(MainTabControl.ActualWidth - mainViewModel.TypeWidth - 28);
+        private void ComputedColumnProject(Column column) {
+            #region 图标尺寸
+            int iconSize = Configs.iconSize;
+            if (null != column.IconSize) {
+                iconSize = (int)column.IconSize;
             }
+            foreach (KeyValuePair<string, Project> project in column.ProjectDic) {
+                if (project.Value.IconSize != iconSize) {
+                    project.Value.IconSize = iconSize;
+                }
+            }
+            #endregion
+            #region 计算一行是否多个项目
+            bool oneLineMulti = null == column.OneLineMulti ? mainViewModel.OneLineMulti : (bool)column.OneLineMulti;
+            if (oneLineMulti) {
+                // 一行多个
+                column.ProjectWidth = -1;
+            } else {
+                // 一行一个
+                if (Visibility.Visible == column.VerticalScrollBar || ScrollBarVisibility.Visible == XStartService.TypeDic[column.TypeSection].VerticalScroll) {
+                    column.ProjectWidth = (int)(MainTabControl.ActualWidth - mainViewModel.TypeWidth - 46);
+                } else {
+                    column.ProjectWidth = (int)(MainTabControl.ActualWidth - mainViewModel.TypeWidth - 28);
+                }
+            }
+            #endregion
         }
 
         private void Open_Setting(object sender, RoutedEventArgs e) {
@@ -484,6 +514,16 @@ namespace XStart2._0 {
                 mainViewModel.UrlOpen = settingVM.UrlOpen;
                 mainViewModel.UrlOpenCustomBrowser = settingVM.UrlOpenCustomBrowser;
                 mainViewModel.IconSize = settingVM.IconSize;
+                mainViewModel.HideTitle = settingVM.HideTitle;
+                mainViewModel.Orientation = settingVM.Orientation;
+                if (mainViewModel.OneLineMulti != settingVM.OneLineMulti) {
+                    mainViewModel.OneLineMulti = settingVM.OneLineMulti;
+                    foreach (var type in mainViewModel.Types) {
+                        foreach (var column in type.Value.ColumnDic) {
+                            ComputedColumnProject(column.Value);
+                        }
+                    }
+                }
                 SaveSetting();
             }
             settingWindow.Close();
@@ -709,11 +749,16 @@ namespace XStart2._0 {
             Expander curExpander = ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent(sender as MenuItem)) as Expander;
             string columnSection = curExpander.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
             string typeSection = curExpander.GetValue(ElementParamHelper.TypeSectionProperty) as string;
+            Column column = XStartService.TypeDic[typeSection].ColumnDic[columnSection];
             ColumnVM vm = new ColumnVM {
                 Title = "修改栏目",
-                Name = XStartService.TypeDic[typeSection].ColumnDic[columnSection].Name,
+                Name = column.Name,
                 TypeSection = typeSection,
-                Section = columnSection
+                Section = columnSection,
+                IconSize = column.IconSize,
+                Orientation = column.Orientation,
+                HideTitle = column.HideTitle,
+                OneLineMulti = column.OneLineMulti
             };
             ColumnWindow window = new ColumnWindow(vm) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
             OperateColumn(window);
@@ -735,27 +780,38 @@ namespace XStart2._0 {
             if (true == columnWindow.ShowDialog()) {
                 // 保存数据到类别库中
                 if (string.IsNullOrEmpty(columnWindow.vm.Section)) {
-                    Column bean = new Column {
-                        Name = columnWindow.vm.Name
+                    Column column = new Column {
+                        Name = columnWindow.vm.Name,
+                        Orientation = columnWindow.vm.Orientation,
+                        HideTitle = columnWindow.vm.HideTitle,
+                        IconSize = columnWindow.vm.IconSize,
+                        OneLineMulti = columnWindow.vm.OneLineMulti
                     };
-                    bean.TypeSection = columnWindow.vm.TypeSection;
-                    bean.Section = Guid.NewGuid().ToString();
-                    bean.IsExpanded = true;
+                    column.TypeSection = columnWindow.vm.TypeSection;
+                    column.Section = Guid.NewGuid().ToString();
+                    column.IsExpanded = true;
                     Column lastColumn = XStartService.TypeDic[columnWindow.vm.TypeSection].ColumnDic[XStartService.TypeDic[columnWindow.vm.TypeSection].ColumnDic.Count - 1];
                     if (null == lastColumn) {
-                        bean.Sort = 0;
+                        column.Sort = 0;
                     } else {
-                        bean.Sort = lastColumn.Sort + 1;
+                        column.Sort = lastColumn.Sort + 1;
                     }
-                    columnService.Insert(bean);
-                    XStartService.TypeDic[columnWindow.vm.TypeSection].ColumnDic.Add(bean.Section, bean);
+                    columnService.Insert(column);
+                    XStartService.TypeDic[columnWindow.vm.TypeSection].ColumnDic.Add(column.Section, column);
                     // 展开新增的栏目
-                    ExpandColumn(bean.TypeSection, bean.Section);
+                    ExpandColumn(column.TypeSection, column.Section);
                     NotifyUtils.ShowNotification("新增栏目成功！");
                 } else {
                     Column bean = XStartService.TypeDic[columnWindow.vm.TypeSection].ColumnDic[columnWindow.vm.Section];
                     bean.Name = columnWindow.vm.Name;
-                    columnService.Update(bean);
+                    bean.Orientation = columnWindow.vm.Orientation;
+                    bean.HideTitle = columnWindow.vm.HideTitle;
+                    bean.IconSize = columnWindow.vm.IconSize;
+                    if (bean.OneLineMulti != columnWindow.vm.OneLineMulti) {
+                        bean.OneLineMulti = columnWindow.vm.OneLineMulti;
+                        ComputedColumnProject(bean);
+                    }
+                    columnService.Update(bean, true);
                     NotifyUtils.ShowNotification("修改栏目成功！");
                 }
             }
@@ -1092,8 +1148,9 @@ namespace XStart2._0 {
             ScrollViewer sv = sender as ScrollViewer;
             Column column = sv.Tag as Column;
             column.VerticalScrollBar = sv.ComputedVerticalScrollBarVisibility;
-            ComputedColumnProjectWidth(column);
+            ComputedColumnProject(column);
         }
+
 
         // 取消所有项目自启动
         private void CancelAllAutoRun_Click(object sender, RoutedEventArgs e) {
@@ -1117,6 +1174,31 @@ namespace XStart2._0 {
                 MessageBox.Show("当前无自启动项目！", Constants.MESSAGE_BOX_TITLE_ERROR);
             }
             e.Handled = true;
+        }
+
+        /// <summary>
+        /// 取消所有有自定义样式的栏目
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CancelAllCustomStyle_Click(object sender, EventArgs e) {
+            if (MessageBoxResult.OK == MessageBox.Show("确认取消所有栏目自定义样式？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                foreach (KeyValuePair<string, Bean.Type> typeDic in mainViewModel.Types) {
+                    foreach (KeyValuePair<string, Column> columnDic in typeDic.Value.ColumnDic) {
+                        if (null != columnDic.Value.HideTitle || !string.IsNullOrEmpty(columnDic.Value.Orientation) || null != columnDic.Value.IconSize || null != columnDic.Value.OneLineMulti) {
+                            Column clearStyle = new Column();
+                            clearStyle.Section = columnDic.Value.Section;
+                            clearStyle.HideTitle = null;
+                            clearStyle.Orientation = null;
+                            clearStyle.IconSize = null;
+                            clearStyle.OneLineMulti = null;
+                            columnService.Update(clearStyle, true);
+                        }
+                    }
+                }
+                NotifyUtils.ShowNotification("取消所有栏目自定义样式成功！");
+            }
+
         }
 
         // 恢复默认配置
@@ -1213,6 +1295,9 @@ namespace XStart2._0 {
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN, ref Configs.urlOpen, mainViewModel.UrlOpen);// 浏览器打开链接
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER, ref Configs.urlOpenCustomBrowser, mainViewModel.UrlOpenCustomBrowser);// 自定义浏览器
             SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_ICON_SIZE, ref Configs.iconSize, mainViewModel.IconSize);// 图标尺寸
+            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_ORIENTATION, ref Configs.orientation, mainViewModel.Orientation);// 排列方式
+            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_HIDE_TITLE, ref Configs.hideTitle, mainViewModel.HideTitle);// 隐藏标题
+            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_ONE_LINE_MULTI, ref Configs.oneLineMulti, mainViewModel.OneLineMulti);// 一行多个
         }
         /// <summary>
         /// Config配置保存

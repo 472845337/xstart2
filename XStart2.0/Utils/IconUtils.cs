@@ -57,14 +57,14 @@ namespace XStart2._0.Utils {
         /// <param name="type">类型 file/dir</param>
         /// <param name="isLargeIcon">是否返回大图标</param>
         /// <returns>获取到的图标</returns>
-        public static Bitmap GetIcon(string fileName, double iconSize) {
+        public static Bitmap GetIcon(string fileName, int iconSize) {
             DllUtils.SHFILEINFO shfi = new DllUtils.SHFILEINFO();
             uint fileInfo = (uint)WinApi.FileInfoFlags.SHGFI_ICON;
             bool isLarge = false;
             if (Constants.ICON_SIZE_32 == iconSize) {
                 fileInfo |= (uint)WinApi.FileInfoFlags.SHGFI_LARGEICON;
             } else if (Constants.ICON_SIZE_48 == iconSize) {
-                fileInfo |= (uint)WinApi.FileInfoFlags.SHGFI_OPENICON;
+                fileInfo |= (uint)WinApi.FileInfoFlags.SHGFI_SYSICONINDEX;
             } else {
                 isLarge = true;
                 fileInfo |= (uint)WinApi.FileInfoFlags.SHGFI_SHELLICONSIZE;
@@ -99,7 +99,7 @@ namespace XStart2._0.Utils {
             return bs;
         }
 
-        public static BitmapImage GetBitmapImage(string fileName, double iconSize) {
+        public static BitmapImage GetBitmapImage(string fileName, int iconSize) {
             return ImageUtils.BitmapToBitmapImage(GetIcon(fileName, iconSize));
         }
         /// <summary>

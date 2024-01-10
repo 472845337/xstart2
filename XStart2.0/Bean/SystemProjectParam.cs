@@ -5,6 +5,9 @@ namespace XStart2._0.Bean {
     static class SystemProjectParam {
         public static Dictionary<string, SystemProject> OperateParam = new Dictionary<string, SystemProject>();
 
+        public const string APP = "#App";
+        public const string URL = "#Url";
+
         public const string MY_COMPUTER = "#MyComputer";
         public const string MY_DOCUMENT = "#MyDocument";
         public const string CONTROL = "#Control";

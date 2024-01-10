@@ -332,7 +332,8 @@
                                                                     <view:ImageButton Grid.Column="0" Content="{Binding Value.Name}" Style="{StaticResource AppButton}"
                                                                         ToolTip="{Binding Value.ToolTipContent}" Tag="{Binding Value}"
                                                                         Click="ProjectButton_Click" MouseDoubleClick="ProjectButton_DoubleClick"
-                                                                                      ButtonIcon="{Binding Value.Icon}" IconSize="{Binding Value.IconSize}">
+                                                                                       ButtonIcon="{Binding Value.Icon}" IconSize="{Binding Value.IconSize}"
+                                                                                     Width="{Binding Value, Converter={StaticResource ProjectWidthConverter}}" Orientation="{Binding Value.Orientation}" HideTitle="{Binding Value.HideTitle}">
                                                                         <Button.ContextMenu>
                                                                             <ContextMenu>
                                                                                 <MenuItem Header="添加项目" Click="AddProject_Click">
@@ -426,6 +427,11 @@
                         <MenuItem Header="取消所有自启动" Click="CancelAllAutoRun_Click">
                             <MenuItem.Icon>
                                 <Image Source="/Files/Icons/App/remove.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="取消所有自定义样式" Click="CancelAllCustomStyle_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/Fresh.ico"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="恢复默认" Click="RestoreDefault_Click">

@@ -78,11 +78,15 @@ namespace XStart2._0.ViewModels {
         public string UrlOpen { get; set; }
         public string UrlOpenCustomBrowser { get; set; }
         [OnChangedMethod(nameof(ChangeIconSize))]
-        public double IconSize { get; set; }
+        public int IconSize { get; set; }
+        [OnChangedMethod(nameof(ChangeColumnOrientation))]
+        public string Orientation { get; set; }
+        [OnChangedMethod(nameof(ChangeProjectHideTitle))]
+        public bool HideTitle { get; set; }
+        public bool OneLineMulti { get; set; }
 
         private void ChangeIconSize() {
             if (Config.Configs.inited) {
-                Config.Configs.InitIconDic(IconSize);
                 foreach(var type in XStartService.TypeDic) {
                     foreach(var column in type.Value.ColumnDic) {
                         if(null == column.Value.IconSize) {
@@ -96,6 +100,38 @@ namespace XStart2._0.ViewModels {
                 }
             }
         }
+
+        private void ChangeColumnOrientation() {
+            if (Config.Configs.inited) {
+                foreach (var type in XStartService.TypeDic) {
+                    foreach (var column in type.Value.ColumnDic) {
+                        if (string.IsNullOrEmpty(column.Value.Orientation)) {
+                            // 非自定义的栏目才修改图标大小
+                            foreach (var project in column.Value.ProjectDic) {
+                                project.Value.Orientation = Orientation;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ChangeProjectHideTitle() {
+            if (Config.Configs.inited) {
+                foreach (var type in XStartService.TypeDic) {
+                    foreach (var column in type.Value.ColumnDic) {
+                        if (null == column.Value.HideTitle) {
+                            // 非自定义的栏目才重置是否显示标题
+                            foreach (var project in column.Value.ProjectDic) {
+                                project.Value.HideTitle = HideTitle;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
         #endregion
     }
 }

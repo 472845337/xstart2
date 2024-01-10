@@ -17,13 +17,19 @@ namespace XStart2._0.Bean {
         [TableParam("start_open", "BIT")]
         public bool? StartOpen { get; set; }
         // 图标尺寸
+        [OnChangedMethod(nameof(ChangeProjectStyle))]
         [TableParam("icon_size", "INT")]
-        public double? IconSize { get; set; }
+        public int? IconSize { get; set; }
         // 是否横排
-        [TableParam("Orientation", "VARCHAR")]
+        [OnChangedMethod(nameof(ChangeProjectStyle))]
+        [TableParam("orientation", "VARCHAR")]
         public string Orientation { get; set; }
+        // 一行多个
+        [TableParam("one_line_multi", "BIT")]
+        public bool? OneLineMulti { get; set; }
         // 隐藏标题
-        [TableParam("Hide_Title", "INT")]
+        [OnChangedMethod(nameof(ChangeProjectStyle))]
+        [TableParam("hide_title", "BIT")]
         public bool? HideTitle { get; set; }
         [DoNotNotify]
         public bool SaveSecurity { get; set; }
@@ -37,5 +43,28 @@ namespace XStart2._0.Bean {
         public int ProjectWidth { get; set; }
         // 栏目中的项目字典
         public ObservableDictionary<string, Project> ProjectDic { get; set; } = new ObservableDictionary<string, Project>();
+
+        private void ChangeProjectStyle() {
+            if (Config.Configs.inited) {
+                foreach (var project in ProjectDic) {
+                    if(null != IconSize && project.Value.IconSize != IconSize) {
+                        project.Value.IconSize = (int)IconSize;
+                        
+                    }else if (null == IconSize) {
+                        project.Value.IconSize = Config.Configs.iconSize;
+                    }
+                    if (!string.IsNullOrEmpty(Orientation) && !project.Value.Orientation.Equals(Orientation)) {
+                        project.Value.Orientation = Orientation;
+                    }else if (string.IsNullOrEmpty(Orientation)) {
+                        project.Value.Orientation = Config.Configs.orientation;
+                    }
+                    if(null != HideTitle && project.Value.HideTitle != HideTitle) {
+                        project.Value.HideTitle = (bool)HideTitle;
+                    }else if(null == HideTitle) {
+                        project.Value.HideTitle = Config.Configs.hideTitle;
+                    }
+                }
+            }
+        }
     }
 }

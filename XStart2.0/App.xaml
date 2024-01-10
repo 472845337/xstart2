@@ -23,7 +23,10 @@
             <con:UrlOpenConverter x:Key="UrlOpenConverter"/>
             <con:ProjectCanAutoRunConverter x:Key="ProjectCanAutoRunConverter"/>
             <con:ProjectAutoRunToolTipConverter x:Key="ProjectAutoRunToolTipConverter"/>
+            <con:ProjectWidthConverter x:Key="ProjectWidthConverter"/>
             <con:IconSizeConverter x:Key="IconSizeConverter"/>
+            <con:Orientation2BoolConverter x:Key="Orientation2BoolConverter"/>
+            <con:Boolean2IsCheckedConverter x:Key="Boolean2IsCheckedConverter"/>
             <Style x:Key="Btn_Style" TargetType="{x:Type Button}">
                 <Setter Property="Width" Value="60"/>
                 <Setter Property="Height" Value="28"/>

@@ -101,9 +101,15 @@
     </ApplicationDefinition>
     <Compile Include="Bean\FontAwesome.cs" />
     <Compile Include="Bean\CopyProject.cs" />
+    <Compile Include="Converters\Boolean2IsCheckedConverter.cs" />
+    <Compile Include="Converters\HideTitle2VisibilityConverter.cs" />
+    <Compile Include="Converters\Orientation2CenterConverter.cs" />
+    <Compile Include="Converters\Orientation2BoolConverter.cs" />
+    <Compile Include="Converters\ProjectWidthConverter.cs" />
     <Compile Include="Converters\ProjectAutoRunToolTipConverter.cs" />
     <Compile Include="Converters\ProjectCanAutoRunConverter.cs" />
     <Compile Include="Converters\IconSizeConverter.cs" />
+    <Compile Include="Converters\OrientationConverter.cs" />
     <Compile Include="Converters\UrlOpenConverter.cs" />
     <Compile Include="Converters\ClickTypeConverter.cs" />
     <Compile Include="Converters\ProjectAutoRunConverter.cs" />

@@ -92,11 +92,11 @@ namespace XStart2._0.Services {
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public int Update(T t) {
+        public int Update(T t, bool hasNull = false) {
             List<SQLiteParameter> paramList = new List<SQLiteParameter>();
             SQLiteParameter idParame = new SQLiteParameter("section", t.Section);
             paramList.Add(idParame);
-            return SqlLiteHelper.Update(GetTableName(), GetParams(t, false), "section=@section", paramList.ToArray());
+            return SqlLiteHelper.Update(GetTableName(), GetParams(t, false, hasNull), "section=@section", paramList.ToArray());
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace XStart2._0.Services {
         /// <param name="t">:TableData</param>
         /// <param name="key">是否包含主键，insert填true，update填false</param>
         /// <returns></returns>
-        private Dictionary<string, object> GetParams(T t, bool key) {
+        private Dictionary<string, object> GetParams(T t, bool key, bool hasNull = false) {
             if (null == t) return null;
             var dict = new Dictionary<string, object>();
             // 遍历所有的属性
@@ -247,10 +247,11 @@ namespace XStart2._0.Services {
                         continue;
                     }
                 }
-                if (null == info.GetValue(t, null)) {
+                object value = info.GetValue(t, null);
+                if (!hasNull && null == value) {
                     continue;
                 }
-                dict.Add(tableParam.param, info.GetValue(t, null));
+                dict.Add(tableParam.param, value);
             }
             return dict;
         }

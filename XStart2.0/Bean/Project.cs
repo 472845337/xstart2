@@ -81,7 +81,10 @@ namespace XStart2._0.Bean {
         [DoNotNotify]
         public string Operate { get; set; }
         // 图标尺寸
-        public double IconSize { get; set; }
+        [OnChangedMethod(nameof(InitIcon))]
+        public int IconSize { get; set; }
+        public string Orientation { get; set; }
+        public bool HideTitle { get; set; }
         public string ToolTipContent {
             get {
                 if (SystemProjectParam.MSTSC.Equals(Path)) {

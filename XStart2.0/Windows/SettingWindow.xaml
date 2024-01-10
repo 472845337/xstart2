@@ -71,6 +71,32 @@
                             <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="巨型图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Jumbo',Mode=TwoWay}"/>
                         </StackPanel>
                     </GroupBox>
+                    <WrapPanel Grid.Row="1">
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="排列:" HorizontalAlignment="Right"/>
+                            <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="横排" OffLabel="竖排" Width="65" ButtonWidth="25" IsChecked="{Binding Orientation,Converter={StaticResource Orientation2BoolConverter}, Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                        </Grid>
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="隐藏标题:" HorizontalAlignment="Right"/>
+                            <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding HideTitle,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                        </Grid>
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="一行多个:" HorizontalAlignment="Right"/>
+                            <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding OneLineMulti,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                        </Grid>
+                    </WrapPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="打开方式" Style="{StaticResource TabItem_Style}" VerticalAlignment="Top">

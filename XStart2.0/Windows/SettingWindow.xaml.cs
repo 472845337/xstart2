@@ -21,6 +21,9 @@ namespace XStart2._0.Windows {
             settingVM.UrlOpen = mainVm.UrlOpen;
             settingVM.UrlOpenCustomBrowser = mainVm.UrlOpenCustomBrowser;
             settingVM.IconSize = mainVm.IconSize;
+            settingVM.Orientation = mainVm.Orientation;
+            settingVM.HideTitle = mainVm.HideTitle;
+            settingVM.OneLineMulti = mainVm.OneLineMulti;
             System.Console.WriteLine(settingVM.IconSize);
             Loaded += SettingWindow_Loaded;
         }
