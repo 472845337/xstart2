@@ -6,9 +6,6 @@ using XStart2._0.Utils;
 
 namespace XStart2._0.ViewModels {
     public class MainViewModel : BaseViewModel {
-        public TypeService typeService = TypeService.Instance;
-        public ColumnService columnService = ColumnService.Instance;
-        public ProjectService projectService = ProjectService.Instance;
 
         public MainViewModel() {
             MainHeight = 800;

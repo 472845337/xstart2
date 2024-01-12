@@ -97,7 +97,7 @@ namespace XStart2._0.Utils {
 
         /** 强制GC API函数**/
         [DllImport(Kernel32)]
-        public static extern Int32 SetProcessWorkingSetSize(IntPtr process, Int32 minSize, Int32 maxSize);
+        public static extern int SetProcessWorkingSetSize(IntPtr process, int minSize, int maxSize);
         /// <summary>
         /// 写入Ini配置文件
         /// </summary>
@@ -119,7 +119,7 @@ namespace XStart2._0.Utils {
         /// <param name="filePath"></param>
         /// <returns></returns>
         [DllImport(Kernel32, EntryPoint = "GetPrivateProfileString")]
-        public static extern uint GetPrivateProfileStringA(string section, string key, string def, Byte[] retVal, int size, string filePath);
+        public static extern uint GetPrivateProfileStringA(string section, string key, string def, byte[] retVal, int size, string filePath);
         /// <summary>
         /// 窗口操作，关闭请不要随意使用
         /// </summary>
@@ -287,5 +287,8 @@ namespace XStart2._0.Utils {
 
         [DllImport(User32, CharSet = CharSet.Auto)]
         public static extern bool GetCursorPos(ref Point pt);
+
+        [DllImport(User32, EntryPoint = "ScreenToClient")]
+        public static extern int ScreenToClient(IntPtr hwnd, ref Point lpPoint);
     }
 }

@@ -12,8 +12,12 @@ namespace XStart2._0.Windows {
         readonly CalendarVM vm = new CalendarVM();
         public CalendarWindow() {
             InitializeComponent();
+            Loaded += Window_Loaded;
 
+        }
 
+        private void Window_Loaded(object sender, EventArgs e) {
+            DataContext = vm;
         }
 
         private void Calendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e) {

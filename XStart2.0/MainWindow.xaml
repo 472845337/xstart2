@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:XStart2._0"
         xmlns:helper="clr-namespace:XStart2._0.Helper"
         xmlns:view="clr-namespace:XStart2._0.View"
+        xmlns:assist="clr-namespace:DragDropAssist"
         mc:Ignorable="d"
         Title="X启动" Height="{Binding MainHeight, Mode=TwoWay}" Width="{Binding MainWidth, Mode=TwoWay}"
         MinHeight="500" MinWidth="300" Left="{Binding MainLeft, Mode=TwoWay}"
@@ -18,6 +19,19 @@
         </b:EventTrigger>
     </b:Interaction.Triggers>-->
     <Window.Resources>
+        <DataTemplate x:Key="DragAdorner">
+            <Border Background="Silver"
+                            BorderBrush="Gray"
+                            BorderThickness="1"
+                            CornerRadius="2"
+                            SnapsToDevicePixels="True">
+                <StackPanel Margin="4" Orientation="Horizontal">
+                    <TextBlock Margin="6 0 0 0"
+                                       VerticalAlignment="Center"
+                                       Text="{Binding Value.Name}" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
         <Style x:Key="MenuStyleKey" TargetType="MenuItem">
             <Setter Property="Background" Value="Transparent" />
         </Style>
@@ -103,7 +117,8 @@
         </Grid>
         <TabControl Grid.Row="1" x:Name="MainTabControl" TabStripPlacement="Left" ItemsSource="{Binding Types}"
                     SizeChanged="MainTabControl_SizeChanged" ContextMenu="{StaticResource TypeTabContextMenu}"
-                    SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="{Binding SelectedIndex}">
+                    SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="{Binding SelectedIndex}"
+                    assist:SelectorDragDropAttach.IsItemsDragDropEnabled="True">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <DockPanel LastChildFill="True" Tag="{Binding Value.Section}"  Height="32" 
@@ -213,11 +228,6 @@
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
                             <ItemsControl ItemsSource="{Binding Value.ColumnDic}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Vertical"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Expander helper:ElementParamHelper.TypeSection="{Binding Value.TypeSection}" helper:ElementParamHelper.ColumnSection="{Binding Value.Section}"
@@ -316,7 +326,7 @@
                                                             </MenuItem>
                                                         </ContextMenu>
                                                     </ScrollViewer.ContextMenu>
-                                                    <ItemsControl ItemsSource="{Binding Value.ProjectDic}">
+                                                    <ItemsControl Height="Auto" ItemsSource="{Binding Value.ProjectDic}">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
                                                                 <WrapPanel ItemWidth="{Binding Value.ProjectWidth}"/>
@@ -371,6 +381,11 @@
                                                                                 <MenuItem Header="刷新RDP" Visibility="{Binding Value.IsMstsc, Converter={StaticResource Boolean2VisibilityConverter}}" Click="FreshRdp_Click">
                                                                                     <MenuItem.Icon>
                                                                                         <Image Source="/Files/Icons/App/Fresh.ico"/>
+                                                                                    </MenuItem.Icon>
+                                                                                </MenuItem>
+                                                                                <MenuItem Header="打开所在目录" IsEnabled="{Binding Value.Kind, Converter={StaticResource ProjectKind2EnabledConverter}}" Click="OpenFolder_Click">
+                                                                                    <MenuItem.Icon>
+                                                                                        <Image Source="/Files/Icons/App/folder.ico"/>
                                                                                     </MenuItem.Icon>
                                                                                 </MenuItem>
                                                                                 <MenuItem Header="属性" IsEnabled="{Binding Value.PropertyEnabled}" Click="Property_Click">

@@ -12,7 +12,7 @@ namespace XStart2._0.Bean {
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
     [SuppressPropertyChangedWarnings]
-    public class ObservableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, INotifyCollectionChanged, INotifyPropertyChanged {
+    public class ObservableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, INotifyCollectionChanged, INotifyPropertyChanged{
         public ObservableDictionary() : base() { }
 
         private int _index;
@@ -83,6 +83,41 @@ namespace XStart2._0.Bean {
             return default;
         }
 
+        public void ChangeIndex(int fromIndex, int toIndex) {
+            KeyValuePair<TKey, TValue> fromVal = this.ElementAt(fromIndex);
+            ObservableDictionary<TKey, TValue> newValue = new ObservableDictionary<TKey, TValue>();
+            // 向上移，fromIndex移到toIndex之后，之间的元素向上移,如果是向下移，则是fromIndex>toIndex
+            bool up = true;
+            if (fromIndex > toIndex) {
+                up = false;
+            }
+            int current = 0;
+            foreach (var item in this) {
+                if (up) {
+                    if (current != fromIndex) {
+                        newValue.Add(item.Key, item.Value);
+                        if (current == toIndex) {
+                            // 在目标位置添加上from
+                            newValue.Add(fromVal.Key, fromVal.Value);
+                        }
+                    }
+                } else {
+                    if (current != fromIndex) {
+                        if (current == toIndex) {
+                            // 在目标位置添加上from
+                            newValue.Add(fromVal.Key, fromVal.Value);
+                        }
+                        newValue.Add(item.Key, item.Value);
+                    }
+                }
+                current++;
+            }
+            Clear();
+            foreach (KeyValuePair<TKey, TValue> item in newValue) {
+                Add(item.Key, item.Value);
+            }
+        }
+
         private void SetIndexValue(int index, TValue value) {
             try {
                 KeyValuePair<TKey, TValue> pair = this.ElementAtOrDefault(index);
@@ -132,7 +167,6 @@ namespace XStart2._0.Bean {
             }
             return -1;
         }
-
         #endregion
     }
 }

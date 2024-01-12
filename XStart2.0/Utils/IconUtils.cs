@@ -81,9 +81,8 @@ namespace XStart2._0.Utils {
                 // Get the System IImageList object from the Shell:
                 Guid iidImageList = new Guid("46EB5926-582E-4017-9FDF-E8998DAA0950");
 
-                IImageList iml;
                 int size = 0x4;
-                DllUtils.SHGetImageList(size, ref iidImageList, out iml); // writes iml
+                DllUtils.SHGetImageList(size, ref iidImageList, out IImageList iml); // writes iml
 
                 IntPtr hIcon = IntPtr.Zero;
                 int ILD_TRANSPARENT = 1;

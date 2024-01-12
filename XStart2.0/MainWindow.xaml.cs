@@ -24,6 +24,7 @@ namespace XStart2._0 {
         private readonly System.Windows.Threading.DispatcherTimer AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
         private readonly System.Windows.Threading.DispatcherTimer currentTimer = new System.Windows.Threading.DispatcherTimer();
         private readonly System.Windows.Threading.DispatcherTimer currentDateTimer = new System.Windows.Threading.DispatcherTimer();
+        private readonly System.Windows.Threading.DispatcherTimer AutoGcTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMinutes(5)};
         // 数据服务
         public TypeService typeService = ServiceFactory.GetTypeService();
         public ColumnService columnService = ServiceFactory.GetColumnService();
@@ -47,6 +48,9 @@ namespace XStart2._0 {
 
             AutoHideTimer.Tick += new EventHandler(AutoHideTimer_Tick);
             AutoHideTimer.Start();
+            // 自动GC
+            AutoGcTimer.Tick += new EventHandler(AutoGcTimer_Tick);
+            AutoGcTimer.Start();
             // 将模型赋值上下文
             DataContext = mainViewModel;
         }
@@ -274,8 +278,7 @@ namespace XStart2._0 {
 
             #region 任务栏图标
             notifyIcon = new System.Windows.Forms.NotifyIcon();
-            System.Windows.Forms.NotifyIcon icon = new System.Windows.Forms.NotifyIcon();
-            Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Files/xstart2.ico")).Stream;
+            using Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Files/xstart2.ico")).Stream;
 
             notifyIcon.Icon = new System.Drawing.Icon(iconStream);
             notifyIcon.Visible = true;
@@ -310,16 +313,32 @@ namespace XStart2._0 {
             if (string.IsNullOrEmpty(Configs.openType) || !Configs.openType.Equals(setOpenType)) {
                 XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE, Configs.openType);
             }
-            // 保存打开栏目
+            // 保存数据的调整（当前打开的类别，类别中打开的栏目，排序）
+            int typeIndex = 0;
             foreach (KeyValuePair<string, Bean.Type> type in mainViewModel.Types) {
+                if(typeIndex != type.Value.Sort) {
+                    typeService.UpdateSort(type.Value.Section, typeIndex);
+                }
+                int columnIndex = 0;
                 foreach (KeyValuePair<string, Column> column in type.Value.ColumnDic) {
+                    if(columnIndex != column.Value.Sort) {
+                        columnService.UpdateSort(column.Value.Section, columnIndex);
+                    }
                     if (column.Value.IsExpanded) {
                         if (!column.Value.Section.Equals(XStartService.TypeDic[column.Value.TypeSection].OpenColumn)) {
                             typeService.Update(new Bean.Type { Section = column.Value.TypeSection, OpenColumn = column.Value.Section });
                         }
-                        break;
                     }
+                    int projectIndex = 0;
+                    foreach(KeyValuePair<string, Project> project in column.Value.ProjectDic) {
+                        if(projectIndex != project.Value.Sort) {
+                            projectService.UpdateSort(project.Value.Section, projectIndex);
+                        }
+                        projectIndex++;
+                    }
+                    columnIndex++;
                 }
+                typeIndex++;
             }
             // 窗口位置修改
             if (WindowState.Minimized != WindowState) {
@@ -381,15 +400,15 @@ namespace XStart2._0 {
         /// <param name="columnSection">栏目Section</param>
         private void ExpandColumn(string typeSection, string columnSection) {
             Bean.Type type = XStartService.TypeDic[typeSection];
-            foreach (Column c in type.ColumnDic.Values) {
-                if (!columnSection.Equals(c.Section) && c.IsExpanded) {
-                    c.IsExpanded = false;
-                    c.ColumnHeight = 0;
-                } else if (columnSection.Equals(c.Section)) {
-                    c.ColumnHeight = (int)type.ExpandedColumnHeight;
+            foreach (Column column in type.ColumnDic.Values) {
+                if (!columnSection.Equals(column.Section) && column.IsExpanded) {
+                    column.IsExpanded = false;
+                    column.ColumnHeight = 0;
+                } else if (columnSection.Equals(column.Section)) {
+                    column.ColumnHeight = (int)type.ExpandedColumnHeight;
                     // 如果当前类别有口令，并且没有记住口令则展示为锁定
-                    if (!c.Locked && !c.RememberSecurity && c.HasPassword) {
-                        c.Locked = true;
+                    if (!column.Locked && !column.RememberSecurity && column.HasPassword) {
+                        column.Locked = true;
                     }
                 }
             }
@@ -1211,12 +1230,13 @@ namespace XStart2._0 {
                 foreach (KeyValuePair<string, Bean.Type> typeDic in mainViewModel.Types) {
                     foreach (KeyValuePair<string, Column> columnDic in typeDic.Value.ColumnDic) {
                         if (null != columnDic.Value.HideTitle || !string.IsNullOrEmpty(columnDic.Value.Orientation) || null != columnDic.Value.IconSize || null != columnDic.Value.OneLineMulti) {
-                            Column clearStyle = new Column();
-                            clearStyle.Section = columnDic.Value.Section;
-                            clearStyle.HideTitle = null;
-                            clearStyle.Orientation = null;
-                            clearStyle.IconSize = null;
-                            clearStyle.OneLineMulti = null;
+                            Column clearStyle = new Column {
+                                Section = columnDic.Value.Section,
+                                HideTitle = null,
+                                Orientation = null,
+                                IconSize = null,
+                                OneLineMulti = null
+                            };
                             columnService.Update(clearStyle, true);
                         }
                     }
@@ -1242,6 +1262,9 @@ namespace XStart2._0 {
                 mainViewModel.ExitWarn = true;
                 mainViewModel.UrlOpen = Constants.URL_OPEN_DEFAULT;
                 mainViewModel.IconSize = Constants.ICON_SIZE_32;
+                mainViewModel.HideTitle = false;
+                mainViewModel.OneLineMulti = false;
+                mainViewModel.Orientation = Constants.ORIENTATION_HORIZONTAL;
             }
             e.Handled = true;
         }
@@ -1291,6 +1314,15 @@ namespace XStart2._0 {
             currentDateTimer.Interval = timeToGo;
             mainViewModel.CurrentDay = DateTime.Now.ToString("D");
             mainViewModel.CurrentWeekDay = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
+        }
+
+        private void AutoGcTimer_Tick(object sender, EventArgs e) {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+                //  配置工作使用空间
+                DllUtils.SetProcessWorkingSetSize(Configs.Handler, -1, -1);
+            }
         }
 
         private TimeSpan GetTimeToNextMidnight(int hour) {
@@ -1509,6 +1541,19 @@ namespace XStart2._0 {
             RdpUtils.FreshRdp(project, Constants.OPERATE_UPDATE);
             NotifyUtils.ShowNotification("RDP文件刷新成功！");
         }
+
+        private void OpenFolder_Click(object sender, EventArgs e) {
+            Project project = GetProjectByMenu(sender);
+            
+            // 打开文件所在的目录
+            if (Project.KIND_FILE.Equals(project.Kind) || Project.KIND_DIRECTORY.Equals(project.Kind)) {
+                if (File.Exists(project.Path)) {
+                    Process.Start("explorer.exe", $"/select,{project.Path}");
+                } else {
+                    MessageBox.Show($"文件不存在！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                }
+            }
+        }
         private void Property_Click(object sender, RoutedEventArgs e) {
             Project project = GetProjectByMenu(sender);
             if (null != project) {
@@ -1627,6 +1672,9 @@ namespace XStart2._0 {
 
         private void Project_DragDrop(object sender, DragEventArgs e) {
             Array array = (Array)e.Data.GetData(DataFormats.FileDrop);
+            if(null == array) {
+                return;
+            }
             if (array.Length > 5) {
                 MessageBox.Show("最多拖拽5个项目！", Constants.MESSAGE_BOX_TITLE_ERROR);
                 e.Effects = DragDropEffects.None;
