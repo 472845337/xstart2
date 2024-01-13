@@ -11,10 +11,5 @@ namespace XStart2._0.Services {
         private ColumnService() { }
 
         public static ColumnService Instance { get; } = new ColumnService();
-
-        public int UpdateSort(string section, int sort) {
-            Column updateModel = new Column { Section = section, Sort = sort };
-            return Instance.Update(updateModel);
-        }
     }
 }

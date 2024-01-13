@@ -9,10 +9,6 @@ namespace XStart2._0.Services {
         private TypeService() { }
 
         public static TypeService Instance { get; } = new TypeService();
-
-        public int UpdateSort(string section, int sort) {
-            Bean.Type updateModel = new Bean.Type { Section = section, Sort = sort };
-            return Instance.Update(updateModel);
-        }
+        
     }
 }

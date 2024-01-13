@@ -32,7 +32,9 @@ namespace XStart2._0.Windows {
 
             if (sender is NotificationWindow self) {
                 self.UpdateLayout();
-                SystemSounds.Asterisk.Play();//播放提示声
+                if (Config.Configs.audio) {
+                    SystemSounds.Asterisk.Play();//播放提示声
+                }
 
                 double right = SystemParameters.WorkArea.Right;//工作区最右边的值
                 self.Top = self.TopFrom - self.ActualHeight;

@@ -48,7 +48,7 @@ namespace XStart2._0.Windows {
         }
 
         private void SystemPathSpecialArguments(string path) {
-            if (path.StartsWith("#")) {
+            if (path.StartsWith(Constants.SYSTEM_PROJECT_CHAR)) {
                 // 系统功能路径不可以变更
                 vm.PathReadonly = true;
                 if (SystemProjectParam.CLEAR_SOME_DIRECTORY.Equals(path)) {

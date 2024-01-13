@@ -10,18 +10,18 @@ namespace XStart2._0.Config {
     /// 系统缓存参数
     /// </summary>
     class Configs {
-        public static string AppStartPath = System.AppDomain.CurrentDomain.BaseDirectory;
-        public static System.IntPtr Handler = System.IntPtr.Zero;
+        public static string AppStartPath = System.AppDomain.CurrentDomain.BaseDirectory;// 当前程序的启动目录
+        public static System.IntPtr Handler = System.IntPtr.Zero;// 当前窗口句柄
         public static bool inited = false;// 是否初始化
 
         public static bool typeTabExpand;// 类别标签头是否展开
 
-        public static double mainHeight;
-        public static double mainWidth;
-        public static double mainTop;
-        public static double mainLeft;
-        public static bool topMost;
-        public static bool audio;
+        public static double mainHeight;// 主窗口高
+        public static double mainWidth;// 主窗口宽
+        public static double mainTop;// 主窗口顶部位置
+        public static double mainLeft;// 主窗口左边位置
+        public static bool topMost;// 是否置顶
+        public static bool audio;// 是否开启音效
         public static bool autoRun;// 随系统启动
         public static string openType = null;// 启动后打开的类别
         public static string clickType = Constants.CLICK_TYPE_SINGLE;// 默认单击

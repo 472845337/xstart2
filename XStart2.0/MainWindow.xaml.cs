@@ -26,9 +26,9 @@ namespace XStart2._0 {
         private readonly System.Windows.Threading.DispatcherTimer currentDateTimer = new System.Windows.Threading.DispatcherTimer();
         private readonly System.Windows.Threading.DispatcherTimer AutoGcTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMinutes(5) };
         // 数据服务
-        public TypeService typeService = ServiceFactory.GetTypeService();
-        public ColumnService columnService = ServiceFactory.GetColumnService();
-        public ProjectService projectService = ServiceFactory.GetProjectService();
+        public TableService<Bean.Type> typeService = ServiceFactory.GetTypeService();
+        public TableService<Column> columnService = ServiceFactory.GetColumnService();
+        public TableService<Project> projectService = ServiceFactory.GetProjectService();
         // 模型
         readonly MainViewModel mainViewModel = new MainViewModel();
         private static bool IsAllShow = true;
@@ -654,11 +654,7 @@ namespace XStart2._0 {
                         , FaIconColor = projectTypeWindow.VM.SelectedIconColor
                         , FaIconFontFamily = projectTypeWindow.VM.SelectedFf.ToString()
                     };
-                    projectType.Section = Guid.NewGuid().ToString();
-
-                    projectType.Sort = XStartService.TypeDic.Count > 0 ? XStartService.TypeDic[XStartService.TypeDic.Count - 1].Sort + 1 : 0;
-                    typeService.Insert(projectType);
-                    XStartService.TypeDic.Add(projectType.Section, projectType);
+                    XStartService.AddNewData(projectType);
                     NotifyUtils.ShowNotification("新增类别成功！");
                 } else {
                     Bean.Type projectType = XStartService.TypeDic[projectTypeWindow.VM.Section];
@@ -814,16 +810,8 @@ namespace XStart2._0 {
                         OneLineMulti = columnWindow.vm.OneLineMulti
                     };
                     column.TypeSection = columnWindow.vm.TypeSection;
-                    column.Section = Guid.NewGuid().ToString();
                     column.IsExpanded = true;
-                    Column lastColumn = XStartService.TypeDic[columnWindow.vm.TypeSection].ColumnDic[XStartService.TypeDic[columnWindow.vm.TypeSection].ColumnDic.Count - 1];
-                    if (null == lastColumn) {
-                        column.Sort = 0;
-                    } else {
-                        column.Sort = lastColumn.Sort + 1;
-                    }
-                    columnService.Insert(column);
-                    XStartService.TypeDic[columnWindow.vm.TypeSection].ColumnDic.Add(column.Section, column);
+                    XStartService.AddNewData(column);
                     // 展开新增的栏目
                     ExpandColumn(column.TypeSection, column.Section);
                     NotifyUtils.ShowNotification("新增栏目成功！");
@@ -1051,7 +1039,7 @@ namespace XStart2._0 {
                 if (string.IsNullOrEmpty(projectWindow.Project.Kind)) {
                     projectWindow.Project.Kind = XStartService.KindOfPath(projectWindow.Project.Path);
                 }
-                XStartService.AddNewApp(projectWindow.Project);
+                XStartService.AddNewData(projectWindow.Project);
                 NotifyUtils.ShowNotification($"添加[{projectWindow.Project.Name}]成功！");
             }
             projectWindow.Close();
@@ -1618,7 +1606,7 @@ namespace XStart2._0 {
             if (Clipboard.ContainsData("XStartApp")) {
                 CopyProject project = Clipboard.GetData("XStartApp") as CopyProject;
                 string primarySection = project.Section;
-                XStartService.AddNewApp(new Project {
+                XStartService.AddNewData(new Project {
                     Name = project.Name, TypeSection = typeSection, ColumnSection = columnSection
             , Path = project.Path, Kind = project.Kind, IconIndex = project.IconIndex, FontColor = project.FontColor, IconPath = project.IconPath
             , Arguments = project.Arguments, HotKey = project.HotKey, Remark = project.Remark
@@ -1729,7 +1717,7 @@ namespace XStart2._0 {
                 }
                 project.TypeSection = typeSection;
                 project.ColumnSection = columnSection;
-                XStartService.AddNewApp(project);
+                XStartService.AddNewData(project);
                 dragCount++;
             }
             NotifyUtils.ShowNotification($"成功添加【{dragCount}】个项目！");

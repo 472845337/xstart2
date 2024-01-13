@@ -110,20 +110,17 @@ namespace XStart2._0.Services {
             List<SQLiteParameter> paramList = new List<SQLiteParameter>();
             string paramSql = string.Empty;
             string whereSql = string.Empty;
-            string selectSql = string.Empty;
+            StringBuilder selectSql = new StringBuilder();
             InitSql(queryModel, ref paramSql, ref whereSql, ref paramList);
-            selectSql += "SELECT ";
-            selectSql += paramSql;
-            selectSql += " FROM " + GetTableName();
+            selectSql.Append("SELECT ").Append(paramSql).Append(" FROM ").Append(GetTableName());
             if (!string.IsNullOrEmpty(whereSql)) {
-                selectSql += " WHERE ";
-                selectSql += whereSql;
+                selectSql.Append(" WHERE ").Append(whereSql);
             }
             if (!string.IsNullOrEmpty(queryModel.OrderBy)) {
-                selectSql += " ORDER BY " + queryModel.OrderBy;
+                selectSql.Append(" ORDER BY ").Append(queryModel.OrderBy);
             }
             // 执行查询
-            SQLiteDataReader reader = SqlLiteHelper.ExecuteReader(selectSql, paramList.ToArray());
+            SQLiteDataReader reader = SqlLiteHelper.ExecuteReader(selectSql.ToString(), paramList.ToArray());
             if (null != reader) {
                 // 数据拼装
                 while (reader.Read()) {
@@ -149,32 +146,29 @@ namespace XStart2._0.Services {
         private void InitSql(T t, ref string paramSql, ref string whereSql, ref List<SQLiteParameter> paramList) {
             var infos = typeof(T).GetProperties();
             paramList = new List<SQLiteParameter>();
-            paramSql = string.Empty;
-            whereSql = string.Empty;
+            StringBuilder paramSb = new StringBuilder();
+            StringBuilder whereSb = new StringBuilder();
             foreach (var property in infos) {
                 var tableParam = GetAttributeByProperty<TableParam>(property);
                 if (null == tableParam) {
                     continue;
                 }
                 if (null != property.GetValue(t, null)) {
-                    whereSql += tableParam.param;
-                    whereSql += "=@";
-                    whereSql += property.Name;
-                    whereSql += " AND ";
+                    if (whereSb.Length > 0) {
+                        whereSb.Append(" AND ");
+                    }
+                    whereSb.Append(tableParam.param).Append("=@").Append(property.Name);
 
                     SQLiteParameter param = new SQLiteParameter(property.Name, property.GetValue(t, null));
                     paramList.Add(param);
                 }
-                if (paramSql.Length > 0) {
-                    paramSql += ", ";
+                if (paramSb.Length > 0) {
+                    paramSb.Append(", ");
                 }
-                paramSql += tableParam.param;
+                paramSb.Append(tableParam.param);
             }
-
-            if (whereSql.Contains(" AND ")) {
-                // 去掉最后一个and
-                whereSql = whereSql.Substring(0, whereSql.LastIndexOf("AND ", StringComparison.Ordinal));
-            }
+            paramSql = paramSb.ToString();
+            whereSql = whereSql.ToString();
         }
 
         /// <summary>
@@ -183,7 +177,7 @@ namespace XStart2._0.Services {
         private void CreateTable() {
             // 获取自己和父类的属性
             var infos = typeof(T).GetProperties();
-            var insertSql = "create table " + GetTableName() + " (";
+            var insertSql = new StringBuilder("create table ").Append(GetTableName()).Append(" (");
             var sb = new StringBuilder();
             foreach (var info in infos) {
                 var tableParam = GetAttributeByProperty<TableParam>(info);
@@ -198,9 +192,8 @@ namespace XStart2._0.Services {
                 //    sb.Append(" PRIMARY KEY AUTOINCREMENT");
                 //}
             }
-            insertSql += sb.ToString();
-            insertSql += ")";
-            SqlLiteHelper.ExecuteNonQuery(insertSql, null);
+            insertSql.Append(sb).Append(")");
+            SqlLiteHelper.ExecuteNonQuery(insertSql.ToString(), null);
         }
 
         private List<string> GetTableParam() {
@@ -263,6 +256,13 @@ namespace XStart2._0.Services {
                 attribute = (TA)attributes[0];
             }
             return attribute;
+        }
+
+        public int UpdateSort(string section, int sort) {
+            T t = Activator.CreateInstance<T>();
+            t.Section = section; ;
+            t.Sort = sort;
+            return Update(t);
         }
     }
 }

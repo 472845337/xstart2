@@ -205,7 +205,7 @@ namespace XStart2._0.Windows {
             Button systemAppButton = (Button)sender;
             string name = systemAppButton.Content as string;// 按钮内容
             string buttonName = systemAppButton.GetValue(ElementParamHelper.ButtonNameProperty) as string;
-            string path = "#" + buttonName.Replace("Button", string.Empty);
+            string path = Constants.SYSTEM_PROJECT_CHAR + buttonName.Replace("Button", string.Empty);
             string arguments = string.Empty;
             if (SystemProjectParam.CLEAR_SOME_DIRECTORY.Equals(path)) {
                 Topmost = false;
@@ -254,7 +254,7 @@ namespace XStart2._0.Windows {
                 };
                 if (vm.MultiAdd) {
                     // 直接添加应用
-                    XStartService.AddNewApp(app);
+                    XStartService.AddNewData(app);
                     NotifyUtils.ShowNotification("系统应用添加成功");
                 } else {
                     // 返回

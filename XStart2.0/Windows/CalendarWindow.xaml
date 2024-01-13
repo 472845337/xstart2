@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XStart2._0.Windows"
         mc:Ignorable="d"
-        Title="日历" Height="250" Width="320" WindowStartupLocation="CenterScreen">
+        Title="日历" Height="250" Width="320" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="180"/>

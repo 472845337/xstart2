@@ -14,9 +14,9 @@ namespace XStart2._0.Windows {
     public partial class ResumeWindow : Window {
         private readonly ResumeViewModel vm = new ResumeViewModel();
         // 数据服务
-        public TypeService typeService = ServiceFactory.GetTypeService();
-        public ColumnService columnService = ServiceFactory.GetColumnService();
-        public ProjectService projectService = ServiceFactory.GetProjectService();
+        public TableService<Bean.Type> typeService = ServiceFactory.GetTypeService();
+        public TableService<Column> columnService = ServiceFactory.GetColumnService();
+        public TableService<Project> projectService = ServiceFactory.GetProjectService();
         public ResumeWindow() {
             InitializeComponent();
             Loaded += Window_Loaded;

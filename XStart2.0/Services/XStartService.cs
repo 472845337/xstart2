@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -13,41 +12,6 @@ namespace XStart2._0.Services {
 
         public static ObservableDictionary<string, Bean.Type> TypeDic = new ObservableDictionary<string, Bean.Type>();
 
-        public static Sections GetSectionByName(string name) {
-            Sections section = new Sections();
-            string[] nameArray = name.Split('_');
-            if (nameArray.Length == 2) {
-                section.TypeSection = nameArray[0];
-                section.SuffixName = nameArray[1];
-            } else if (nameArray.Length == 3) {
-                section.TypeSection = nameArray[0];
-                section.ColumnSection = nameArray[1];
-                section.SuffixName = nameArray[2];
-            } else if (nameArray.Length > 3) {
-                section.TypeSection = nameArray[0];
-                section.ColumnSection = nameArray[1];
-                section.AppSection = nameArray[2];
-                section.SuffixName = nameArray[3];
-            } else {
-                throw new Exception("不可解析的Section名");
-            }
-            return section;
-        }
-
-        /// <summary>
-        /// 对快捷启动中的数据进行排序
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dic"></param>
-        /// <returns></returns>
-        public static List<KeyValuePair<string, T>> SortXStartData<T>(Dictionary<string, T> dic) where T : TableData {
-            List<KeyValuePair<string, T>> list = new List<KeyValuePair<string, T>>(dic);
-            list.Sort(delegate (KeyValuePair<string, T> s1, KeyValuePair<string, T> s2) {
-                return (int)s1.Value.Sort - (int)s2.Value.Sort;
-            });
-            return list;
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -59,7 +23,7 @@ namespace XStart2._0.Services {
             try {
                 BitmapImage image = null;
                 if (!string.IsNullOrEmpty(iconPath)) {
-                    if (iconPath.StartsWith("#")) {
+                    if (iconPath.StartsWith(Constants.SYSTEM_PROJECT_CHAR)) {
                         // 系统功能图标
                         image = Configs.GetIcon(size, iconPath);
                     } else {
@@ -104,7 +68,7 @@ namespace XStart2._0.Services {
             string kind;
             if (path.ToLower().StartsWith("https://") || path.ToLower().StartsWith("http://") || path.ToLower().StartsWith("www.")) {
                 kind = Project.KIND_URL;
-            } else if (path.StartsWith("#")) {
+            } else if (path.StartsWith(Constants.SYSTEM_PROJECT_CHAR)) {
                 kind = Project.KIND_SYSTEM;
             } else {
                 if (File.Exists(path)) {
@@ -116,15 +80,35 @@ namespace XStart2._0.Services {
             return kind;
         }
 
-        public static void AddNewApp(Project project) {
-            project.Section = Guid.NewGuid().ToString();
-            // 取最后一个app的sort+1
-            var appList = TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic;
-            int sort = (null == appList || appList.Count == 0) ? 0 : (int)appList[appList.Count - 1].Sort + 1;
-            project.Sort = sort;
+        public static void AddNewData<T>(T t) where T:TableData {
+            t.Section = Guid.NewGuid().ToString();
+            int sort = 0;
+            // 取最后一个的sort+1
+            if (t is Bean.Type _type) {
+                if (TypeDic.Count > 0) {
+                    sort = (int)TypeDic[TypeDic.Count - 1].Sort + 1;
+                }
+                TypeDic.Add(t.Section, _type);
+            } else if (t is Column _column) {
+                var columnDic = TypeDic[_column.TypeSection].ColumnDic;
+                if (columnDic.Count > 0) {
+                    sort = (int)columnDic[columnDic.Count - 1].Sort + 1;
+
+                }
+                columnDic.Add(t.Section, _column);
+            } else if(t is Project _project) {
+                var projectDic = TypeDic[_project.TypeSection].ColumnDic[_project.ColumnSection].ProjectDic;
+                if (projectDic.Count > 0) {
+                    sort = (int)projectDic[projectDic.Count - 1].Sort + 1;
+
+                }
+                projectDic.Add(t.Section, _project);
+            }
+            t.Sort = sort;
             // 保存应用信息
-            ProjectService.Instance.Insert(project);
-            TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic.Add(project.Section, project);
+           ServiceFactory.GetService<T, TableService<T>>().Insert(t);
         }
+
+      
     }
 }

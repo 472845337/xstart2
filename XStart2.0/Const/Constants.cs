@@ -71,6 +71,7 @@
         public const string DEVICE_NAME_CD_PLAYER = "cd player";
 
         public const char SPLIT_CHAR = '¤';
+        public const string SYSTEM_PROJECT_CHAR = "#";
 
         public const string OPERATE_CREATE = "create";// 创建
         public const string OPERATE_UPDATE = "update";// 更新

@@ -10,10 +10,5 @@ namespace XStart2._0.Services {
         private ProjectService() { }
 
         public static ProjectService Instance { get; } = new ProjectService();
-
-        internal void UpdateSort(string appSection, int sort) {
-            Project project = new Project { Section = appSection, Sort = sort };
-            Instance.Update(project);
-        }
     }
 }
