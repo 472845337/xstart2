@@ -231,9 +231,8 @@ namespace DragDropAssist {
                 return;
             }
             UIElement itemToDrag = this.GetSelectorItem(selectedIndex);
-            if (itemToDrag == null)
-                return;
-
+            if (itemToDrag == null)return;
+            
             AdornerLayer adornerLayer = this.ShowDragAdornerResolved ? this.InitializeAdornerLayer(itemToDrag) : null;
 
             this.InitializeDragOperation(itemToDrag);
@@ -553,6 +552,18 @@ namespace DragDropAssist {
         AdornerLayer InitializeAdornerLayer(UIElement itemToDrag) {
             // Create a brush which will paint the SelectorItem onto
             // a visual in the adorner layer.
+            Console.WriteLine("当前拖拽类型："+itemToDrag.GetType().Name);
+            if(itemToDrag is ContentPresenter cp) {
+                // 属于ItemsControl控件
+                var child = VisualTreeHelper.GetChild(cp, 0);
+                Console.WriteLine("当前子型：" + child.GetType().Name);
+                if(child is Expander columnExpander){
+                    ToggleButton columnHeader = ElementUtils.FindChild<ToggleButton>(columnExpander, "HeaderSite");
+                    if(null != columnHeader) {
+                        itemToDrag = columnHeader;
+                    }
+                }
+            }
             VisualBrush brush = new VisualBrush(itemToDrag);
 
             // Create an element which displays the source item while it is dragged.
@@ -660,7 +671,9 @@ namespace DragDropAssist {
         #region PerformDragOperation
 
         void PerformDragOperation() {
-            object selectedItem = this.selector.Items[IndexUnderDragCursor];
+            var index = IndexUnderDragCursor;
+            if (index < 0) return; ;
+            object selectedItem = this.selector.Items[index];
             DragDropEffects allowedEffects = DragDropEffects.Move | DragDropEffects.Move | DragDropEffects.Link;
             if (DragDrop.DoDragDrop(this.selector, selectedItem, allowedEffects) != DragDropEffects.None) {
                 // The item was dropped into a new location,
@@ -717,7 +730,6 @@ namespace DragDropAssist {
             //{
             //    Debug.WriteLine(JsonSerializer.Serialize(lsbi.DataContext));
             //}
-            Debug.WriteLine(string.Format("navite.X:{0}--navite.Y:{1}--FromScreen.X：{2}--FromScreen.Y：{3}", mouse.X.ToString(), mouse.Y.ToString(), FromScreen.X.ToString(), FromScreen.Y.ToString()));
             return FromScreen;//=relativeTo.PointFromScreen(new Point((double)mouse.X, (double)mouse.Y));
         }
 

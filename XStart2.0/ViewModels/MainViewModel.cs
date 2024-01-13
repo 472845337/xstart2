@@ -90,7 +90,6 @@ namespace XStart2._0.ViewModels {
                             // 非自定义的栏目才修改图标大小
                             foreach(var project in column.Value.ProjectDic) {
                                 project.Value.IconSize = IconSize;
-                                project.Value.Icon = XStartService.GetIconImage(project.Value.Kind, project.Value.Path, project.Value.IconPath, IconSize);
                             }
                         }
                     }
