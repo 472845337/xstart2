@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using System.Collections.Generic;
 using XStart2._0.Utils;
+using XStart2._0.View;
 
 namespace DragDropAssist {
     public class SelectorDragDrop {
@@ -20,7 +21,7 @@ namespace DragDropAssist {
         int indexToSelect;
         bool isDragInProgress;
         object itemUnderDragCursor;
-        Selector selector;
+        ItemsControl selector;
         Point ptMouseDown;
         bool showDragAdorner;
 
@@ -42,7 +43,7 @@ namespace DragDropAssist {
         /// Initializes a new instance of selectorDragManager.
         /// </summary>
         /// <param name="selector"></param>
-        public SelectorDragDrop(Selector selector)
+        public SelectorDragDrop(ItemsControl selector)
             : this() {
             this.Selector = selector;
         }
@@ -52,7 +53,7 @@ namespace DragDropAssist {
         /// </summary>
         /// <param name="selector"></param>
         /// <param name="dragAdornerOpacity"></param>
-        public SelectorDragDrop(Selector selector, double dragAdornerOpacity)
+        public SelectorDragDrop(ItemsControl selector, double dragAdornerOpacity)
             : this(selector) {
             this.DragAdornerOpacity = dragAdornerOpacity;
         }
@@ -62,7 +63,7 @@ namespace DragDropAssist {
         /// </summary>
         /// <param name="selector"></param>
         /// <param name="showDragAdorner"></param>
-        public SelectorDragDrop(Selector selector, bool showDragAdorner)
+        public SelectorDragDrop(ItemsControl selector, bool showDragAdorner)
             : this(selector) {
             this.ShowDragAdorner = showDragAdorner;
         }
@@ -111,7 +112,7 @@ namespace DragDropAssist {
         /// can be set to null, to prevent drag management from occuring.  If
         /// the selector's AllowDrop property is false, it will be set to true.
         /// </summary>
-        public Selector Selector {
+        public ItemsControl Selector {
             get { return selector; }
             set {
                 if (this.IsDragInProgress)
@@ -218,15 +219,18 @@ namespace DragDropAssist {
                 return;
 
             // Select the item the user clicked on.
-            if (this.selector.SelectedIndex != this.indexToSelect)
-                this.selector.SelectedIndex = this.indexToSelect;
+            //if (this.selector.SelectedIndex != this.indexToSelect)
+            //    this.selector.SelectedIndex = this.indexToSelect;
 
             // If the item at the selected index is null, there's nothing
             // we can do, so just return;
-            if (this.selector.SelectedItem == null)
+            //if (this.selector.SelectedItem == null)
+            //    return;
+            int selectedIndex = IndexUnderDragCursor;
+            if (selectedIndex < 0) {
                 return;
-
-            UIElement itemToDrag = this.GetSelectorItem(this.selector.SelectedIndex);
+            }
+            UIElement itemToDrag = this.GetSelectorItem(selectedIndex);
             if (itemToDrag == null)
                 return;
 
@@ -283,7 +287,7 @@ namespace DragDropAssist {
 
         #region selector_Drop
 
-        void selector_Drop(object sender, DragEventArgs e) {
+        void selector_Drop(object sender, DragEventArgs e){
             if (this.ItemUnderDragCursor != null)
                 this.ItemUnderDragCursor = null;
 
@@ -312,12 +316,30 @@ namespace DragDropAssist {
             int index = 0;
             string dataType = "list";
             if (itemsSource is XStart2._0.Bean.ObservableDictionary<string, XStart2._0.Bean.Type>) {
-                dataType = "od";
+                dataType = "odType";
+            }else if (itemsSource is XStart2._0.Bean.ObservableDictionary<string, XStart2._0.Bean.Column>) {
+                dataType = "odColumn";
+            } else if (itemsSource is XStart2._0.Bean.ObservableDictionary<string, XStart2._0.Bean.Project>) {
+                dataType = "odProject";
             }
             foreach (var obj in itemsSource) {
-                if ("od".Equals(dataType)) {
+                if ("odType".Equals(dataType)) {
                     var objKvp = (KeyValuePair<string, XStart2._0.Bean.Type>)obj;
                     var dataKvp = (KeyValuePair<string, XStart2._0.Bean.Type>)data;
+                    if (objKvp.Key.Equals(dataKvp.Key)) {
+                        oldIndex = index;
+                        break;
+                    }
+                } else if ("odColumn".Equals(dataType)) {
+                    var objKvp = (KeyValuePair<string, XStart2._0.Bean.Column>)obj;
+                    var dataKvp = (KeyValuePair<string, XStart2._0.Bean.Column>)data;
+                    if (objKvp.Key.Equals(dataKvp.Key)) {
+                        oldIndex = index;
+                        break;
+                    }
+                } else if ("odProject".Equals(dataType)) {
+                    var objKvp = (KeyValuePair<string, XStart2._0.Bean.Project>)obj;
+                    var dataKvp = (KeyValuePair<string, XStart2._0.Bean.Project>)data;
                     if (objKvp.Key.Equals(dataKvp.Key)) {
                         oldIndex = index;
                         break;
@@ -365,12 +387,12 @@ namespace DragDropAssist {
                 // new index (according to where the mouse cursor is).  If it was
                 // not previously in the ListBox, then insert the item.
                 if (oldIndex > -1)
-                    if ("od".Equals(dataType)) {
+                    if ("odType".Equals(dataType) || "odColumn".Equals(dataType) || "odProject".Equals(dataType)) {
                         dItemsSource.ChangeIndex(oldIndex, newIndex);
                     } else if ("list".Equals(dataType)) {
                         dItemsSource.Move(oldIndex, newIndex);
                     } else {
-                        if (dItemsSource is XStart2._0.Bean.ObservableDictionary<string, XStart2._0.Bean.Type> dItemsDic) {
+                        if (dItemsSource is XStart2._0.Bean.ObservableDictionary<string, XStart2._0.Bean.TableData> dItemsDic) {
 
                             var kvp = (KeyValuePair<string, XStart2._0.Bean.Type>)data;
                             //dItemsDic.SetIndexValue(newIndex, kvp.Value);
@@ -510,7 +532,7 @@ namespace DragDropAssist {
 
                 DependencyObject depObj = res.VisualHit;
                 while (depObj != null) {
-                    if (depObj is ListBoxItem || depObj is TabItem || depObj is ComboBoxItem) {
+                    if (depObj is ListBoxItem || depObj is TabItem || depObj is ComboBoxItem || depObj is DraggableGrid) {
                         return this.selector.Items.IndexOf((depObj as FrameworkElement).DataContext);
                     }
 
@@ -638,12 +660,15 @@ namespace DragDropAssist {
         #region PerformDragOperation
 
         void PerformDragOperation() {
-            object selectedItem = this.selector.SelectedItem;
+            object selectedItem = this.selector.Items[IndexUnderDragCursor];
             DragDropEffects allowedEffects = DragDropEffects.Move | DragDropEffects.Move | DragDropEffects.Link;
             if (DragDrop.DoDragDrop(this.selector, selectedItem, allowedEffects) != DragDropEffects.None) {
                 // The item was dropped into a new location,
                 // so make it the new selected item.
-                this.selector.SelectedItem = selectedItem;
+                if(this.selector is Selector operate) {
+                    operate.SelectedItem = selectedItem;
+                }
+                //this.selector.SelectedItem = selectedItem;
             }
         }
 

@@ -227,7 +227,8 @@
                                     </MenuItem>
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
-                            <ItemsControl ItemsSource="{Binding Value.ColumnDic}">
+                            <ItemsControl ItemsSource="{Binding Value.ColumnDic}"
+                                          >
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Expander helper:ElementParamHelper.TypeSection="{Binding Value.TypeSection}" helper:ElementParamHelper.ColumnSection="{Binding Value.Section}"
@@ -326,7 +327,8 @@
                                                             </MenuItem>
                                                         </ContextMenu>
                                                     </ScrollViewer.ContextMenu>
-                                                    <ItemsControl Height="Auto" ItemsSource="{Binding Value.ProjectDic}">
+                                                    <ItemsControl ItemsSource="{Binding Value.ProjectDic}"
+                                                                  assist:SelectorDragDropAttach.IsItemsDragDropEnabled="True">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
                                                                 <WrapPanel ItemWidth="{Binding Value.ProjectWidth}"/>
@@ -334,12 +336,12 @@
                                                         </ItemsControl.ItemsPanel>
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <Grid>
+                                                                <view:DraggableGrid>
                                                                     <Grid.ColumnDefinitions>
                                                                         <ColumnDefinition/>
                                                                         <ColumnDefinition Width="24"/>
                                                                     </Grid.ColumnDefinitions>
-                                                                    <view:ImageButton Grid.Column="0" Content="{Binding Value.Name}" Style="{StaticResource AppButton}"
+                                                                    <view:ImageButton Grid.Column="0" Content="{Binding Value.Name}" Style="{StaticResource ProjectButton}"
                                                                         ToolTip="{Binding Value.ToolTipContent}" Tag="{Binding Value}"
                                                                         Click="ProjectButton_Click" MouseDoubleClick="ProjectButton_DoubleClick"
                                                                                        ButtonIcon="{Binding Value.Icon}" IconSize="{Binding Value.IconSize}"
@@ -403,7 +405,7 @@
                                                                     </view:ImageButton>
                                                                     <ToggleButton Grid.Column="1" Style="{StaticResource GlassToggleButton}" Height="20" Margin="2" Background="Green" Tag="{Binding Value}"
                                                                     IsChecked="{Binding Value.AutoRun, Converter={StaticResource ProjectAutoRunConverter}}" IsEnabled="{Binding Value.CanAutoRun}" ToolTip="{Binding Value.CanAutoRun, Converter={StaticResource ProjectAutoRunToolTipConverter}}" Click="ToggleAutoRun_Click" ToolTipService.ShowOnDisabled="True"/>
-                                                                </Grid>
+                                                                </view:DraggableGrid>
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>

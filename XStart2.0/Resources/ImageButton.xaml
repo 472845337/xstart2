@@ -7,7 +7,7 @@
     <con:Orientation2CenterConverter x:Key="Orientation2CenterConverter"/>
     <con:HideTitle2VisibilityConverter x:Key="HideTitle2VisibilityConverter"/>
     <!-- 项目按钮样式 -->
-    <Style x:Key="AppButton" TargetType="{x:Type view:ImageButton}">
+    <Style x:Key="ProjectButton" TargetType="{x:Type view:ImageButton}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type view:ImageButton}">
