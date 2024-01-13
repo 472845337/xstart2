@@ -24,7 +24,7 @@ namespace XStart2._0 {
         private readonly System.Windows.Threading.DispatcherTimer AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
         private readonly System.Windows.Threading.DispatcherTimer currentTimer = new System.Windows.Threading.DispatcherTimer();
         private readonly System.Windows.Threading.DispatcherTimer currentDateTimer = new System.Windows.Threading.DispatcherTimer();
-        private readonly System.Windows.Threading.DispatcherTimer AutoGcTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMinutes(5)};
+        private readonly System.Windows.Threading.DispatcherTimer AutoGcTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMinutes(5) };
         // 数据服务
         public TypeService typeService = ServiceFactory.GetTypeService();
         public ColumnService columnService = ServiceFactory.GetColumnService();
@@ -316,12 +316,12 @@ namespace XStart2._0 {
             // 保存数据的调整（当前打开的类别，类别中打开的栏目，排序）
             int typeIndex = 0;
             foreach (KeyValuePair<string, Bean.Type> type in mainViewModel.Types) {
-                if(typeIndex != type.Value.Sort) {
+                if (typeIndex != type.Value.Sort) {
                     typeService.UpdateSort(type.Value.Section, typeIndex);
                 }
                 int columnIndex = 0;
                 foreach (KeyValuePair<string, Column> column in type.Value.ColumnDic) {
-                    if(columnIndex != column.Value.Sort) {
+                    if (columnIndex != column.Value.Sort) {
                         columnService.UpdateSort(column.Value.Section, columnIndex);
                     }
                     if (column.Value.IsExpanded) {
@@ -330,8 +330,8 @@ namespace XStart2._0 {
                         }
                     }
                     int projectIndex = 0;
-                    foreach(KeyValuePair<string, Project> project in column.Value.ProjectDic) {
-                        if(projectIndex != project.Value.Sort) {
+                    foreach (KeyValuePair<string, Project> project in column.Value.ProjectDic) {
+                        if (projectIndex != project.Value.Sort) {
                             projectService.UpdateSort(project.Value.Section, projectIndex);
                         }
                         projectIndex++;
@@ -655,7 +655,8 @@ namespace XStart2._0 {
                         , FaIconFontFamily = projectTypeWindow.VM.SelectedFf.ToString()
                     };
                     projectType.Section = Guid.NewGuid().ToString();
-                    projectType.Sort = XStartService.TypeDic[XStartService.TypeDic.Count - 1].Sort + 1;
+
+                    projectType.Sort = XStartService.TypeDic.Count > 0 ? XStartService.TypeDic[XStartService.TypeDic.Count - 1].Sort + 1 : 0;
                     typeService.Insert(projectType);
                     XStartService.TypeDic.Add(projectType.Section, projectType);
                     NotifyUtils.ShowNotification("新增类别成功！");
@@ -1544,7 +1545,7 @@ namespace XStart2._0 {
 
         private void OpenFolder_Click(object sender, EventArgs e) {
             Project project = GetProjectByMenu(sender);
-            
+
             // 打开文件所在的目录
             if (Project.KIND_FILE.Equals(project.Kind) || Project.KIND_DIRECTORY.Equals(project.Kind)) {
                 if (File.Exists(project.Path)) {
@@ -1672,7 +1673,7 @@ namespace XStart2._0 {
 
         private void Project_DragDrop(object sender, DragEventArgs e) {
             Array array = (Array)e.Data.GetData(DataFormats.FileDrop);
-            if(null == array) {
+            if (null == array) {
                 return;
             }
             if (array.Length > 5) {
