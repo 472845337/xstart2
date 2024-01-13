@@ -228,7 +228,7 @@
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
                             <ItemsControl ItemsSource="{Binding Value.ColumnDic}"
-                                          >
+                                          assist:SelectorDragDropAttach.IsItemsDragDropEnabled="True">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Expander helper:ElementParamHelper.TypeSection="{Binding Value.TypeSection}" helper:ElementParamHelper.ColumnSection="{Binding Value.Section}"

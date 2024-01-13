@@ -532,7 +532,7 @@ namespace DragDropAssist {
 
                 DependencyObject depObj = res.VisualHit;
                 while (depObj != null) {
-                    if (depObj is ListBoxItem || depObj is TabItem || depObj is ComboBoxItem || depObj is DraggableGrid) {
+                    if (depObj is ListBoxItem || depObj is TabItem || depObj is ComboBoxItem || depObj is DraggableGrid || depObj is Expander) {
                         return this.selector.Items.IndexOf((depObj as FrameworkElement).DataContext);
                     }
 

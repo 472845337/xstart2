@@ -116,6 +116,7 @@
     <Compile Include="Converters\ProjectAutoRunConverter.cs" />
     <Compile Include="Converters\Project2IconConverter.cs" />
     <Compile Include="Helper\DragDop\DragAdorner.cs" />
+    <Compile Include="View\DraggableExpander.cs" />
     <Compile Include="View\DraggableGrid.cs" />
     <Compile Include="Helper\DragDop\SelectorDragDrop.cs" />
     <Compile Include="Helper\DragDop\SelectorDragDropAttach.cs" />
