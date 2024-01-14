@@ -116,7 +116,11 @@ namespace XStart2._0.Windows {
             };
         }
         private BackData.BackColumn GetByTableColumn(Column column) {
-            return new BackData.BackColumn { Section = column.Section, Name = column.Name, Sort = column.Sort, Password = column.Password };
+            return new BackData.BackColumn {
+                Section = column.Section, TypeSection = column.TypeSection, Name = column.Name
+                , Sort = column.Sort, Password = column.Password, IconIndex = column.IconIndex
+                 , Orientation = column.Orientation, OneLineMulti = column.OneLineMulti, HideTitle = column.HideTitle
+            };
         }
         private BackData.BackProject GetByTableProject(Project project) {
             return new BackData.BackProject {

@@ -78,19 +78,19 @@ namespace XStart2._0.Windows {
                             , IconIndex = backProject.IconIndex, Kind = backProject.Kind, Path = backProject.Path, FontColor = backProject.FontColor
                             , Arguments = backProject.Arguments, RunStartPath = backProject.RunStartPath, HotKey = backProject.HotKey, Remark = backProject.Remark
                             };
-                            if (null == XStartService.TypeDic[backColumn.TypeSection]) {
+                            if (!XStartService.TypeDic.ContainsKey(backColumn.TypeSection)) {
                                 // 先创建类别
                                 Type type = new Type { Section = backType.Section, Name = backType.Name, Sort = backType.Sort, FaIcon = backType.FaIcon, FaIconColor = backType.FaIconColor, FaIconFontFamily = backType.FaIconFontFamily, Password = backType.Password };
                                 typeService.Insert(type);
                                 XStartService.TypeDic.Add(type.Section, type);
                             }
-                            if (null == XStartService.TypeDic[backColumn.TypeSection].ColumnDic[backColumn.Section]) {
+                            if (!XStartService.TypeDic[backColumn.TypeSection].ColumnDic.ContainsKey(backColumn.Section)) {
                                 // 先创建栏目
                                 Column column = new Column { TypeSection = backColumn.TypeSection, Section = backColumn.Section, Name = backColumn.Name, Sort = backColumn.Sort, Password = backColumn.Password };
                                 columnService.Insert(column);
                                 XStartService.TypeDic[column.TypeSection].ColumnDic.Add(column.Section, column);
                             }
-                            if (null != XStartService.TypeDic[backColumn.TypeSection].ColumnDic[backColumn.Section].ProjectDic[backProject.Section]) {
+                            if (XStartService.TypeDic[backColumn.TypeSection].ColumnDic[backColumn.Section].ProjectDic.ContainsKey(backProject.Section)) {
                                 if (isOverride) {
                                     // 覆盖
                                     projectService.Update(project);
@@ -115,13 +115,13 @@ namespace XStart2._0.Windows {
                     }
                     if (true == backColumnVM.IsChecked) {
                         Column column = new Column { TypeSection = backColumn.TypeSection, Section = backColumn.Section, Name = backColumn.Name, Sort = backColumn.Sort, Password = backColumn.Password };
-                        if (null == XStartService.TypeDic[backColumn.TypeSection]) {
+                        if (!XStartService.TypeDic.ContainsKey(backColumn.TypeSection)) {
                             // 先创建类别
                             Type type = new Type { Section = backType.Section, Name = backType.Name, Sort = backType.Sort, FaIcon = backType.FaIcon, FaIconColor = backType.FaIconColor, FaIconFontFamily = backType.FaIconFontFamily, Password = backType.Password };
                             typeService.Insert(type);
                             XStartService.TypeDic.Add(type.Section, type);
                         }
-                        if (null != XStartService.TypeDic[backColumn.TypeSection].ColumnDic[backColumn.Section]) {
+                        if (XStartService.TypeDic[backColumn.TypeSection].ColumnDic.ContainsKey(backColumn.Section)) {
                             if (isOverride) {
                                 // 覆盖
                                 columnService.Update(column);
@@ -138,7 +138,7 @@ namespace XStart2._0.Windows {
                 }
                 if (true == backTypeVM.IsChecked) {
                     Type type = new Type { Section = backType.Section, Name = backType.Name, Sort = backType.Sort, FaIcon = backType.FaIcon, FaIconColor = backType.FaIconColor, FaIconFontFamily = backType.FaIconFontFamily, Password = backType.Password };
-                    if (null != XStartService.TypeDic[backType.Section]) {
+                    if ( XStartService.TypeDic.ContainsKey(backType.Section)) {
                         if (isOverride) {
                             // 覆盖
                             typeService.Update(type);

@@ -13,6 +13,7 @@ namespace XStart2._0.Bean {
         [DoNotNotify]
         [TableParam("type_section", "VARCHAR")]
         public string TypeSection { get; set; }
+        // 程序打开后，栏目是否展开
         [DoNotNotify]
         [TableParam("start_open", "BIT")]
         public bool? StartOpen { get; set; }

@@ -25,7 +25,14 @@ namespace XStart2._0.Bean {
 
             // 所属类别
             public string TypeSection { get; set; }
-
+            // 图标尺寸
+            public int? IconSize { get; set; }
+            // 是否横排
+            public string Orientation { get; set; }
+            // 一行多个
+            public bool? OneLineMulti { get; set; }
+            // 隐藏标题
+            public bool? HideTitle { get; set; }
 
             public List<BackProject> Projects { get; set; }
         }
