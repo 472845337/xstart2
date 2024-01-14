@@ -343,7 +343,10 @@ namespace XStart2._0 {
             // 自启动
             Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             if (mainViewModel.AutoRun) {
-                registryKey.SetValue(Constants.APP_NAME, System.Reflection.Assembly.GetExecutingAssembly().Location, Microsoft.Win32.RegistryValueKind.String);
+                string exeLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                if (!exeLocation.Equals(registryKey.GetValue(Constants.APP_NAME))) {
+                    registryKey.SetValue(Constants.APP_NAME, System.Reflection.Assembly.GetExecutingAssembly().Location, Microsoft.Win32.RegistryValueKind.String);
+                }
             } else {
                 registryKey.DeleteValue(Constants.APP_NAME, false);
             }
