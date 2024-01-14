@@ -3,10 +3,10 @@ using System.Windows.Data;
 using XStart2._0.Const;
 
 namespace XStart2._0.Converters {
-    public class ProjectWidthConverter : IValueConverter {
+    public class ProjectWidthConverter : BaseValueConverter<ProjectWidthConverter> {
         #region IValueConverter Members
 
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public override object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             int width = -1;
             if(value is Bean.Project project) {
                 if (Constants.ORIENTATION_VERTICAL.Equals(project.Orientation)) {
@@ -18,7 +18,7 @@ namespace XStart2._0.Converters {
         }
 
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public override object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             return null;
         }
         #endregion

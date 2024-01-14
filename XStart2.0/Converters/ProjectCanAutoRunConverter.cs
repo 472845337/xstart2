@@ -2,15 +2,15 @@
 using System.Windows.Data;
 
 namespace XStart2._0.Converters {
-    public class ProjectCanAutoRunConverter : IValueConverter {
+    public class ProjectCanAutoRunConverter : BaseValueConverter<ProjectCanAutoRunConverter> {
         #region IValueConverter Members
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public override object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             Bean.Project project = (Bean.Project)value;
             return null == project ? false : (object)project.CanAutoRun;
         }
 
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public override object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             throw new NotSupportedException();
         }
         #endregion

@@ -522,9 +522,10 @@ namespace XStart2._0 {
                 Topmost = false;
             }
             SettingWindow settingWindow = new SettingWindow(mainViewModel) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
+            bool changeOneLineMulti = false;
             if (true == settingWindow.ShowDialog()) {
                 SettingViewModel settingVM = settingWindow.settingVM;
-                // 将设置的值赋值，并写入配置
+                // 将设置的值赋值，关闭前定入配置
                 mainViewModel.Audio = settingVM.Audio;
                 mainViewModel.TopMost = settingVM.TopMost;
                 mainViewModel.AutoRun = settingVM.AutoRun;
@@ -537,14 +538,27 @@ namespace XStart2._0 {
                 mainViewModel.HideTitle = settingVM.HideTitle;
                 mainViewModel.Orientation = settingVM.Orientation;
                 if (mainViewModel.OneLineMulti != settingVM.OneLineMulti) {
+                    changeOneLineMulti = true;
                     mainViewModel.OneLineMulti = settingVM.OneLineMulti;
-                    foreach (var type in mainViewModel.Types) {
-                        foreach (var column in type.Value.ColumnDic) {
-                            ComputedColumnProject(column.Value);
-                        }
-                    }
                 }
                 SaveSetting();
+            }
+            // 导入时的数据处理，在导入数据后，新添加的Type需要计算相关的尺寸信息
+            foreach (var type in mainViewModel.Types) {
+                if (changeOneLineMulti) {
+                    foreach (var column in type.Value.ColumnDic) {
+                        ComputedColumnProject(column.Value);
+                    }
+                }
+                if (type.Value.NewAdd) {
+                    CalculateWidthHeight(type.Value.Section);
+                    // 如果类别中有栏目，打开第一个栏目
+                    if (type.Value.ColumnDic.Count > 0) {
+                        type.Value.ColumnDic[0].IsExpanded = true;
+                        type.Value.ColumnDic[0].ColumnHeight = (int)type.Value.ExpandedColumnHeight;
+                    }
+                    type.Value.NewAdd = false;
+                }
             }
             settingWindow.Close();
             if (mainViewModel.TopMost) {

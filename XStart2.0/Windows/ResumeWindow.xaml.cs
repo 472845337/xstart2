@@ -165,7 +165,7 @@ namespace XStart2._0.Windows {
         }
 
         private Type GetByBackType(BackData.BackType backType) {
-            return new Type { Section = backType.Section, Name = backType.Name, Sort = backType.Sort, FaIcon = backType.FaIcon, FaIconColor = backType.FaIconColor, FaIconFontFamily = backType.FaIconFontFamily, Password = backType.Password };
+            return new Type { Section = backType.Section, Name = backType.Name, Sort = backType.Sort, FaIcon = backType.FaIcon, FaIconColor = backType.FaIconColor, FaIconFontFamily = backType.FaIconFontFamily, Password = backType.Password, NewAdd = true };
         }
 
         private Column GetByBackColumn(BackData.BackColumn backColumn) {

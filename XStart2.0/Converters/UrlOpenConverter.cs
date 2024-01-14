@@ -2,9 +2,9 @@
 using System.Windows.Data;
 
 namespace XStart2._0.Converters {
-    public class UrlOpenConverter : IValueConverter {
+    public class UrlOpenConverter : BaseValueConverter<UrlOpenConverter> {
         // 单击为true,双击为false
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public override object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             if (null == value || string.IsNullOrEmpty(value as string) || parameter == null) {
                 return false;
             }
@@ -17,7 +17,7 @@ namespace XStart2._0.Converters {
             }
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public override object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             if (value == null || parameter == null) {
                 return null;
             }

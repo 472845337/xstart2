@@ -3,9 +3,9 @@ using System.Windows.Data;
 using XStart2._0.Const;
 
 namespace XStart2._0.Converters {
-    public class IconSizeConverter : IValueConverter {
+    public class IconSizeConverter : BaseValueConverter<IconSizeConverter> {
         // 图标尺寸转换 32-Small 48-Mid, 72-Large, 256-Huge
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public override object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             bool isCheck = false;
             string targetValue = (string)parameter;
             if (null == value) {
@@ -30,7 +30,7 @@ namespace XStart2._0.Converters {
             return isCheck;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public override object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             if (value == null || parameter == null) {
                 return 0;
             }

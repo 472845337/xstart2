@@ -4,9 +4,9 @@ using System.Windows.Data;
 using XStart2._0.Const;
 
 namespace XStart2._0.Converters {
-    public class Orientation2CenterConverter : IValueConverter {
+    public class Orientation2CenterConverter : BaseValueConverter<Orientation2CenterConverter> {
         // 单击为true,双击为false
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public override object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             if (null == value) {
                 return HorizontalAlignment.Left;
             }
@@ -17,7 +17,7 @@ namespace XStart2._0.Converters {
             }
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public override object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             if(value == null || !(value is HorizontalAlignment)) {
                 return Constants.ORIENTATION_HORIZONTAL;
             } else {

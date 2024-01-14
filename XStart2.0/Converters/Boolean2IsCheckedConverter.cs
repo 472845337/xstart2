@@ -3,10 +3,10 @@ using System.Windows.Data;
 using XStart2._0.Const;
 
 namespace XStart2._0.Converters {
-    public class Boolean2IsCheckedConverter : IValueConverter {
+    public class Boolean2IsCheckedConverter : BaseValueConverter<Boolean2IsCheckedConverter> {
         #region IValueConverter Members
 
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public override object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             bool isCheck = false;
             if (Constants.STYLE_DEFAULT.Equals(parameter)) { 
                 if(null == value) {
@@ -20,7 +20,7 @@ namespace XStart2._0.Converters {
             return isCheck;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public override object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             if (Constants.STYLE_DEFAULT.Equals(parameter)) {
                 return null;
             } else {

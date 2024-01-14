@@ -4,10 +4,10 @@ using XStart2._0.Const;
 using XStart2._0.Services;
 
 namespace XStart2._0.Converters {
-    public class Project2IconConverter : IValueConverter {
+    public class Project2IconConverter : BaseValueConverter<Project2IconConverter> {
         #region IValueConverter Members
 
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public override object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             if (null != value) {
                 if (value is Bean.BackData.BackProject backProject) {
                     return XStartService.GetIconImage(backProject.Kind, backProject.Path, backProject.IconPath, Constants.ICON_SIZE_32);
@@ -18,7 +18,7 @@ namespace XStart2._0.Converters {
             return null;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public override object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             throw new NotSupportedException();
         }
 

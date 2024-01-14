@@ -104,6 +104,7 @@
     </ApplicationDefinition>
     <Compile Include="Bean\FontAwesome.cs" />
     <Compile Include="Bean\CopyProject.cs" />
+    <Compile Include="Converters\BaseValueConverter.cs" />
     <Compile Include="Converters\ProjectKind2EnabledConverter.cs" />
     <Compile Include="Converters\Boolean2IsCheckedConverter.cs" />
     <Compile Include="Converters\HideTitle2VisibilityConverter.cs" />

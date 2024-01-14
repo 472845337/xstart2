@@ -31,6 +31,9 @@ namespace XStart2._0.Bean {
         public System.Windows.Controls.ScrollBarVisibility VerticalScroll { get; set; }
         // 类别的栏目集合
         public ObservableDictionary<string, Column> ColumnDic { get; set; } = new ObservableDictionary<string, Column>();
+        // 是否新增，用于某些操作完成后，进行处理
+        [DoNotNotify]
+        public bool NewAdd { get; set; }
 
     }
 }
