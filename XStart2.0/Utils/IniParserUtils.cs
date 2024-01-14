@@ -15,7 +15,7 @@ namespace XStart2._0.Utils {
             if (iniDataDic.TryGetValue(filePath, out IniData _iniData)) {
 
             } else {
-                _iniData = iniParser.ReadFile(Configs.AppStartPath + filePath);
+                _iniData = iniParser.ReadFile(Configs.AppStartPath + filePath, Encoding.UTF8);
                 iniDataDic.Add(filePath, _iniData);
             }
             return _iniData;
@@ -35,7 +35,7 @@ namespace XStart2._0.Utils {
                 GetIniData(filePath);
             }
             iniDataDic[filePath].Merge(iniData);
-            iniParser.WriteFile(Configs.AppStartPath + filePath, iniDataDic[filePath]);
+            iniParser.WriteFile(Configs.AppStartPath + filePath, iniDataDic[filePath], Encoding.UTF8);
         }
     }
 }
