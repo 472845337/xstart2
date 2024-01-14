@@ -72,21 +72,16 @@ namespace XStart2._0.Windows {
                         BackData.BackProject backProject = backProjectVM.Data as BackData.BackProject;
 
                         if (true == backProjectVM.IsChecked) {
-                            Project project = new Project {
-                                TypeSection = backProject.TypeSection, ColumnSection = backProject.ColumnSection
-                            , Section = backProject.Section, Name = backProject.Name, Sort = backProject.Sort, IconPath = backProject.IconPath
-                            , IconIndex = backProject.IconIndex, Kind = backProject.Kind, Path = backProject.Path, FontColor = backProject.FontColor
-                            , Arguments = backProject.Arguments, RunStartPath = backProject.RunStartPath, HotKey = backProject.HotKey, Remark = backProject.Remark
-                            };
+                            Project project = GetByBackProject(backProject);
                             if (!XStartService.TypeDic.ContainsKey(backColumn.TypeSection)) {
                                 // 先创建类别
-                                Type type = new Type { Section = backType.Section, Name = backType.Name, Sort = backType.Sort, FaIcon = backType.FaIcon, FaIconColor = backType.FaIconColor, FaIconFontFamily = backType.FaIconFontFamily, Password = backType.Password };
+                                Type type = GetByBackType(backType);
                                 typeService.Insert(type);
                                 XStartService.TypeDic.Add(type.Section, type);
                             }
                             if (!XStartService.TypeDic[backColumn.TypeSection].ColumnDic.ContainsKey(backColumn.Section)) {
                                 // 先创建栏目
-                                Column column = new Column { TypeSection = backColumn.TypeSection, Section = backColumn.Section, Name = backColumn.Name, Sort = backColumn.Sort, Password = backColumn.Password };
+                                Column column = GetByBackColumn(backColumn);
                                 columnService.Insert(column);
                                 XStartService.TypeDic[column.TypeSection].ColumnDic.Add(column.Section, column);
                             }
@@ -114,10 +109,10 @@ namespace XStart2._0.Windows {
                         }
                     }
                     if (true == backColumnVM.IsChecked) {
-                        Column column = new Column { TypeSection = backColumn.TypeSection, Section = backColumn.Section, Name = backColumn.Name, Sort = backColumn.Sort, Password = backColumn.Password };
+                        Column column = GetByBackColumn(backColumn);
                         if (!XStartService.TypeDic.ContainsKey(backColumn.TypeSection)) {
                             // 先创建类别
-                            Type type = new Type { Section = backType.Section, Name = backType.Name, Sort = backType.Sort, FaIcon = backType.FaIcon, FaIconColor = backType.FaIconColor, FaIconFontFamily = backType.FaIconFontFamily, Password = backType.Password };
+                            Type type = GetByBackType(backType);
                             typeService.Insert(type);
                             XStartService.TypeDic.Add(type.Section, type);
                         }
@@ -128,6 +123,10 @@ namespace XStart2._0.Windows {
                                 XStartService.TypeDic[column.TypeSection].ColumnDic[column.Section].Name = column.Name;
                                 XStartService.TypeDic[column.TypeSection].ColumnDic[column.Section].Sort = column.Sort;
                                 XStartService.TypeDic[column.TypeSection].ColumnDic[column.Section].Password = column.Password;
+                                XStartService.TypeDic[column.TypeSection].ColumnDic[column.Section].Orientation = column.Orientation;
+                                XStartService.TypeDic[column.TypeSection].ColumnDic[column.Section].IconSize = column.IconSize;
+                                XStartService.TypeDic[column.TypeSection].ColumnDic[column.Section].HideTitle = column.HideTitle;
+                                XStartService.TypeDic[column.TypeSection].ColumnDic[column.Section].OneLineMulti = column.OneLineMulti;
                             }
                         } else {
                             // 新增
@@ -137,7 +136,7 @@ namespace XStart2._0.Windows {
                     }
                 }
                 if (true == backTypeVM.IsChecked) {
-                    Type type = new Type { Section = backType.Section, Name = backType.Name, Sort = backType.Sort, FaIcon = backType.FaIcon, FaIconColor = backType.FaIconColor, FaIconFontFamily = backType.FaIconFontFamily, Password = backType.Password };
+                    Type type = GetByBackType(backType);
                     if ( XStartService.TypeDic.ContainsKey(backType.Section)) {
                         if (isOverride) {
                             // 覆盖
@@ -165,5 +164,24 @@ namespace XStart2._0.Windows {
             DialogResult = false;
         }
 
+        private Type GetByBackType(BackData.BackType backType) {
+            return new Type { Section = backType.Section, Name = backType.Name, Sort = backType.Sort, FaIcon = backType.FaIcon, FaIconColor = backType.FaIconColor, FaIconFontFamily = backType.FaIconFontFamily, Password = backType.Password };
+        }
+
+        private Column GetByBackColumn(BackData.BackColumn backColumn) {
+            return new Column {
+                TypeSection = backColumn.TypeSection, Section = backColumn.Section, Name = backColumn.Name
+                                    , Sort = backColumn.Sort, Password = backColumn.Password, Orientation = backColumn.Orientation, OneLineMulti = backColumn.OneLineMulti
+                                    , IconSize = backColumn.IconSize, HideTitle = backColumn.HideTitle
+            };
+        }
+        private Project GetByBackProject(BackData.BackProject backProject) {
+            return new Project {
+                TypeSection = backProject.TypeSection, ColumnSection = backProject.ColumnSection
+                           , Section = backProject.Section, Name = backProject.Name, Sort = backProject.Sort, IconPath = backProject.IconPath
+                           , IconIndex = backProject.IconIndex, Kind = backProject.Kind, Path = backProject.Path, FontColor = backProject.FontColor
+                           , Arguments = backProject.Arguments, RunStartPath = backProject.RunStartPath, HotKey = backProject.HotKey, Remark = backProject.Remark
+            };
+        }
     }
 }
