@@ -59,6 +59,9 @@
     <Reference Include="CliWrap, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CliWrap.2.5.0\lib\net45\CliWrap.dll</HintPath>
     </Reference>
+    <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
+      <HintPath>..\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
@@ -117,6 +120,7 @@
     <Compile Include="Converters\Project2IconConverter.cs" />
     <Compile Include="Helper\DragDop\DragAdorner.cs" />
     <Compile Include="Utils\ElementUtils.cs" />
+    <Compile Include="Utils\IniParserUtils.cs" />
     <Compile Include="View\DraggableExpander.cs" />
     <Compile Include="View\DraggableGrid.cs" />
     <Compile Include="Helper\DragDop\SelectorDragDrop.cs" />
@@ -160,13 +164,11 @@
     <Compile Include="Utils\FontAwesome6.cs" />
     <Compile Include="Utils\FontAwesomeBrands.cs" />
     <Compile Include="Utils\IconUtils.cs" />
-    <Compile Include="Utils\IniUtils.cs" />
     <Compile Include="Utils\LunarCalendar.cs" />
     <Compile Include="Utils\NotifyUtils.cs" />
     <Compile Include="Utils\RdpUtils.cs" />
     <Compile Include="Utils\WinApi.cs" />
     <Compile Include="Utils\WinUtils.cs" />
-    <Compile Include="Utils\XStartIniUtils.cs" />
     <Compile Include="ViewModels\AutoRunViewModel.cs" />
     <Compile Include="ViewModels\ControlAppMemoryViewModel.cs" />
     <Compile Include="ViewModels\MstscViewModel.cs" />

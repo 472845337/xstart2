@@ -63,6 +63,8 @@ namespace XStart2._0.ViewModels {
         #endregion
 
         #region 窗口相关设置
+        [DoNotNotify]
+        public string OpenType { get; set; }
         public int SelectedIndex { get; set; }
         public double TabControlActualHeight { get; set; }
         public bool TopMost { get; set; }

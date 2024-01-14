@@ -163,27 +163,6 @@
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <Separator/>
-                                <MenuItem Header="至顶" IsEnabled="{Binding Value.Unlocked}">
-                                    <MenuItem.Icon>
-                                        <Image Source="/Files/Icons/App/top.ico"/>
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <MenuItem Header="上移" IsEnabled="{Binding Value.Unlocked}">
-                                    <MenuItem.Icon>
-                                        <Image Source="/Files/Icons/App/up.ico"/>
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <MenuItem Header="下移" IsEnabled="{Binding Value.Unlocked}">
-                                    <MenuItem.Icon>
-                                        <Image Source="/Files/Icons/App/down.ico"/>
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <MenuItem Header="至底" IsEnabled="{Binding Value.Unlocked}">
-                                    <MenuItem.Icon>
-                                        <Image Source="/Files/Icons/App/bottom.ico"/>
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <Separator/>
                                 <MenuItem Header="清空栏目" IsEnabled="{Binding Value.Unlocked}" Click="ClearColumn_Click">
                                     <MenuItem.Icon>
                                         <Image Source="/Files/Icons/App/clear.ico"/>

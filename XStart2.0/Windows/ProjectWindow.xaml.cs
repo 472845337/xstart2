@@ -172,13 +172,17 @@ namespace XStart2._0.Windows {
                 Project = spw.Project;
                 SystemPathSpecialArguments(vm.Path);
              }
+            IniParser.Model.IniData iniData = new IniParser.Model.IniData();
             if (Configs.systemAppAddMulti != spw.MultiAdd) {
                 Configs.systemAppAddMulti = spw.MultiAdd;
-                IniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_ADD_MULTI, Convert.ToString(spw.MultiAdd));
+                iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_ADD_MULTI] = Convert.ToString(spw.MultiAdd);
             }
             if (Configs.systemAppOpenPage != spw.OpenPage) {
                 Configs.systemAppOpenPage = spw.OpenPage;
-                IniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_SYSTEM_PROJECT_OPEN_PAGE, Convert.ToString(spw.OpenPage));
+                iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_SYSTEM_PROJECT_OPEN_PAGE] = Convert.ToString(spw.OpenPage);
+            }
+            if (iniData.Sections.Count > 0) {
+                IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
             }
             spw.Close();
         }

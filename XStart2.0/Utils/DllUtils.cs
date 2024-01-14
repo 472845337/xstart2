@@ -98,28 +98,7 @@ namespace XStart2._0.Utils {
         /** 强制GC API函数**/
         [DllImport(Kernel32)]
         public static extern int SetProcessWorkingSetSize(IntPtr process, int minSize, int maxSize);
-        /// <summary>
-        /// 写入Ini配置文件
-        /// </summary>
-        /// <param name="section"></param>
-        /// <param name="key"></param>
-        /// <param name="val"></param>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
-        [DllImport(Kernel32)]
-        public static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
-        /// <summary>
-        /// 读取Ini配置文件
-        /// </summary>
-        /// <param name="section"></param>
-        /// <param name="key"></param>
-        /// <param name="def"></param>
-        /// <param name="retVal"></param>
-        /// <param name="size"></param>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
-        [DllImport(Kernel32, EntryPoint = "GetPrivateProfileString")]
-        public static extern uint GetPrivateProfileStringA(string section, string key, string def, byte[] retVal, int size, string filePath);
+
         /// <summary>
         /// 窗口操作，关闭请不要随意使用
         /// </summary>

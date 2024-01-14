@@ -60,9 +60,12 @@ namespace XStart2._0 {
         /// </summary>
         /// <param name="param"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e) {
+            #region 读取配置文件
+            var iniData = IniParserUtils.GetIniData(Constants.SET_FILE);
+            #endregion
             #region 用户头像和昵称
-            string avatarPath = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_AVATAR);
-            string nickName = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_NICKNAME);
+            string avatarPath = iniData[Constants.SECTION_USER][Constants.KEY_USER_AVATAR];
+            string nickName = iniData[Constants.SECTION_USER][Constants.KEY_USER_NICKNAME];
             if (!string.IsNullOrEmpty(avatarPath)) {
                 if (!File.Exists(avatarPath)) {
                     avatarPath = Configs.AppStartPath + Constants.AVATAR_PATH_NOTEXIST;
@@ -75,10 +78,10 @@ namespace XStart2._0 {
             #endregion
 
             #region 窗口相关加载，尺寸，位置，置顶
-            string leftStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_LOCATION, Constants.KEY_LEFT);
-            string topStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_LOCATION, Constants.KEY_TOP);
-            string heightStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SIZE, Constants.KEY_HEIGHT);
-            string widthStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SIZE, Constants.KEY_WIDTH);
+            string leftStr = iniData[Constants.SECTION_LOCATION][Constants.KEY_LEFT];
+            string topStr = iniData[Constants.SECTION_LOCATION][Constants.KEY_TOP];
+            string heightStr = iniData[Constants.SECTION_SIZE][Constants.KEY_HEIGHT];
+            string widthStr = iniData[Constants.SECTION_SIZE][Constants.KEY_WIDTH];
 
             // 尺寸
             mainViewModel.MainHeight = string.IsNullOrEmpty(heightStr) ? Constants.MAIN_HEIGHT : Convert.ToDouble(heightStr);
@@ -93,20 +96,20 @@ namespace XStart2._0 {
             Configs.mainTop = mainViewModel.MainTop;
             #endregion
             #region 加载设置项
-            string typeTabExpandStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_TYPE_TAB_EXPAND);
-            string topMostStr = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST);
-            string openType = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE);// 上次最后打开的类别
-            string clickType = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_CLICK_TYPE);// 点击方式，单击、双击
-            string audio = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_AUDIO);
-            string autoRun = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_AUTO_RUN);
-            string exitWarn = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_EXIT_WARN);
-            string closeBorderHide = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE);
-            string urlOpen = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN);
-            string urlOpenCustomBrowser = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER);
-            string iconSize = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_ICON_SIZE);
-            string orientation = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_ORIENTATION);// 排列方式
-            string hideTitle = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_HIDE_TITLE);// 标题隐藏
-            string oneLineMulti = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_ONE_LINE_MULTI);// 一行多个
+            string typeTabExpandStr = iniData[Constants.SECTION_CONFIG][Constants.KEY_TYPE_TAB_EXPAND];
+            string topMostStr = iniData[Constants.SECTION_CONFIG][Constants.KEY_TOP_MOST];
+            string openType = iniData[Constants.SECTION_CONFIG][Constants.KEY_OPEN_TYPE];// 上次最后打开的类别
+            string clickType = iniData[Constants.SECTION_CONFIG][Constants.KEY_CLICK_TYPE];// 点击方式，单击、双击
+            string audio = iniData[Constants.SECTION_CONFIG][Constants.KEY_AUDIO];
+            string autoRun = iniData[Constants.SECTION_CONFIG][Constants.KEY_AUTO_RUN];
+            string exitWarn = iniData[Constants.SECTION_CONFIG][Constants.KEY_EXIT_WARN];
+            string closeBorderHide = iniData[Constants.SECTION_CONFIG][Constants.KEY_CLOSE_BORDER_HIDE];
+            string urlOpen = iniData[Constants.SECTION_CONFIG][Constants.KEY_URL_OPEN];
+            string urlOpenCustomBrowser = iniData[Constants.SECTION_CONFIG][Constants.KEY_URL_OPEN_CUSTOM_BROWSER];
+            string iconSize = iniData[Constants.SECTION_CONFIG][Constants.KEY_ICON_SIZE];
+            string orientation = iniData[Constants.SECTION_CONFIG][Constants.KEY_ORIENTATION];// 排列方式
+            string hideTitle = iniData[Constants.SECTION_CONFIG][Constants.KEY_HIDE_TITLE];// 标题隐藏
+            string oneLineMulti = iniData[Constants.SECTION_CONFIG][Constants.KEY_ONE_LINE_MULTI];// 一行多个
 
             Configs.typeTabExpand = string.IsNullOrEmpty(typeTabExpandStr) || Convert.ToBoolean(typeTabExpandStr);
             Configs.topMost = !string.IsNullOrEmpty(topMostStr) && Convert.ToBoolean(topMostStr);
@@ -126,6 +129,7 @@ namespace XStart2._0 {
             mainViewModel.TypeTabExpanded = Configs.typeTabExpand;
             mainViewModel.ChangeTypeTab();// 初始化时要先触发一次
             mainViewModel.TopMost = Configs.topMost;
+            mainViewModel.OpenType = Configs.openType;
             mainViewModel.ClickType = Configs.clickType;
             mainViewModel.Audio = Configs.audio;
             mainViewModel.AutoRun = Configs.autoRun;
@@ -138,14 +142,14 @@ namespace XStart2._0 {
             mainViewModel.HideTitle = Configs.hideTitle;
             mainViewModel.OneLineMulti = Configs.oneLineMulti;
             // 系统其他配置
-            string delCount = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_DEL_COUNT);// 数据库执行多少次删除后执行VACUUM
+            string delCount = iniData[Constants.SECTION_CONFIG][Constants.KEY_DEL_COUNT];// 数据库执行多少次删除后执行VACUUM
             Configs.delCount = string.IsNullOrEmpty(delCount) ? 0 : Convert.ToInt32(delCount);
             #endregion
 
             #region 系统功能图标和操作
-            string systemProjectOpenPage = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_SYSTEM_PROJECT_OPEN_PAGE);
+            string systemProjectOpenPage = iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_SYSTEM_PROJECT_OPEN_PAGE];
             Configs.systemAppOpenPage = string.IsNullOrEmpty(systemProjectOpenPage) ? 0 : Convert.ToInt32(systemProjectOpenPage);
-            string addMulti = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_SYSTEM_APP, Constants.KEY_ADD_MULTI);
+            string addMulti = iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_ADD_MULTI];
             Configs.systemAppAddMulti = !string.IsNullOrEmpty(addMulti) && Convert.ToBoolean(addMulti);
             Configs.InitIconDic();
             SystemProjectParam.InitOperate();
@@ -308,11 +312,6 @@ namespace XStart2._0 {
             if (!Configs.inited) {
                 return;
             }
-            // 保存打开类别
-            string setOpenType = XStartIniUtils.IniReadValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE);
-            if (string.IsNullOrEmpty(Configs.openType) || !Configs.openType.Equals(setOpenType)) {
-                XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE, Configs.openType);
-            }
             // 保存数据的调整（当前打开的类别，类别中打开的栏目，排序）
             int typeIndex = 0;
             foreach (KeyValuePair<string, Bean.Type> type in mainViewModel.Types) {
@@ -340,11 +339,7 @@ namespace XStart2._0 {
                 }
                 typeIndex++;
             }
-            // 窗口位置修改
-            if (WindowState.Minimized != WindowState) {
-                SaveFormSize();
-                SaveFormLocation();
-            }
+
             // 自启动
             Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             if (mainViewModel.AutoRun) {
@@ -355,7 +350,7 @@ namespace XStart2._0 {
             registryKey.Dispose();
             // 剪切板内容清除
             Clipboard.Clear();
-            // 配置保存
+            // 配置以及窗口数据保存
             SaveSetting();
             if (!Configs.forceExit && Configs.exitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                 // 取消退出
@@ -441,7 +436,7 @@ namespace XStart2._0 {
                     mainViewModel.SelectedIndex = MainTabControl.SelectedIndex;
                     KeyValuePair<string, Bean.Type> type = (KeyValuePair<string, Bean.Type>)MainTabControl.SelectedItem;
                     // 记录下当前打开的类别（关闭时判断如果和配置中打开不一样，则保存配置）
-                    Configs.openType = type.Value.Section;
+                    mainViewModel.OpenType = type.Value.Section;
                     // 如果当前类别有口令，并且没有记住口令则展示为锁定
                     if (!type.Value.Locked && !type.Value.RememberSecurity && type.Value.HasPassword) {
                         type.Value.Locked = true;
@@ -1162,7 +1157,7 @@ namespace XStart2._0 {
             } else {
                 Configs.delCount += 1;
             }
-            XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_DEL_COUNT, Convert.ToString(Configs.delCount));
+            IniParserUtils.SaveIniData(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_DEL_COUNT, Convert.ToString(Configs.delCount));
 
         }
 
@@ -1277,22 +1272,7 @@ namespace XStart2._0 {
             NotifyUtils.ShowNotification(aboutSb.ToString(), Colors.LightBlue, "关于");
             e.Handled = true;
         }
-        /// <summary>
-        /// 保存当前窗口尺寸配置
-        /// </summary>
-        public void SaveFormSize() {
-            SaveConfig(Constants.SECTION_SIZE, Constants.KEY_HEIGHT, ref Configs.mainHeight, mainViewModel.MainHeight);
-            SaveConfig(Constants.SECTION_SIZE, Constants.KEY_WIDTH, ref Configs.mainWidth, mainViewModel.MainWidth);
-        }
 
-        /// <summary>
-        /// 保存当前窗口位置
-        /// </summary>
-        public void SaveFormLocation() {
-            // 保存当前位置
-            SaveConfig(Constants.SECTION_LOCATION, Constants.KEY_LEFT, ref Configs.mainLeft, mainViewModel.MainLeft);
-            SaveConfig(Constants.SECTION_LOCATION, Constants.KEY_TOP, ref Configs.mainTop, mainViewModel.MainTop);
-        }
         //计时执行的程序
         private void CurrentTimer_Tick(object sender, EventArgs e) {
             mainViewModel.CurrentTime = DateTime.Now.ToString("T");
@@ -1331,29 +1311,40 @@ namespace XStart2._0 {
 
         #region 保存配置项
         private void SaveSetting() {
-            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_TYPE_TAB_EXPAND, ref Configs.typeTabExpand, mainViewModel.TypeTabExpanded);// 类别标题是否展开
-            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST, ref Configs.topMost, mainViewModel.TopMost);// 置顶
-            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_CLICK_TYPE, ref Configs.clickType, mainViewModel.ClickType);// 点击方式
-            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_AUDIO, ref Configs.audio, mainViewModel.Audio);// 音效开关
-            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_AUTO_RUN, ref Configs.autoRun, mainViewModel.AutoRun);// 自启动
-            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_EXIT_WARN, ref Configs.exitWarn, mainViewModel.ExitWarn);// 退出警告
-            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE, ref Configs.closeBorderHide, mainViewModel.CloseBorderHide);// 靠边隐藏
-            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN, ref Configs.urlOpen, mainViewModel.UrlOpen);// 浏览器打开链接
-            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER, ref Configs.urlOpenCustomBrowser, mainViewModel.UrlOpenCustomBrowser);// 自定义浏览器
-            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_ICON_SIZE, ref Configs.iconSize, mainViewModel.IconSize);// 图标尺寸
-            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_ORIENTATION, ref Configs.orientation, mainViewModel.Orientation);// 排列方式
-            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_HIDE_TITLE, ref Configs.hideTitle, mainViewModel.HideTitle);// 隐藏标题
-            SaveConfig(Constants.SECTION_CONFIG, Constants.KEY_ONE_LINE_MULTI, ref Configs.oneLineMulti, mainViewModel.OneLineMulti);// 一行多个
+            IniParser.Model.IniData iniData = new IniParser.Model.IniData();
+
+            #region 窗口位置和尺寸保存
+            ConfigIniData(iniData, Constants.SECTION_SIZE, Constants.KEY_HEIGHT, ref Configs.mainHeight, mainViewModel.MainHeight);
+            ConfigIniData(iniData, Constants.SECTION_SIZE, Constants.KEY_WIDTH, ref Configs.mainWidth, mainViewModel.MainWidth);
+            ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_LEFT, ref Configs.mainLeft, mainViewModel.MainLeft);
+            ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_TOP, ref Configs.mainTop, mainViewModel.MainTop);
+            #endregion
+
+            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE, ref Configs.openType, mainViewModel.OpenType);// 类别标题是否展开
+            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_TYPE_TAB_EXPAND, ref Configs.typeTabExpand, mainViewModel.TypeTabExpanded);// 类别标题是否展开
+            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST, ref Configs.topMost, mainViewModel.TopMost);// 置顶
+            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_CLICK_TYPE, ref Configs.clickType, mainViewModel.ClickType);// 点击方式
+            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_AUDIO, ref Configs.audio, mainViewModel.Audio);// 音效开关
+            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_AUTO_RUN, ref Configs.autoRun, mainViewModel.AutoRun);// 自启动
+            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_EXIT_WARN, ref Configs.exitWarn, mainViewModel.ExitWarn);// 退出警告
+            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE, ref Configs.closeBorderHide, mainViewModel.CloseBorderHide);// 靠边隐藏
+            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN, ref Configs.urlOpen, mainViewModel.UrlOpen);// 浏览器打开链接
+            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER, ref Configs.urlOpenCustomBrowser, mainViewModel.UrlOpenCustomBrowser);// 自定义浏览器
+            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_ICON_SIZE, ref Configs.iconSize, mainViewModel.IconSize);// 图标尺寸
+            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_ORIENTATION, ref Configs.orientation, mainViewModel.Orientation);// 排列方式
+            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_HIDE_TITLE, ref Configs.hideTitle, mainViewModel.HideTitle);// 隐藏标题
+            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_ONE_LINE_MULTI, ref Configs.oneLineMulti, mainViewModel.OneLineMulti);// 一行多个
+            IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
         }
         /// <summary>
-        /// Config配置保存
+        /// Config配置放入IniData中
         /// </summary>
         /// <typeparam name="T">数据类型</typeparam>
         /// <param name="section">INI的section头</param>
         /// <param name="key">INI的关键字</param>
         /// <param name="from">原值</param>
         /// <param name="to">新值</param>
-        private void SaveConfig<T>(string section, string key, ref T from, T to) {
+        private void ConfigIniData<T>(IniParser.Model.IniData iniData, string section, string key, ref T from, T to) {
             bool isChange = false;
             if (from is bool fromBool && to is bool toBool) {
                 if (fromBool != toBool) {
@@ -1375,9 +1366,13 @@ namespace XStart2._0 {
                 if (fromDouble != toDouble) {
                     isChange = true;
                 }
+            } else if (null == from && null != to) {
+                isChange = true;
+            } else if (null != from && null == to) {
+                isChange = true;
             }
             if (isChange) {
-                XStartIniUtils.IniWriteValue(Constants.SET_FILE, section, key, Convert.ToString(to));
+                iniData[section][key] = Convert.ToString(to);
                 from = to;
             }
         }
@@ -1510,12 +1505,7 @@ namespace XStart2._0 {
         }
 
         private void CloseBorderHide_Click(object sender, RoutedEventArgs e) {
-            // 保存配置
-            if (Configs.inited) {
-                Configs.closeBorderHide = mainViewModel.CloseBorderHide;
-                XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE, System.Convert.ToString(Configs.closeBorderHide));
-            }
-            if (!Configs.closeBorderHide) {
+            if (!mainViewModel.CloseBorderHide) {
                 // 不隐藏
                 CancelAnchor();
             } else {
@@ -1630,15 +1620,17 @@ namespace XStart2._0 {
         private void User_Click(object sender, RoutedEventArgs e) {
             UserWindow userWindow = new UserWindow(mainViewModel.AvatarPath, mainViewModel.NickName) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
             if (true == userWindow.ShowDialog()) {
+                IniParser.Model.IniData iniData = new IniParser.Model.IniData();
                 // 保存配置项
                 if (!mainViewModel.AvatarPath.Equals(userWindow.vm.AvatarPath)) {
-                    XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_AVATAR, userWindow.vm.AvatarPath);
+                    iniData[Constants.SECTION_USER][Constants.KEY_USER_AVATAR] = userWindow.vm.AvatarPath;
                     mainViewModel.AvatarPath = userWindow.vm.AvatarPath;
                 }
                 if (!mainViewModel.NickName.Equals(userWindow.vm.NickName)) {
-                    XStartIniUtils.IniWriteValue(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_NICKNAME, userWindow.vm.NickName);
+                    iniData[Constants.SECTION_USER][Constants.KEY_USER_NICKNAME] = userWindow.vm.NickName;
                     mainViewModel.NickName = userWindow.vm.NickName;
                 }
+                IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
             }
             userWindow.Close();
         }
