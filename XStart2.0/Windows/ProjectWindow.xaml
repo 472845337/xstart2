@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XStart2._0.Windows"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="380" Width="400" WindowStartupLocation="CenterScreen">
+        Title="{Binding Title}" Height="380" Width="400" WindowStartupLocation="CenterScreen" Topmost="{Binding TopMost, Mode= TwoWay}">
     
     <Grid>
         <Grid.RowDefinitions>

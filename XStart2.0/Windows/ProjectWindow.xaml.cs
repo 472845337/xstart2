@@ -156,6 +156,7 @@ namespace XStart2._0.Windows {
         }
         // 选择系统功能
         private void SystemBtn_Click(object sender, RoutedEventArgs e) {
+            OpenNewWindowUtils.SetTopmost(this);
             SystemProjectWindow spw = new SystemProjectWindow(vm.TypeSection, vm.ColumnSection, Configs.systemAppAddMulti, Configs.systemAppOpenPage) { };
             if (true == spw.ShowDialog()) {
                 vm.PathReadonly = true;
@@ -185,6 +186,7 @@ namespace XStart2._0.Windows {
                 IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
             }
             spw.Close();
+            OpenNewWindowUtils.RecoverTopmost(this, vm);
         }
 
         private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -206,6 +208,7 @@ namespace XStart2._0.Windows {
         }
 
         private void MstscProject_ArgumentsTextBoxMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            OpenNewWindowUtils.SetTopmost(this);
             string[] argumentArray = vm.Arguments.Split(Constants.SPLIT_CHAR);
             string address = argumentArray[0];
             string port = argumentArray[1];
@@ -216,9 +219,11 @@ namespace XStart2._0.Windows {
                 vm.Arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}";
             }
             mstsc.Close();
+            OpenNewWindowUtils.RecoverTopmost(this, vm);
         }
 
         private void ControlAppMemoryProject_ArgumentsTextBoxMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            OpenNewWindowUtils.SetTopmost(this);
             string[] argumentArray = vm.Arguments.Split(Constants.SPLIT_CHAR);
             string path = argumentArray[0];
             string minMemory = argumentArray[1];
@@ -229,6 +234,7 @@ namespace XStart2._0.Windows {
                 vm.Arguments = $"{cam.vm.AppName}{Constants.SPLIT_CHAR}{cam.vm.MinMemory}{Constants.SPLIT_CHAR}{cam.vm.MaxMemory}";
             }
             cam.Close();
+            OpenNewWindowUtils.RecoverTopmost(this, vm);
         }
     }
 }

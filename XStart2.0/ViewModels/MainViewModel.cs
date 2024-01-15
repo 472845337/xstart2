@@ -67,7 +67,6 @@ namespace XStart2._0.ViewModels {
         public string OpenType { get; set; }
         public int SelectedIndex { get; set; }
         public double TabControlActualHeight { get; set; }
-        public bool TopMost { get; set; }
         // 音效开关
         public bool Audio { get; set; }
         public bool AutoRun { get; set; }

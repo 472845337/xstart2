@@ -24,7 +24,6 @@ namespace XStart2._0.Windows {
             settingVM.Orientation = mainVm.Orientation;
             settingVM.HideTitle = mainVm.HideTitle;
             settingVM.OneLineMulti = mainVm.OneLineMulti;
-            System.Console.WriteLine(settingVM.IconSize);
             Loaded += SettingWindow_Loaded;
         }
 

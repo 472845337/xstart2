@@ -122,6 +122,7 @@
     <Compile Include="Helper\DragDop\DragAdorner.cs" />
     <Compile Include="Utils\ElementUtils.cs" />
     <Compile Include="Utils\IniParserUtils.cs" />
+    <Compile Include="Utils\OpenNewWindowUtils.cs" />
     <Compile Include="View\DraggableExpander.cs" />
     <Compile Include="View\DraggableGrid.cs" />
     <Compile Include="Helper\DragDop\SelectorDragDrop.cs" />
