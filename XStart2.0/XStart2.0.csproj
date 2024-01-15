@@ -104,6 +104,8 @@
     </ApplicationDefinition>
     <Compile Include="Bean\FontAwesome.cs" />
     <Compile Include="Bean\CopyProject.cs" />
+    <Compile Include="Commands\BackUpCommand.cs" />
+    <Compile Include="Commands\ResumeCommand.cs" />
     <Compile Include="Converters\BaseValueConverter.cs" />
     <Compile Include="Converters\ProjectKind2EnabledConverter.cs" />
     <Compile Include="Converters\Boolean2IsCheckedConverter.cs" />

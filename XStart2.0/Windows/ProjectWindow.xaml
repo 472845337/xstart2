@@ -45,7 +45,7 @@
                         </Grid.ColumnDefinitions>
                        <TextBox Grid.Column="0" Style="{StaticResource FormValue_Style}" Text="{Binding IconPath}" Margin="5"/>
                         <Border Grid.Column="1" BorderBrush="LightGray" BorderThickness="1" Margin="5" MouseLeftButtonUp="Border_MouseLeftButtonUp">
-                            <Image Source="{Binding Project,Converter={StaticResource Project2IconConverter}}"/>
+                            <Image Source="{Binding Icon}"/>
                         </Border>
                     </Grid>
                     <TextBlock Grid.Row="4" Grid.Column="0" Text="参数:" Style="{StaticResource FormLabel_Style}" Margin="5"/>

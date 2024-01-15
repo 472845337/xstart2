@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using XStart2._0.Bean;
+using XStart2._0.Commands;
 using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Helper;
@@ -25,6 +26,7 @@ namespace XStart2._0 {
         private readonly System.Windows.Threading.DispatcherTimer currentTimer = new System.Windows.Threading.DispatcherTimer();
         private readonly System.Windows.Threading.DispatcherTimer currentDateTimer = new System.Windows.Threading.DispatcherTimer();
         private readonly System.Windows.Threading.DispatcherTimer AutoGcTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMinutes(5) };
+        private readonly System.Windows.Threading.DispatcherTimer OperateMessageTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromSeconds(5) };
         // 数据服务
         public TableService<Bean.Type> typeService = ServiceFactory.GetTypeService();
         public TableService<Column> columnService = ServiceFactory.GetColumnService();
@@ -51,6 +53,8 @@ namespace XStart2._0 {
             // 自动GC
             AutoGcTimer.Tick += new EventHandler(AutoGcTimer_Tick);
             AutoGcTimer.Start();
+            // 操作消息
+            OperateMessageTimer.Tick += new EventHandler(OperateMessageTimer_Tick);
             // 将模型赋值上下文
             DataContext = mainViewModel;
         }
@@ -242,7 +246,9 @@ namespace XStart2._0 {
                         Project projectValue = project.Value;
                         // 自启动应用
                         if (projectValue.AutoRun != null && (bool)projectValue.AutoRun) {
-                            autoRunProjects.Add(ProjectUtils.Copy(projectValue));
+                            Project autoProject = ProjectUtils.Copy(projectValue, false);
+                            autoProject.IconSize = Constants.ICON_SIZE_32;// 自启动的应用默认使用32的图标
+                            autoRunProjects.Add(autoProject);
                         }
                     }
                 }
@@ -297,6 +303,7 @@ namespace XStart2._0 {
 
             Configs.inited = true;
             IsAllShow = true;
+            SetOperateMsg(Colors.Green, "加载完成");
         }
 
         private void MainWindow_Show(object sender, EventArgs e) {
@@ -1054,7 +1061,7 @@ namespace XStart2._0 {
             if (null != project) {
                 ProjectWindow projectWindow = new ProjectWindow("修改项目", project.TypeSection, project.ColumnSection) { Project = project, Topmost = true };
                 if (true == projectWindow.ShowDialog()) {
-                    projectWindow.Project.Icon = XStartService.GetIconImage(projectWindow.Project.Kind, projectWindow.Project.Path, projectWindow.Project.IconPath, projectWindow.Project.IconSize);
+                    //projectWindow.Project.Icon = XStartService.GetIconImage(projectWindow.Project.Kind, projectWindow.Project.Path, projectWindow.Project.IconPath, projectWindow.Project.IconSize);
                     if (string.IsNullOrEmpty(projectWindow.Project.Kind)) {
                         projectWindow.Project.Kind = XStartService.KindOfPath(projectWindow.Project.Path);
                     }
@@ -1260,6 +1267,12 @@ namespace XStart2._0 {
                 //  配置工作使用空间
                 DllUtils.SetProcessWorkingSetSize(Configs.Handler, -1, -1);
             }
+        }
+
+        private void OperateMessageTimer_Tick(object sender, EventArgs e) {
+            // 执行完成后,定时器停止，清除消息
+            OperateMessageTimer.Stop();
+            mainViewModel.InitOperateMsg(Colors.White, string.Empty);
         }
 
         private TimeSpan GetTimeToNextMidnight(int hour) {
@@ -1501,6 +1514,23 @@ namespace XStart2._0 {
                 }
             }
         }
+
+        /// <summary>
+        /// 备份
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BackUp_Click(object sender, RoutedEventArgs e) {
+            BackUpCommand.ShowBackUpWindow();
+        }
+        /// <summary>
+        /// 恢复
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Recover_Click(object sender, RoutedEventArgs e) {
+            ResumeCommand.ShowResumeWindow();
+        }
         private void Property_Click(object sender, RoutedEventArgs e) {
             Project project = GetProjectByMenu(sender);
             if (null != project) {
@@ -1689,6 +1719,11 @@ namespace XStart2._0 {
         private void Calendar_Click(object sender, RoutedEventArgs e) {
             CalendarWindow cal = new CalendarWindow();
             cal.Show();
+        }
+
+        private void SetOperateMsg(Color color, string msg) {
+            OperateMessageTimer.Start();
+            mainViewModel.InitOperateMsg(color, msg);
         }
     }
 }

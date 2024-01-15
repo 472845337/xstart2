@@ -1,4 +1,5 @@
 ﻿using PropertyChanged;
+using System.Windows.Media;
 using XStart2._0.Bean;
 using XStart2._0.Const;
 using XStart2._0.Services;
@@ -82,6 +83,10 @@ namespace XStart2._0.ViewModels {
         [OnChangedMethod(nameof(ChangeProjectHideTitle))]
         public bool HideTitle { get; set; }
         public bool OneLineMulti { get; set; }
+        // 操作信息颜色
+        public Brush OperateMsgColor { get; private set; }
+        // 操作信息
+        public string OperateMsg { get; private set; }
 
         private void ChangeIconSize() {
             if (Config.Configs.inited) {
@@ -128,6 +133,10 @@ namespace XStart2._0.ViewModels {
             }
         }
 
+        public void InitOperateMsg(Color color, string msg) {
+            OperateMsgColor = new SolidColorBrush(color);
+            OperateMsg = msg;
+        }
 
         #endregion
     }

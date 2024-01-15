@@ -129,8 +129,8 @@
             </TabItem>
             <TabItem Header="其他" Style="{StaticResource TabItem_Style}">
                 <WrapPanel>
-                    <Button Style="{StaticResource BtnConfirm_Style}" Content="备份" Width="80" Margin="5" Click="BackUp_Click"/>
-                    <Button Style="{StaticResource BtnConfirm_Style}" Content="恢复" Width="80" Margin="5" Click="Recover_Click"/>
+                    <Button Style="{StaticResource BtnConfirm_Style}" Content="导出" Width="80" Margin="5" Click="BackUp_Click"/>
+                    <Button Style="{StaticResource BtnConfirm_Style}" Content="导入" Width="80" Margin="5" Click="Recover_Click"/>
                     <Button Style="{StaticResource BtnConfirm_Style}" Content="生成桌面快捷方式" Width="120" Margin="5" Click="CreateDeskLink_Click"/>
                 </WrapPanel>
             </TabItem>

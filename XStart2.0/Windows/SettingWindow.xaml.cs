@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Windows;
+using XStart2._0.Commands;
 using XStart2._0.Const;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
@@ -49,9 +50,7 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BackUp_Click(object sender, RoutedEventArgs e) {
-            BackUpWindow backUpWindow = new BackUpWindow() { WindowStartupLocation = WindowStartupLocation.CenterScreen };
-            backUpWindow.ShowDialog();
-            backUpWindow.Close();
+            BackUpCommand.ShowBackUpWindow();
         }
         /// <summary>
         /// 恢复
@@ -59,11 +58,7 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Recover_Click(object sender, RoutedEventArgs e) {
-            ResumeWindow resumeWindow = new ResumeWindow() {
-                WindowStartupLocation = WindowStartupLocation.CenterScreen
-            };
-            resumeWindow.ShowDialog();
-            resumeWindow.Close();
+            ResumeCommand.ShowResumeWindow();
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace XStart2._0.Bean {
         public string ColumnSection { get; set; }// 归属栏目
 
         private string kind;
-        [DoNotNotify]
+
         [TableParam("kind", "VARCHAR")]
         public string Kind {
             // 种类
@@ -46,6 +46,7 @@ namespace XStart2._0.Bean {
                 kind = value;
                 if (KIND_FILE.Equals(value) || KIND_DIRECTORY.Equals(value)) {
                     PropertyEnabled = true;
+                    CanAutoRun = true;
                 } else {
                     if (KIND_SYSTEM.Equals(value)) {
                         CanAutoRun = false;
@@ -59,6 +60,7 @@ namespace XStart2._0.Bean {
         [TableParam("path", "VARCHAR")]
         public string Path { get; set; }// 应用路径或链接url
         [TableParam("icon_path", "VARCHAR")]
+        [OnChangedMethod(nameof(InitIcon))]
         public string IconPath { get; set; }// 图标
         [TableParam("font_color", "VARCHAR")]
         public string FontColor { get; set; }// 字体颜色
@@ -98,7 +100,9 @@ namespace XStart2._0.Bean {
         public System.Windows.Media.Imaging.BitmapImage Icon { get; set; }
 
         public void InitIcon() {
-            Icon = XStartService.GetIconImage(Kind, Path, IconPath, IconSize);
+            if (IconSize > 0 && (!string.IsNullOrEmpty(Path) || !string.IsNullOrEmpty(IconPath))) {
+                Icon = XStartService.GetIconImage(Kind, Path, IconPath, IconSize);
+            }
         }
 
         private void SetIsMstsc() {

@@ -399,7 +399,7 @@
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
-        <StatusBar Grid.Row="2" Height="30">
+        <StatusBar Grid.Row="2" Height="30" HorizontalAlignment="Stretch">
             <StatusBarItem>
                 <Menu DockPanel.Dock="Left">
                     <MenuItem>
@@ -417,6 +417,16 @@
                         <MenuItem Header="选项" Click="Open_Setting">
                             <MenuItem.Icon>
                                 <Image Source="/Files/Icons/App/setting.ico" Width="16" Height="16"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="导出" Click="BackUp_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/export.ico" Width="16" Height="16"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="导入" Click="Recover_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/import.ico" Width="16" Height="16"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
@@ -447,6 +457,9 @@
                         </MenuItem>
                     </MenuItem>
                 </Menu>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right" Margin="0 0 10 0">
+                <TextBlock Text="{Binding OperateMsg}" Foreground="{Binding OperateMsgColor}"/>
             </StatusBarItem>
         </StatusBar>
     </Grid>

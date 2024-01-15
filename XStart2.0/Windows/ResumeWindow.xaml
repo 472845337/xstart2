@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XStart2._0.Windows"
         mc:Ignorable="d"
-        Title="恢复" Height="450" Width="400">
+        Title="恢复" Height="450" Width="400" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -15,12 +15,12 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="72"/>
             </Grid.ColumnDefinitions>
-            <TextBox IsReadOnly="True" Text="{Binding SelectBackUpFilePath}" VerticalContentAlignment="Center" Margin="5"/>
+            <TextBox IsReadOnly="True" Text="{Binding SelectBackUpFilePath}" VerticalContentAlignment="Center" Margin="5 5 0 5"/>
             <Button Grid.Column="1" Style="{StaticResource BtnConfirm_Style}" Content="选择" Click="SelectBackupFile_Click"/>
         </Grid>
-        <TreeView Grid.Row="1" ItemsSource="{Binding Items}" Margin="5">
+        <TreeView Grid.Row="1" ItemsSource="{Binding Items}" Margin="5 0 5 5">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                     <StackPanel Orientation="Horizontal">

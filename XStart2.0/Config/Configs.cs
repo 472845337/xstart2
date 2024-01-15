@@ -120,11 +120,9 @@ namespace XStart2._0.Config {
 
         public static BitmapImage GetIcon(int size, string key) {
             Dictionary<string, BitmapImage> iconDic = GetIconDicBySize(size);
-            if (Constants.ICON_SIZE_32 != size) {
-                // 加载
-                if (!iconDic.ContainsKey(key)) {
-                    iconDic.Add(key, IconUtils.GetBitmapImage(AppStartPath + iconPathDic[key], size));
-                }
+            // 加载
+            if (!iconDic.ContainsKey(key)) {
+                iconDic.Add(key, IconUtils.GetBitmapImage(AppStartPath + iconPathDic[key], size));
             }
             return iconDic[key];
         }
@@ -133,7 +131,9 @@ namespace XStart2._0.Config {
             Dictionary<string, BitmapImage> iconDic = GetIconDicBySize(size);
             ClearIconDic(iconDic);
             foreach (var iconPath in iconPathDic) {
-                iconDic.Add(iconPath.Key, IconUtils.GetBitmapImage(AppStartPath + iconPath.Value, size));
+                if (!iconDic.ContainsKey(iconPath.Key)) {
+                    iconDic.Add(iconPath.Key, IconUtils.GetBitmapImage(AppStartPath + iconPath.Value, size));
+                }
             }
         }
         public static void Dispose() {

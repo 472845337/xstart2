@@ -189,12 +189,94 @@ namespace XStart2._0.Utils {
             return result;
         }
 
-        public static Project Copy(Project p) {
-            Project newP = new Project {
-                Section = p.Section, TypeSection = p.TypeSection, ColumnSection = p.ColumnSection, Kind = p.Kind
-                , FontColor = p.FontColor, Arguments = p.Arguments, Path = p.Path, Name = p.Name, AutoRun = p.AutoRun
-                , IconPath = p.IconPath, IconIndex = p.IconIndex, RunStartPath = p.RunStartPath, HotKey = p.HotKey, Remark = p.Remark
-            };
+        public static void Copy2(Project p, Project toP, bool notNull) {
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Section))) {
+                toP.Section = p.Section;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.TypeSection))) {
+                toP.TypeSection = p.TypeSection;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.ColumnSection))) {
+                toP.ColumnSection = p.ColumnSection;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Kind))) {
+                toP.Kind = p.Kind;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.FontColor))) {
+                toP.FontColor = p.FontColor;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Arguments))) {
+                toP.Arguments = p.Arguments;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Path))) {
+                toP.Path = p.Path;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Name))) {
+                toP.Name = p.Name;
+            }
+            if (!notNull || (notNull && null != p.AutoRun)) {
+                toP.AutoRun = p.AutoRun;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.IconPath))) {
+                toP.IconPath = p.IconPath;
+            }
+            if (!notNull || (notNull && null != p.IconIndex)) {
+                toP.IconIndex = p.IconIndex;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.RunStartPath))) {
+                toP.RunStartPath = p.RunStartPath;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.HotKey))) {
+                toP.HotKey = p.HotKey;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Remark))) {
+                toP.Remark = p.Remark;
+            }
+        }
+        public static Project Copy(Project p, bool notNull) {
+            Project newP = new Project();
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Section))) {
+                newP.Section = p.Section;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.TypeSection))) {
+                newP.TypeSection = p.TypeSection;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.ColumnSection))) {
+                newP.ColumnSection = p.ColumnSection;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Kind))) {
+                newP.Kind = p.Kind;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.FontColor))) {
+                newP.FontColor = p.FontColor;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Arguments))) {
+                newP.Arguments = p.Arguments;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Path))) {
+                newP.Path = p.Path;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Name))) {
+                newP.Name = p.Name;
+            }
+            if (!notNull || (notNull && null != p.AutoRun)) {
+                newP.AutoRun = p.AutoRun;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.IconPath))) {
+                newP.IconPath = p.IconPath;
+            }
+            if (!notNull || (notNull && null != p.IconIndex)) {
+                newP.IconIndex = p.IconIndex;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.RunStartPath))) {
+                newP.RunStartPath = p.RunStartPath;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.HotKey))) {
+                newP.HotKey = p.HotKey;
+            }
+            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Remark))) {
+                newP.Remark = p.Remark;
+            }
             return newP;
         }
 

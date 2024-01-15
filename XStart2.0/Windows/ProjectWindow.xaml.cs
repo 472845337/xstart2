@@ -5,6 +5,7 @@ using System.Windows.Input;
 using XStart2._0.Bean;
 using XStart2._0.Config;
 using XStart2._0.Const;
+using XStart2._0.Services;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
 
@@ -26,7 +27,7 @@ namespace XStart2._0.Windows {
         private void Window_Loaded(object sender, RoutedEventArgs e) {
 
             if (null != Project) {
-                vm.Project = Project;
+                
                 vm.Name = Project.Name;
                 vm.Path = Project.Path;
                 vm.Kind = Project.Kind;
@@ -44,6 +45,7 @@ namespace XStart2._0.Windows {
                     ColumnSection = vm.ColumnSection
                 };
             }
+            vm.Project = Project;
             DataContext = vm;
         }
 
@@ -110,14 +112,7 @@ namespace XStart2._0.Windows {
                     vm.Name = Path.GetFileNameWithoutExtension(filePath);
                 }
                 if (string.IsNullOrEmpty(vm.IconPath)) {
-                    // 图标自动赋值
                     vm.IconPath = filePath;
-                    Project project = new Project {
-                        Path = filePath,
-                        IconPath = filePath,
-                        Kind = vm.Kind
-                    };
-                    vm.Project = project;
                 }
             }
         }
@@ -145,12 +140,6 @@ namespace XStart2._0.Windows {
                 // 图标自动赋值
                 if (string.IsNullOrEmpty(vm.IconPath)) {
                     vm.IconPath = folderPath;
-                    Project project = new Project {
-                        Path = vm.Path,
-                        IconPath = vm.IconPath,
-                        Kind = vm.Kind
-                    };
-                    vm.Project = project;
                 }
             }
         }
@@ -170,7 +159,6 @@ namespace XStart2._0.Windows {
                 vm.RunStartPath = spw.Project.RunStartPath;
                 vm.HotKey = spw.Project.HotKey;
                 vm.Remark = spw.Project.Remark;
-                Project = spw.Project;
                 SystemPathSpecialArguments(vm.Path);
              }
             IniParser.Model.IniData iniData = new IniParser.Model.IniData();
@@ -193,7 +181,6 @@ namespace XStart2._0.Windows {
             using System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "带图标文件|*.exe;*.ico" };
             if (System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
                 vm.IconPath = ofd.FileName;
-                vm.Project = new Project() { IconPath = ofd.FileName };
             }
         }
 

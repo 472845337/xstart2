@@ -12,6 +12,7 @@ namespace XStart2._0.Converters {
                 if (value is Bean.BackData.BackProject backProject) {
                     return XStartService.GetIconImage(backProject.Kind, backProject.Path, backProject.IconPath, Constants.ICON_SIZE_32);
                 } else if (value is Bean.Project project) {
+                    // 该块目前无用的，Project的图标直接读取Project中的Icon属性
                     return XStartService.GetIconImage(project);
                 }
             }

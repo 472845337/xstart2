@@ -23,13 +23,13 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="20"/>
-                            <ColumnDefinition Width="32"/>
+                            <ColumnDefinition Width="36"/>
                             <ColumnDefinition Width="*"/>
 
                         </Grid.ColumnDefinitions>
                         <CheckBox Grid.Column="0" IsChecked="{Binding AutoRun}" VerticalAlignment="Center" Margin="3 0 0 0"/>
                         <Border Grid.Column="1" Padding="3">
-                            <Image Source="{Binding Converter={StaticResource Project2IconConverter}}" Stretch="Fill" Margin="2"/>
+                            <Image Source="{Binding Icon}" Stretch="Fill" Margin="2"/>
                         </Border>
                         <TextBlock Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center" Margin="5 0 0 0"/>
                     </Grid>
