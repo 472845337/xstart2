@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:XStart2._0.View"
         mc:Ignorable="d"
-        Title="选项" Height="360" Width="500" Icon="../Files/Icons/App/setting.ico">
+        Title="选项" Height="360" Width="500" Icon="../Files/Icons/App/setting.ico" Topmost="{Binding TopMost}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

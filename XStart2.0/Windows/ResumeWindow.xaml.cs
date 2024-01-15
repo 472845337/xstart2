@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using XStart2._0.Bean;
+using XStart2._0.Const;
 using XStart2._0.Services;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
@@ -33,16 +34,16 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void SelectBackupFile_Click(object sender, RoutedEventArgs e) {
-            using System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "xsb文件|*.xsb" };
+            using System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "X启动备份文件 | *.xsb" };
             if (System.Windows.Forms.DialogResult.OK == openFileDialog.ShowDialog()) {
                 string encryptBackupJson = File.ReadAllText(openFileDialog.FileName, Encoding.UTF8);
                 string backupJson = AesUtils.DecryptContent(encryptBackupJson);
                 if (string.IsNullOrEmpty(backupJson)) {
-                    MessageBox.Show("不支持的备份文件！", "错误");
+                    MessageBox.Show("不支持的备份文件！", Constants.MESSAGE_BOX_TITLE_ERROR);
                 } else {
                     BackData backData = JsonConvert.DeserializeObject<BackData>(backupJson);
                     if (null == backData.Types || backData.Types.Count == 0) {
-                        MessageBox.Show("可导入数据为空！", "错误");
+                        MessageBox.Show("可导入数据为空！", Constants.MESSAGE_BOX_TITLE_ERROR);
                     } else {
                         vm.SelectBackUpFilePath = openFileDialog.FileName;
                         vm.InitVmData(backData.Types);
@@ -59,7 +60,7 @@ namespace XStart2._0.Windows {
         private void ResumeConfirm_Click(object sender, RoutedEventArgs e) {
             bool isOverride = vm.IsOverride;
             if (null == vm.Items || vm.Items.Count == 0) {
-                MessageBox.Show("请先选择备份文件!", "提示");
+                MessageBox.Show("请先选择备份文件!", Constants.MESSAGE_BOX_TITLE_WARN);
                 return;
             }
             foreach (CheckBoxTreeViewModel backTypeVM in vm.Items) {

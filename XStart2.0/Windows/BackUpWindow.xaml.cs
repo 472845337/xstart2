@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using XStart2._0.Bean;
+using XStart2._0.Const;
 using XStart2._0.Services;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
@@ -89,14 +90,14 @@ namespace XStart2._0.Windows {
                 }
             }
             if (backData.Types.Count == 0) {
-                System.Windows.MessageBox.Show("未选择任何备份数据！", "错误");
+                System.Windows.MessageBox.Show("未选择任何备份数据！", Constants.MESSAGE_BOX_TITLE_ERROR);
             } else {
                 // 将数据转成Json串
 
                 string backupJson = JsonConvert.SerializeObject(backData, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                 string encryptBackupJson = AesUtils.EntryptContent(backupJson);
                 // 写入文件
-                using SaveFileDialog fileDialog = new SaveFileDialog() { Filter = "X启动备份文件|.xsb" };
+                using SaveFileDialog fileDialog = new SaveFileDialog() {Filter = "X启动备份文件 | *.xsb", FileName = "XStart.xsb", DefaultExt = ".xsb"};
                 if (System.Windows.Forms.DialogResult.OK == fileDialog.ShowDialog()) {
                     File.WriteAllText(fileDialog.FileName, encryptBackupJson, Encoding.UTF8);
                     NotifyUtils.ShowNotification("备份成功！");

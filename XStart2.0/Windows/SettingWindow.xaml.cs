@@ -25,6 +25,7 @@ namespace XStart2._0.Windows {
             settingVM.Orientation = mainVm.Orientation;
             settingVM.HideTitle = mainVm.HideTitle;
             settingVM.OneLineMulti = mainVm.OneLineMulti;
+            settingVM.TopMost = true;
             Loaded += SettingWindow_Loaded;
         }
 
@@ -50,7 +51,9 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BackUp_Click(object sender, RoutedEventArgs e) {
+            OpenNewWindowUtils.SetTopmost(this);
             BackUpCommand.ShowBackUpWindow();
+            OpenNewWindowUtils.RecoverTopmost(this, settingVM);
         }
         /// <summary>
         /// 恢复
@@ -58,7 +61,9 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Recover_Click(object sender, RoutedEventArgs e) {
+            OpenNewWindowUtils.SetTopmost(this);
             ResumeCommand.ShowResumeWindow();
+            OpenNewWindowUtils.RecoverTopmost(this, settingVM);
         }
 
         /// <summary>
