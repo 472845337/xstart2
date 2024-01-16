@@ -5,8 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XStart2._0.Windows"
         mc:Ignorable="d"
-        Title="天气" Height="450" Width="800">
+        Title="天气" Height="450" Width="300" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="Border">
+            <Setter Property="Width" Value="260"/>
+            <Setter Property="Background" Value="AliceBlue"/>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </Window.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <!-- 实时天气数据 -->
+        <StackPanel Grid.Row="0" HorizontalAlignment="Center">
+            <TextBlock Text="九江市" FontSize="28" Margin="0 10 0 0" HorizontalAlignment="Center"/>
+            <TextBlock Text="13°c" FontSize="32" HorizontalAlignment="Center"/>
+            <TextBlock Text="局部多云" HorizontalAlignment="Center"/>
+            <TextBlock HorizontalAlignment="Center">
+                <Run Text="最高13°c"/><Run Text="最低4°c"/>
+            </TextBlock>
+            <Border>
+                <StackPanel Margin="10">
+                    <Image/>
+                    <TextBlock Text="空气质量"/>
+                    <Slider Minimum="0" Maximum="250"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        <!-- 七日数据 -->
+        <Border Grid.Row="1">
+            <StackPanel Margin="10">
+                <TextBlock Text="7日天气预报"/>
+                <Separator/>
+                <DockPanel LastChildFill="False">
+                    <TextBlock Text="今日" VerticalAlignment="Center" Margin="5"/>
+                    <Image Source="/Files/Images/Weather/apple/lei.png" Width="36" Margin="5"/>
+                    <TextBlock VerticalAlignment="Center" DockPanel.Dock="Right">
+                        <Run Text="4°c"/>
+                        <Run Text="-"/>
+                        <Run Text="14°c"/>
+                        <Run Text="东风"/>
+                        <Run Text="3-4级转&lt;3级"/>
+                    </TextBlock>
+                </DockPanel>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>
