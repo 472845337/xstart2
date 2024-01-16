@@ -12,6 +12,9 @@ namespace XStart2._0.Config {
     class Configs {
         public static string AppStartPath = System.AppDomain.CurrentDomain.BaseDirectory;// 当前程序的启动目录
         public static System.IntPtr Handler = System.IntPtr.Zero;// 当前窗口句柄
+        public static System.IntPtr CalendarHandler = System.IntPtr.Zero;// 日历窗口句柄
+        public static System.IntPtr WeatherHandler = System.IntPtr.Zero;// 天气窗口句柄
+
         public static bool inited = false;// 是否初始化
 
         public static bool typeTabExpand;// 类别标签头是否展开

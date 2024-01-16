@@ -131,11 +131,11 @@ namespace XStart2._0.Utils {
         /// <summary>
         /// 窗口置最前，最小化也会置
         /// </summary>
-        /// <param name="hWnd"></param>
-        /// <param name="fAltTab"></param>
+        /// <param name="hWnd">窗口的句柄</param>
+        /// <param name="fAltTab">此参数的 TRUE 表示正在使用 Alt/Ctl+Tab 键序列将窗口切换到 。 否则，此参数应为 FALSE</param>
         /// <returns></returns>
         [DllImport(User32, CharSet = CharSet.Auto)]
-        public static extern bool SwitchToThisWindow(IntPtr hWnd, Boolean fAltTab);
+        public static extern bool SwitchToThisWindow(IntPtr hWnd, bool fAltTab);
 
         /// <summary>
         /// Gets the window long.

@@ -13,6 +13,8 @@ namespace XStart2._0.Windows {
         readonly AutoRunViewModel vm = new AutoRunViewModel();
         public List<Project> AutoRunProjects { get; set; }
         public List<Project> Projects { get; set; }
+
+        public bool IsStart { get; set; } = true;
         public bool IsExit { get; set; } = false;
         public AutoRunWindow() {
             InitializeComponent();
@@ -21,6 +23,7 @@ namespace XStart2._0.Windows {
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             vm.AutoRunProjects = AutoRunProjects;
+            vm.IsStart = IsStart;
             DataContext = vm;
         }
 

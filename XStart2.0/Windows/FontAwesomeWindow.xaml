@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XStart2._0.Windows"
         mc:Ignorable="d"
-        Title="FontAwesome图标" Height="450" Width="800">
+        Title="FontAwesome图标" Height="450" Width="800" Icon="pack://application:,,,/Files/Icons/App/font_icon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
@@ -30,7 +30,7 @@
             </StackPanel>
         </DockPanel>
         <TabControl x:Name="FontAwesomeTabControl" Grid.Row="1">
-            <TabItem Header="常用" Width="60">
+            <TabItem Header="常用" Style="{StaticResource TabItem_Style}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding CustomFontAwesomes}">
                         <ItemsControl.ItemsPanel>
@@ -49,7 +49,7 @@
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Solid" Width="60">
+            <TabItem Header="Solid" Style="{StaticResource TabItem_Style}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding SolidFontAwesomes}">
                         <ItemsControl.ItemsPanel>
@@ -68,7 +68,7 @@
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Regular" Width="60">
+            <TabItem Header="Regular" Style="{StaticResource TabItem_Style}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding RegularFontAwesomes}">
                         <ItemsControl.ItemsPanel>
@@ -87,7 +87,7 @@
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Brands" Width="60">
+            <TabItem Header="Brands" Style="{StaticResource TabItem_Style}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding BrandsFontAwesomes}">
                         <ItemsControl.ItemsPanel>
@@ -106,7 +106,7 @@
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="V4" Width="60">
+            <TabItem Header="V4" Style="{StaticResource TabItem_Style}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding FontAwesomes4}">
                         <ItemsControl.ItemsPanel>
@@ -125,7 +125,7 @@
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="查询" Width="60">
+            <TabItem Header="查询" Style="{StaticResource TabItem_Style}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding QueryFontAwesomes}">
                         <ItemsControl.ItemsPanel>

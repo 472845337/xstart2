@@ -23,10 +23,11 @@ namespace XStart2._0 {
     public partial class MainWindow : Window {
         // 时钟定时器
         private readonly System.Windows.Threading.DispatcherTimer AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
-        private readonly System.Windows.Threading.DispatcherTimer currentTimer = new System.Windows.Threading.DispatcherTimer();
-        private readonly System.Windows.Threading.DispatcherTimer currentDateTimer = new System.Windows.Threading.DispatcherTimer();
+        private readonly System.Windows.Threading.DispatcherTimer currentTimer = new System.Windows.Threading.DispatcherTimer() { Interval = new TimeSpan(0, 0, 0, 0, 200) };
+        private readonly System.Windows.Threading.DispatcherTimer currentDateTimer = new System.Windows.Threading.DispatcherTimer() { Interval = new TimeSpan(0, 0, 1) };
         private readonly System.Windows.Threading.DispatcherTimer AutoGcTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMinutes(5) };
         private readonly System.Windows.Threading.DispatcherTimer OperateMessageTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromSeconds(5) };
+
         // 数据服务
         public TableService<Bean.Type> typeService = ServiceFactory.GetTypeService();
         public TableService<Column> columnService = ServiceFactory.GetColumnService();
@@ -38,22 +39,19 @@ namespace XStart2._0 {
         public MainWindow() {
             InitializeComponent();
             Configs.Handler = new System.Windows.Interop.WindowInteropHelper(this).Handle;
-            // Tick 超过计时器间隔时发生。
+            // 时钟定时任务
             currentTimer.Tick += new EventHandler(CurrentTimer_Tick);
-            // Interval 获取或设置计时器刻度之间的时间段
-            currentTimer.Interval = new TimeSpan(0, 0, 1);
             currentTimer.Start();
-            // 日期定时任务
-            currentDateTimer.Interval = new TimeSpan(0, 0, 1);
+            // 日期定时任务(配置的是1秒，但是执行后，计算下一天的时间差)
             currentDateTimer.Tick += new EventHandler(CurrentDate_Tick);
             currentDateTimer.Start();
-
+            // 靠边隐藏定时器
             AutoHideTimer.Tick += new EventHandler(AutoHideTimer_Tick);
             AutoHideTimer.Start();
             // 自动GC
             AutoGcTimer.Tick += new EventHandler(AutoGcTimer_Tick);
             AutoGcTimer.Start();
-            // 操作消息
+            // 操作消息（在设置消息的时候启动，计时完成后停止）
             OperateMessageTimer.Tick += new EventHandler(OperateMessageTimer_Tick);
             // 将模型赋值上下文
             DataContext = mainViewModel;
@@ -265,27 +263,10 @@ namespace XStart2._0 {
             if (autoRunProjects.Count > 0) {
                 // 新线程
                 Dispatcher.Invoke(new Action(delegate {
-                    AutoRunWindow autoRunWindow = new AutoRunWindow { AutoRunProjects = autoRunProjects, Topmost = true };
-                    if (true == autoRunWindow.ShowDialog()) {
-                        // 启动项目
-                        foreach (Project project in autoRunWindow.Projects) {
-                            // 判断是否启动过
-                            List<Process> existList = ProcessUtils.GetProcessByName(ProcessUtils.GetProcessName(project.Path), project.Path);
-                            if (null == existList || existList.Count == 0) {
-                                try {
-                                    ExecuteProject(project);
-                                } catch (Exception ex) {
-                                    MessageBox.Show(ex.Message);
-                                }
-                            } else {
-                                NotifyUtils.ShowNotification($"项目【{project.Name}】已存在，取消自启动！");
-                            }
-                        }
-                    }
-                    autoRunWindow.Close();
+                    AutoRunProjectWindow(autoRunProjects);
                 }));
             }
-
+            autoRunProjects.Clear();
             #region 任务栏图标
             notifyIcon = new System.Windows.Forms.NotifyIcon();
             using Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Files/xstart2.ico")).Stream;
@@ -304,6 +285,32 @@ namespace XStart2._0 {
             Configs.inited = true;
             IsAllShow = true;
             SetOperateMsg(Colors.Green, "加载完成");
+        }
+
+        private void AutoRunProjectWindow(List<Project> autoRunProjects, bool isStart = true) {
+            OpenNewWindowUtils.SetTopmost(this);
+            AutoRunWindow autoRunWindow = new AutoRunWindow { AutoRunProjects = autoRunProjects, Topmost = true, IsStart = isStart };
+            if (true == autoRunWindow.ShowDialog()) {
+                // 启动项目
+                foreach (Project project in autoRunWindow.Projects) {
+                    // 判断是否启动过
+                    List<Process> existList = ProcessUtils.GetProcessByName(ProcessUtils.GetProcessName(project.Path), project.Path);
+                    if (null == existList || existList.Count == 0) {
+                        try {
+                            ExecuteProject(project);
+                        } catch (Exception ex) {
+                            MessageBox.Show(ex.Message);
+                        }
+                    } else {
+                        NotifyUtils.ShowNotification($"项目【{project.Name}】已存在，取消自启动！");
+                    }
+                }
+            }
+            if (autoRunWindow.IsExit) {
+                Close();
+            }
+            autoRunWindow.Close();
+            OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
         }
 
         private void MainWindow_Show(object sender, EventArgs e) {
@@ -1154,6 +1161,35 @@ namespace XStart2._0 {
             ComputedColumnProject(column);
         }
 
+        private void AllAutoRun_Click(object sender, RoutedEventArgs e) {
+            // 启动所有自启动
+            List<Project> autoRunProjects = new List<Project>();
+            foreach (KeyValuePair<string, Bean.Type> type in XStartService.TypeDic) {
+                foreach (KeyValuePair<string, Column> column in type.Value.ColumnDic) {
+                    // 加载应用
+                    foreach (KeyValuePair<string, Project> project in column.Value.ProjectDic) {
+                        Project projectValue = project.Value;
+                        // 自启动应用
+                        if (projectValue.AutoRun != null && (bool)projectValue.AutoRun) {
+                            Project autoProject = ProjectUtils.Copy(projectValue, false);
+                            autoProject.IconSize = Constants.ICON_SIZE_32;// 自启动的应用默认使用32的图标
+                            autoRunProjects.Add(autoProject);
+                        }
+                    }
+                }
+            }
+            // 自启动
+            if (autoRunProjects.Count > 0) {
+                // 新线程
+                Dispatcher.Invoke(new Action(delegate {
+                    AutoRunProjectWindow(autoRunProjects, false);
+                }));
+            } else {
+                MessageBox.Show("当前无自启动应用！", Constants.MESSAGE_BOX_TITLE_ERROR);
+            }
+            autoRunProjects.Clear();
+        }
+
 
         // 取消所有项目自启动
         private void CancelAllAutoRun_Click(object sender, RoutedEventArgs e) {
@@ -1250,14 +1286,14 @@ namespace XStart2._0 {
 
         //计时执行的程序
         private void CurrentTimer_Tick(object sender, EventArgs e) {
-            mainViewModel.CurrentTime = DateTime.Now.ToString("T");
+            mainViewModel.MyDateTime.CurTime = DateTime.Now.ToString("T");
         }
         private void CurrentDate_Tick(object sender, EventArgs e) {
             // 下次运行时间
-            TimeSpan timeToGo = GetTimeToNextMidnight(24);
+            TimeSpan timeToGo = TimeUtils.GetTimeToNext(TimeEnum.DAY);
             currentDateTimer.Interval = timeToGo;
-            mainViewModel.CurrentDay = DateTime.Now.ToString("D");
-            mainViewModel.CurrentWeekDay = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
+            mainViewModel.MyDateTime.CurDate = DateTime.Now.ToString("D");
+            mainViewModel.MyDateTime.CurWeekDay = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
         }
 
         private void AutoGcTimer_Tick(object sender, EventArgs e) {
@@ -1273,12 +1309,6 @@ namespace XStart2._0 {
             // 执行完成后,定时器停止，清除消息
             OperateMessageTimer.Stop();
             mainViewModel.InitOperateMsg(Colors.White, string.Empty);
-        }
-
-        private TimeSpan GetTimeToNextMidnight(int hour) {
-            DateTime now = DateTime.Now;
-            DateTime nextMidnight = now.Date.AddHours(hour);
-            return nextMidnight - now;
         }
 
         private void ToggleAutoRun_Click(object sender, RoutedEventArgs e) {
@@ -1720,9 +1750,42 @@ namespace XStart2._0 {
 
         #endregion
 
+        /// <summary>
+        /// 打开日历
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Calendar_Click(object sender, RoutedEventArgs e) {
-            CalendarWindow cal = new CalendarWindow();
-            cal.Show();
+            if (Configs.CalendarHandler.ToInt32()>0) {
+                // 打开当前窗口
+                DllUtils.SwitchToThisWindow(Configs.CalendarHandler, true);
+                DllUtils.ShowWindow(Configs.CalendarHandler, WinApi.SW_NORMAL);
+            } else {
+                CalendarWindow cal = new CalendarWindow();
+                cal.vm.MyDateTime = mainViewModel.MyDateTime;
+                cal.Show();
+            }
+            
+        }
+
+        private void OpenNotePad_Click(object sender, RoutedEventArgs e) {
+            Process.Start("notepad");
+        }
+
+        /// <summary>
+        /// 打开天气窗口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Weather_Click(object sender, RoutedEventArgs e) {
+            if (Configs.WeatherHandler.ToInt32() > 0) {
+                // 打开当前窗口
+                DllUtils.SwitchToThisWindow(Configs.WeatherHandler, true);
+                DllUtils.ShowWindow(Configs.WeatherHandler, WinApi.SW_NORMAL);
+            } else {
+                WeatherWindow cal = new WeatherWindow();
+                cal.Show();
+            }
         }
 
         private void SetOperateMsg(Color color, string msg) {

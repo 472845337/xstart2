@@ -104,6 +104,7 @@
     </ApplicationDefinition>
     <Compile Include="Bean\FontAwesome.cs" />
     <Compile Include="Bean\CopyProject.cs" />
+    <Compile Include="Bean\MyDateTime.cs" />
     <Compile Include="Commands\BackUpCommand.cs" />
     <Compile Include="Commands\ResumeCommand.cs" />
     <Compile Include="Converters\BaseValueConverter.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Utils\ElementUtils.cs" />
     <Compile Include="Utils\IniParserUtils.cs" />
     <Compile Include="Utils\OpenNewWindowUtils.cs" />
+    <Compile Include="Utils\TimeUtils.cs" />
     <Compile Include="View\DraggableExpander.cs" />
     <Compile Include="View\DraggableGrid.cs" />
     <Compile Include="Helper\DragDop\SelectorDragDrop.cs" />
@@ -180,7 +182,7 @@
     <Compile Include="ViewModels\ResumeViewModel.cs" />
     <Compile Include="ViewModels\BackUpViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\CalendarVM.cs" />
+    <Compile Include="ViewModels\CalendarViewModel.cs" />
     <Compile Include="ViewModels\CheckBoxTreeViewModel.cs" />
     <Compile Include="ViewModels\ColumnVM.cs" />
     <Compile Include="ViewModels\FontAwesomeVM.cs" />
@@ -243,6 +245,9 @@
     </Compile>
     <Compile Include="Windows\SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WeatherWindow.xaml.cs">
+      <DependentUpon>WeatherWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -347,6 +352,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\WeatherWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -412,6 +421,7 @@
     <EmbeddedResource Include="Files\Images\Avatar\NotExist.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <Resource Include="Doc\WeatherApi.txt" />
     <Content Include="NAudio.dll" />
     <Content Include="System.Data.SQLite.dll" />
     <EmbeddedResource Include="X64\SQLite.Interop.dll">
@@ -427,6 +437,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Files\Images\Weather\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

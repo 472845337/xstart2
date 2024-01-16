@@ -27,9 +27,7 @@ namespace XStart2._0.ViewModels {
         #endregion
 
         #region 时间数据
-        public string CurrentDay { get; set; }
-        public string CurrentTime { get; set; }
-        public string CurrentWeekDay { get; set; }
+        public MyDateTime MyDateTime { get; set; } = new MyDateTime();
         #endregion
         #region 应用数据
         public ObservableDictionary<string, Bean.Type> Types { get; set; }

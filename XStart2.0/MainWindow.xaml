@@ -61,7 +61,7 @@
             </Setter>
             <EventSetter Event="Expanded" Handler="Expander_Expanded_Handler"/>
         </Style>
-        
+
         <ContextMenu x:Key="TypeTabContextMenu">
             <ContextMenu.Items>
                 <MenuItem Name="AddType" Header="添加类别" Click="AddType_Click">
@@ -104,15 +104,15 @@
                 <TextBlock Text="{Binding NickName}" VerticalAlignment="Bottom" Margin="8 0 8 5"/>
             </StackPanel>
             <StackPanel Grid.Column="1" HorizontalAlignment="Right">
-                <TextBlock Text="{Binding CurrentTime}" HorizontalAlignment="Right"/>
-                <TextBlock Text="{Binding CurrentWeekDay}" HorizontalAlignment="Right"/>
-                <TextBlock Text="{Binding CurrentDay}" HorizontalAlignment="Right"/>
+                <TextBlock Text="{Binding MyDateTime.CurTime}" HorizontalAlignment="Right"/>
+                <TextBlock Text="{Binding MyDateTime.CurWeekDay}" HorizontalAlignment="Right"/>
+                <TextBlock Text="{Binding MyDateTime.CurDate}" HorizontalAlignment="Right"/>
             </StackPanel>
             <!-- 小工具 -->
             <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5">
-                <Image Source="/Files/Images/Calendar.png" Height="25" Margin="2" Cursor="Hand" MouseLeftButtonUp="Calendar_Click"/>
-                <Image Source="/Files/Images/NotePad.png" Height="25" Margin="2" Cursor="Hand"/>
-                <Image Source="/Files/Images/Weather.png" Height="25" Margin="2" Cursor="Hand"/>
+                <Image Source="/Files/Images/Calendar.png" Height="25" Margin="2" Cursor="Hand" MouseLeftButtonUp="Calendar_Click" ToolTip="打开日历"/>
+                <Image Source="/Files/Images/NotePad.png" Height="25" Margin="2" Cursor="Hand" MouseLeftButtonUp="OpenNotePad_Click" ToolTip="新建记事本"/>
+                <Image Source="/Files/Images/Weather.png" Height="25" Margin="2" Cursor="Hand" MouseLeftButtonUp="Weather_Click" ToolTip="打开天气"/>
             </WrapPanel>
         </Grid>
         <TabControl Grid.Row="1" x:Name="MainTabControl" TabStripPlacement="Left" ItemsSource="{Binding Types}"
@@ -430,16 +430,22 @@
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
-                        <MenuItem Header="取消所有自启动" Click="CancelAllAutoRun_Click">
+                        <MenuItem Header="运行自启动" Click="AllAutoRun_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/run.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="取消自启动" Click="CancelAllAutoRun_Click">
                             <MenuItem.Icon>
                                 <Image Source="/Files/Icons/App/remove.ico"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="取消所有自定义样式" Click="CancelAllCustomStyle_Click">
+                        <MenuItem Header="取消自定义样式" Click="CancelAllCustomStyle_Click">
                             <MenuItem.Icon>
                                 <Image Source="/Files/Icons/App/Fresh.ico"/>
                             </MenuItem.Icon>
                         </MenuItem>
+                        <Separator/>
                         <MenuItem Header="恢复默认" Click="RestoreDefault_Click">
                             <MenuItem.Icon>
                                 <Image Source="/Files/Icons/App/default.ico"/>
@@ -455,6 +461,14 @@
                                 <Image Source="/Files/Icons/App/exit.ico"/>
                             </MenuItem.Icon>
                         </MenuItem>
+                    </MenuItem>
+                    <MenuItem Click="Open_Setting">
+                        <MenuItem.Header>
+                            <TextBlock Text="选项" VerticalAlignment="Center"/>
+                        </MenuItem.Header>
+                        <MenuItem.Icon>
+                            <Image Source="/Files/Icons/App/setting.ico" Width="16" Height="16"/>
+                        </MenuItem.Icon>
                     </MenuItem>
                 </Menu>
             </StatusBarItem>

@@ -16,7 +16,7 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Style="{StaticResource BottomButtonPanel_RowDefinition_Style}"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Text="地址" Style="{StaticResource FormLabel_Style}"/>
         <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Address}"/>

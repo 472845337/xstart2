@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XStart2._0.Windows"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="100" Width="300">
+        Title="{Binding Title}" MaxHeight="180" Width="300">
     <Grid Background="{Binding Background}" Margin="5">
         <TextBlock Grid.Row ="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Content}" VerticalAlignment="Top"/>
     </Grid>

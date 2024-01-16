@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:XStart2._0.Windows"
         mc:Ignorable="d"
         Title="启动" Height="350" Width="300" WindowStartupLocation="CenterScreen" Icon="../Files/xstart2.ico">
     <Grid>
@@ -11,37 +10,37 @@
             <RowDefinition/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0">
-        <ItemsControl ItemsSource="{Binding AutoRunProjects}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical"></StackPanel>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20"/>
-                            <ColumnDefinition Width="36"/>
-                            <ColumnDefinition Width="*"/>
+        <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding AutoRunProjects}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"></StackPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="36"/>
+                                <ColumnDefinition Width="*"/>
 
-                        </Grid.ColumnDefinitions>
-                        <CheckBox Grid.Column="0" IsChecked="{Binding AutoRun}" VerticalAlignment="Center" Margin="3 0 0 0"/>
-                        <Border Grid.Column="1" Padding="3">
-                            <Image Source="{Binding Icon}" Stretch="Fill" Margin="2"/>
-                        </Border>
-                        <TextBlock Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center" Margin="5 0 0 0"/>
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Grid.Column="0" IsChecked="{Binding AutoRun}" VerticalAlignment="Center" Margin="3 0 0 0"/>
+                            <Border Grid.Column="1" Padding="3">
+                                <Image Source="{Binding Icon}" Stretch="Fill" Margin="2"/>
+                            </Border>
+                            <TextBlock Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-            <CheckBox Content="全选" IsChecked="True" VerticalAlignment="Center" Click="SelectAll_Click"/>
-            <Button Style="{StaticResource BtnConfirm_Style}" Content="启动" Click="Run_Click"/>
-            <Button Style="{StaticResource BtnConfirm_Style}" Content="跳过" Click="Ignore_Click"/>
-            <Button Style="{StaticResource BtnCancel_Style}" Content="退出" Click="Exit_Click"/>
-        </StackPanel>
+        <DockPanel Grid.Row="1" LastChildFill="False">
+            <CheckBox Content="全选" DockPanel.Dock="Left" IsChecked="True" VerticalAlignment="Center" Click="SelectAll_Click" Margin="5 0 0 0"/>
+            <Button DockPanel.Dock="Right" Style="{StaticResource BtnCancel_Style}" Content="退出" Visibility="{Binding IsStart, Converter={StaticResource Boolean2VisibilityConverter}}" Click="Exit_Click"/>
+            <Button DockPanel.Dock="Right" Style="{StaticResource BtnConfirm_Style}" Content="跳过" Visibility="{Binding IsStart, Converter={StaticResource Boolean2VisibilityConverter}}" Click="Ignore_Click"/>
+            <Button DockPanel.Dock="Right" Style="{StaticResource BtnConfirm_Style}" Content="启动" Click="Run_Click"/>
+        </DockPanel>
     </Grid>
 </Window>

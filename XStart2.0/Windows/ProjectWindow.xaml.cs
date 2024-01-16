@@ -177,7 +177,7 @@ namespace XStart2._0.Windows {
             OpenNewWindowUtils.RecoverTopmost(this, vm);
         }
 
-        private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+        private void Border_MouseLeftButtonUp(object sender, RoutedEventArgs e) {
             using System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "带图标文件|*.exe;*.ico" };
             if (System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
                 vm.IconPath = ofd.FileName;
