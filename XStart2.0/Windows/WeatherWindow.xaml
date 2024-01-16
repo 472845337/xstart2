@@ -3,11 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:XStart2._0.Windows"
         mc:Ignorable="d"
         Title="天气" Height="450" Width="300" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <Style TargetType="Border">
+        <Style x:Key="Border_Style" TargetType="Border">
             <Setter Property="Width" Value="260"/>
             <Setter Property="Background" Value="AliceBlue"/>
             <Setter Property="CornerRadius" Value="15"/>
@@ -17,40 +16,80 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <!-- 城市选择 -->
+        <StackPanel Orientation="Horizontal" Margin="5 5 5 0">
+            <TextBlock Text="省" VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding Path=Provinces}" x:Name="ComboBoxProvince" 
+                  DisplayMemberPath="Name" SelectedValuePath="Id" SelectedValue="{Binding Path=Province,Mode=TwoWay}" Width="80" Margin="5">
+            </ComboBox>
+            <TextBlock Text="市" VerticalAlignment="Center"/>
+            <ComboBox x:Name="ComboBoxCity" ItemsSource="{Binding Path=SelectedItem.Cities,ElementName=ComboBoxProvince}" 
+                  DisplayMemberPath="Name" SelectedValuePath="Id" SelectedValue="{Binding Path=City,Mode=TwoWay}" Width="80" Margin="5"></ComboBox>
+            <Button Style="{StaticResource Btn_Style}" Content="获取天气" Click="GetWeather_Click"/>
+        </StackPanel>
         <!-- 实时天气数据 -->
-        <StackPanel Grid.Row="0" HorizontalAlignment="Center">
-            <TextBlock Text="九江市" FontSize="28" Margin="0 10 0 0" HorizontalAlignment="Center"/>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center">
+            <TextBlock Text="九江市" FontSize="28" Margin="0 5 0 0" HorizontalAlignment="Center"/>
             <TextBlock Text="13°c" FontSize="32" HorizontalAlignment="Center"/>
             <TextBlock Text="局部多云" HorizontalAlignment="Center"/>
             <TextBlock HorizontalAlignment="Center">
-                <Run Text="最高13°c"/><Run Text="最低4°c"/>
+                <Run Text="最高13°c"/>
+                <Run Text="最低4°c"/>
             </TextBlock>
-            <Border>
+            <Border Style="{StaticResource Border_Style}">
                 <StackPanel Margin="10">
-                    <Image/>
-                    <TextBlock Text="空气质量"/>
+                    <TextBlock>
+                        <Run Text="&#xf216;" FontFamily="{StaticResource FontAwesome4}" FontSize="18" Foreground="RoyalBlue"/>
+                        <Run Text="空气质量"/>
+                    </TextBlock>
                     <Slider Minimum="0" Maximum="250"/>
                 </StackPanel>
             </Border>
         </StackPanel>
         <!-- 七日数据 -->
-        <Border Grid.Row="1">
+        <Border Grid.Row="2" Style="{StaticResource Border_Style}">
             <StackPanel Margin="10">
-                <TextBlock Text="7日天气预报"/>
-                <Separator/>
-                <DockPanel LastChildFill="False">
-                    <TextBlock Text="今日" VerticalAlignment="Center" Margin="5"/>
-                    <Image Source="/Files/Images/Weather/apple/lei.png" Width="36" Margin="5"/>
-                    <TextBlock VerticalAlignment="Center" DockPanel.Dock="Right">
-                        <Run Text="4°c"/>
-                        <Run Text="-"/>
-                        <Run Text="14°c"/>
-                        <Run Text="东风"/>
-                        <Run Text="3-4级转&lt;3级"/>
-                    </TextBlock>
-                </DockPanel>
+                <TextBlock>
+                    <Run Text="&#xf073;" FontFamily="{StaticResource FontAwesome4}" FontSize="18" Foreground="RoyalBlue"/>
+                    <Run Text="7日天气预报"/>
+                </TextBlock>
+                <ScrollViewer>
+                    <StackPanel>
+                        <Separator/>
+                        <DockPanel LastChildFill="False">
+                            <TextBlock Text="今日" VerticalAlignment="Center" Margin="5"/>
+                            <Image Source="/Files/Images/Weather/apple/lei.png" Width="36" Margin="5"/>
+                            <TextBlock Text="雷阵雨" VerticalAlignment="Center"/>
+                            <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+                                <TextBlock VerticalAlignment="Center">
+                                    <Run Text="4°c"/>
+                                    <Run Text="-"/>
+                                    <Run Text="14°c"/>
+                                </TextBlock>
+                                <TextBlock VerticalAlignment="Center">
+                                    <Run Text="东风"/>
+                                    <Run Text="3-4级转&lt;3级"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </DockPanel>
+                        <Separator/>
+                        <DockPanel LastChildFill="False">
+                            <TextBlock Text="周日" VerticalAlignment="Center" Margin="5"/>
+                            <Image Source="/Files/Images/Weather/apple/qing.png" Width="36" Margin="5"/>
+                            <TextBlock VerticalAlignment="Center" DockPanel.Dock="Right">
+                                <Run Text="晴"/>
+                                <Run Text="4°c"/>
+                                <Run Text="-"/>
+                                <Run Text="14°c"/>
+                                <Run Text="东风"/>
+                                <Run Text="3-4级转&lt;3级"/>
+                            </TextBlock>
+                        </DockPanel>
+                    </StackPanel>
+                </ScrollViewer>
             </StackPanel>
         </Border>
     </Grid>

@@ -102,9 +102,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Bean\City.cs" />
     <Compile Include="Bean\FontAwesome.cs" />
     <Compile Include="Bean\CopyProject.cs" />
     <Compile Include="Bean\MyDateTime.cs" />
+    <Compile Include="Bean\Province.cs" />
     <Compile Include="Commands\BackUpCommand.cs" />
     <Compile Include="Commands\ResumeCommand.cs" />
     <Compile Include="Converters\BaseValueConverter.cs" />
@@ -127,6 +129,7 @@
     <Compile Include="Utils\IniParserUtils.cs" />
     <Compile Include="Utils\OpenNewWindowUtils.cs" />
     <Compile Include="Utils\TimeUtils.cs" />
+    <Compile Include="ViewModels\WeatherViewModel.cs" />
     <Compile Include="View\DraggableExpander.cs" />
     <Compile Include="View\DraggableGrid.cs" />
     <Compile Include="Helper\DragDop\SelectorDragDrop.cs" />
