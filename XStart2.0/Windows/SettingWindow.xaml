@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
         xmlns:view="clr-namespace:XStart2._0.View"
         mc:Ignorable="d"
-        Title="选项" Height="360" Width="500" Icon="pack://application:,,,/Files/Icons/App/setting.ico" Topmost="{Binding TopMost}">
+        Title="选项" Height="360" Width="500" Icon="pack://application:,,,/Files/Icons/App/setting.ico" Topmost="{Binding TopMost}" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -141,24 +142,32 @@
                     <GroupBox Header="天气参数配置" Grid.Row="1" Margin="5">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="36"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
+                                <RowDefinition Height="34"/>
+                                <RowDefinition Height="34"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="主题" Style="{StaticResource FormLabel_Style}"/>
-                            <ComboBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" SelectedValuePath="Content" SelectedValue="{Binding WeatherImgTheme}">
+                            
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="AppId" Style="{StaticResource FormLabel_Style}"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding WeatherApiAppId}" Style="{StaticResource FormValue_Style}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="2" Text="AppSecret" Style="{StaticResource FormLabel_Style}"/>
+                            <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding WeatherApiAppSecret}" Style="{StaticResource FormValue_Style}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="4" Text="主题" Style="{StaticResource FormLabel_Style}"/>
+                            <ComboBox Grid.Row="0" Grid.Column="5" Style="{StaticResource FormValue_Style}" SelectedValuePath="Content" SelectedValue="{Binding WeatherImgTheme}">
                                 <ComboBoxItem Content="apple"/>
                                 <ComboBoxItem Content="baidu"/>
                                 <ComboBoxItem Content="banana"/>
                                 <ComboBoxItem Content="cake"/>
                                 <ComboBoxItem Content="cherry"/>
                                 <ComboBoxItem Content="ctrip"/>
-                                <ComboBoxItem Content="cucmmber"/>
+                                <ComboBoxItem Content="cucumber"/>
                                 <ComboBoxItem Content="durian"/>
                                 <ComboBoxItem Content="gif"/>
                                 <ComboBoxItem Content="grape"/>
@@ -173,12 +182,29 @@
                                 <ComboBoxItem Content="yahoo"/>
                                 <ComboBoxItem Content="yikeyun"/>
                             </ComboBox>
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="AppId" Style="{StaticResource FormLabel_Style}"/>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding WeatherApiAppId}" Style="{StaticResource FormValue_Style}"/>
-                            <TextBlock Grid.Row="2" Grid.Column="0" Text="AppSecret" Style="{StaticResource FormLabel_Style}"/>
-                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding WeatherApiAppSecret}" Style="{StaticResource FormValue_Style}"/>
-                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Url" Style="{StaticResource FormLabel_Style}"/>
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding WeatherApiUrl}" Style="{StaticResource FormValue_Style}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Url" Style="{StaticResource FormLabel_Style}"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding WeatherApiUrl}" Style="{StaticResource FormValue_Style}"/>
+                                <ItemsControl Grid.Row="2" Grid.ColumnSpan="6" ItemsSource="{Binding ThemePngs}" Margin="10">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel>
+                                                
+                                            </WrapPanel>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <MultiBinding Converter="{StaticResource WeaImgConverter}">
+                                                    <Binding Path=""/>
+                                                    <Binding Path="DataContext.WeatherImgTheme" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                                </MultiBinding>
+                                            </Image.Source>
+                                        </Image>
+                                    </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                         </Grid>
                     </GroupBox>
                 </Grid>

@@ -26,12 +26,17 @@ namespace XStart2._0.Utils {
         }
 
         public static BitmapImage File2BitmapImage(string filename) {
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            image.UriSource = new System.Uri(@filename);
-            image.EndInit();
-            image.Freeze();
-            return image;
+            if (File.Exists(filename)) {
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.UriSource = new System.Uri(@filename);
+                image.EndInit();
+                image.Freeze();
+                return image;
+            } else {
+                return null;
+            }
+           
         }
     }
 }

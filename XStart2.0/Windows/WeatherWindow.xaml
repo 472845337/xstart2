@@ -53,7 +53,13 @@
                 <Run Text="最高"/><Run Text="{Binding CurWeather.TemDay}"/><Run Text="°c"/>
                     </TextBlock>
                 </StackPanel>
-                <Image Grid.Column="2" Source="{Binding CurWeather.WeaImg, Converter={StaticResource WeaImgConverter}}"/>
+                <Image Grid.Column="2">
+                    <Image.Source>
+                        <MultiBinding Converter="{StaticResource WeaImgConverter}">
+                            <Binding Path="CurWeather.WeaImg"/>
+                        </MultiBinding>
+                    </Image.Source>
+                </Image>
             </Grid>
             <Border Style="{StaticResource Border_Style}">
                 <StackPanel Margin="10">
@@ -106,7 +112,13 @@
                                     <Separator/>
                                     <DockPanel LastChildFill="False">
                                         <TextBlock Text="{Binding Date}" VerticalAlignment="Center" Margin="5"/>
-                                        <Image Source="{Binding WeaImg, Converter={StaticResource WeaImgConverter}}" Width="36" Margin="5"/>
+                                        <Image Width="36" Margin="5">
+                                            <Image.Source>
+                                                <MultiBinding Converter="{StaticResource WeaImgConverter}">
+                                                    <Binding Path="WeaImg"/>
+                                                </MultiBinding>
+                                            </Image.Source>
+                                        </Image>
                                         <TextBlock Text="{Binding Wea}" VerticalAlignment="Center"/>
                                         <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
                                             <TextBlock VerticalAlignment="Center">

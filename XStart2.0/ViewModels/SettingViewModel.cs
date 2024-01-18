@@ -1,4 +1,7 @@
-﻿
+﻿using PropertyChanged;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
 namespace XStart2._0.ViewModels {
     public class SettingViewModel : BaseViewModel {
         public bool Audio { get; set; }
@@ -16,5 +19,8 @@ namespace XStart2._0.ViewModels {
         public string WeatherApiAppSecret { get; set; }
         public string WeatherApiUrl { get; set; }
         public string WeatherImgTheme { get; set; }
+
+        [DependsOn("WeatherImgTheme")]
+        public ObservableCollection<string> ThemePngs { get; set; } = new ObservableCollection<string> { "xue","lei","shachen","wu","bingbao","yun","yu","yin","qing" };
     }
 }
