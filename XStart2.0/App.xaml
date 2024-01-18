@@ -28,6 +28,9 @@
             <con:Orientation2BoolConverter x:Key="Orientation2BoolConverter"/>
             <con:Boolean2IsCheckedConverter x:Key="Boolean2IsCheckedConverter"/>
             <con:ProjectKind2EnabledConverter x:Key="ProjectKind2EnabledConverter"/>
+            <con:WeaImgConverter x:Key="WeaImgConverter"/>
+            <con:WeatherAirConverter x:Key="WeatherAirConverter"/>
+            <con:WeatherAirColorConverter x:Key="WeatherAirColorConverter"/>
             <Style x:Key="Btn_Style" TargetType="{x:Type Button}">
                 <Setter Property="Width" Value="60"/>
                 <Setter Property="Height" Value="28"/>

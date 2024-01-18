@@ -102,11 +102,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Bean\City.cs" />
+    <Compile Include="Bean\Weather\City.cs" />
     <Compile Include="Bean\FontAwesome.cs" />
     <Compile Include="Bean\CopyProject.cs" />
     <Compile Include="Bean\MyDateTime.cs" />
-    <Compile Include="Bean\Province.cs" />
+    <Compile Include="Bean\Weather\CurWeather.cs" />
+    <Compile Include="Bean\Weather\DayWeather.cs" />
+    <Compile Include="Bean\Weather\Province.cs" />
     <Compile Include="Commands\BackUpCommand.cs" />
     <Compile Include="Commands\ResumeCommand.cs" />
     <Compile Include="Converters\BaseValueConverter.cs" />
@@ -124,8 +126,12 @@
     <Compile Include="Converters\ClickTypeConverter.cs" />
     <Compile Include="Converters\ProjectAutoRunConverter.cs" />
     <Compile Include="Converters\Project2IconConverter.cs" />
+    <Compile Include="Converters\WeatherAirColorConverter.cs" />
+    <Compile Include="Converters\WeatherAirConverter.cs" />
+    <Compile Include="Converters\WeaImgConverter.cs" />
     <Compile Include="Helper\DragDop\DragAdorner.cs" />
     <Compile Include="Utils\ElementUtils.cs" />
+    <Compile Include="Utils\HttpUtils.cs" />
     <Compile Include="Utils\IniParserUtils.cs" />
     <Compile Include="Utils\OpenNewWindowUtils.cs" />
     <Compile Include="Utils\TimeUtils.cs" />
@@ -378,6 +384,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Files\Citys\city.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -424,6 +433,9 @@
     <EmbeddedResource Include="Files\Images\Avatar\NotExist.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Files\Images\Weather\*\*.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Resource Include="Doc\WeatherApi.txt" />
     <Content Include="NAudio.dll" />
     <Content Include="System.Data.SQLite.dll" />
@@ -441,9 +453,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Files\Images\Weather\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

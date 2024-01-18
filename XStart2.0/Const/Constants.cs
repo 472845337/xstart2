@@ -12,6 +12,7 @@
         public const string ABOUT_FILE = "Files/Doc/about.txt";
         public const string AUDIO_CHANGE = "Files/Audio/Change.wav";
         public const string AUDIO_START = "Files/Audio/Start.wav";
+        public const string CITY_JSON_FILE = "Files/Citys/city.json";
 
         public const string SET_FILE = "Config/Ini/Set.ini";
 
@@ -20,6 +21,7 @@
         public const string SECTION_SIZE = "Size";
         public const string SECTION_CONFIG = "Config";
         public const string SECTION_SYSTEM_APP = "SystemApp";
+        public const string SECTION_WEATHER = "Weather";
 
         public const string KEY_USER_AVATAR = "Avatar";
         public const string KEY_USER_NICKNAME = "NickName";
@@ -109,5 +111,15 @@
 
         public const string ORIENTATION_HORIZONTAL = "Horizontal";
         public const string ORIENTATION_VERTICAL = "Vertical";
+
+        public const string KEY_WEATHER_PROVINCE = "Province";
+        public const string KEY_WEATHER_CITY = "City";
+        public const string KEY_WEATHER_APP_ID = "AppId";
+        public const string KEY_WEATHER_APP_SECRET = "AppSecret";
+        public const string KEY_WEATHER_URL = "Url";
+        public const string KEY_WEATHER_IMG_THEME = "Theme";
+
+        public const string WEATHER_IMG_THEME_DEFAULT = "yikeyun";// 默认天气主题是易客云自已的
+        public const string WEATHER_API_URL = "http://v1.yiketianqi.com";
     }
 }

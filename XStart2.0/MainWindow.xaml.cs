@@ -169,6 +169,26 @@ namespace XStart2._0 {
             Configs.cdPlayerMuted = AudioUtils.GetDeviceMute(Constants.DEVICE_NAME_CD_PLAYER, NAudio.CoreAudioApi.DataFlow.Render);
             #endregion
 
+            #region 天气参数配置
+            string weatherAppId = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_APP_ID];
+            string weatherAppSecret = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_APP_SECRET];
+            string weatherUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_URL];
+            string weatherImgTheme = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_IMG_THEME];
+            string weatherProvince = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_PROVINCE];
+            string weatherCity = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_CITY];
+
+            Configs.weatherApiAppId = weatherAppId;
+            Configs.weatherApiAppSecret = weatherAppSecret;
+            Configs.weatherApiUrl = weatherUrl ?? Constants.WEATHER_API_URL;
+            Configs.weatherImgTheme = weatherImgTheme ?? Constants.WEATHER_IMG_THEME_DEFAULT;
+            Configs.lastWeatherProvince = weatherProvince;
+            Configs.lastWeacherCity = weatherCity;
+
+            mainViewModel.WeatherApiAppId = Configs.weatherApiAppId;
+            mainViewModel.WeatherApiAppSecret = Configs.weatherApiAppSecret;
+            mainViewModel.WeatherApiUrl = Configs.weatherApiUrl;
+            mainViewModel.WeatherImgTheme = Configs.weatherImgTheme;
+            #endregion
             #region 加载数据
             // 加载类别配置
             List<Bean.Type> types = typeService.SelectList(new Bean.Type { OrderBy = "sort" });
@@ -532,8 +552,12 @@ namespace XStart2._0 {
         }
 
         private void Open_Setting(object sender, RoutedEventArgs e) {
+            OpenSettingWindow();
+        }
+
+        private void OpenSettingWindow(int openTab = 0) {
             OpenNewWindowUtils.SetTopmost(this);
-            SettingWindow settingWindow = new SettingWindow(mainViewModel) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
+            SettingWindow settingWindow = new SettingWindow(mainViewModel) { WindowStartupLocation = WindowStartupLocation.CenterScreen, OpenTab = openTab };
             bool changeOneLineMulti = false;
             if (true == settingWindow.ShowDialog()) {
                 SettingViewModel settingVM = settingWindow.settingVM;
@@ -553,6 +577,10 @@ namespace XStart2._0 {
                     changeOneLineMulti = true;
                     mainViewModel.OneLineMulti = settingVM.OneLineMulti;
                 }
+                mainViewModel.WeatherApiAppId = settingVM.WeatherApiAppId;
+                mainViewModel.WeatherApiAppSecret = settingVM.WeatherApiAppSecret;
+                mainViewModel.WeatherApiUrl = settingVM.WeatherApiUrl;
+                mainViewModel.WeatherImgTheme = settingVM.WeatherImgTheme;
                 SaveSetting();
             }
             // 导入时的数据处理，在导入数据后，新添加的Type需要计算相关的尺寸信息
@@ -1325,67 +1353,37 @@ namespace XStart2._0 {
             IniParser.Model.IniData iniData = new IniParser.Model.IniData();
 
             #region 窗口位置和尺寸保存
-            ConfigIniData(iniData, Constants.SECTION_SIZE, Constants.KEY_HEIGHT, ref Configs.mainHeight, mainViewModel.MainHeight);
-            ConfigIniData(iniData, Constants.SECTION_SIZE, Constants.KEY_WIDTH, ref Configs.mainWidth, mainViewModel.MainWidth);
-            ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_LEFT, ref Configs.mainLeft, mainViewModel.MainLeft);
-            ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_TOP, ref Configs.mainTop, mainViewModel.MainTop);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_SIZE, Constants.KEY_HEIGHT, ref Configs.mainHeight, mainViewModel.MainHeight);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_SIZE, Constants.KEY_WIDTH, ref Configs.mainWidth, mainViewModel.MainWidth);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_LEFT, ref Configs.mainLeft, mainViewModel.MainLeft);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_TOP, ref Configs.mainTop, mainViewModel.MainTop);
             #endregion
 
-            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE, ref Configs.openType, mainViewModel.OpenType);// 类别标题是否展开
-            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_TYPE_TAB_EXPAND, ref Configs.typeTabExpand, mainViewModel.TypeTabExpanded);// 类别标题是否展开
-            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST, ref Configs.topMost, mainViewModel.TopMost);// 置顶
-            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_CLICK_TYPE, ref Configs.clickType, mainViewModel.ClickType);// 点击方式
-            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_AUDIO, ref Configs.audio, mainViewModel.Audio);// 音效开关
-            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_AUTO_RUN, ref Configs.autoRun, mainViewModel.AutoRun);// 自启动
-            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_EXIT_WARN, ref Configs.exitWarn, mainViewModel.ExitWarn);// 退出警告
-            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE, ref Configs.closeBorderHide, mainViewModel.CloseBorderHide);// 靠边隐藏
-            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN, ref Configs.urlOpen, mainViewModel.UrlOpen);// 浏览器打开链接
-            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER, ref Configs.urlOpenCustomBrowser, mainViewModel.UrlOpenCustomBrowser);// 自定义浏览器
-            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_ICON_SIZE, ref Configs.iconSize, mainViewModel.IconSize);// 图标尺寸
-            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_ORIENTATION, ref Configs.orientation, mainViewModel.Orientation);// 排列方式
-            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_HIDE_TITLE, ref Configs.hideTitle, mainViewModel.HideTitle);// 隐藏标题
-            ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_ONE_LINE_MULTI, ref Configs.oneLineMulti, mainViewModel.OneLineMulti);// 一行多个
+            #region 样式
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE, ref Configs.openType, mainViewModel.OpenType);// 类别标题是否展开
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_TYPE_TAB_EXPAND, ref Configs.typeTabExpand, mainViewModel.TypeTabExpanded);// 类别标题是否展开
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST, ref Configs.topMost, mainViewModel.TopMost);// 置顶
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_CLICK_TYPE, ref Configs.clickType, mainViewModel.ClickType);// 点击方式
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_AUDIO, ref Configs.audio, mainViewModel.Audio);// 音效开关
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_AUTO_RUN, ref Configs.autoRun, mainViewModel.AutoRun);// 自启动
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_EXIT_WARN, ref Configs.exitWarn, mainViewModel.ExitWarn);// 退出警告
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE, ref Configs.closeBorderHide, mainViewModel.CloseBorderHide);// 靠边隐藏
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN, ref Configs.urlOpen, mainViewModel.UrlOpen);// 浏览器打开链接
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER, ref Configs.urlOpenCustomBrowser, mainViewModel.UrlOpenCustomBrowser);// 自定义浏览器
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_ICON_SIZE, ref Configs.iconSize, mainViewModel.IconSize);// 图标尺寸
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_ORIENTATION, ref Configs.orientation, mainViewModel.Orientation);// 排列方式
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_HIDE_TITLE, ref Configs.hideTitle, mainViewModel.HideTitle);// 隐藏标题
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_ONE_LINE_MULTI, ref Configs.oneLineMulti, mainViewModel.OneLineMulti);// 一行多个
+            #endregion
+
+            #region 天气配置
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_APP_ID, ref Configs.weatherApiAppId, mainViewModel.WeatherApiAppId);// 接口Appid
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_APP_SECRET, ref Configs.weatherApiAppSecret, mainViewModel.WeatherApiAppSecret);// 接口AppSecret
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_URL, ref Configs.weatherApiUrl, mainViewModel.WeatherApiUrl);// 接口URL
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_IMG_THEME, ref Configs.weatherImgTheme, mainViewModel.WeatherImgTheme);// 图片主题
+            #endregion
+
             IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
-        }
-        /// <summary>
-        /// Config配置放入IniData中
-        /// </summary>
-        /// <typeparam name="T">数据类型</typeparam>
-        /// <param name="section">INI的section头</param>
-        /// <param name="key">INI的关键字</param>
-        /// <param name="from">原值</param>
-        /// <param name="to">新值</param>
-        private void ConfigIniData<T>(IniParser.Model.IniData iniData, string section, string key, ref T from, T to) {
-            bool isChange = false;
-            if (from is bool fromBool && to is bool toBool) {
-                if (fromBool != toBool) {
-                    isChange = true;
-                }
-            } else if (from is string fromStr && to is string toStr) {
-                if (!fromStr.Equals(toStr)) {
-                    isChange = true;
-                }
-            } else if (from is int fromInt && to is int toInt) {
-                if (fromInt != toInt) {
-                    isChange = true;
-                }
-            } else if (from is uint fromUint && to is uint toUint) {
-                if (fromUint != toUint) {
-                    isChange = true;
-                }
-            } else if (from is double fromDouble && to is double toDouble) {
-                if (fromDouble != toDouble) {
-                    isChange = true;
-                }
-            } else if (null == from && null != to) {
-                isChange = true;
-            } else if (null != from && null == to) {
-                isChange = true;
-            }
-            if (isChange) {
-                iniData[section][key] = Convert.ToString(to);
-                from = to;
-            }
         }
         #endregion
 
@@ -1756,7 +1754,7 @@ namespace XStart2._0 {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Calendar_Click(object sender, RoutedEventArgs e) {
-            if (Configs.CalendarHandler.ToInt32()>0) {
+            if (Configs.CalendarHandler.ToInt32() > 0) {
                 // 打开当前窗口
                 DllUtils.SwitchToThisWindow(Configs.CalendarHandler, true);
                 DllUtils.ShowWindow(Configs.CalendarHandler, WinApi.SW_NORMAL);
@@ -1765,7 +1763,7 @@ namespace XStart2._0 {
                 cal.vm.MyDateTime = mainViewModel.MyDateTime;
                 cal.Show();
             }
-            
+
         }
 
         private void OpenNotePad_Click(object sender, RoutedEventArgs e) {
@@ -1778,13 +1776,20 @@ namespace XStart2._0 {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Weather_Click(object sender, RoutedEventArgs e) {
-            if (Configs.WeatherHandler.ToInt32() > 0) {
-                // 打开当前窗口
-                DllUtils.SwitchToThisWindow(Configs.WeatherHandler, true);
-                DllUtils.ShowWindow(Configs.WeatherHandler, WinApi.SW_NORMAL);
+            if (string.IsNullOrEmpty(Configs.weatherApiAppId) || string.IsNullOrEmpty(Configs.weatherApiAppSecret)) {
+                if (MessageBoxResult.OK == MessageBox.Show("天气API参数未配置，是否立即配置？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                    // 打开设置
+                    OpenSettingWindow(3);
+                }
             } else {
-                WeatherWindow cal = new WeatherWindow();
-                cal.Show();
+                if (Configs.WeatherHandler.ToInt32() > 0) {
+                    // 打开当前窗口
+                    DllUtils.SwitchToThisWindow(Configs.WeatherHandler, true);
+                    DllUtils.ShowWindow(Configs.WeatherHandler, WinApi.SW_NORMAL);
+                } else {
+                    WeatherWindow cal = new WeatherWindow();
+                    cal.Show();
+                }
             }
         }
 

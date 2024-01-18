@@ -6,12 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XStart2._0.Bean {
-    [AddINotifyPropertyChangedInterface]
+namespace XStart2._0.Bean.Weather {
     class Province {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public string En { get; set; }
+        public string Zh { get; set; }
 
-        public ObservableCollection<City> Cities { get; set; }
+        public List<City> Cities { get; set; } = new List<City>();
     }
 }

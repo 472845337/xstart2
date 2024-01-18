@@ -11,7 +11,7 @@
             <RowDefinition/>
             <RowDefinition Style="{StaticResource BottomButtonPanel_RowDefinition_Style}"/>
         </Grid.RowDefinitions>
-        <TabControl Grid.Row="0">
+        <TabControl x:Name="SettingTabControl" Grid.Row="0">
             <TabItem Header="基本" Style="{StaticResource TabItem_Style}">
                 <WrapPanel>
                     <Grid Margin="5">
@@ -128,11 +128,61 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="其他" Style="{StaticResource TabItem_Style}">
-                <WrapPanel>
-                    <Button Style="{StaticResource BtnConfirm_Style}" Content="导出" Width="80" Margin="5" Click="BackUp_Click"/>
-                    <Button Style="{StaticResource BtnConfirm_Style}" Content="导入" Width="80" Margin="5" Click="Recover_Click"/>
-                    <Button Style="{StaticResource BtnConfirm_Style}" Content="生成桌面快捷方式" Width="120" Margin="5" Click="CreateDeskLink_Click"/>
-                </WrapPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <WrapPanel Grid.Row="0">
+                        <Button Style="{StaticResource BtnConfirm_Style}" Content="导出" Width="80" Margin="5" Click="BackUp_Click"/>
+                        <Button Style="{StaticResource BtnConfirm_Style}" Content="导入" Width="80" Margin="5" Click="Recover_Click"/>
+                        <Button Style="{StaticResource BtnConfirm_Style}" Content="生成桌面快捷方式" Width="120" Margin="5" Click="CreateDeskLink_Click"/>
+                    </WrapPanel>
+                    <GroupBox Header="天气参数配置" Grid.Row="1" Margin="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="主题" Style="{StaticResource FormLabel_Style}"/>
+                            <ComboBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" SelectedValuePath="Content" SelectedValue="{Binding WeatherImgTheme}">
+                                <ComboBoxItem Content="apple"/>
+                                <ComboBoxItem Content="baidu"/>
+                                <ComboBoxItem Content="banana"/>
+                                <ComboBoxItem Content="cake"/>
+                                <ComboBoxItem Content="cherry"/>
+                                <ComboBoxItem Content="ctrip"/>
+                                <ComboBoxItem Content="cucmmber"/>
+                                <ComboBoxItem Content="durian"/>
+                                <ComboBoxItem Content="gif"/>
+                                <ComboBoxItem Content="grape"/>
+                                <ComboBoxItem Content="longan"/>
+                                <ComboBoxItem Content="mango"/>
+                                <ComboBoxItem Content="orange"/>
+                                <ComboBoxItem Content="peach"/>
+                                <ComboBoxItem Content="pear"/>
+                                <ComboBoxItem Content="pitaya"/>
+                                <ComboBoxItem Content="rose"/>
+                                <ComboBoxItem Content="sogou"/>
+                                <ComboBoxItem Content="yahoo"/>
+                                <ComboBoxItem Content="yikeyun"/>
+                            </ComboBox>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="AppId" Style="{StaticResource FormLabel_Style}"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding WeatherApiAppId}" Style="{StaticResource FormValue_Style}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="AppSecret" Style="{StaticResource FormLabel_Style}"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding WeatherApiAppSecret}" Style="{StaticResource FormValue_Style}"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Url" Style="{StaticResource FormLabel_Style}"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding WeatherApiUrl}" Style="{StaticResource FormValue_Style}"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+                
             </TabItem>
         </TabControl>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">

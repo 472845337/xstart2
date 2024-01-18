@@ -81,6 +81,14 @@ namespace XStart2._0.ViewModels {
         [OnChangedMethod(nameof(ChangeProjectHideTitle))]
         public bool HideTitle { get; set; }
         public bool OneLineMulti { get; set; }
+        [DoNotNotify]
+        public string WeatherApiAppId { get; set; }
+        [DoNotNotify]
+        public string WeatherApiAppSecret { get; set; }
+        [DoNotNotify]
+        public string WeatherApiUrl { get; set; }
+        [DoNotNotify]
+        public string WeatherImgTheme { get; set; }
         // 操作信息颜色
         public Brush OperateMsgColor { get; private set; }
         // 操作信息
@@ -133,6 +141,7 @@ namespace XStart2._0.ViewModels {
 
         public void InitOperateMsg(Color color, string msg) {
             OperateMsgColor = new SolidColorBrush(color);
+            OperateMsgColor.Freeze();
             OperateMsg = msg;
         }
 

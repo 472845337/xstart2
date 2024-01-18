@@ -12,5 +12,9 @@ namespace XStart2._0.ViewModels {
         public string Orientation { get; set; }
         public bool HideTitle { get; set; }
         public bool OneLineMulti { get; set; }
+        public string WeatherApiAppId { get; set; }
+        public string WeatherApiAppSecret { get; set; }
+        public string WeatherApiUrl { get; set; }
+        public string WeatherImgTheme { get; set; }
     }
 }

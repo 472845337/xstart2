@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Windows.Media.Imaging;
+using XStart2._0.Bean;
+using XStart2._0.Bean.Weather;
 using XStart2._0.Const;
 using XStart2._0.Utils;
 using static XStart2._0.Bean.SystemProjectParam;
@@ -51,6 +54,17 @@ namespace XStart2._0.Config {
         public static bool micMuted = false;
         public static bool lineInMuted = false;
         public static bool cdPlayerMuted = false;
+
+        #region weather
+        public static List<Province> Provinces = new List<Province>();
+        public static string lastWeatherProvince;
+        public static string lastWeacherCity;
+        public static string weatherApiUrl;
+        public static string weatherApiAppId;
+        public static string weatherApiAppSecret;
+        public static string weatherImgTheme;// 天气主题
+
+        #endregion
 
         // 需要初始化，在窗口加载后
         public static Dictionary<string, BitmapImage> iconDic32 = new Dictionary<string, BitmapImage>();

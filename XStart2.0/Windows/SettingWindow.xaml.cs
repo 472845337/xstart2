@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Windows;
 using XStart2._0.Commands;
+using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
@@ -10,6 +11,7 @@ namespace XStart2._0.Windows {
     /// SettingWindow.xaml 的交互逻辑
     /// </summary>
     public partial class SettingWindow : Window {
+        public int OpenTab { get; set; }
         public SettingViewModel settingVM = new SettingViewModel();
         public SettingWindow(MainViewModel mainVm) {
             InitializeComponent();
@@ -26,11 +28,16 @@ namespace XStart2._0.Windows {
             settingVM.HideTitle = mainVm.HideTitle;
             settingVM.OneLineMulti = mainVm.OneLineMulti;
             settingVM.TopMost = true;
+            settingVM.WeatherApiAppId = Configs.weatherApiAppId;
+            settingVM.WeatherApiAppSecret = Configs.weatherApiAppSecret;
+            settingVM.WeatherApiUrl = Configs.weatherApiUrl;
+            settingVM.WeatherImgTheme = Configs.weatherImgTheme;
             Loaded += SettingWindow_Loaded;
         }
 
         private void SettingWindow_Loaded(object sender, RoutedEventArgs e) {
             DataContext = settingVM;
+            SettingTabControl.SelectedIndex = OpenTab;
         }
 
         private void SaveSetting_Click(object sender, RoutedEventArgs e) {

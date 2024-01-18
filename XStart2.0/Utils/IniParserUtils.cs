@@ -37,5 +37,46 @@ namespace XStart2._0.Utils {
             iniDataDic[filePath].Merge(iniData);
             iniParser.WriteFile(Configs.AppStartPath + filePath, iniDataDic[filePath], Encoding.UTF8);
         }
+
+        /// <summary>
+        /// Config配置放入IniData中
+        /// </summary>
+        /// <typeparam name="T">数据类型</typeparam>
+        /// <param name="section">INI的section头</param>
+        /// <param name="key">INI的关键字</param>
+        /// <param name="from">原值</param>
+        /// <param name="to">新值</param>
+        public static void ConfigIniData<T>(IniData iniData, string section, string key, ref T from, T to) {
+            bool isChange = false;
+            if (from is bool fromBool && to is bool toBool) {
+                if (fromBool != toBool) {
+                    isChange = true;
+                }
+            } else if (from is string fromStr && to is string toStr) {
+                if (!fromStr.Equals(toStr)) {
+                    isChange = true;
+                }
+            } else if (from is int fromInt && to is int toInt) {
+                if (fromInt != toInt) {
+                    isChange = true;
+                }
+            } else if (from is uint fromUint && to is uint toUint) {
+                if (fromUint != toUint) {
+                    isChange = true;
+                }
+            } else if (from is double fromDouble && to is double toDouble) {
+                if (fromDouble != toDouble) {
+                    isChange = true;
+                }
+            } else if (null == from && null != to) {
+                isChange = true;
+            } else if (null != from && null == to) {
+                isChange = true;
+            }
+            if (isChange) {
+                iniData[section][key] = Convert.ToString(to);
+                from = to;
+            }
+        }
     }
 }

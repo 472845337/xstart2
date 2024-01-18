@@ -34,6 +34,7 @@ namespace XStart2._0.Bean {
                     Instance.IsHighContrastWhite = false;
                     Instance.IsHighContrastBlack = false;
                 }
+                windowbrush.Freeze();
             }
         }
 
