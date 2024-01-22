@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
         Title="天气" Height="600" Width="360" WindowStartupLocation="CenterScreen">
     <Window.Resources>
@@ -53,12 +54,12 @@
                 <Run Text="最高"/><Run Text="{Binding CurWeather.TemDay}"/><Run Text="°c"/>
                     </TextBlock>
                 </StackPanel>
-                <Image Grid.Column="2">
-                    <Image.Source>
+                <Image Grid.Column="2" gif:ImageBehavior.RepeatBehavior="Forever">
+                    <gif:ImageBehavior.AnimatedSource>
                         <MultiBinding Converter="{StaticResource WeaImgConverter}">
                             <Binding Path="CurWeather.WeaImg"/>
                         </MultiBinding>
-                    </Image.Source>
+                    </gif:ImageBehavior.AnimatedSource>
                 </Image>
             </Grid>
             <Border Style="{StaticResource Border_Style}">
@@ -113,11 +114,11 @@
                                     <DockPanel LastChildFill="False">
                                         <TextBlock Text="{Binding Date}" VerticalAlignment="Center" Margin="5"/>
                                         <Image Width="36" Margin="5">
-                                            <Image.Source>
+                                            <gif:ImageBehavior.AnimatedSource>
                                                 <MultiBinding Converter="{StaticResource WeaImgConverter}">
                                                     <Binding Path="WeaImg"/>
                                                 </MultiBinding>
-                                            </Image.Source>
+                                            </gif:ImageBehavior.AnimatedSource>
                                         </Image>
                                         <TextBlock Text="{Binding Wea}" VerticalAlignment="Center"/>
                                         <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">

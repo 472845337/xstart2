@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using XStart2._0.Const;
 using XStart2._0.Utils;
 
 namespace XStart2._0.Converters {
@@ -10,7 +11,12 @@ namespace XStart2._0.Converters {
                 if (value.Length>1) {
                     themePath = value[1] as string;
                 }
-                return ImageUtils.File2BitmapImage($"{Config.Configs.AppStartPath}Files/Images/Weather/{themePath}/{value[0]}.png");
+                if (Constants.WEATHER_IMG_THEME_GIF.Equals(themePath)) {
+                    return ImageUtils.File2BitmapImage($"{Config.Configs.AppStartPath}Files/Images/Weather/{themePath}/{value[0]}.gif");
+                } else {
+                    return ImageUtils.File2BitmapImage($"{Config.Configs.AppStartPath}Files/Images/Weather/{themePath}/{value[0]}.png");
+                }
+                
             } else {
                 return null;
             }

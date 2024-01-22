@@ -1,6 +1,11 @@
 ﻿using PropertyChanged;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Media.Imaging;
+using XStart2._0.Bean.Weather;
+using XStart2._0.Config;
+using XStart2._0.Const;
+using XStart2._0.Utils;
 
 namespace XStart2._0.ViewModels {
     public class SettingViewModel : BaseViewModel {
@@ -11,7 +16,9 @@ namespace XStart2._0.ViewModels {
         public string ClickType { get; set; }
         public string UrlOpen { get; set; }
         public string UrlOpenCustomBrowser { get; set; }
+        [OnChangedMethod(nameof(GetIcon))]
         public int IconSize { get; set; }
+        public BitmapImage SettingIcon { get; set; }
         public string Orientation { get; set; }
         public bool HideTitle { get; set; }
         public bool OneLineMulti { get; set; }
@@ -21,6 +28,13 @@ namespace XStart2._0.ViewModels {
         public string WeatherImgTheme { get; set; }
 
         [DependsOn("WeatherImgTheme")]
-        public ObservableCollection<string> ThemePngs { get; set; } = new ObservableCollection<string> { "xue","lei","shachen","wu","bingbao","yun","yu","yin","qing" };
+        public ObservableCollection<Theme> ThemePngs { get; set; } = new ObservableCollection<Theme> { 
+            new Theme("xue","雪"),new Theme("lei", "雷"),new Theme("shachen","沙尘"),
+            new Theme("wu","雾"),new Theme("bingbao","冰雹"),new Theme("yun","云"),
+            new Theme("yu","雨"),new Theme("yin","阴"),new Theme("qing", "晴") };
+
+        public void GetIcon() {
+            SettingIcon = IconUtils.GetBitmapImage(Configs.AppStartPath + Constants.APP_ICON, IconSize);
+        }
     }
 }

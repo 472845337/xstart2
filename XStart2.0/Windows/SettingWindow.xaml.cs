@@ -24,6 +24,7 @@ namespace XStart2._0.Windows {
             settingVM.UrlOpen = mainVm.UrlOpen;
             settingVM.UrlOpenCustomBrowser = mainVm.UrlOpenCustomBrowser;
             settingVM.IconSize = mainVm.IconSize;
+
             settingVM.Orientation = mainVm.Orientation;
             settingVM.HideTitle = mainVm.HideTitle;
             settingVM.OneLineMulti = mainVm.OneLineMulti;
@@ -83,6 +84,16 @@ namespace XStart2._0.Windows {
             string path = Assembly.GetExecutingAssembly().Location;
             FileUtils.CreateShortCutOnDesktop(name, path);
             NotifyUtils.ShowNotification("桌面快捷方式创建成功！");
+        }
+
+        /// <summary>
+        /// 打开注册页
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GoRegesit_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            OpenNewWindowUtils.SetTopmost(this);
+            ProjectUtils.ExecuteApp(new Bean.Project() { Kind = Bean.Project.KIND_URL, Path= Constants.WEATHER_REGISTER_URL });
         }
     }
 }

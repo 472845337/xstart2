@@ -9,6 +9,7 @@
         public const string CLICK_TYPE_SINGLE = "1";// 单击
         public const string CLICK_TYPE_DOUBLE = "2";// 双击
 
+        public const string APP_ICON = "Files/Icons/xstart2.ico";
         public const string ABOUT_FILE = "Files/Doc/about.txt";
         public const string AUDIO_CHANGE = "Files/Audio/Change.wav";
         public const string AUDIO_START = "Files/Audio/Start.wav";
@@ -120,6 +121,8 @@
         public const string KEY_WEATHER_IMG_THEME = "Theme";
 
         public const string WEATHER_IMG_THEME_DEFAULT = "yikeyun";// 默认天气主题是易客云自已的
-        public const string WEATHER_API_URL = "http://v1.yiketianqi.com";
+        public const string WEATHER_IMG_THEME_GIF = "gif";
+        public const string WEATHER_API_URL = "http://v1.yiketianqi.com";// API地址
+        public const string WEATHER_REGISTER_URL = "https://tianqiapi.com/user/register";// api注册地址
     }
 }

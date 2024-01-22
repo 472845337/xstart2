@@ -1288,6 +1288,8 @@ namespace XStart2._0 {
                 mainViewModel.HideTitle = false;
                 mainViewModel.OneLineMulti = false;
                 mainViewModel.Orientation = Constants.ORIENTATION_HORIZONTAL;
+                mainViewModel.WeatherImgTheme = Constants.WEATHER_IMG_THEME_DEFAULT;
+                mainViewModel.WeatherApiUrl = Constants.WEATHER_API_URL;
             }
             e.Handled = true;
         }

@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:view="clr-namespace:XStart2._0.View"
         mc:Ignorable="d"
-        Title="选项" Height="360" Width="500" Icon="pack://application:,,,/Files/Icons/App/setting.ico" Topmost="{Binding TopMost}" ResizeMode="NoResize">
+        Title="选项" Height="430" Width="500" Icon="pack://application:,,,/Files/Icons/App/setting.ico" Topmost="{Binding TopMost}" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -64,13 +64,22 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <GroupBox Grid.Row="0" Header="图标大小">
-                        <StackPanel Margin="5">
-                            <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="小图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Small',Mode=TwoWay}"/>
-                            <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="中等图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Mid',Mode=TwoWay}"/>
-                            <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="大图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Large',Mode=TwoWay}"/>
-                            <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="超大图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Huge',Mode=TwoWay}"/>
-                            <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="巨型图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Jumbo',Mode=TwoWay}"/>
-                        </StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="5">
+                                <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="小图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Small',Mode=TwoWay}"/>
+                                <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="中等图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Mid',Mode=TwoWay}"/>
+                                <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="大图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Large',Mode=TwoWay}"/>
+                                <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="超大图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Huge',Mode=TwoWay}"/>
+                                <RadioButton GroupName="IconSize" Style="{StaticResource RadioButton_Style}" Content="巨型图标" IsChecked="{Binding IconSize,Converter={StaticResource IconSizeConverter},ConverterParameter='Jumbo',Mode=TwoWay}"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="256" Height="256" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Image Height="{Binding IconSize}" Width="{Binding IconSize}" Source="{Binding SettingIcon}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
                     </GroupBox>
                     <WrapPanel Grid.Row="1">
                         <Grid Margin="5">
@@ -177,34 +186,44 @@
                                 <ComboBoxItem Content="peach"/>
                                 <ComboBoxItem Content="pear"/>
                                 <ComboBoxItem Content="pitaya"/>
-                                <ComboBoxItem Content="rose"/>
                                 <ComboBoxItem Content="sogou"/>
                                 <ComboBoxItem Content="yahoo"/>
                                 <ComboBoxItem Content="yikeyun"/>
                             </ComboBox>
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Url" Style="{StaticResource FormLabel_Style}"/>
-                            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding WeatherApiUrl}" Style="{StaticResource FormValue_Style}"/>
-                                <ItemsControl Grid.Row="2" Grid.ColumnSpan="6" ItemsSource="{Binding ThemePngs}" Margin="10">
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Url" Style="{StaticResource FormLabel_Style}" Foreground="Red"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding WeatherApiUrl}" Style="{StaticResource FormValue_Style}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="5" Text="去注册" VerticalAlignment="Center" HorizontalAlignment="Center" Cursor="Hand" Foreground="Blue" MouseLeftButtonUp="GoRegesit_MouseLeftButtonUp"/>
+                            <Border Grid.Row="2" Grid.ColumnSpan="6" Margin="10" BorderThickness="1" BorderBrush="Gray" CornerRadius="5">
+                            <ItemsControl ItemsSource="{Binding ThemePngs}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
-                                            <WrapPanel>
+                                            <WrapPanel Margin="0 0 10 0">
                                                 
                                             </WrapPanel>
                                         </ItemsPanelTemplate>
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                        <Image Width="48" Height="48">
-                                            <Image.Source>
-                                                <MultiBinding Converter="{StaticResource WeaImgConverter}">
-                                                    <Binding Path=""/>
-                                                    <Binding Path="DataContext.WeatherImgTheme" RelativeSource="{RelativeSource AncestorType=Window}"/>
-                                                </MultiBinding>
-                                            </Image.Source>
-                                        </Image>
+                                            <Grid Margin="10 5 0 0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <Image Grid.Row="0" Width="48" Height="48" gif:ImageBehavior.RepeatBehavior="Forever">
+                                                    <gif:ImageBehavior.AnimatedSource>
+                                                        <MultiBinding Converter="{StaticResource WeaImgConverter}">
+                                                            <Binding Path="ImgCode"/>
+                                                            <Binding Path="DataContext.WeatherImgTheme" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                                        </MultiBinding>
+                                                    </gif:ImageBehavior.AnimatedSource>
+                                                </Image>
+                                                <TextBlock Grid.Row="1" Text="{Binding ImgName}" HorizontalAlignment="Center"/>
+                                            </Grid>
+                                        
                                     </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
+                            </Border>
                         </Grid>
                     </GroupBox>
                 </Grid>
