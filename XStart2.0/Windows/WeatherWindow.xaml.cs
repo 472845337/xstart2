@@ -45,11 +45,11 @@ namespace XStart2._0.Windows {
                 }
             }
             vm.Provinces = Configs.Provinces;
-            //if (!string.IsNullOrEmpty(Configs.lastWeacherCity)) {
-            //    vm.Province = Configs.lastWeatherProvince;
-            //    vm.City = Configs.lastWeacherCity;
-            //    GetWeather(vm.City);
-            //}
+            if (!string.IsNullOrEmpty(Configs.lastWeacherCity)) {
+                vm.Province = Configs.lastWeatherProvince;
+                vm.City = Configs.lastWeacherCity;
+                //GetWeather(vm.City);
+            }
             DataContext = vm;
         }
 
