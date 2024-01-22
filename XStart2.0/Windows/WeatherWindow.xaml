@@ -31,7 +31,7 @@
             <TextBlock Text="市" VerticalAlignment="Center"/>
             <ComboBox x:Name="ComboBoxCity" ItemsSource="{Binding Path=SelectedItem.Cities,ElementName=ComboBoxProvince}"  VerticalAlignment="Center"
                   DisplayMemberPath="CityZh" SelectedValuePath="Id" SelectedValue="{Binding Path=City,Mode=TwoWay}" Style="{StaticResource ComboBox_Style}"></ComboBox>
-            <Button Style="{StaticResource Btn_Style}" Content="获取天气" Click="GetWeather_Click"/>
+            <Button Style="{StaticResource BtnConfirm_Style}" Content="获取天气" Click="GetWeather_Click"/>
         </StackPanel>
         <!-- 实时天气数据 -->
         <StackPanel Grid.Row="1">

@@ -44,12 +44,12 @@ namespace XStart2._0.Windows {
                     province.Cities = province.Cities.OrderBy(p => p.CityEn).ToList();
                 }
             }
-            vm.Provinces = Config.Configs.Provinces;
-            if (!string.IsNullOrEmpty(Configs.lastWeacherCity)) {
-                vm.Province = Configs.lastWeatherProvince;
-                vm.City = Configs.lastWeacherCity;
-                GetWeather(vm.City);
-            }
+            vm.Provinces = Configs.Provinces;
+            //if (!string.IsNullOrEmpty(Configs.lastWeacherCity)) {
+            //    vm.Province = Configs.lastWeatherProvince;
+            //    vm.City = Configs.lastWeacherCity;
+            //    GetWeather(vm.City);
+            //}
             DataContext = vm;
         }
 
