@@ -385,8 +385,6 @@ namespace XStart2._0 {
                 registryKey.DeleteValue(Constants.APP_NAME, false);
             }
             registryKey.Dispose();
-            // 剪切板内容清除
-            Clipboard.Clear();
             // 配置以及窗口数据保存
             SaveSetting();
             if (!Configs.forceExit && Configs.exitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {

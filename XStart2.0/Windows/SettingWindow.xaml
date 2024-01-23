@@ -14,48 +14,84 @@
         </Grid.RowDefinitions>
         <TabControl x:Name="SettingTabControl" Grid.Row="0">
             <TabItem Header="基本" Style="{StaticResource TabItem_Style}">
-                <WrapPanel>
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="80"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="程序置顶:" HorizontalAlignment="Right"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding TopMost,Mode=TwoWay}"  Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
-                    </Grid>
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="80"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="操作音效:" HorizontalAlignment="Right"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="开" OffLabel="关" Width="55" ButtonWidth="25" IsChecked="{Binding Audio,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
-                    </Grid>
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="80"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="靠边隐藏:" HorizontalAlignment="Right"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding CloseBorderHide,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
-                    </Grid>
-                    <Grid Margin="5" Height="26">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="80"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="开机启动:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding AutoRun,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
-                    </Grid>
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="80"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="退出提醒:" HorizontalAlignment="Right"/>
-                        <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding ExitWarn,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
-                    </Grid>
-                </WrapPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Grid.Row="0" Header="开关配置" Margin="5">
+                        <WrapPanel>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="程序置顶:" HorizontalAlignment="Right"/>
+                                <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding TopMost,Mode=TwoWay}"  Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                            </Grid>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="操作音效:" HorizontalAlignment="Right"/>
+                                <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="开" OffLabel="关" Width="55" ButtonWidth="25" IsChecked="{Binding Audio,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                            </Grid>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="靠边隐藏:" HorizontalAlignment="Right"/>
+                                <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding CloseBorderHide,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                            </Grid>
+                            <Grid Margin="5" Height="26">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="开机启动:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding AutoRun,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                            </Grid>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="退出提醒:" HorizontalAlignment="Right"/>
+                                <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding ExitWarn,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                            </Grid>
+                        </WrapPanel>
+                    </GroupBox>
+                    <GroupBox Grid.Row="1" Header="项目运行" Margin="5">
+                        <StackPanel>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="14"/>
+                                    <ColumnDefinition Width="47"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="运行方式:" HorizontalAlignment="Right" Grid.ColumnSpan="2"/>
+                                <view:SliderButton Grid.Column="2" OnLabel="单击" OffLabel="双击" Width="65" ButtonWidth="25" IsChecked="{Binding ClickType,Converter={StaticResource ClickTypeConverter},Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center" Margin="8,0"/>
+                            </Grid>
+                            <GroupBox Header="打开链接" Margin="5">
+                                <StackPanel>
+                                    <RadioButton GroupName="UrlOpen" Content="默认浏览器" Style="{StaticResource RadioButton_Style}" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlDefault',Mode=TwoWay}"/>
+                                    <RadioButton GroupName="UrlOpen" Content="Edge浏览器" Style="{StaticResource RadioButton_Style}" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlEdge',Mode=TwoWay}"/>
+                                    <RadioButton GroupName="UrlOpen" Content="自定义浏览器" Style="{StaticResource RadioButton_Style}" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlCustom',Mode=TwoWay}"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="32"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Grid.Column="0" Margin="5" Text="{Binding UrlOpenCustomBrowser}"/>
+                                        <Button Content="..." Grid.Column="1" Margin="5"/>
+                                    </Grid>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
             </TabItem>
             <TabItem Header="样式" Style="{StaticResource TabItem_Style}">
                 <Grid>
@@ -109,34 +145,6 @@
                     </WrapPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="打开方式" Style="{StaticResource TabItem_Style}" VerticalAlignment="Top">
-                <StackPanel>
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="14"/>
-                            <ColumnDefinition Width="47"/>
-                            <ColumnDefinition Width="80"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="点击运行:" HorizontalAlignment="Right" Grid.ColumnSpan="2"/>
-                        <view:SliderButton Grid.Column="2" OnLabel="单击" OffLabel="双击" Width="65" ButtonWidth="25" IsChecked="{Binding ClickType,Converter={StaticResource ClickTypeConverter},Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center" Margin="8,0"/>
-                    </Grid>
-                    <GroupBox Header="网址打开">
-                        <StackPanel>
-                            <RadioButton GroupName="UrlOpen" Content="使用系统默认浏览器" Style="{StaticResource RadioButton_Style}" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlDefault',Mode=TwoWay}"/>
-                            <RadioButton GroupName="UrlOpen" Content="使用Edge" Style="{StaticResource RadioButton_Style}" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlEdge',Mode=TwoWay}"/>
-                            <RadioButton GroupName="UrlOpen" Content="使用自定义浏览器" Style="{StaticResource RadioButton_Style}" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlCustom',Mode=TwoWay}"/>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="32"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBox Grid.Column="0" Margin="5" Text="{Binding UrlOpenCustomBrowser}"/>
-                                <Button Content="..." Grid.Column="1" Margin="5"/>
-                            </Grid>
-                        </StackPanel>
-                    </GroupBox>
-                </StackPanel>
-            </TabItem>
             <TabItem Header="其他" Style="{StaticResource TabItem_Style}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -163,7 +171,7 @@
                                 <RowDefinition Height="34"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            
+
                             <TextBlock Grid.Row="0" Grid.Column="0" Text="AppId" Style="{StaticResource FormLabel_Style}"/>
                             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding WeatherApiAppId}" Style="{StaticResource FormValue_Style}"/>
                             <TextBlock Grid.Row="0" Grid.Column="2" Text="AppSecret" Style="{StaticResource FormLabel_Style}"/>
@@ -192,13 +200,13 @@
                             </ComboBox>
                             <TextBlock Grid.Row="1" Grid.Column="0" Text="Url" Style="{StaticResource FormLabel_Style}" Foreground="Red"/>
                             <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding WeatherApiUrl}" Style="{StaticResource FormValue_Style}"/>
-                            <TextBlock Grid.Row="1" Grid.Column="5" Text="去注册" VerticalAlignment="Center" HorizontalAlignment="Center" Cursor="Hand" Foreground="Blue" MouseLeftButtonUp="GoRegesit_MouseLeftButtonUp"/>
+                            <TextBlock Grid.Row="1" Grid.Column="5" Text="去注册" Style="{StaticResource FormLabel_Style}" VerticalAlignment="Center" HorizontalAlignment="Center" Cursor="Hand" Foreground="Blue" MouseLeftButtonUp="GoRegesit_MouseLeftButtonUp"/>
                             <Border Grid.Row="2" Grid.ColumnSpan="6" Margin="10" BorderThickness="1" BorderBrush="Gray" CornerRadius="5">
-                            <ItemsControl ItemsSource="{Binding ThemePngs}">
+                                <ItemsControl ItemsSource="{Binding ThemePngs}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel Margin="0 0 10 0">
-                                                
+
                                             </WrapPanel>
                                         </ItemsPanelTemplate>
                                     </ItemsControl.ItemsPanel>
@@ -219,15 +227,15 @@
                                                 </Image>
                                                 <TextBlock Grid.Row="1" Text="{Binding ImgName}" HorizontalAlignment="Center"/>
                                             </Grid>
-                                        
-                                    </DataTemplate>
+
+                                        </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
                             </Border>
                         </Grid>
                     </GroupBox>
                 </Grid>
-                
+
             </TabItem>
         </TabControl>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
