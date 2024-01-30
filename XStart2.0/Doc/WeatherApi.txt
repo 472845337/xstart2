@@ -1,0 +1,124 @@
+﻿实时天气数据
+请求方式：Get
+http://v1.yiketianqi.com/free/day?appid=用户注册AppId&appsecret=用户注册AppSecret&unescape=1
+请求参数
+参数名     必填  类型      说明               备注
+appid	    是	string	用户appid	        注册开发账号
+appsecret	是	string	用户appsecret	
+cityid	    否	string	城市ID	            请参考 城市ID列表 如果您想查询多个城市(最多30个),请用英文逗号隔开, 如：cityid=101120101,101120201,101050101
+city	    否	string	城市名称	        不要带市和区, 支持市区县, 不支持乡镇级别; 如: 青岛、铁西
+ip	        否	string	IP地址	            查询IP所在城市天气
+callback	否	string	jsonp参数	        如: jQuery.Callbacks
+vue	        否	string	跨域参数	        如果您使用的是react、vue、angular请填写值: 1
+unescape	否	Int	    是否转义中文	    如果您希望json不被unicode, 直接输出中文, 请传此参数: 1
+
+反馈数据结构
+{
+    "nums":226, //今日实时请求次数
+    "cityid":"101120101", //城市ID
+    "city":"济南",
+    "date":"2022-05-05",
+    "week":"星期四",
+    "update_time":"22:38", //更新时间
+    "wea":"多云", //天气情况
+    "wea_img":"yun", //天气标识
+    "tem":"25", //实况温度
+    "tem_day":"30", //白天温度(高温)
+    "tem_night":"23", //夜间温度(低温)
+    "win":"南风", //风向
+    "win_speed":"3级", //风力
+    "win_meter":"19km\/h", //风速
+    "air":"53", //空气质量
+    "pressure":"987", //气压
+    "humidity":"27%" //湿度
+}
+
+七日数据
+请求方式：get
+http://v1.yiketianqi.com/free/week?unescape=1&appid=用户注册AppId&appsecret=用户注册AppSecret
+请求参数
+参数名     必填  类型      说明               备注
+appid	    是	string	用户appid	        注册开发账号
+appsecret	是	string	用户appsecret	
+cityid	    否	string	城市ID	            请参考 城市ID列表 如果您想查询多个城市(最多30个),请用英文逗号隔开, 如：cityid=101120101,101120201,101050101
+city	    否	string	城市名称	        不要带市和区, 支持市区县, 不支持乡镇级别; 如: 青岛、铁西
+ip	        否	string	IP地址	            查询IP所在城市天气
+callback	否	string	jsonp参数	        如: jQuery.Callbacks
+vue	        否	string	跨域参数	        如果您使用的是react、vue、angular请填写值: 1
+unescape	否	Int	    是否转义中文	    如果您希望json不被unicode, 直接输出中文, 请传此参数: 1
+
+备注
+
+cityid、city和ip参数3选一提交，如果不传，默认返回当前ip城市天气，cityid优先级最高。
+
+反馈数据结构
+{
+    "cityid":"101120101",
+    "city":"济南",
+    "update_time":"2020-04-21 17:24:11",
+    "data":[
+        {
+            "date":"2020-04-21",
+            "wea":"晴",
+            "wea_img":"qing",
+            "tem_day":"17",
+            "tem_night":"4",
+            "win":"北风",
+            "win_speed":"3-4级"
+        },
+        {
+            "date":"2020-04-22",
+            "wea":"晴",
+            "wea_img":"qing",
+            "tem_day":"15",
+            "tem_night":"4",
+            "win":"北风",
+            "win_speed":"3-4级"
+        },
+        {
+            "date":"2020-04-23",
+            "wea":"晴",
+            "wea_img":"qing",
+            "tem_day":"17",
+            "tem_night":"8",
+            "win":"北风",
+            "win_speed":"3-4级"
+        },
+        {
+            "date":"2020-04-24",
+            "wea":"晴",
+            "wea_img":"qing",
+            "tem_day":"20",
+            "tem_night":"10",
+            "win":"西南风",
+            "win_speed":"4-5级"
+        },
+        {
+            "date":"2020-04-25",
+            "wea":"晴",
+            "wea_img":"qing",
+            "tem_day":"21",
+            "tem_night":"11",
+            "win":"东北风",
+            "win_speed":"4-5级转3-4级"
+        },
+        {
+            "date":"2020-04-26",
+            "wea":"多云",
+            "wea_img":"yun",
+            "tem_day":"21",
+            "tem_night":"11",
+            "win":"南风",
+            "win_speed":"<3级转3-4级"
+        },
+        {
+            "date":"2020-04-27",
+            "wea":"晴",
+            "wea_img":"qing",
+            "tem_day":"15",
+            "tem_night":"13",
+            "win":"东风",
+            "win_speed":"3-4级转<3级"
+        }
+    ]
+}

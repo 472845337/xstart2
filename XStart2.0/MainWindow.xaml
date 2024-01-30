@@ -1,0 +1,538 @@
+﻿<Window x:Class="XStart2._0.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:XStart2._0"
+        xmlns:helper="clr-namespace:XStart2._0.Helper"
+        xmlns:view="clr-namespace:XStart2._0.View"
+        xmlns:bean="clr-namespace:XStart2._0.Bean"
+        xmlns:assist="clr-namespace:DragDropAssist"
+        mc:Ignorable="d"
+        Title="X启动" Height="{Binding MainHeight, Mode=TwoWay}" Width="{Binding MainWidth, Mode=TwoWay}"
+        MinHeight="500" MinWidth="300" Left="{Binding MainLeft, Mode=TwoWay}"
+        Top="{Binding MainTop, Mode=TwoWay}" Loaded="Window_Loaded"
+        Closing="Window_Closing" Topmost="{Binding TopMost}" LocationChanged="MainWindow_LocationChanged" Icon="pack://application:,,,/Files/xstart2.ico" ResizeMode="CanResizeWithGrip">
+    <!--<b:Interaction.Triggers>
+        <b:EventTrigger EventName="Loaded">
+            <b:InvokeCommandAction Command="{Binding MainWindowLoadedCommand}"/>
+        </b:EventTrigger>
+    </b:Interaction.Triggers>-->
+    <Window.Resources>
+        <Style x:Key="HeaderTool_Style" TargetType="Image">
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style x:Key="MenuStyleKey" TargetType="MenuItem">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <!-- 栏目样式 -->
+        <Style x:Key="ExpanderTitle_Style" TargetType="ToggleButton">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Background" Value="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}"/>
+            <Setter Property="Foreground" Value="{Binding ButtonConfirmForeGround,Source={x:Static bean:WindowTheme.Instance}}"/>
+            <!-- 添加模板，用于置Background,否则无效 -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="{Binding ToggleButtonIsCheckedBackGround,Source={x:Static bean:WindowTheme.Instance}}"/>
+                    <Setter Property="Foreground" Value="{Binding ToggleButtonIsCheckedForeGround,Source={x:Static bean:WindowTheme.Instance}}"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{Binding ButtonConfirmIsMouseOverBackGround,Source={x:Static bean:WindowTheme.Instance}}"/>
+                    <Setter Property="Foreground" Value="{Binding ButtonConfirmIsMouseOverForeGround,Source={x:Static bean:WindowTheme.Instance}}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ExpandablePanelStyle" TargetType="{x:Type Expander}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Expander}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <DockPanel>
+                                <ToggleButton Style="{StaticResource ExpanderTitle_Style}" x:Name="HeaderSite" Content="{TemplateBinding Header}" DockPanel.Dock="Top" 
+                                              IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                              PreviewMouseLeftButtonDown="Expander_Header_PreviewMouseLeftButtonDown"/>
+                                <ContentPresenter x:Name="ExpandSite" DockPanel.Dock="Bottom" Visibility="Collapsed"/>
+                            </DockPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsExpanded" Value="True">
+                                <Setter TargetName="ExpandSite" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IsExpanded" Value="False">
+                                <Setter TargetName="ExpandSite" Property="Visibility" Value="Hidden" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <EventSetter Event="Expanded" Handler="Expander_Expanded_Handler"/>
+        </Style>
+
+        <ContextMenu x:Key="TypeTabContextMenu">
+            <ContextMenu.Items>
+                <MenuItem Name="AddType" Header="添加类别" Click="AddType_Click">
+                    <MenuItem.Icon>
+                        <Image Source="/Files/Icons/App/add.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Name="ClearType" Header="清空所有类别" Click="ClearType_Click">
+                    <MenuItem.Icon>
+                        <Image Source="/Files/Icons/App/clear.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </ContextMenu.Items>
+        </ContextMenu>
+    </Window.Resources>
+    <!-- 窗体布局-->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="68"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition MinWidth="80"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <!-- 个人信息 -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="5" MouseLeftButtonUp="User_Click">
+                <Border BorderBrush="gray" BorderThickness="1" Height="50" Width="50" CornerRadius="5">
+                    <Border.Background>
+                        <ImageBrush ImageSource="{Binding Avatar}"/>
+                    </Border.Background>
+                </Border>
+                <TextBlock Style="{StaticResource TextBlock_ThemeStyle}" Text="{Binding NickName}" VerticalAlignment="Bottom" Margin="8 0 8 5"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource TextBlock_ThemeStyle}" Text="{Binding MyDateTime.CurTime}" HorizontalAlignment="Right"/>
+                <TextBlock Style="{StaticResource TextBlock_ThemeStyle}" Text="{Binding MyDateTime.CurWeekDay}" HorizontalAlignment="Right"/>
+                <TextBlock Style="{StaticResource TextBlock_ThemeStyle}" Text="{Binding MyDateTime.CurDate}" HorizontalAlignment="Right"/>
+            </StackPanel>
+            <!-- 小工具 -->
+            <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5">
+                <Image Source="/Files/Images/Calendar.png" Style="{StaticResource HeaderTool_Style}" MouseLeftButtonUp="Calendar_Click" ToolTip="打开日历"/>
+                <Image Source="/Files/Images/NotePad.png" Style="{StaticResource HeaderTool_Style}" MouseLeftButtonUp="OpenNotePad_Click" ToolTip="新建记事本"/>
+                <Image Source="/Files/Images/Weather.png" Style="{StaticResource HeaderTool_Style}" MouseLeftButtonUp="Weather_Click" ToolTip="打开天气"/>
+            </WrapPanel>
+        </Grid>
+        <TabControl Grid.Row="1" x:Name="MainTabControl" TabStripPlacement="Left" ItemsSource="{Binding Types}"
+                    SizeChanged="MainTabControl_SizeChanged" ContextMenu="{StaticResource TypeTabContextMenu}"
+                    SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="{Binding SelectedIndex}"
+                    assist:SelectorDragDropAttach.IsItemsDragDropEnabled="True">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel LastChildFill="True" Tag="{Binding Value.Section}"  Height="32" 
+                               Width="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=DataContext.TypeWidth}"
+                               AllowDrop="True" DragDrop.DragEnter="Type_DragEnter">
+                        <DockPanel.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="添加类别" Click="AddType_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Files/Icons/App/add.ico"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="修改类别" Click="UpdateType_Click" IsEnabled="{Binding Value.Unlocked}">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Files/Icons/App/update.ico"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="删除类别" Click="DeleteType_Click" IsEnabled="{Binding Value.Unlocked}">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Files/Icons/App/remove.ico"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator/>
+                                <MenuItem Header="添加口令" IsEnabled="{Binding Value.HasPassword, Converter={StaticResource InverseBooleanConverter}}" Click="AddTypeSecurity_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Files/Icons/App/security_add.ico"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="修改口令" IsEnabled="{Binding Value.HasPassword}" Click="UpdateTypeSecurity_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Files/Icons/App/security_edit.ico"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="移除口令" IsEnabled="{Binding Value.HasPassword}" Click="RemoveTypeSecurity_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Files/Icons/App/security_del.ico"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="锁定" IsEnabled="{Binding Value.CanLock}" Click="LockType_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Files/Icons/App/lock.ico"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator/>
+                                <MenuItem Header="清空栏目" IsEnabled="{Binding Value.Unlocked}" Click="ClearColumn_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Files/Icons/App/clear.ico"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </DockPanel.ContextMenu>
+                        <TextBlock DockPanel.Dock="Left" Width="28" Text="{Binding Value.FaIcon}" FontFamily="{Binding Value.FaIconFontFamily}" Foreground="{Binding Value.FaIconColor}" FontSize="18" Padding="5"/>
+                        <TextBlock DockPanel.Dock="Right" VerticalAlignment="Center" Text="{Binding Value.Name}" FontSize="18" Padding="5"/>
+                    </DockPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <StackPanel Visibility="{Binding Value.Locked, Converter={StaticResource Boolean2VisibilityConverter}}" Tag="{Binding Value.Section}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="口令:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"/>
+                                <PasswordBox PasswordChar="*" Grid.Row="0" Grid.Column="1" helper:PasswordBoxHelper.Attach ="True" helper:PasswordBoxHelper.Password="{Binding Value.UnlockSecurity,Mode=TwoWay}" FontSize="14" Height="30" VerticalContentAlignment="Center" Margin="5"/>
+                                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <CheckBox Content="记住口令" IsChecked="{Binding Value.RememberSecurity}" Margin="5" VerticalAlignment="Center"/>
+                                    <Button Style="{StaticResource BtnConfirm_Style}" Click="UnlockType_Click" Tag="{Binding Value.Section}"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                        <ScrollViewer Visibility="{Binding Value.Unlocked, Converter={StaticResource Boolean2VisibilityConverter}}" VerticalScrollBarVisibility="{Binding Value.VerticalScroll}" Tag="{Binding Value.Section}">
+                            <ScrollViewer.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="添加栏目" Click="AddColumn_Click">
+                                        <MenuItem.Icon>
+                                            <Image Source="/Files/Icons/App/add.ico"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </ScrollViewer.ContextMenu>
+                            <ItemsControl ItemsSource="{Binding Value.ColumnDic}"
+                                          assist:SelectorDragDropAttach.IsItemsDragDropEnabled="True">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Expander helper:ElementParamHelper.TypeSection="{Binding Value.TypeSection}" helper:ElementParamHelper.ColumnSection="{Binding Value.Section}"
+                                          Header="{Binding Value.Name}" IsExpanded="{Binding Value.IsExpanded}" Style="{StaticResource ExpandablePanelStyle}" BorderBrush="Transparent"
+                                                  AllowDrop="True" DragDrop.Drop="Project_DragDrop">
+                                            <Expander.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="添加栏目" Click="AddColumn_Click">
+                                                        <MenuItem.Icon>
+                                                            <Image Source="/Files/Icons/App/add.ico"/>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
+                                                    <MenuItem Header="修改栏目" Click="UpdateColumn_Click">
+                                                        <MenuItem.Icon>
+                                                            <Image Source="/Files/Icons/App/update.ico"/>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
+                                                    <MenuItem Header="删除栏目" Click="DeleteColumn_Click">
+                                                        <MenuItem.Icon>
+                                                            <Image Source="/Files/Icons/App/remove.ico"/>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
+                                                    <Separator/>
+                                                    <MenuItem Header="添加口令" IsEnabled="{Binding Value.HasPassword, Converter={StaticResource InverseBooleanConverter}}" Click="AddColumnSecurity_Click">
+                                                        <MenuItem.Icon>
+                                                            <Image Source="/Files/Icons/App/security_add.ico"/>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
+                                                    <MenuItem Header="修改口令" IsEnabled="{Binding Value.HasPassword}" Click="UpdateColumnSecurity_Click">
+                                                        <MenuItem.Icon>
+                                                            <Image Source="/Files/Icons/App/security_edit.ico"/>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
+                                                    <MenuItem Header="移除口令" IsEnabled="{Binding Value.HasPassword}" Click="RemoveColumnSecurity_Click">
+                                                        <MenuItem.Icon>
+                                                            <Image Source="/Files/Icons/App/security_del.ico"/>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
+                                                    <MenuItem Header="锁定" IsEnabled="{Binding Value.CanLock}" Click="LockColumn_Click">
+                                                        <MenuItem.Icon>
+                                                            <Image Source="/Files/Icons/App/lock.ico"/>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
+                                                    <Separator/>
+                                                    <MenuItem Header="粘贴" Click="PasteProject_Click">
+                                                        <MenuItem.Icon>
+                                                            <Image Source="/Files/Icons/App/paste.ico"/>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
+                                                    <MenuItem Header="清空所有项目" Click="ClearProject_Click">
+                                                        <MenuItem.Icon>
+                                                            <Image Source="/Files/Icons/App/clear.ico"/>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
+                                                </ContextMenu>
+                                            </Expander.ContextMenu>
+                                            <Grid>
+                                                <StackPanel Visibility="{Binding Value.Locked, Converter={StaticResource Boolean2VisibilityConverter}}" Tag="{Binding Value.Section}" Height="{Binding Value.ColumnHeight}">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition/>
+                                                            <RowDefinition/>
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="60"/>
+                                                            <ColumnDefinition/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="口令:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"/>
+                                                        <PasswordBox PasswordChar="*" Grid.Row="0" Grid.Column="1" helper:PasswordBoxHelper.Attach ="True" helper:PasswordBoxHelper.Password="{Binding Value.UnlockSecurity,Mode=TwoWay}" FontSize="14" Height="30" VerticalContentAlignment="Center" Margin="5"/>
+                                                        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                                                            <CheckBox Content="记住口令" IsChecked="{Binding Value.RememberSecurity}" Margin="5" VerticalAlignment="Center"/>
+                                                            <Button Style="{StaticResource BtnConfirm_Style}" Click="UnlockColumn_Click"
+                                                                    helper:ElementParamHelper.TypeSection="{Binding Value.TypeSection}" helper:ElementParamHelper.ColumnSection="{Binding Value.Section}"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </StackPanel>
+                                                <ScrollViewer Visibility="{Binding Value.Unlocked, Converter={StaticResource Boolean2VisibilityConverter}}" 
+                                                              VerticalScrollBarVisibility="Auto" Height="{Binding Value.ColumnHeight}" ScrollChanged="ScrollChanged" 
+                                                              Tag="{Binding Value}">
+                                                    <ScrollViewer.ContextMenu>
+                                                        <ContextMenu>
+                                                            <MenuItem Header="添加项目" Click="AddProject_Click">
+                                                                <MenuItem.Icon>
+                                                                    <Image Source="/Files/Icons/App/add.ico"/>
+                                                                </MenuItem.Icon>
+                                                            </MenuItem>
+                                                            <MenuItem Header="粘贴" Click="PasteProject_Click">
+                                                                <MenuItem.Icon>
+                                                                    <Image Source="/Files/Icons/App/paste.ico"/>
+                                                                </MenuItem.Icon>
+                                                            </MenuItem>
+                                                            <MenuItem Header="清空所有项目" Click="ClearProject_Click">
+                                                                <MenuItem.Icon>
+                                                                    <Image Source="/Files/Icons/App/clear.ico"/>
+                                                                </MenuItem.Icon>
+                                                            </MenuItem>
+                                                        </ContextMenu>
+                                                    </ScrollViewer.ContextMenu>
+                                                    <ItemsControl ItemsSource="{Binding Value.ProjectDic}"
+                                                                  assist:SelectorDragDropAttach.IsItemsDragDropEnabled="True">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <WrapPanel ItemWidth="{Binding Value.ProjectWidth}"/>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <view:DraggableGrid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition/>
+                                                                        <ColumnDefinition Width="24"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <view:ImageButton Grid.Column="0" Content="{Binding Value.Name}" Style="{StaticResource ProjectButton}"
+                                                                        ToolTip="{Binding Value.ToolTipContent}" Tag="{Binding Value}"
+                                                                        Click="ProjectButton_Click" MouseDoubleClick="ProjectButton_DoubleClick"
+                                                                                       ButtonIcon="{Binding Value.Icon}" IconSize="{Binding Value.IconSize}"
+                                                                                     Width="{Binding Value, Converter={StaticResource ProjectWidthConverter}}" Orientation="{Binding Value.Orientation}" HideTitle="{Binding Value.HideTitle}">
+                                                                        <Button.ContextMenu>
+                                                                            <ContextMenu>
+                                                                                <MenuItem Header="添加项目" Click="AddProject_Click">
+                                                                                    <MenuItem.Icon>
+                                                                                        <Image Source="/Files/Icons/App/add.ico"/>
+                                                                                    </MenuItem.Icon>
+                                                                                </MenuItem>
+                                                                                <MenuItem Header="修改项目" Click="EditProject_Click">
+                                                                                    <MenuItem.Icon>
+                                                                                        <Image Source="/Files/Icons/App/update.ico"/>
+                                                                                    </MenuItem.Icon>
+                                                                                </MenuItem>
+                                                                                <MenuItem Header="删除项目" Click="DeleteProject_Click">
+                                                                                    <MenuItem.Icon>
+                                                                                        <Image Source="/Files/Icons/App/remove.ico"/>
+                                                                                    </MenuItem.Icon>
+                                                                                </MenuItem>
+                                                                                <Separator/>
+                                                                                <MenuItem Header="剪切" Click="CutProject_Click">
+                                                                                    <MenuItem.Icon>
+                                                                                        <Image Source="/Files/Icons/App/cut.ico"/>
+                                                                                    </MenuItem.Icon>
+                                                                                </MenuItem>
+                                                                                <MenuItem Header="复制" Click="CopyProject_Click">
+                                                                                    <MenuItem.Icon>
+                                                                                        <Image Source="/Files/Icons/App/copy.ico"/>
+                                                                                    </MenuItem.Icon>
+                                                                                </MenuItem>
+                                                                                <MenuItem Header="粘贴" Click="PasteProject_Click">
+                                                                                    <MenuItem.Icon>
+                                                                                        <Image Source="/Files/Icons/App/paste.ico"/>
+                                                                                    </MenuItem.Icon>
+                                                                                </MenuItem>
+                                                                                <Separator/>
+                                                                                <MenuItem Header="刷新RDP" Visibility="{Binding Value.IsMstsc, Converter={StaticResource Boolean2VisibilityConverter}}" Click="FreshRdp_Click">
+                                                                                    <MenuItem.Icon>
+                                                                                        <Image Source="/Files/Icons/App/Fresh.ico"/>
+                                                                                    </MenuItem.Icon>
+                                                                                </MenuItem>
+                                                                                <MenuItem Header="打开所在目录" IsEnabled="{Binding Value.Kind, Converter={StaticResource ProjectKind2EnabledConverter}}" Click="OpenFolder_Click">
+                                                                                    <MenuItem.Icon>
+                                                                                        <Image Source="/Files/Icons/App/folder.ico"/>
+                                                                                    </MenuItem.Icon>
+                                                                                </MenuItem>
+                                                                                <MenuItem Header="属性" IsEnabled="{Binding Value.PropertyEnabled}" Click="Property_Click">
+                                                                                    <MenuItem.Icon>
+                                                                                        <Image Source="/Files/Icons/App/property.ico"/>
+                                                                                    </MenuItem.Icon>
+                                                                                </MenuItem>
+                                                                                <MenuItem Header="发送到桌面" IsEnabled="{Binding Value.PropertyEnabled}" Click="Send2Desktop_Click">
+                                                                                    <MenuItem.Icon>
+                                                                                        <Image Source="/Files/Icons/App/desktop.ico"/>
+                                                                                    </MenuItem.Icon>
+                                                                                </MenuItem>
+                                                                            </ContextMenu>
+                                                                        </Button.ContextMenu>
+                                                                    </view:ImageButton>
+                                                                    <ToggleButton Grid.Column="1" Style="{StaticResource GlassToggleButton}" Height="20" Margin="2" Background="Green" Tag="{Binding Value}"
+                                                                    IsChecked="{Binding Value.AutoRun, Converter={StaticResource ProjectAutoRunConverter}}" IsEnabled="{Binding Value.CanAutoRun}" ToolTip="{Binding Value.CanAutoRun, Converter={StaticResource ProjectAutoRunToolTipConverter}}" Click="ToggleAutoRun_Click" ToolTipService.ShowOnDisabled="True"/>
+                                                                </view:DraggableGrid>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </ScrollViewer>
+                                            </Grid>
+                                        </Expander>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+        <StatusBar Grid.Row="2" Height="30" HorizontalAlignment="Stretch">
+            <StatusBarItem>
+                <Menu DockPanel.Dock="Left">
+                    <MenuItem>
+                        <MenuItem.Header>
+                            <TextBlock Text="{Binding TypeTabToggleIcon}" Foreground="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" FontFamily="{StaticResource FontAwesomeSolid}" FontSize="18" ToolTip="类别名称显示切换" MouseLeftButtonUp="ToggleTabItem"/>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem Header="菜单" Width="42" Height="24">
+                        <MenuItem IsCheckable="True" IsChecked="{Binding TopMost}" Header="置顶" Style="{StaticResource MenuStyleKey}"/>
+                        <MenuItem IsCheckable="True" IsChecked="{Binding Audio}" Header="音效" Style="{StaticResource MenuStyleKey}"/>
+                        <MenuItem IsCheckable="True" IsChecked="{Binding CloseBorderHide}" Header="靠边隐藏" Style="{StaticResource MenuStyleKey}" Click="CloseBorderHide_Click"/>
+                        <MenuItem IsCheckable="True" IsChecked="{Binding AutoRun}" Header="开机启动" Style="{StaticResource MenuStyleKey}"/>
+                        <MenuItem IsCheckable="True" IsChecked="{Binding ExitWarn}" Header="退出提醒" Style="{StaticResource MenuStyleKey}"/>
+                        <Separator/>
+                        <MenuItem Header="选项" Click="Open_Setting">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/setting.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="导出" Click="BackUp_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/export.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="导入" Click="Recover_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/import.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator/>
+                        <MenuItem Header="运行自启动" Click="AllAutoRun_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/run.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="取消自启动" Click="CancelAllAutoRun_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/remove.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="取消栏目自定义样式" Click="CancelAllCustomStyle_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/Fresh.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator/>
+                        <MenuItem Header="恢复默认" Click="RestoreDefault_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/default.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="关于" Click="ShowAbout">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/about.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="退出程序" Click="WindowCloseMenu_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/exit.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem Click="Open_Setting">
+                        <MenuItem.Icon>
+                            <Image Source="/Files/Icons/App/setting.ico"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem>
+                        <MenuItem.Icon>
+                            <Image Source="/Files/Icons/App/theme.ico"/>
+                        </MenuItem.Icon>
+                        <MenuItem Header="蓝" Click="ChangeTheme_Click" Tag="blue">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/blue.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="绿" Click="ChangeTheme_Click" Tag="green">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/green.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="橙" Click="ChangeTheme_Click" Tag="orange">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/orange.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="红" Click="ChangeTheme_Click" Tag="red">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/red.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="灰" Click="ChangeTheme_Click" Tag="gray">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/gray.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="紫" Click="ChangeTheme_Click" Tag="purple">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/purple.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="黑" Click="ChangeTheme_Click" Tag="black">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/black.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="自定义">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/theme.ico"/>
+                            </MenuItem.Icon>
+                            <MenuItem Header="配置" Click="CustomTheme_Click"/>
+                            <MenuItem Header="应用" Click="ChangeTheme_Click" Tag="custom"/>
+                        </MenuItem>
+                    </MenuItem>
+                </Menu>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right" Margin="0 0 10 0">
+                <TextBlock Text="{Binding OperateMsg}" Foreground="{Binding OperateMsgColor}"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>

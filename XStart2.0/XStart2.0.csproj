@@ -1,0 +1,482 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\PropertyChanged.Fody.4.1.0\build\PropertyChanged.Fody.props" Condition="Exists('..\packages\PropertyChanged.Fody.4.1.0\build\PropertyChanged.Fody.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8E5A8F52-8AE8-4B69-9A6C-9A846153D2B2}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>XStart2._0</RootNamespace>
+    <AssemblyName>XStart2.0</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <Deterministic>true</Deterministic>
+    <LangVersion>8.0</LangVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Files\Icons\xstart2.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CliWrap, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CliWrap.2.5.0\lib\net45\CliWrap.dll</HintPath>
+    </Reference>
+    <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
+      <HintPath>..\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\XStart\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PropertyChanged, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
+      <HintPath>..\packages\PropertyChanged.Fody.4.1.0\lib\net40\PropertyChanged.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.112.1, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\XStart\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WpfAnimatedGif, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7cd3b544a090dc, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfAnimatedGif.2.0.2\lib\net40\WpfAnimatedGif.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Bean\Weather\City.cs" />
+    <Compile Include="Bean\FontAwesome.cs" />
+    <Compile Include="Bean\CopyProject.cs" />
+    <Compile Include="Bean\MyDateTime.cs" />
+    <Compile Include="Bean\Weather\CurWeather.cs" />
+    <Compile Include="Bean\Weather\DayWeather.cs" />
+    <Compile Include="Bean\Weather\Province.cs" />
+    <Compile Include="Bean\Weather\Theme.cs" />
+    <Compile Include="Bean\WindowTheme.cs" />
+    <Compile Include="Commands\BackUpCommand.cs" />
+    <Compile Include="Commands\ResumeCommand.cs" />
+    <Compile Include="Converters\BaseMultiValueConverter.cs" />
+    <Compile Include="Converters\BaseValueConverter.cs" />
+    <Compile Include="Converters\ProjectKind2EnabledConverter.cs" />
+    <Compile Include="Converters\Boolean2IsCheckedConverter.cs" />
+    <Compile Include="Converters\HideTitle2VisibilityConverter.cs" />
+    <Compile Include="Converters\Orientation2CenterConverter.cs" />
+    <Compile Include="Converters\Orientation2BoolConverter.cs" />
+    <Compile Include="Converters\ProjectWidthConverter.cs" />
+    <Compile Include="Converters\ProjectAutoRunToolTipConverter.cs" />
+    <Compile Include="Converters\ProjectCanAutoRunConverter.cs" />
+    <Compile Include="Converters\IconSizeConverter.cs" />
+    <Compile Include="Converters\OrientationConverter.cs" />
+    <Compile Include="Converters\UrlOpenConverter.cs" />
+    <Compile Include="Converters\ClickTypeConverter.cs" />
+    <Compile Include="Converters\ProjectAutoRunConverter.cs" />
+    <Compile Include="Converters\Project2IconConverter.cs" />
+    <Compile Include="Converters\WeatherAirColorConverter.cs" />
+    <Compile Include="Converters\WeatherAirConverter.cs" />
+    <Compile Include="Converters\WeaImgConverter.cs" />
+    <Compile Include="Helper\DragDop\DragAdorner.cs" />
+    <Compile Include="Utils\ColorUtils.cs" />
+    <Compile Include="Utils\ElementUtils.cs" />
+    <Compile Include="Utils\HttpUtils.cs" />
+    <Compile Include="Utils\IniParserUtils.cs" />
+    <Compile Include="Utils\OpenNewWindowUtils.cs" />
+    <Compile Include="Utils\TimeUtils.cs" />
+    <Compile Include="ViewModels\ThemeViewModel.cs" />
+    <Compile Include="ViewModels\WeatherViewModel.cs" />
+    <Compile Include="View\DraggableGrid.cs" />
+    <Compile Include="Helper\DragDop\SelectorDragDrop.cs" />
+    <Compile Include="Helper\DragDop\SelectorDragDropAttach.cs" />
+    <Compile Include="Helper\ElementParamHelper.cs" />
+    <Compile Include="Bean\HighContrastHelper.cs" />
+    <Compile Include="Bean\ObservableDictionary.cs" />
+    <Compile Include="Bean\ValueBoxes.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Config\Configs.cs" />
+    <Compile Include="Converters\Boolean2VisibilityConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="DataBase\ClsLock.cs" />
+    <Compile Include="DataBase\DBConstants.cs" />
+    <Compile Include="DataBase\SQLiteFactory.cs" />
+    <Compile Include="DataBase\SQLiteHelper.cs" />
+    <Compile Include="Helper\PasswordBoxHelper.cs" />
+    <Compile Include="Interfaces\IImageList.cs" />
+    <Compile Include="Interfaces\IMAGEINFO.cs" />
+    <Compile Include="Interfaces\IMAGELISTDRAWPARAMS.cs" />
+    <Compile Include="Interfaces\POINT.cs" />
+    <Compile Include="Interfaces\RECT.cs" />
+    <Compile Include="Services\ProjectService.cs" />
+    <Compile Include="Services\ColumnService.cs" />
+    <Compile Include="Services\ServiceFactory.cs" />
+    <Compile Include="Services\TableService.cs" />
+    <Compile Include="Services\TypeService.cs" />
+    <Compile Include="Services\XStartService.cs" />
+    <Compile Include="Utils\AesUtils.cs" />
+    <Compile Include="Utils\AsdlUtils.cs" />
+    <Compile Include="Utils\CdRomUtils.cs" />
+    <Compile Include="Utils\CliWrapUtils.cs" />
+    <Compile Include="Utils\FileUtils.cs" />
+    <Compile Include="Utils\ImageUtils.cs" />
+    <Compile Include="Utils\ProcessUtils.cs" />
+    <Compile Include="Utils\ProjectUtils.cs" />
+    <Compile Include="Utils\AudioUtils.cs" />
+    <Compile Include="Utils\DllUtils.cs" />
+    <Compile Include="Utils\FontAwesome4.cs" />
+    <Compile Include="Utils\FontAwesomeRegular.cs" />
+    <Compile Include="Utils\FontAwesome6.cs" />
+    <Compile Include="Utils\FontAwesomeBrands.cs" />
+    <Compile Include="Utils\IconUtils.cs" />
+    <Compile Include="Utils\LunarCalendar.cs" />
+    <Compile Include="Utils\NotifyUtils.cs" />
+    <Compile Include="Utils\RdpUtils.cs" />
+    <Compile Include="Utils\WinApi.cs" />
+    <Compile Include="Utils\WinUtils.cs" />
+    <Compile Include="ViewModels\AutoRunViewModel.cs" />
+    <Compile Include="ViewModels\ControlAppMemoryViewModel.cs" />
+    <Compile Include="ViewModels\MstscViewModel.cs" />
+    <Compile Include="ViewModels\ProjectViewModel.cs" />
+    <Compile Include="ViewModels\ResumeViewModel.cs" />
+    <Compile Include="ViewModels\BackUpViewModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\CalendarViewModel.cs" />
+    <Compile Include="ViewModels\CheckBoxTreeViewModel.cs" />
+    <Compile Include="ViewModels\ColumnVM.cs" />
+    <Compile Include="ViewModels\FontAwesomeVM.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\NotifyData.cs" />
+    <Compile Include="ViewModels\ProjectTypeVM.cs" />
+    <Compile Include="ViewModels\SecurityVM.cs" />
+    <Compile Include="ViewModels\SettingViewModel.cs" />
+    <Compile Include="ViewModels\SystemProjectViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel.cs" />
+    <Compile Include="View\ImageButton.cs" />
+    <Compile Include="View\SliderButton.cs" />
+    <Compile Include="Windows\AutoRunWindow.xaml.cs">
+      <DependentUpon>AutoRunWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ThemeWindow.xaml.cs">
+      <DependentUpon>ThemeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\UserWindow.xaml.cs">
+      <DependentUpon>UserWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ControlAppMemoryWindow.xaml.cs">
+      <DependentUpon>ControlAppMemoryWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MstscWindow.xaml.cs">
+      <DependentUpon>MstscWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ProjectWindow.xaml.cs">
+      <DependentUpon>ProjectWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ResumeWindow.xaml.cs">
+      <DependentUpon>ResumeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\BackUpWindow.xaml.cs">
+      <DependentUpon>BackUpWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\CalendarWindow.xaml.cs">
+      <DependentUpon>CalendarWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\FontAwesomeWindow.xaml.cs">
+      <DependentUpon>FontAwesomeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\RemoveSecurityWindow.xaml.cs">
+      <DependentUpon>RemoveSecurityWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SystemProjectWindow.xaml.cs">
+      <DependentUpon>SystemProjectWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\UpdateSecurityWindow.xaml.cs">
+      <DependentUpon>UpdateSecurityWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddSecurityWindow.xaml.cs">
+      <DependentUpon>AddSecurityWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ColumnWindow.xaml.cs">
+      <DependentUpon>ColumnWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\NotificationWindow.xaml.cs">
+      <DependentUpon>NotificationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ProjectTypeWindow.xaml.cs">
+      <DependentUpon>ProjectTypeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SettingWindow.xaml.cs">
+      <DependentUpon>SettingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WeatherWindow.xaml.cs">
+      <DependentUpon>WeatherWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Bean\Project.cs" />
+    <Compile Include="Bean\BackData.cs" />
+    <Compile Include="Bean\Column.cs" />
+    <Compile Include="Bean\LinkedHashMap.cs" />
+    <Compile Include="Bean\Sections.cs" />
+    <Compile Include="Bean\SystemProjectParam.cs" />
+    <Compile Include="Bean\Table.cs" />
+    <Compile Include="Bean\TableData.cs" />
+    <Compile Include="Bean\TableParam.cs" />
+    <Compile Include="Bean\Type.cs" />
+    <Compile Include="Const\Constants.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Resources\GlassButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ImageButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\SliderButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\AutoRunWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ThemeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\UserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ControlAppMemoryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MstscWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ProjectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ResumeWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\BackUpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\CalendarWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FontAwesomeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\RemoveSecurityWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\SystemProjectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\UpdateSecurityWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\AddSecurityWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ColumnWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\NotificationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\ProjectTypeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SettingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\WeatherWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Files\Citys\city.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Resource Include="Resources\Fonts\fontawesome4.ttf" />
+    <Resource Include="Resources\Fonts\fa-brands-400.ttf" />
+    <Resource Include="Resources\Fonts\fa-regular-400.ttf" />
+    <Resource Include="Resources\Fonts\fa-solid-900.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="IWshRuntimeLibrary">
+      <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Files\Audio\*.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Files\Doc\*.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Files\Icons\*.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Files\Icons\System\*.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Resource Include="Files\Images\*.png" />
+    <Resource Include="Files\xstart2.ico" />
+    <Resource Include="Files\Icons\App\*.ico" />
+    <EmbeddedResource Include="Files\Images\Avatar\DefaultUser.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Files\Images\Avatar\NotExist.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Files\Images\Weather\*\*.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Files\Images\Weather\gif\*.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Resource Include="Doc\WeatherApi.txt" />
+    <Content Include="NAudio.dll" />
+    <Content Include="System.Data.SQLite.dll" />
+    <EmbeddedResource Include="X64\SQLite.Interop.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="X86\SQLite.Interop.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\PropertyChanged.Fody.4.1.0\build\PropertyChanged.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PropertyChanged.Fody.4.1.0\build\PropertyChanged.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\Fody.6.6.4\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.6.4\build\Fody.targets'))" />
+  </Target>
+  <Import Project="..\packages\Fody.6.6.4\build\Fody.targets" Condition="Exists('..\packages\Fody.6.6.4\build\Fody.targets')" />
+</Project>

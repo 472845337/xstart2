@@ -1,0 +1,30 @@
+﻿<Window x:Class="XStart2._0.Windows.BackUpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XStart2._0.Windows"
+        mc:Ignorable="d"
+        Title="导出" Height="450" Width="400" WindowStartupLocation="CenterScreen"  Icon="pack://application:,,,/Files/Icons/App/export.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <TreeView Grid.Row="0" ItemsSource="{Binding Items}" >
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding IsChecked,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"></CheckBox>
+                        <Image Source="{Binding Data, Converter={StaticResource Project2IconConverter}}" Stretch="Fill" Margin="2"/>
+                        <TextBlock Text="{Binding Header}" Margin="5" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button Style="{StaticResource BtnConfirm_Style}" Click="BackUpConfirm_Click"/>
+            <Button Style="{StaticResource BtnCancel_Style}" Click="BackUpCancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
