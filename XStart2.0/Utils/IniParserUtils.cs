@@ -1,19 +1,32 @@
 ﻿using IniParser.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using XStart2._0.Config;
 
 namespace XStart2._0.Utils {
-    class IniParserUtils {
+    internal class IniParserUtils {
         private static IniParser.FileIniDataParser iniParser = new IniParser.FileIniDataParser();
         private static readonly Dictionary<string, IniData> iniDataDic = new Dictionary<string, IniData>();
 
         public static IniData GetIniData(string filePath) {
-            if (iniDataDic.TryGetValue(filePath, out IniData _iniData)) {
+            // 绝对路径
+            string absolutePath = Configs.AppStartPath + filePath;
+            #region 如果文件不存在，创建文件
+            string directoryPath = Path.GetDirectoryName(absolutePath);
+            if (!Directory.Exists(directoryPath)) {
+                Directory.CreateDirectory(directoryPath);
+            }
+            if (!File.Exists(absolutePath)) {
+                StreamWriter sw = File.CreateText(absolutePath);
+                sw.Flush();
+                sw.Close();
+            }
+            #endregion
 
-            } else {
-                _iniData = iniParser.ReadFile(Configs.AppStartPath + filePath, Encoding.UTF8);
+            if (!iniDataDic.TryGetValue(filePath, out IniData _iniData)) {
+                _iniData = iniParser.ReadFile(absolutePath, Encoding.UTF8);
                 iniDataDic.Add(filePath, _iniData);
             }
             return _iniData;

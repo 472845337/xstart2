@@ -27,6 +27,7 @@ namespace XStart2._0.DataBase {
             foreach (var pair in SqLiteHelperDic) {
                 pair.Value.Close();
             }
+            SqLiteHelperDic.Clear();
         }
     }
 }

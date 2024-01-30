@@ -1804,7 +1804,7 @@ namespace XStart2._0 {
             if (string.IsNullOrEmpty(Configs.weatherApiAppId) || string.IsNullOrEmpty(Configs.weatherApiAppSecret)) {
                 if (MessageBoxResult.OK == MessageBox.Show("天气API参数未配置，是否立即配置？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                     // 打开设置
-                    OpenSettingWindow(3);
+                    OpenSettingWindow(2);
                 }
             } else {
                 if (Configs.WeatherHandler.ToInt32() > 0) {
