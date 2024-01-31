@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using XStart2._0.Bean.Weather;
 using XStart2._0.Config;
 using XStart2._0.Const;
@@ -116,6 +117,10 @@ namespace XStart2._0.Windows {
             task.Start();
         }
 
+        private void OpenQuery_Click(object sender, RoutedEventArgs e) {
+            QueryCity_Popup.IsOpen = false;
+            QueryCity_Popup.IsOpen = true;
+        }
         private void OpenLastCities_Click(object sender, RoutedEventArgs e) {
             LastCities_Popup.IsOpen = false;
             LastCities_Popup.IsOpen = true;
@@ -128,6 +133,7 @@ namespace XStart2._0.Windows {
                 vm.Province = selectedCity.ProvinceEn;
                 vm.City = selectedCity.Id;
                 LastCities_Popup.IsOpen = false;
+                QueryCity_Popup.IsOpen = false;
             }
         }
 
@@ -150,6 +156,19 @@ namespace XStart2._0.Windows {
             }
             if (isExist) {
                 vm.LastCities.RemoveAt(index);
+            }
+        }
+
+        private void QueryCity_KeyDown(object sender, System.Windows.Input.KeyEventArgs e) {
+            if(Key.Enter == e.Key) {
+                vm.QueryCities.Clear();
+                if (!string.IsNullOrWhiteSpace(vm.QueryCity)) {
+                    foreach (var city in Configs.Cities) {
+                        if (city.Value.CityZh.Contains(vm.QueryCity)) {
+                            vm.QueryCities.Add(city.Value);
+                        }
+                    }
+                }
             }
         }
     }

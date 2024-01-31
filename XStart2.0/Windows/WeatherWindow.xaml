@@ -16,6 +16,17 @@
             <Setter Property="Width" Value="80"/>
             <Setter Property="Margin" Value="5"/>
         </Style>
+        <Style x:Key="AssistButton_Style" TargetType="Button" BasedOn="{StaticResource BtnConfirm_Style}">
+            <Setter Property="Margin" Value="0 0 5 0"/>
+            <Setter Property="Width" Value="18"/>
+        </Style>
+        <Style x:Key="Popup_Style" TargetType="Popup">
+            <Setter Property="StaysOpen" Value="False"/>
+            <Setter Property="Margin" Value="0 10 0 0"/>
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="Placement" Value="Bottom"/>
+            <Setter Property="AllowsTransparency" Value="True"/>
+        </Style>
         <LinearGradientBrush  x:Key="AirSliderLinearGradient_Style">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Offset="0" Color="Green" />
@@ -43,9 +54,27 @@
             <TextBlock Text="市" VerticalAlignment="Center"/>
             <ComboBox x:Name="ComboBoxCity" ItemsSource="{Binding Path=SelectedItem.Cities,ElementName=ComboBoxProvince}"  VerticalAlignment="Center"
                   DisplayMemberPath="CityZh" SelectedValuePath="Id" SelectedValue="{Binding Path=City,Mode=TwoWay}" Style="{StaticResource ComboBox_Style}"></ComboBox>
-            <Button x:Name="OpenLastCitiesButton" Style="{StaticResource BtnConfirm_Style}" Content="▼" Margin="0" Width="18" Click="OpenLastCities_Click"/>
+            <!-- 查询城市 -->
+            <Button x:Name="QueryCityButton" Style="{StaticResource AssistButton_Style}" Content="&#xf002;" FontFamily="{StaticResource FontAwesomeSolid}" Click="OpenQuery_Click"/>
+            <!-- 城市天气历史记录 -->
+            <Button x:Name="OpenLastCitiesButton" Style="{StaticResource AssistButton_Style}" Content="▼" Click="OpenLastCities_Click"/>
+            <!-- 获取天气信息 -->
             <Button Style="{StaticResource BtnConfirm_Style}" Content="获取天气" Click="GetWeather_Click"/>
-            <Popup x:Name="LastCities_Popup" StaysOpen="False" Margin="0 10 0 0" MinHeight="30" Placement="Bottom" PlacementTarget="{Binding ElementName=OpenLastCitiesButton}">
+            <!-- 查询城市弹窗 -->
+            <Popup x:Name="QueryCity_Popup" Style="{StaticResource Popup_Style}" PlacementTarget="{Binding ElementName=QueryCityButton}">
+                <StackPanel Width="120">
+                    <TextBox Style="{StaticResource FormValue_Style}" Text="{Binding QueryCity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="24" KeyDown="QueryCity_KeyDown"/>
+                    <ListBox ItemsSource="{Binding QueryCities}" SelectionChanged="ListBox_SelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock DockPanel.Dock="Left" Text="{Binding FullName}" Margin="5" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </Popup>
+            <!-- 查询历史 -->
+            <Popup x:Name="LastCities_Popup" Style="{StaticResource Popup_Style}" PlacementTarget="{Binding ElementName=OpenLastCitiesButton}">
                 <ListBox ItemsSource="{Binding LastCities}" SelectionChanged="ListBox_SelectionChanged">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -55,6 +84,7 @@
                                            FontFamily="{StaticResource FontAwesomeSolid}" 
                                            Foreground="DeepSkyBlue"
                                            FontSize="18"
+                                           VerticalAlignment="Center"
                                            MouseLeftButtonUp="RemoveLastCity_Click" Tag="{Binding Id}" Cursor="Hand"/>
                             </DockPanel>
                         </DataTemplate>

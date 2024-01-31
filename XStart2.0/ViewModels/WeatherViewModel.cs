@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using XStart2._0.Bean.Weather;
+using PropertyChanged;
+using XStart2._0.Config;
 
 namespace XStart2._0.ViewModels {
     class WeatherViewModel : BaseViewModel {
@@ -15,6 +17,10 @@ namespace XStart2._0.ViewModels {
 
         // 七日天气信息
         public DayWeather DayWeather { get; set; }
+
+        public string QueryCity { get; set; }
+
+        public ObservableCollection<City> QueryCities { get; set; } = new ObservableCollection<City>();
 
         public ObservableCollection<City> LastCities { get; set; } = new ObservableCollection<City>();
     }
