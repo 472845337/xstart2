@@ -184,6 +184,7 @@ namespace XStart2._0 {
             string weatherImgTheme = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_IMG_THEME];
             string weatherProvince = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_PROVINCE];
             string weatherCity = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_CITY];
+            string weatherCountry = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_COUNTRY];
 
             Configs.weatherApiAppId = weatherAppId;
             Configs.weatherApiAppSecret = weatherAppSecret;
@@ -191,6 +192,7 @@ namespace XStart2._0 {
             Configs.weatherImgTheme = weatherImgTheme ?? Constants.WEATHER_IMG_THEME_DEFAULT;
             Configs.lastWeatherProvince = weatherProvince;
             Configs.lastWeacherCity = weatherCity;
+            Configs.lastWeacherCountry = weatherCountry;
 
             mainViewModel.WeatherApiAppId = Configs.weatherApiAppId;
             mainViewModel.WeatherApiAppSecret = Configs.weatherApiAppSecret;

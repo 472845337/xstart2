@@ -105,7 +105,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Bean\Weather\City.cs" />
+    <Compile Include="Bean\Weather\CityBean.cs" />
     <Compile Include="Bean\FontAwesome.cs" />
     <Compile Include="Bean\CopyProject.cs" />
     <Compile Include="Bean\MyDateTime.cs" />

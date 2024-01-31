@@ -118,6 +118,7 @@
 
         public const string KEY_WEATHER_PROVINCE = "Province";
         public const string KEY_WEATHER_CITY = "City";
+        public const string KEY_WEATHER_COUNTRY = "Country";
         public const string KEY_LAST_CITYS = "LastCitys";
         public const string KEY_WEATHER_APP_ID = "AppId";
         public const string KEY_WEATHER_APP_SECRET = "AppSecret";

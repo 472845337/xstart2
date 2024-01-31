@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace XStart2._0.Bean.Weather {
-    class City {
+    class CityBean {
         [JsonProperty("id")]
         public string Id { get; set; }
         [JsonProperty("cityEn")]
@@ -20,7 +20,5 @@ namespace XStart2._0.Bean.Weather {
         public string Lat { get; set; }
         [JsonProperty("lon")]
         public string Lon { get; set; }
-
-        public string FullName { get { return ProvinceZh + "  " + CityZh; } }
     }
 }

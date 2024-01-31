@@ -13,12 +13,12 @@
             <Setter Property="Margin" Value="5"/>
         </Style>
         <Style x:Key="ComboBox_Style" TargetType="ComboBox">
-            <Setter Property="Width" Value="80"/>
             <Setter Property="Margin" Value="5"/>
         </Style>
         <Style x:Key="AssistButton_Style" TargetType="Button" BasedOn="{StaticResource BtnConfirm_Style}">
             <Setter Property="Margin" Value="0 0 5 0"/>
             <Setter Property="Width" Value="18"/>
+            <Setter Property="Height" Value="22"/>
         </Style>
         <Style x:Key="Popup_Style" TargetType="Popup">
             <Setter Property="StaysOpen" Value="False"/>
@@ -46,52 +46,74 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <!-- 城市选择 -->
-        <StackPanel Orientation="Horizontal" Margin="5 5 5 0">
-            <TextBlock Text="省" VerticalAlignment="Center"/>
-            <ComboBox ItemsSource="{Binding Path=Provinces}" x:Name="ComboBoxProvince" VerticalAlignment="Center"
-                  DisplayMemberPath="Zh" SelectedValuePath="En" SelectedValue="{Binding Path=Province,Mode=TwoWay}" Style="{StaticResource ComboBox_Style}">
-            </ComboBox>
-            <TextBlock Text="市" VerticalAlignment="Center"/>
-            <ComboBox x:Name="ComboBoxCity" ItemsSource="{Binding Path=SelectedItem.Cities,ElementName=ComboBoxProvince}"  VerticalAlignment="Center"
-                  DisplayMemberPath="CityZh" SelectedValuePath="Id" SelectedValue="{Binding Path=City,Mode=TwoWay}" Style="{StaticResource ComboBox_Style}"></ComboBox>
-            <!-- 查询城市 -->
-            <Button x:Name="QueryCityButton" Style="{StaticResource AssistButton_Style}" Content="&#xf002;" FontFamily="{StaticResource FontAwesomeSolid}" Click="OpenQuery_Click"/>
-            <!-- 城市天气历史记录 -->
-            <Button x:Name="OpenLastCitiesButton" Style="{StaticResource AssistButton_Style}" Content="▼" Click="OpenLastCities_Click"/>
-            <!-- 获取天气信息 -->
-            <Button Style="{StaticResource BtnConfirm_Style}" Content="获取天气" Click="GetWeather_Click"/>
-            <!-- 查询城市弹窗 -->
-            <Popup x:Name="QueryCity_Popup" Style="{StaticResource Popup_Style}" PlacementTarget="{Binding ElementName=QueryCityButton}">
-                <StackPanel Width="120">
-                    <TextBox Style="{StaticResource FormValue_Style}" Text="{Binding QueryCity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="24" KeyDown="QueryCity_KeyDown"/>
-                    <ListBox ItemsSource="{Binding QueryCities}" SelectionChanged="ListBox_SelectionChanged">
+        <Grid Margin="5 5 5 0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="省" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding Path=Provinces}" x:Name="ComboBoxProvince" VerticalAlignment="Center"
+                  DisplayMemberPath="Zh" SelectedValuePath="En" SelectedValue="{Binding Path=Province,Mode=TwoWay}" Style="{StaticResource ComboBox_Style}"/>
+                <TextBlock Grid.Column="2" Text="市" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <ComboBox Grid.Column="3" x:Name="ComboBoxCity" ItemsSource="{Binding Path=SelectedItem.Cities,ElementName=ComboBoxProvince}"  VerticalAlignment="Center"
+                  DisplayMemberPath="Zh" SelectedValuePath="En" SelectedValue="{Binding Path=City,Mode=TwoWay}" Style="{StaticResource ComboBox_Style}"/>
+                <TextBlock Grid.Column="4" Text="区" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <ComboBox Grid.Column="5" x:Name="ComboBoxCountry" ItemsSource="{Binding Path=SelectedItem.Countries,ElementName=ComboBoxCity}"  VerticalAlignment="Center"
+                  DisplayMemberPath="Zh" SelectedValuePath="Id" SelectedValue="{Binding Path=Country,Mode=TwoWay}" Style="{StaticResource ComboBox_Style}"/>
+                <!-- 查询区县 -->
+                <Button Grid.Column="6" x:Name="QueryCountryButton" Style="{StaticResource AssistButton_Style}" Content="&#xf002;" FontFamily="{StaticResource FontAwesomeSolid}" Click="OpenQuery_Click" ToolTip="查询区县"/>
+                <!-- 城市天气历史记录 -->
+                <Button Grid.Column="7" x:Name="OpenLastCountriesButton" Style="{StaticResource AssistButton_Style}" Content="▼" Click="OpenLastCities_Click" ToolTip="历史区县查询记录"/>
+                <!-- 查询城市弹窗 -->
+                <Popup x:Name="QueryCity_Popup" Style="{StaticResource Popup_Style}" PlacementTarget="{Binding ElementName=QueryCountryButton}">
+                    <StackPanel Width="120">
+                        <TextBox Style="{StaticResource FormValue_Style}" Text="{Binding QueryCountry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="24" KeyDown="QueryCountry_KeyDown"/>
+                        <ListBox ItemsSource="{Binding QueryCountries}" SelectionChanged="ListBox_SelectionChanged">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock DockPanel.Dock="Left" Text="{Binding FullName}" Margin="5" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Popup>
+                <!-- 查询历史 -->
+                <Popup x:Name="LastCountries_Popup" Style="{StaticResource Popup_Style}" PlacementTarget="{Binding ElementName=OpenLastCountriesButton}">
+                    <ListBox ItemsSource="{Binding LastCountries}" SelectionChanged="ListBox_SelectionChanged">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock DockPanel.Dock="Left" Text="{Binding FullName}" Margin="5" VerticalAlignment="Center"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </StackPanel>
-            </Popup>
-            <!-- 查询历史 -->
-            <Popup x:Name="LastCities_Popup" Style="{StaticResource Popup_Style}" PlacementTarget="{Binding ElementName=OpenLastCitiesButton}">
-                <ListBox ItemsSource="{Binding LastCities}" SelectionChanged="ListBox_SelectionChanged">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <DockPanel LastChildFill="False" Margin="5" Width="120">
-                                <TextBlock DockPanel.Dock="Left" Text="{Binding FullName}" Width="Auto" VerticalAlignment="Center"/>
-                                <TextBlock DockPanel.Dock="Right" Text="&#xf057;" Background="Transparent" 
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="20"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" DockPanel.Dock="Left" Text="{Binding FullName}" Width="Auto" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="&#xf057;" Background="Transparent" 
                                            FontFamily="{StaticResource FontAwesomeSolid}" 
                                            Foreground="DeepSkyBlue"
                                            FontSize="18"
                                            VerticalAlignment="Center"
                                            MouseLeftButtonUp="RemoveLastCity_Click" Tag="{Binding Id}" Cursor="Hand"/>
-                            </DockPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Popup>
-        </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Popup>
+            </Grid>
+            
+        </Grid>
         <!-- 实时天气数据 -->
         <StackPanel Grid.Row="1">
             <Grid>
@@ -100,16 +122,18 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
+                <!-- 获取天气信息 -->
+                <Button HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Style="{StaticResource BtnConfirm_Style}" Margin="20 0 0 0" Content="获取天气" Click="GetWeather_Click" ToolTip="获取所选区县的天气"/>
                 <StackPanel Grid.Column="1">
                     <TextBlock Text="{Binding CurWeather.City}" FontSize="28" Margin="0 5 0 0" HorizontalAlignment="Center"/>
                     <TextBlock FontSize="24" HorizontalAlignment="Center">
-                <Run Text="{Binding CurWeather.Tem}"/>
-                <Run Text="°c"/>
+                        <Run Text="{Binding CurWeather.Tem}"/>
+                        <Run Text="°c"/>
                     </TextBlock>
                     <TextBlock Text="{Binding CurWeather.Wea}" HorizontalAlignment="Center"/>
                     <TextBlock HorizontalAlignment="Center">
-                <Run Text="最低"/><Run Text="{Binding CurWeather.TemNight}"/><Run Text="°c"/>
-                <Run Text="最高"/><Run Text="{Binding CurWeather.TemDay}"/><Run Text="°c"/>
+                        <Run Text="最低"/><Run Text="{Binding CurWeather.TemNight}"/><Run Text="°c"/>
+                        <Run Text="最高"/><Run Text="{Binding CurWeather.TemDay}"/><Run Text="°c"/>
                     </TextBlock>
                 </StackPanel>
                 <Image Grid.Column="2" gif:ImageBehavior.RepeatBehavior="Forever">

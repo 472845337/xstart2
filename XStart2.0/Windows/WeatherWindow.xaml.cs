@@ -30,36 +30,50 @@ namespace XStart2._0.Windows {
             // 初始化省市数据
             if (Configs.Provinces.Count == 0) {
                 string cityJson = File.ReadAllText(Configs.AppStartPath + Constants.CITY_JSON_FILE, Encoding.UTF8);
-                List<City> cityList = JsonConvert.DeserializeObject<List<City>>(cityJson);
+                List<CityBean> cityList = JsonConvert.DeserializeObject<List<CityBean>>(cityJson);
                 Dictionary<string, Province> provinceDic = new Dictionary<string, Province>();
-                foreach (City city in cityList) {
-                    if (!provinceDic.TryGetValue(city.ProvinceEn, out Province province)) {
-                        province = new Province() { En = city.ProvinceEn, Zh = city.ProvinceZh };
-                        provinceDic.Add(city.ProvinceEn, province);
+                Dictionary<string, City> cityDic = new Dictionary<string, City>();
+                foreach (CityBean cityBean in cityList) {
+                    if (!provinceDic.TryGetValue(cityBean.ProvinceEn, out Province province)) {
+                        province = new Province() { En = cityBean.ProvinceEn, Zh = cityBean.ProvinceZh };
+                        provinceDic.Add(cityBean.ProvinceEn, province);
                     }
-                    province.Cities.Add(city);
-                    Configs.Cities.Add(city.Id, city);
+                    if(!cityDic.TryGetValue(cityBean.ProvinceEn + Constants.SPLIT_CHAR + cityBean.LeaderEn, out City _city)) {
+                        City dataCity = new City { En = cityBean.LeaderEn, Zh = cityBean.LeaderZh };
+                        cityDic.Add(cityBean.ProvinceEn + Constants.SPLIT_CHAR + cityBean.LeaderEn, dataCity);
+                        province.Cities.Add(dataCity);
+                    }
+                    Country country = new Country { Id = cityBean.Id, En = cityBean.CityEn, Zh = cityBean.CityZh
+                        , ProvinceEn = cityBean.ProvinceEn, ProvinceZh = cityBean.ProvinceZh
+                    , LeaderEn = cityBean.LeaderEn, LeaderZh = cityBean.LeaderZh};
+                    cityDic[cityBean.ProvinceEn + Constants.SPLIT_CHAR + cityBean.LeaderEn].Countries.Add(country);
+                    Configs.Countries.Add(cityBean.Id, country);
                 }
                 // 对省数据进行排序
                 Configs.Provinces = provinceDic.Values.ToList().OrderBy(p => p.En).ToList();
                 // 对城市数据进行排序
                 foreach (Province province in provinceDic.Values) {
-                    province.Cities = province.Cities.OrderBy(p => p.CityEn).ToList();
+                    province.Cities = province.Cities.OrderBy(p => p.En).ToList();
+                    // 对区县进行排序
+                    foreach(City city in province.Cities) {
+                        city.Countries = city.Countries.OrderBy(c => c.En).ToList();
+                    }
                 }
             }
             vm.Provinces = Configs.Provinces;
             if (!string.IsNullOrEmpty(Configs.lastWeacherCity)) {
                 vm.Province = Configs.lastWeatherProvince;
                 vm.City = Configs.lastWeacherCity;
+                vm.Country = Configs.lastWeacherCountry;
                 //GetWeather(vm.City);
             }
             // 最近查询的城市信息
             var iniData = IniParserUtils.GetIniData(Constants.SET_FILE);
-            Configs.lastCitys = iniData[Constants.SECTION_WEATHER][Constants.KEY_LAST_CITYS];
-            if (!string.IsNullOrEmpty(Configs.lastCitys)) {
-                string[] lastCityIdArray = Configs.lastCitys.Split(';');
+            Configs.lastCountries = iniData[Constants.SECTION_WEATHER][Constants.KEY_LAST_CITYS];
+            if (!string.IsNullOrEmpty(Configs.lastCountries)) {
+                string[] lastCityIdArray = Configs.lastCountries.Split(';');
                 foreach (string lastCityId in lastCityIdArray) {
-                    vm.LastCities.Add(Configs.Cities[lastCityId]);
+                    vm.LastCountries.Add(Configs.Countries[lastCityId]);
                 }
             }
             DataContext = vm;
@@ -70,14 +84,15 @@ namespace XStart2._0.Windows {
             IniParser.Model.IniData iniData = new IniParser.Model.IniData();
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_PROVINCE, ref Configs.lastWeatherProvince, vm.Province);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_CITY, ref Configs.lastWeacherCity, vm.City);
-            StringBuilder lastCitysStr = new StringBuilder();
-            foreach (City lastCity in vm.LastCities) {
-                if (lastCitysStr.Length > 0) {
-                    lastCitysStr.Append(";");
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_COUNTRY, ref Configs.lastWeacherCountry, vm.Country);
+            StringBuilder lastCountryStr = new StringBuilder();
+            foreach (Country lastCountry in vm.LastCountries) {
+                if (lastCountryStr.Length > 0) {
+                    lastCountryStr.Append(";");
                 }
-                lastCitysStr.Append(lastCity.Id);
+                lastCountryStr.Append(lastCountry.Id);
             }
-            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_LAST_CITYS, ref Configs.lastCitys, lastCitysStr.ToString());
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_LAST_CITYS, ref Configs.lastCountries, lastCountryStr.ToString());
             IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
             DataContext = null;
         }
@@ -88,10 +103,10 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void GetWeather_Click(object sender, RoutedEventArgs e) {
-            if (string.IsNullOrEmpty(vm.City)) {
-                MessageBox.Show("未选择城市", Constants.MESSAGE_BOX_TITLE_ERROR);
+            if (string.IsNullOrEmpty(vm.Country)) {
+                MessageBox.Show("未选择区县", Constants.MESSAGE_BOX_TITLE_ERROR);
             } else {
-                GetWeather(vm.City);
+                GetWeather(vm.Country);
             }
 
         }
@@ -100,8 +115,8 @@ namespace XStart2._0.Windows {
             vm.CurWeather = null;
             vm.DayWeather = null;
             // 添加到最近查询城市列表中
-            RemoveLastCity(cityId);
-            vm.LastCities.Insert(0, Configs.Cities[cityId]);
+            RemoveLastCountry(cityId);
+            vm.LastCountries.Insert(0, Configs.Countries[cityId]);
             // 异步获取实时天气数据
             Task task = new Task(() => {
                 string curUrl = $"{Configs.weatherApiUrl}{CurWeather.ApiPath}? appid={Configs.weatherApiAppId}&appsecret={Configs.weatherApiAppSecret}&unescape=1&cityid={cityId}";
@@ -122,50 +137,51 @@ namespace XStart2._0.Windows {
             QueryCity_Popup.IsOpen = true;
         }
         private void OpenLastCities_Click(object sender, RoutedEventArgs e) {
-            LastCities_Popup.IsOpen = false;
-            LastCities_Popup.IsOpen = true;
+            LastCountries_Popup.IsOpen = false;
+            LastCountries_Popup.IsOpen = true;
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            ListBox lastCitysListBox = sender as ListBox;
-            if (null != lastCitysListBox.SelectedItem) {
-                City selectedCity = lastCitysListBox.SelectedItem as City;
-                vm.Province = selectedCity.ProvinceEn;
-                vm.City = selectedCity.Id;
-                LastCities_Popup.IsOpen = false;
+            ListBox lastCountriesListBox = sender as ListBox;
+            if (null != lastCountriesListBox.SelectedItem) {
+                Country selectedCountry = lastCountriesListBox.SelectedItem as Country;
+                vm.Province = selectedCountry.ProvinceEn;
+                vm.City = selectedCountry.LeaderEn;
+                vm.Country = selectedCountry.Id;
+                LastCountries_Popup.IsOpen = false;
                 QueryCity_Popup.IsOpen = false;
             }
         }
 
         private void RemoveLastCity_Click(object sender, RoutedEventArgs e) {
             TextBlock btn = sender as TextBlock;
-            string cityId = btn.Tag as string;
-            RemoveLastCity(cityId);
+            string countryId = btn.Tag as string;
+            RemoveLastCountry(countryId);
         }
 
-        private void RemoveLastCity(string cityId) {
+        private void RemoveLastCountry(string countryId) {
             int index = 0;
             bool isExist = false;
-            for (int i = 0; i < vm.LastCities.Count; i++) {
-                City city = vm.LastCities[i];
-                if (city.Id.Equals(cityId)) {
+            for (int i = 0; i < vm.LastCountries.Count; i++) {
+                Country country = vm.LastCountries[i];
+                if (country.Id.Equals(countryId)) {
                     index = i;
                     isExist = true;
                     break;
                 }
             }
             if (isExist) {
-                vm.LastCities.RemoveAt(index);
+                vm.LastCountries.RemoveAt(index);
             }
         }
 
-        private void QueryCity_KeyDown(object sender, System.Windows.Input.KeyEventArgs e) {
+        private void QueryCountry_KeyDown(object sender, KeyEventArgs e) {
             if(Key.Enter == e.Key) {
-                vm.QueryCities.Clear();
-                if (!string.IsNullOrWhiteSpace(vm.QueryCity)) {
-                    foreach (var city in Configs.Cities) {
-                        if (city.Value.CityZh.Contains(vm.QueryCity)) {
-                            vm.QueryCities.Add(city.Value);
+                vm.QueryCountries.Clear();
+                if (!string.IsNullOrWhiteSpace(vm.QueryCountry)) {
+                    foreach (var country in Configs.Countries) {
+                        if (country.Value.Zh.Contains(vm.QueryCountry)) {
+                            vm.QueryCountries.Add(country.Value);
                         }
                     }
                 }

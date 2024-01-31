@@ -57,10 +57,12 @@ namespace XStart2._0.Config {
 
         #region weather
         public static List<Province> Provinces = new List<Province>();
-        public static Dictionary<string, City> Cities = new Dictionary<string, City>();
+        public static Dictionary<string, Country> Countries = new Dictionary<string, Country>();
         public static string lastWeatherProvince;
         public static string lastWeacherCity;
-        public static string lastCitys;
+        public static string lastWeacherCountry;
+
+        public static string lastCountries;
         public static string weatherApiUrl;
         public static string weatherApiAppId;
         public static string weatherApiAppSecret;
