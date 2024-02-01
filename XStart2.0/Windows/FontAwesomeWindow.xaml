@@ -8,7 +8,7 @@
         Title="FontAwesome图标" Height="450" Width="800" Icon="pack://application:,,,/Files/Icons/App/font_icon.ico">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80"/>
+            <RowDefinition Height="86"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0">
@@ -21,12 +21,16 @@
                 <TextBlock Text="{Binding QueryFontAwesomeResult}" Height="24"/>
             </StackPanel>
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                <Border Grid.Column="0" BorderBrush="LightGray" BorderThickness="1" Margin="5 0" Height="68" Width="68" VerticalAlignment="Bottom">
+                <Border Grid.Column="0" BorderBrush="LightGray" BorderThickness="1" Margin="5 0" Height="80" Width="80" VerticalAlignment="Bottom">
                     <TextBlock Style="{StaticResource FontAwesome_Style}" Text="{Binding SelectedFa, Mode=TwoWay}" FontFamily="{Binding SelectedFf, Mode=TwoWay}"
-                           Grid.Column="0" Margin="5" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Center"
+                           Grid.Column="0" Margin="5" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center"
                            MouseLeftButtonUp="SelectIconColor"/>
                 </Border>
-                <Button Style="{StaticResource BtnConfirm_Style}" Click="ConfirmSelectFontAwesome"/>
+                <StackPanel Orientation="Vertical">
+                    <TextBox Style="{StaticResource FormValue_Style}" IsReadOnly="True" Text="{Binding SelectedFaCode}" VerticalContentAlignment="Center"/>
+                    <TextBox Style="{StaticResource FormValue_Style}" IsReadOnly="True" Text="{Binding SelectedFaName}" VerticalContentAlignment="Center"/>
+                    <Button Style="{StaticResource BtnConfirm_Style}" Click="ConfirmSelectFontAwesome"/>
+                </StackPanel>
             </StackPanel>
         </DockPanel>
         <TabControl x:Name="FontAwesomeTabControl" Grid.Row="1">
@@ -41,7 +45,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical" Width="60">
-                                    <TextBlock Style="{StaticResource FontAwesome_Style}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                    <TextBlock Style="{StaticResource FontAwesome_Style}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome" Tag="{Binding FaName}"/>
                                     <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
                                 </StackPanel>
                             </DataTemplate>
@@ -60,7 +64,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical" Width="60">
-                                <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeSolid}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                    <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeSolid}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome" Tag="{Binding FaName}"/>
                                     <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
                                 </StackPanel>
                             </DataTemplate>
@@ -79,7 +83,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical" Width="60">
-                                    <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeRegular}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                    <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeRegular}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome" Tag="{Binding FaName}"/>
                                     <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
                                 </StackPanel>
                             </DataTemplate>
@@ -98,7 +102,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical" Width="60">
-                                    <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeBrands}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                    <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeBrands}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome" Tag="{Binding FaName}"/>
                                     <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
                                 </StackPanel>
                             </DataTemplate>
@@ -117,7 +121,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical" Width="60">
-                                    <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesome4}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                    <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesome4}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome" Tag="{Binding FaName}"/>
                                     <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
                                 </StackPanel>
                             </DataTemplate>
@@ -136,7 +140,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical" Width="60">
-                                    <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{Binding FfName}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome"/>
+                                    <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{Binding FfName}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome" Tag="{Binding FaName}"/>
                                     <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
                                 </StackPanel>
                             </DataTemplate>

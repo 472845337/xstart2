@@ -25,7 +25,6 @@
             <Setter Property="Margin" Value="0 10 0 0"/>
             <Setter Property="MinHeight" Value="30"/>
             <Setter Property="Placement" Value="Bottom"/>
-            <Setter Property="AllowsTransparency" Value="True"/>
         </Style>
         <LinearGradientBrush  x:Key="AirSliderLinearGradient_Style">
             <LinearGradientBrush.GradientStops>
@@ -77,39 +76,40 @@
                 <Button Grid.Column="7" x:Name="OpenLastCountriesButton" Style="{StaticResource AssistButton_Style}" Content="▼" Click="OpenLastCities_Click" ToolTip="历史区县查询记录"/>
                 <!-- 查询城市弹窗 -->
                 <Popup x:Name="QueryCity_Popup" Style="{StaticResource Popup_Style}" PlacementTarget="{Binding ElementName=QueryCountryButton}">
-                    <StackPanel Width="120">
-                        <TextBox Style="{StaticResource FormValue_Style}" Text="{Binding QueryCountry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="24" KeyDown="QueryCountry_KeyDown"/>
-                        <ListBox ItemsSource="{Binding QueryCountries}" SelectionChanged="ListBox_SelectionChanged">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock DockPanel.Dock="Left" Text="{Binding FullName}" Margin="5" VerticalAlignment="Center"/>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                    <StackPanel>
+                        <TextBox Style="{StaticResource FormValue_Style}" Margin="0"
+                                 Text="{Binding QueryCountry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Height="24" KeyDown="QueryCountry_KeyDown"/>
+                        <Border MaxHeight="240" MinWidth="80" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <ListBox x:Name="QueryCityListBox" ItemsSource="{Binding QueryCountries}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock DockPanel.Dock="Left" Text="{Binding FullName}" Margin="5" VerticalAlignment="Center" MouseLeftButtonUp="SelectCity" Tag="{Binding}"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Border>
                     </StackPanel>
                 </Popup>
                 <!-- 查询历史 -->
                 <Popup x:Name="LastCountries_Popup" Style="{StaticResource Popup_Style}" PlacementTarget="{Binding ElementName=OpenLastCountriesButton}">
-                    <ListBox ItemsSource="{Binding LastCountries}" SelectionChanged="ListBox_SelectionChanged">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="5">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="10"/>
-                                        <ColumnDefinition Width="20"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" DockPanel.Dock="Left" Text="{Binding FullName}" Width="Auto" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="2" Text="&#xf057;" Background="Transparent" 
-                                           FontFamily="{StaticResource FontAwesomeSolid}" 
+                    <Border MaxHeight="240" MinWidth="80" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                        <ListBox x:Name="LastCountries_ListBox" ItemsSource="{Binding LastCountries}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="5" Orientation="Horizontal">
+                                        <TextBlock Text="{Binding FullName}" Width="Auto" VerticalAlignment="Center" MouseLeftButtonUp="SelectCity" Tag="{Binding}"/>
+                                        <TextBlock Margin="10 0 0 0" Text="&#xf057;" Background="Transparent"
+                                           FontFamily="{StaticResource FontAwesomeSolid}"
                                            Foreground="DeepSkyBlue"
-                                           FontSize="18"
+                                           FontSize="16"
                                            VerticalAlignment="Center"
                                            MouseLeftButtonUp="RemoveLastCity_Click" Tag="{Binding Id}" Cursor="Hand"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Border>
                 </Popup>
             </Grid>
             
@@ -123,7 +123,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <!-- 获取天气信息 -->
-                <Button HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Style="{StaticResource BtnConfirm_Style}" Margin="20 0 0 0" Content="获取天气" Click="GetWeather_Click" ToolTip="获取所选区县的天气"/>
+                <Button HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Style="{StaticResource BtnConfirm_Style}" Margin="20 0 0 0" Content="查询天气" Click="GetWeather_Click" ToolTip="获取所选区县的天气"/>
                 <StackPanel Grid.Column="1">
                     <TextBlock Text="{Binding CurWeather.City}" FontSize="28" Margin="0 5 0 0" HorizontalAlignment="Center"/>
                     <TextBlock FontSize="24" HorizontalAlignment="Center">

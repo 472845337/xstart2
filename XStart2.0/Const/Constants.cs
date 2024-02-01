@@ -89,6 +89,10 @@
         public const string FONT_FAMILY_FA_REGULAR = "pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Regular";
         public const string FONT_FAMILY_FA_BRANDS = "pack://application:,,,/Resources/Fonts/#Font Awesome 6 Brands Regular";
         public const string FONT_FAMILY_FA_V4 = "pack://application:,,,/Resources/Fonts/#FontAwesome";
+        public const string FA_NAME_SOLID = "Solid";
+        public const string FA_NAME_REGULAR = "Regular";
+        public const string FA_NAME_BRANDS = "Brands";
+        public const string FA_NAME_V4 = "V4";
 
         public const string MESSAGE_BOX_TITLE_ERROR = "错误";
         public const string MESSAGE_BOX_TITLE_WARN = "警告";

@@ -178,21 +178,15 @@ namespace XStart2._0 {
             #endregion
 
             #region 天气参数配置
-            string weatherAppId = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_APP_ID];
-            string weatherAppSecret = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_APP_SECRET];
             string weatherUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_URL];
             string weatherImgTheme = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_IMG_THEME];
-            string weatherProvince = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_PROVINCE];
-            string weatherCity = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_CITY];
-            string weatherCountry = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_COUNTRY];
 
-            Configs.weatherApiAppId = weatherAppId;
-            Configs.weatherApiAppSecret = weatherAppSecret;
+            Configs.weatherApiAppId = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_APP_ID];
+            Configs.weatherApiAppSecret = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_APP_SECRET];
             Configs.weatherApiUrl = weatherUrl ?? Constants.WEATHER_API_URL;
             Configs.weatherImgTheme = weatherImgTheme ?? Constants.WEATHER_IMG_THEME_DEFAULT;
-            Configs.lastWeatherProvince = weatherProvince;
-            Configs.lastWeacherCity = weatherCity;
-            Configs.lastWeacherCountry = weatherCountry;
+            Configs.lastWeacherCountry = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_COUNTRY];
+            Configs.lastCountries = iniData[Constants.SECTION_WEATHER][Constants.KEY_LAST_CITYS];
 
             mainViewModel.WeatherApiAppId = Configs.weatherApiAppId;
             mainViewModel.WeatherApiAppSecret = Configs.weatherApiAppSecret;

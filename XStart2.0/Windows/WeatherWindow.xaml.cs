@@ -24,6 +24,8 @@ namespace XStart2._0.Windows {
             InitializeComponent();
             Loaded += Window_Loaded;
             Closing += Window_Closing;
+            //UseTheScrollViewerScrolling(QueryCityListBox);
+            //UseTheScrollViewerScrolling(LastCountries_ListBox);
         }
 
         private void Window_Loaded(object sender, EventArgs e) {
@@ -61,15 +63,13 @@ namespace XStart2._0.Windows {
                 }
             }
             vm.Provinces = Configs.Provinces;
-            if (!string.IsNullOrEmpty(Configs.lastWeacherCity)) {
-                vm.Province = Configs.lastWeatherProvince;
-                vm.City = Configs.lastWeacherCity;
+            if (!string.IsNullOrEmpty(Configs.lastWeacherCountry)) {
+                vm.Province = Configs.Countries[Configs.lastWeacherCountry].ProvinceEn;
+                vm.City = Configs.Countries[Configs.lastWeacherCountry].LeaderEn;
                 vm.Country = Configs.lastWeacherCountry;
                 //GetWeather(vm.City);
             }
             // 最近查询的城市信息
-            var iniData = IniParserUtils.GetIniData(Constants.SET_FILE);
-            Configs.lastCountries = iniData[Constants.SECTION_WEATHER][Constants.KEY_LAST_CITYS];
             if (!string.IsNullOrEmpty(Configs.lastCountries)) {
                 string[] lastCityIdArray = Configs.lastCountries.Split(';');
                 foreach (string lastCityId in lastCityIdArray) {
@@ -79,11 +79,18 @@ namespace XStart2._0.Windows {
             DataContext = vm;
         }
 
+        public void UseTheScrollViewerScrolling(FrameworkElement fElement) {
+            fElement.PreviewMouseWheel += (sender, e) => {
+                var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
+                eventArg.RoutedEvent = UIElement.MouseWheelEvent;
+                eventArg.Source = sender;
+                fElement.RaiseEvent(eventArg);
+            };
+        }
+
         private void Window_Closing(object sender, EventArgs e) {
             // 保存当前查询的城市
             IniParser.Model.IniData iniData = new IniParser.Model.IniData();
-            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_PROVINCE, ref Configs.lastWeatherProvince, vm.Province);
-            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_CITY, ref Configs.lastWeacherCity, vm.City);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_COUNTRY, ref Configs.lastWeacherCountry, vm.Country);
             StringBuilder lastCountryStr = new StringBuilder();
             foreach (Country lastCountry in vm.LastCountries) {
@@ -135,28 +142,32 @@ namespace XStart2._0.Windows {
         private void OpenQuery_Click(object sender, RoutedEventArgs e) {
             QueryCity_Popup.IsOpen = false;
             QueryCity_Popup.IsOpen = true;
+            e.Handled = true;
         }
         private void OpenLastCities_Click(object sender, RoutedEventArgs e) {
             LastCountries_Popup.IsOpen = false;
             LastCountries_Popup.IsOpen = true;
+            e.Handled = true;
         }
 
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            ListBox lastCountriesListBox = sender as ListBox;
-            if (null != lastCountriesListBox.SelectedItem) {
-                Country selectedCountry = lastCountriesListBox.SelectedItem as Country;
+        private void SelectCity(object sender, RoutedEventArgs e) {
+            TextBlock lastCountriesListBox = sender as TextBlock;
+            if (null != lastCountriesListBox.Tag) {
+                Country selectedCountry = lastCountriesListBox.Tag as Country;
                 vm.Province = selectedCountry.ProvinceEn;
                 vm.City = selectedCountry.LeaderEn;
                 vm.Country = selectedCountry.Id;
                 LastCountries_Popup.IsOpen = false;
                 QueryCity_Popup.IsOpen = false;
             }
+            e.Handled = true;
         }
 
         private void RemoveLastCity_Click(object sender, RoutedEventArgs e) {
             TextBlock btn = sender as TextBlock;
             string countryId = btn.Tag as string;
             RemoveLastCountry(countryId);
+            e.Handled = true;
         }
 
         private void RemoveLastCountry(string countryId) {

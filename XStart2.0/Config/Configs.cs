@@ -58,8 +58,6 @@ namespace XStart2._0.Config {
         #region weather
         public static List<Province> Provinces = new List<Province>();
         public static Dictionary<string, Country> Countries = new Dictionary<string, Country>();
-        public static string lastWeatherProvince;
-        public static string lastWeacherCity;
         public static string lastWeacherCountry;
 
         public static string lastCountries;
@@ -158,17 +156,6 @@ namespace XStart2._0.Config {
             }
         }
         public static void Dispose() {
-            BindingFlags flag = BindingFlags.Static | BindingFlags.Public;
-            System.Type configsType = typeof(Configs);
-            FieldInfo[] infos = configsType.GetFields(flag);
-            foreach (FieldInfo info in infos) {
-                if ("Bitmap".Equals(info.FieldType.Name)) {
-                    BitmapImage imageInfo = (BitmapImage)info.GetValue(new Configs());
-                    if (null != imageInfo) {
-                        imageInfo.Freeze();
-                    }
-                }
-            }
             ClearIconDic(iconDic32);
             ClearIconDic(iconDic48);
             ClearIconDic(iconDic72);

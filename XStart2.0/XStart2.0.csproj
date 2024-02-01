@@ -150,7 +150,6 @@
     <Compile Include="Helper\ElementParamHelper.cs" />
     <Compile Include="Bean\HighContrastHelper.cs" />
     <Compile Include="Bean\ObservableDictionary.cs" />
-    <Compile Include="Bean\ValueBoxes.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Config\Configs.cs" />
     <Compile Include="Converters\Boolean2VisibilityConverter.cs" />
@@ -280,7 +279,6 @@
     <Compile Include="Bean\BackData.cs" />
     <Compile Include="Bean\Column.cs" />
     <Compile Include="Bean\LinkedHashMap.cs" />
-    <Compile Include="Bean\Sections.cs" />
     <Compile Include="Bean\SystemProjectParam.cs" />
     <Compile Include="Bean\Table.cs" />
     <Compile Include="Bean\TableData.cs" />

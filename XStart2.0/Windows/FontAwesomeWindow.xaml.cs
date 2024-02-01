@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -24,13 +25,13 @@ namespace XStart2._0.Windows {
 
         private void WindowLoaded(object sender, RoutedEventArgs e) {
             // 实体
-            IEnumerable<FontAwesome> fontAwesomeList = GetFontAwesomeFieldValue<FontAwesome6>();
+            IEnumerable<FontAwesome> fontAwesomeList = GetFontAwesomeFieldValue<FontAwesome6>(Constants.FA_NAME_SOLID);
             // 品牌
-            IEnumerable<FontAwesome> fontAwesomeBrandsList = GetFontAwesomeFieldValue<FontAwesomeBrands>();
+            IEnumerable<FontAwesome> fontAwesomeBrandsList = GetFontAwesomeFieldValue<FontAwesomeBrands>(Constants.FA_NAME_BRANDS);
             // 常用
-            IEnumerable<FontAwesome> fontAwesomeRegularList = GetFontAwesomeFieldValue<FontAwesomeRegular>();
+            IEnumerable<FontAwesome> fontAwesomeRegularList = GetFontAwesomeFieldValue<FontAwesomeRegular>(Constants.FA_NAME_REGULAR);
             // V4
-            IEnumerable<FontAwesome> fontAwesome4List = GetFontAwesomeFieldValue<FontAwesome4>();
+            IEnumerable<FontAwesome> fontAwesome4List = GetFontAwesomeFieldValue<FontAwesome4>(Constants.FA_NAME_V4);
             VM = new FontAwesomeVM {
                 CustomFontAwesomes = GetCustomFontAwesome(),
                 SolidFontAwesomes = fontAwesomeList,
@@ -57,6 +58,15 @@ namespace XStart2._0.Windows {
             TextBlock text = sender as TextBlock;
             VM.SelectedFf = text.FontFamily.ToString();
             VM.SelectedFa = text.Text;
+            VM.SelectedFaName = text.Tag as string;
+            VM.SelectedFaCode = UnicodeRegexToString(text.Text);
+        }
+        static string UnicodeRegexToString(string source) {
+            StringBuilder sb = new StringBuilder();
+            foreach(char ch in source.ToCharArray()) {
+                sb.Append(((int)ch).ToString("x").PadLeft(4, '0'));
+            }
+            return sb.ToString();
         }
         private void ConfirmSelectFontAwesome(object sender, RoutedEventArgs e) {
             if (string.IsNullOrEmpty(VM.SelectedFa)) {
@@ -89,34 +99,39 @@ namespace XStart2._0.Windows {
                 VM.QueryFontAwesomes.Clear();
                 VM.QueryFontAwesomeResult = string.Empty;
                 // 匹配名称
-                foreach (FontAwesome fa in VM.SolidFontAwesomes) {
-                    if (fa.Name.ToLower().Contains(VM.QueryFontAwesomeName.ToLower())) {
-                        fa.FfName = Constants.FONT_FAMILY_FA_SOLID;
-                        VM.QueryFontAwesomes.Add(fa);
-                    }
-                }
-                foreach (FontAwesome fa in VM.RegularFontAwesomes) {
-                    if (fa.Name.ToLower().Contains(VM.QueryFontAwesomeName.ToLower())) {
-                        fa.FfName = Constants.FONT_FAMILY_FA_REGULAR;
-                        VM.QueryFontAwesomes.Add(fa);
-                    }
-                }
-                foreach (FontAwesome fa in VM.BrandsFontAwesomes) {
-                    if (fa.Name.ToLower().Contains(VM.QueryFontAwesomeName.ToLower())) {
-                        fa.FfName = Constants.FONT_FAMILY_FA_BRANDS;
-                        VM.QueryFontAwesomes.Add(fa);
-                    }
-                }
-                foreach (FontAwesome fa in VM.FontAwesomes4) {
-                    if (fa.Name.ToLower().Contains(VM.QueryFontAwesomeName.ToLower())) {
-                        fa.FfName = Constants.FONT_FAMILY_FA_V4;
-                        VM.QueryFontAwesomes.Add(fa);
-                    }
-                }
+                QueryNameFromFa(Constants.FONT_FAMILY_FA_SOLID);
+                QueryNameFromFa(Constants.FONT_FAMILY_FA_REGULAR);
+                QueryNameFromFa(Constants.FONT_FAMILY_FA_BRANDS);
+                QueryNameFromFa(Constants.FONT_FAMILY_FA_V4);
                 VM.QueryFontAwesomeResult = $"查询到{VM.QueryFontAwesomes.Count}个图标";
                 // 展开查询选项
                 if (5 != FontAwesomeTabControl.SelectedIndex) {
                     FontAwesomeTabControl.SelectedIndex = 5;
+                }
+            }
+        }
+
+        private void QueryNameFromFa(string ffName) {
+            IEnumerable<FontAwesome> faIe = null;
+            string faName = string.Empty;
+            if (Constants.FONT_FAMILY_FA_SOLID.Equals(ffName)) {
+                faIe = VM.SolidFontAwesomes;
+                faName = Constants.FA_NAME_SOLID;
+            } else if (Constants.FONT_FAMILY_FA_REGULAR.Equals(ffName)) {
+                faIe = VM.RegularFontAwesomes;
+                faName = Constants.FA_NAME_REGULAR;
+            } else if (Constants.FONT_FAMILY_FA_BRANDS.Equals(ffName)) {
+                faIe = VM.BrandsFontAwesomes;
+                faName = Constants.FA_NAME_BRANDS;
+            } else if (Constants.FONT_FAMILY_FA_V4.Equals(ffName)) {
+                faIe = VM.FontAwesomes4;
+                faName = Constants.FA_NAME_V4;
+            }
+            foreach (FontAwesome fa in faIe) {
+                if (fa.Name.ToLower().Contains(VM.QueryFontAwesomeName.ToLower())) {
+                    fa.FfName = ffName;
+                    fa.FaName = faName;
+                    VM.QueryFontAwesomes.Add(fa);
                 }
             }
         }
@@ -127,7 +142,7 @@ namespace XStart2._0.Windows {
         /// <returns></returns>
         private List<FontAwesome> GetCustomFontAwesome() {
             return new List<FontAwesome> {
-                new FontAwesome{Name="Comments", Value =  Comments }
+                new FontAwesome{Name="Comments", Value =  Comments}
                 , new FontAwesome{Name="Check", Value =  Check}
                 , new FontAwesome{Name="Xmark", Value =  Xmark},
                 new FontAwesome{Name="Wheelchair", Value =  Wheelchair},
@@ -163,11 +178,11 @@ namespace XStart2._0.Windows {
                 new FontAwesome{Name="Tv", Value =  Tv} };
         }
 
-        private IEnumerable<FontAwesome> GetFontAwesomeFieldValue<T>() {
+        private IEnumerable<FontAwesome> GetFontAwesomeFieldValue<T>(string faName) {
             T t = System.Activator.CreateInstance<T>();
             FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Static | BindingFlags.Public);
             foreach (FieldInfo info in fields) {
-                yield return new FontAwesome { Name = info.Name, Value = info.GetValue(t) as string };
+                yield return new FontAwesome { Name = info.Name, Value = info.GetValue(t) as string , FaName = faName};
             }
         }
     }
