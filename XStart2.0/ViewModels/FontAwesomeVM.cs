@@ -12,7 +12,7 @@ namespace XStart2._0.ViewModels {
         // 类别Icon颜色
         public string SelectedIconColor { get; set; } = "LightSeaGreen";
         // 类别所选FontAwesome字体
-        public string SelectedFf { get; set; } = "{pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Solid}";
+        public string SelectedFf { get; set; }
         public string SelectedFaName { get; set; }
         public string SelectedFaCode { get; set; }
 

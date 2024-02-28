@@ -150,7 +150,6 @@
     <Compile Include="Helper\ElementParamHelper.cs" />
     <Compile Include="Bean\HighContrastHelper.cs" />
     <Compile Include="Bean\ObservableDictionary.cs" />
-    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Config\Configs.cs" />
     <Compile Include="Converters\Boolean2VisibilityConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />

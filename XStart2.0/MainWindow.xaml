@@ -9,6 +9,7 @@
         xmlns:view="clr-namespace:XStart2._0.View"
         xmlns:bean="clr-namespace:XStart2._0.Bean"
         xmlns:assist="clr-namespace:DragDropAssist"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
         Title="X启动" Height="{Binding MainHeight, Mode=TwoWay}" Width="{Binding MainWidth, Mode=TwoWay}"
         MinHeight="500" MinWidth="300" Left="{Binding MainLeft, Mode=TwoWay}"
@@ -111,16 +112,21 @@
             <!-- 个人信息 -->
             <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="5" MouseLeftButtonUp="User_Click">
                 <Border BorderBrush="gray" BorderThickness="1" Height="50" Width="50" CornerRadius="5">
-                    <Border.Background>
-                        <ImageBrush ImageSource="{Binding Avatar}"/>
-                    </Border.Background>
+                    <Image Grid.Column="2" gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimationSpeedRatio="0.5" Stretch="Fill">
+                        <gif:ImageBehavior.AnimatedSource>
+                            <Binding Path="Avatar"/>
+                        </gif:ImageBehavior.AnimatedSource>
+                        <Image.Clip>
+                            <RectangleGeometry RadiusX="5" RadiusY="5" Rect="0,0,50,50"/>
+                        </Image.Clip>
+                    </Image>
                 </Border>
-                <TextBlock Style="{StaticResource TextBlock_ThemeStyle}" Text="{Binding NickName}" VerticalAlignment="Bottom" Margin="8 0 8 5"/>
+                <TextBlock Text="{Binding NickName}" VerticalAlignment="Bottom" Margin="8 0 8 5"/>
             </StackPanel>
             <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <TextBlock Style="{StaticResource TextBlock_ThemeStyle}" Text="{Binding MyDateTime.CurTime}" HorizontalAlignment="Right"/>
-                <TextBlock Style="{StaticResource TextBlock_ThemeStyle}" Text="{Binding MyDateTime.CurWeekDay}" HorizontalAlignment="Right"/>
-                <TextBlock Style="{StaticResource TextBlock_ThemeStyle}" Text="{Binding MyDateTime.CurDate}" HorizontalAlignment="Right"/>
+                <TextBlock Text="{Binding MyDateTime.CurTime}" HorizontalAlignment="Right"/>
+                <TextBlock Text="{Binding MyDateTime.CurWeekDay}" HorizontalAlignment="Right"/>
+                <TextBlock Text="{Binding MyDateTime.CurDate}" HorizontalAlignment="Right"/>
             </StackPanel>
             <!-- 小工具 -->
             <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5">

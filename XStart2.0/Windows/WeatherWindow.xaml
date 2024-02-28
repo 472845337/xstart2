@@ -91,28 +91,39 @@
                         </Border>
                     </StackPanel>
                 </Popup>
-                <!-- 查询历史 -->
+                <!-- 历史记录 -->
                 <Popup x:Name="LastCountries_Popup" Style="{StaticResource Popup_Style}" PlacementTarget="{Binding ElementName=OpenLastCountriesButton}">
-                    <Border MaxHeight="240" MinWidth="80" ScrollViewer.HorizontalScrollBarVisibility="Auto">
-                        <ListBox x:Name="LastCountries_ListBox" ItemsSource="{Binding LastCountries}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Margin="5" Orientation="Horizontal">
-                                        <TextBlock Text="{Binding FullName}" Width="Auto" VerticalAlignment="Center" MouseLeftButtonUp="SelectCity" Tag="{Binding}"/>
-                                        <TextBlock Margin="10 0 0 0" Text="&#xf057;" Background="Transparent"
+                    <Border MaxHeight="240" MinWidth="80" BorderBrush="LightGray" BorderThickness="0.5" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Background="White">
+                                <TextBlock Margin="5" Text="清空所有记录" Width="Auto" VerticalAlignment="Center"/>
+                                <TextBlock Margin="5" Text="&#xf057;" Background="Transparent"
+                                           FontFamily="{StaticResource FontAwesomeSolid}"
+                                           Foreground="OrangeRed"
+                                           FontSize="16"
+                                           VerticalAlignment="Center"
+                                           MouseLeftButtonUp="RemoveAllLastCity_Click" Cursor="Hand"/>
+                            </StackPanel>
+                            <ListBox x:Name="LastCountries_ListBox" ItemsSource="{Binding LastCountries}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="2" Orientation="Horizontal">
+                                            <TextBlock Text="{Binding FullName}" Width="Auto" VerticalAlignment="Center" MouseLeftButtonUp="SelectCity" Tag="{Binding}"/>
+                                            <TextBlock Margin="10 0 0 0" Text="&#xf057;" Background="Transparent"
                                            FontFamily="{StaticResource FontAwesomeSolid}"
                                            Foreground="DeepSkyBlue"
                                            FontSize="16"
                                            VerticalAlignment="Center"
                                            MouseLeftButtonUp="RemoveLastCity_Click" Tag="{Binding Id}" Cursor="Hand"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
                     </Border>
                 </Popup>
             </Grid>
-            
+
         </Grid>
         <!-- 实时天气数据 -->
         <StackPanel Grid.Row="1">
@@ -204,12 +215,12 @@
                                         </Image>
                                         <TextBlock Text="{Binding Wea}" VerticalAlignment="Center"/>
                                         <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
-                                            <TextBlock VerticalAlignment="Center">
+                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right">
                                                 <Run Text="{Binding TemNight}"/><Run Text="°c"/>
                                                 <Run Text="-"/>
                                                 <Run Text="{Binding TemDay}"/><Run Text="°c"/>
                                             </TextBlock>
-                                            <TextBlock VerticalAlignment="Center">
+                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right">
                                                 <Run Text="{Binding Win}"/>
                                                 <Run Text="{Binding WinSpeed}"/>
                                             </TextBlock>

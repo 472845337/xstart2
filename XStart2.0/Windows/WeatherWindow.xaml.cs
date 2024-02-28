@@ -19,13 +19,11 @@ namespace XStart2._0.Windows {
     /// WeatherWindow.xaml 的交互逻辑
     /// </summary>
     public partial class WeatherWindow : Window {
-        WeatherViewModel vm = new WeatherViewModel();
+        readonly WeatherViewModel vm = new WeatherViewModel();
         public WeatherWindow() {
             InitializeComponent();
             Loaded += Window_Loaded;
             Closing += Window_Closing;
-            //UseTheScrollViewerScrolling(QueryCityListBox);
-            //UseTheScrollViewerScrolling(LastCountries_ListBox);
         }
 
         private void Window_Loaded(object sender, EventArgs e) {
@@ -77,15 +75,6 @@ namespace XStart2._0.Windows {
                 }
             }
             DataContext = vm;
-        }
-
-        public void UseTheScrollViewerScrolling(FrameworkElement fElement) {
-            fElement.PreviewMouseWheel += (sender, e) => {
-                var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
-                eventArg.RoutedEvent = UIElement.MouseWheelEvent;
-                eventArg.Source = sender;
-                fElement.RaiseEvent(eventArg);
-            };
         }
 
         private void Window_Closing(object sender, EventArgs e) {
@@ -159,6 +148,17 @@ namespace XStart2._0.Windows {
                 vm.Country = selectedCountry.Id;
                 LastCountries_Popup.IsOpen = false;
                 QueryCity_Popup.IsOpen = false;
+            }
+            e.Handled = true;
+        }
+
+        private void RemoveAllLastCity_Click(object sender, RoutedEventArgs e) {
+            if (vm.LastCountries.Count > 0) {
+                if (MessageBoxResult.OK == MessageBox.Show("确认清除所有历史记录？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                    vm.LastCountries.Clear();
+                }
+            } else {
+                MessageBox.Show("无历史记录！", Constants.MESSAGE_BOX_TITLE_ERROR);
             }
             e.Handled = true;
         }

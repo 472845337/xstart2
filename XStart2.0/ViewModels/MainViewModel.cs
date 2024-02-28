@@ -8,11 +8,6 @@ using XStart2._0.Utils;
 namespace XStart2._0.ViewModels {
     public class MainViewModel : BaseViewModel {
 
-        public MainViewModel() {
-            MainHeight = 800;
-            MainWidth = 450;
-        }
-
         #region 用户数据
         [DoNotNotify]
         private string avatarPath;
@@ -96,43 +91,37 @@ namespace XStart2._0.ViewModels {
         public string OperateMsg { get; private set; }
 
         private void ChangeIconSize() {
-            if (Config.Configs.inited) {
-                foreach (var type in XStartService.TypeDic) {
-                    foreach (var column in type.Value.ColumnDic) {
-                        if (null == column.Value.IconSize) {
-                            // 非自定义的栏目才修改图标大小
-                            foreach (var project in column.Value.ProjectDic) {
-                                project.Value.IconSize = IconSize;
-                            }
-                        }
-                    }
-                }
-            }
+            ChangeProject(nameof(IconSize));
         }
 
         private void ChangeColumnOrientation() {
-            if (Config.Configs.inited) {
-                foreach (var type in XStartService.TypeDic) {
-                    foreach (var column in type.Value.ColumnDic) {
-                        if (string.IsNullOrEmpty(column.Value.Orientation)) {
-                            // 非自定义的栏目才修改图标大小
-                            foreach (var project in column.Value.ProjectDic) {
-                                project.Value.Orientation = Orientation;
-                            }
-                        }
-                    }
-                }
-            }
+            ChangeProject(nameof(Orientation));
         }
 
         private void ChangeProjectHideTitle() {
+            ChangeProject(nameof(HideTitle));
+        }
+
+        private void ChangeProject(string field) {
             if (Config.Configs.inited) {
                 foreach (var type in XStartService.TypeDic) {
                     foreach (var column in type.Value.ColumnDic) {
-                        if (null == column.Value.HideTitle) {
-                            // 非自定义的栏目才重置是否显示标题
+                        bool isChange = false;
+                        if ((nameof(IconSize).Equals(field) && null == column.Value.IconSize) 
+                            || (nameof(Orientation).Equals(field) && string.IsNullOrEmpty(column.Value.Orientation)) 
+                            || (nameof(HideTitle).Equals(field) && null == column.Value.HideTitle)) {
+                            // 非自定义的栏目才修改
+                            isChange = true;
+                        }
+                        if (isChange) {
                             foreach (var project in column.Value.ProjectDic) {
-                                project.Value.HideTitle = HideTitle;
+                                if (nameof(IconSize).Equals(field)) {
+                                    project.Value.IconSize = IconSize;
+                                }else if (nameof(Orientation).Equals(field)) {
+                                    project.Value.Orientation = Orientation;
+                                } else if (nameof(HideTitle).Equals(field)) {
+                                    project.Value.HideTitle = HideTitle;
+                                }
                             }
                         }
                     }
