@@ -200,7 +200,7 @@
                             </ComboBox>
                             <TextBlock Grid.Row="1" Grid.Column="0" Text="Url" Style="{StaticResource FormLabel_Style}" Foreground="Red"/>
                             <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding WeatherApiUrl}" Style="{StaticResource FormValue_Style}"/>
-                            <TextBlock Grid.Row="1" Grid.Column="5" Text="去注册" Style="{StaticResource FormLabel_Style}" VerticalAlignment="Center" HorizontalAlignment="Center" Cursor="Hand" Foreground="Blue" MouseLeftButtonUp="GoRegesit_MouseLeftButtonUp"/>
+                            <TextBlock Grid.Row="1" Grid.Column="5" Text="去注册" Style="{StaticResource WeatherRegister_Style}" MouseLeftButtonUp="GoRegesit_MouseLeftButtonUp"/>
                             <Border Grid.Row="2" Grid.ColumnSpan="6" Margin="10" BorderThickness="1" BorderBrush="Gray" CornerRadius="5">
                                 <ItemsControl ItemsSource="{Binding ThemePngs}">
                                     <ItemsControl.ItemsPanel>

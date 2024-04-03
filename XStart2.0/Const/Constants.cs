@@ -132,7 +132,7 @@
         public const string WEATHER_IMG_THEME_DEFAULT = "yikeyun";// 默认天气主题是易客云自已的
         public const string WEATHER_IMG_THEME_GIF = "gif";
         public const string WEATHER_API_URL = "http://v1.yiketianqi.com";// API地址
-        public const string WEATHER_REGISTER_URL = "https://tianqiapi.com/user/register";// api注册地址
+        public const string WEATHER_REGISTER_URL = "http://www.tianqiapi.com/user/register";// api注册地址
 
         public const string WINDOW_THEME_BLUE = "blue";
         public const string WINDOW_THEME_GREEN = "green";

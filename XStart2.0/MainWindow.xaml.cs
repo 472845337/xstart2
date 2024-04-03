@@ -1427,8 +1427,8 @@ namespace XStart2._0 {
         /// <param name="e"></param>
         public void AutoHideTimer_Tick(object sender, EventArgs e) {
             Point toPoint = new Point(Left, Top);
-            double mouseDistance = 2;// 鼠标在边界距离多远范围
-            double resumeSize = 5;// 隐藏后剩余出来的边界大小
+            double mouseDistance = 1;// 鼠标在边界距离多远范围
+            double resumeSize = 1;// 隐藏后剩余出来的边界大小
             DllUtils.Point curPoint = new DllUtils.Point();
             DllUtils.GetCursorPos(ref curPoint); //获取鼠标相对桌面的位置
             bool isMouseEnter = curPoint.X >= Left - mouseDistance
@@ -1437,16 +1437,16 @@ namespace XStart2._0 {
                                && curPoint.Y <= Top + Height + mouseDistance;
             switch (stopAnchor) {
                 case System.Windows.Forms.AnchorStyles.Top:
-                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - resumeSize));
+                    toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - resumeSize));
                     break;
                 case System.Windows.Forms.AnchorStyles.Left:
-                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - resumeSize), Top);
+                    toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - resumeSize), Top);
                     break;
                 case System.Windows.Forms.AnchorStyles.Right:
-                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - Width, Top) : new Point(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - resumeSize, Top);
+                    toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - Width, Top) : new Point(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - resumeSize, Top);
                     break;
                 case System.Windows.Forms.AnchorStyles.Bottom:
-                    toPoint = IsAllShow || !Configs.closeBorderHide || isMouseEnter ? new Point(Left, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - Height) : new Point(Left, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - resumeSize);
+                    toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - Height) : new Point(Left, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - resumeSize);
                     break;
             }
             if (isMouseEnter) {
