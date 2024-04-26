@@ -23,13 +23,16 @@ namespace XStart2._0.Windows {
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-            // 关闭所有连接
             var rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
-            foreach (System.Windows.Forms.TabPage tabPage in rdpTabControl.TabPages) {
-                var rdpScript = (AxMSTSCLib.AxMsTscAxNotSafeForScripting)tabPage.Controls[0];
-                DisconnectRdp(rdpScript);
+            if (rdpTabControl.TabPages.Count > 0) {
+                if(MessageBoxResult.OK == MessageBox.Show("当前存在远程连接，确认关闭吗？", Const.Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                    // 关闭所有连接
+                    CloseAllRdp();
+                } else {
+                    e.Cancel = true;
+                    return;
+                }
             }
-            rdpTabControl.TabPages.Clear();
             if (RealClose) {
                 e.Cancel = false;
             } else {
@@ -96,7 +99,9 @@ namespace XStart2._0.Windows {
                     rdpScript.UserName = newRdp.Account;
                     rdpScript.ConnectingText = $"正在连接{newRdp.Title}...";
                     IMsRdpClientAdvancedSettings7 iClientSetting = (IMsRdpClientAdvancedSettings7)rdpScript.AdvancedSettings;
-                    iClientSetting.RDPPort = newRdp.Port;
+                    if (newRdp.Port > 0) {
+                        iClientSetting.RDPPort = newRdp.Port;
+                    }
                     iClientSetting.ClearTextPassword = newRdp.Password;
                     rdpScript.Connect();
                 } catch (Exception Ex) {
@@ -137,7 +142,7 @@ namespace XStart2._0.Windows {
         }
 
         private void Disconnect_Click(object sender, EventArgs e) {
-            if(MessageBoxResult.OK == MessageBox.Show("确认关闭所有连接吗?" , Const.Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)){
+            if(MessageBoxResult.OK == MessageBox.Show("确认关闭连接吗?" , Const.Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)){
                 System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
                 if (rdpTabControl.SelectedIndex >= 0) {
                     CloseRdpAndPage(rdpTabControl, rdpTabControl.SelectedTab);
@@ -146,12 +151,9 @@ namespace XStart2._0.Windows {
         }
 
         private void CloseAll_Click(object sender, EventArgs e) {
-            System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
-            foreach (System.Windows.Forms.TabPage tabPage in rdpTabControl.TabPages) {
-                var rdpScript = (AxMSTSCLib.AxMsTscAxNotSafeForScripting)tabPage.Controls[0];
-                DisconnectRdp(rdpScript);
+            if (MessageBoxResult.OK == MessageBox.Show("确认关闭所有连接吗?", Const.Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                CloseAllRdp();
             }
-            rdpTabControl.TabPages.Clear();
         }
 
         private void DisconnectRdp(AxMSTSCLib.AxMsTscAxNotSafeForScripting rdpScript) {
@@ -249,6 +251,15 @@ namespace XStart2._0.Windows {
                 var tabPage = rdpTabControl.SelectedTab;
                 CloseRdpAndPage(rdpTabControl, tabPage);
             }
+        }
+
+        private void CloseAllRdp() {
+            System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
+            foreach (System.Windows.Forms.TabPage tabPage in rdpTabControl.TabPages) {
+                var rdpScript = (AxMSTSCLib.AxMsTscAxNotSafeForScripting)tabPage.Controls[0];
+                DisconnectRdp(rdpScript);
+            }
+            rdpTabControl.TabPages.Clear();
         }
 
         private void CloseRdpAndPage(System.Windows.Forms.TabControl tabControl, System.Windows.Forms.TabPage tabPage) {
