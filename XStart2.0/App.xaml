@@ -20,6 +20,7 @@
             <con:Project2IconConverter x:Key="Project2IconConverter"/>
             <con:ProjectAutoRunConverter x:Key="ProjectAutoRunConverter"/>
             <con:ClickTypeConverter x:Key="ClickTypeConverter"/>
+            <con:RdpModelConverter x:Key="RdpModelConverter"/>
             <con:UrlOpenConverter x:Key="UrlOpenConverter"/>
             <con:ProjectCanAutoRunConverter x:Key="ProjectCanAutoRunConverter"/>
             <con:ProjectAutoRunToolTipConverter x:Key="ProjectAutoRunToolTipConverter"/>

@@ -9,6 +9,9 @@
         public const string CLICK_TYPE_SINGLE = "1";// 单击
         public const string CLICK_TYPE_DOUBLE = "2";// 双击
 
+        public const string RDP_MODEL_SYSTEM = "1";// 系统远程方式
+        public const string RDP_MODEL_CUSTOM = "2";// 个性远程方式
+
         public const string APP_ICON = "Files/Icons/xstart2.ico";
         public const string ABOUT_FILE = "Files/Doc/about.txt";
         public const string AUDIO_CHANGE = "Files/Audio/Change.wav";
@@ -29,6 +32,7 @@
         public const string KEY_USER_NICKNAME = "NickName";
         public const string KEY_TYPE_TAB_EXPAND = "TypeTabExpand";
         public const string KEY_CLICK_TYPE = "ClickType";
+        public const string KEY_RDP_MODEL = "RdpModel";
         public const string KEY_TOP_MOST = "TopMost";
         public const string KEY_AUDIO = "Audio";
         public const string KEY_AUTO_RUN = "AutoRun";

@@ -2,10 +2,11 @@
 
 namespace XStart2._0.Commands {
     public class ResumeCommand {
-        public static void ShowResumeWindow() {
+        public static bool? ShowResumeWindow() {
             ResumeWindow resumeWindow = new ResumeWindow();
-            resumeWindow.ShowDialog();
+            bool? result = resumeWindow.ShowDialog();
             resumeWindow.Close();
+            return result;
         }
     }
 }

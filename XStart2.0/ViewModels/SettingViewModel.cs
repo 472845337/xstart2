@@ -13,6 +13,7 @@ namespace XStart2._0.ViewModels {
         public bool ExitWarn { get; set; }
         public bool CloseBorderHide { get; set; }
         public string ClickType { get; set; }
+        public string RdpModel { get; set; }
         public string UrlOpen { get; set; }
         public string UrlOpenCustomBrowser { get; set; }
         [OnChangedMethod(nameof(GetIcon))]

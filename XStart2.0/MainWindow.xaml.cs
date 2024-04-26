@@ -110,6 +110,7 @@ namespace XStart2._0 {
             string topMostStr = iniData[Constants.SECTION_CONFIG][Constants.KEY_TOP_MOST];
             string openType = iniData[Constants.SECTION_CONFIG][Constants.KEY_OPEN_TYPE];// 上次最后打开的类别
             string clickType = iniData[Constants.SECTION_CONFIG][Constants.KEY_CLICK_TYPE];// 点击方式，单击、双击
+            string rdpModel = iniData[Constants.SECTION_CONFIG][Constants.KEY_RDP_MODEL];
             string audio = iniData[Constants.SECTION_CONFIG][Constants.KEY_AUDIO];
             string autoRun = iniData[Constants.SECTION_CONFIG][Constants.KEY_AUTO_RUN];
             string exitWarn = iniData[Constants.SECTION_CONFIG][Constants.KEY_EXIT_WARN];
@@ -125,6 +126,7 @@ namespace XStart2._0 {
             Configs.topMost = !string.IsNullOrEmpty(topMostStr) && Convert.ToBoolean(topMostStr);
             Configs.openType = openType;
             Configs.clickType = string.IsNullOrEmpty(clickType) ? Constants.CLICK_TYPE_SINGLE : clickType;
+            Configs.rdpModel = string.IsNullOrEmpty(rdpModel) ? Constants.RDP_MODEL_CUSTOM : rdpModel;
             Configs.audio = !string.IsNullOrEmpty(audio) && Convert.ToBoolean(audio);
             Configs.autoRun = !string.IsNullOrEmpty(autoRun) && Convert.ToBoolean(autoRun);
             Configs.exitWarn = string.IsNullOrEmpty(exitWarn) || Convert.ToBoolean(exitWarn);
@@ -141,6 +143,7 @@ namespace XStart2._0 {
             mainViewModel.TopMost = Configs.topMost;
             mainViewModel.OpenType = Configs.openType;
             mainViewModel.ClickType = Configs.clickType;
+            mainViewModel.RdpModel = Configs.rdpModel;
             mainViewModel.Audio = Configs.audio;
             mainViewModel.AutoRun = Configs.autoRun;
             mainViewModel.ExitWarn = Configs.exitWarn;
@@ -399,6 +402,9 @@ namespace XStart2._0 {
                 // 取消退出
                 e.Cancel = true;
             } else {
+                // 子窗口退出
+                mstscWindow.RealClose = true;
+                mstscWindow.Close();
                 // 退出时回收相关资源
                 Configs.Dispose();
                 AudioUtils.Dispose();
@@ -584,6 +590,7 @@ namespace XStart2._0 {
                 mainViewModel.ExitWarn = settingVM.ExitWarn;
                 mainViewModel.CloseBorderHide = settingVM.CloseBorderHide;
                 mainViewModel.ClickType = settingVM.ClickType;
+                mainViewModel.RdpModel = settingVM.RdpModel;
                 mainViewModel.UrlOpen = settingVM.UrlOpen;
                 mainViewModel.UrlOpenCustomBrowser = settingVM.UrlOpenCustomBrowser;
                 mainViewModel.IconSize = settingVM.IconSize;
@@ -1105,6 +1112,12 @@ namespace XStart2._0 {
             }
             e.Handled = true;
         }
+
+        private void AppRun_Click(object sender, RoutedEventArgs e) {
+            Project project = GetProjectByMenu(sender);
+            ExecuteProject(project);
+        }
+
         // 编辑项目
         private void EditProject_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
@@ -1165,11 +1178,16 @@ namespace XStart2._0 {
                     }
                 }
                 #endregion
-                // 执行该应用
-                string result = ProjectUtils.ExecuteApp(project);
-                if (!string.IsNullOrEmpty(result)) {
-                    NotifyUtils.ShowNotification(result);
+                // 执行该应用 远程桌面特殊处理
+                if (Constants.RDP_MODEL_CUSTOM.Equals(mainViewModel.RdpModel) && Project.KIND_SYSTEM.Equals(project.Kind) && SystemProjectParam.MSTSC.Equals(project.Path)) {
+                    OpenNewMstsc(project);
+                } else {
+                    string result = ProjectUtils.ExecuteApp(project);
+                    if (!string.IsNullOrEmpty(result)) {
+                        NotifyUtils.ShowNotification(result);
+                    }
                 }
+
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message, Constants.MESSAGE_BOX_TITLE_ERROR);
             }
@@ -1296,6 +1314,7 @@ namespace XStart2._0 {
                 mainViewModel.TopMost = false;
                 mainViewModel.Audio = true;
                 mainViewModel.ClickType = Constants.CLICK_TYPE_SINGLE;
+                mainViewModel.RdpModel = Constants.RDP_MODEL_CUSTOM;
                 mainViewModel.CloseBorderHide = false;
                 mainViewModel.AutoRun = true;
                 mainViewModel.ExitWarn = true;
@@ -1385,6 +1404,7 @@ namespace XStart2._0 {
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_TYPE_TAB_EXPAND, ref Configs.typeTabExpand, mainViewModel.TypeTabExpanded);// 类别标题是否展开
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST, ref Configs.topMost, mainViewModel.TopMost);// 置顶
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_CLICK_TYPE, ref Configs.clickType, mainViewModel.ClickType);// 点击方式
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_RDP_MODEL, ref Configs.rdpModel, mainViewModel.RdpModel);// 远程方式
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_AUDIO, ref Configs.audio, mainViewModel.Audio);// 音效开关
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_AUTO_RUN, ref Configs.autoRun, mainViewModel.AutoRun);// 自启动
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_EXIT_WARN, ref Configs.exitWarn, mainViewModel.ExitWarn);// 退出警告
@@ -1581,8 +1601,11 @@ namespace XStart2._0 {
         /// <param name="e"></param>
         private void Recover_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
-            ResumeCommand.ShowResumeWindow();
+            bool? resumeResult = ResumeCommand.ShowResumeWindow();
             OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
+            if (null != resumeResult && (bool)resumeResult) {
+                CalculateWidthHeight();
+            }
         }
         private void Property_Click(object sender, RoutedEventArgs e) {
             Project project = GetProjectByMenu(sender);
@@ -1872,6 +1895,18 @@ namespace XStart2._0 {
             } else {
                 return brush.Color.ToString();
             }
+        }
+        MstscManagerWindow mstscWindow = new MstscManagerWindow();
+        private void OpenNewMstsc(Project project) {
+            mstscWindow.Show();
+            string arguments = project.Arguments;
+            if (string.IsNullOrEmpty(arguments)) {
+                MessageBox.Show("远程参数不能为空！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                return;
+            }
+            string[] argumentArray = arguments.Split(Constants.SPLIT_CHAR);
+
+            mstscWindow.AddRdp(project.Section, project.Name, argumentArray[0], string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]), argumentArray[2], argumentArray[3]);
         }
     }
 }

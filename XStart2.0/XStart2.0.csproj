@@ -56,11 +56,18 @@
     <ApplicationIcon>Files\Icons\xstart2.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AxInterop.MSTSCLib">
+      <HintPath>.\AxInterop.MSTSCLib.dll</HintPath>
+    </Reference>
     <Reference Include="CliWrap, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CliWrap.2.5.0\lib\net45\CliWrap.dll</HintPath>
     </Reference>
     <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <HintPath>..\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.MSTSCLib">
+      <HintPath>.\Interop.MSTSCLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
@@ -93,9 +100,11 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
     <Reference Include="WpfAnimatedGif, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7cd3b544a090dc, processorArchitecture=MSIL">
       <HintPath>..\packages\WpfAnimatedGif.2.0.2\lib\net40\WpfAnimatedGif.dll</HintPath>
     </Reference>
@@ -105,6 +114,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Bean\Rdp.cs" />
     <Compile Include="Bean\Weather\CityBean.cs" />
     <Compile Include="Bean\FontAwesome.cs" />
     <Compile Include="Bean\CopyProject.cs" />
@@ -118,6 +128,7 @@
     <Compile Include="Commands\ResumeCommand.cs" />
     <Compile Include="Converters\BaseMultiValueConverter.cs" />
     <Compile Include="Converters\BaseValueConverter.cs" />
+    <Compile Include="Converters\RdpModelConverter.cs" />
     <Compile Include="Converters\ProjectKind2EnabledConverter.cs" />
     <Compile Include="Converters\Boolean2IsCheckedConverter.cs" />
     <Compile Include="Converters\HideTitle2VisibilityConverter.cs" />
@@ -212,6 +223,9 @@
     <Compile Include="Windows\AutoRunWindow.xaml.cs">
       <DependentUpon>AutoRunWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\MstscManagerWindow.xaml.cs">
+      <DependentUpon>MstscManagerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ThemeWindow.xaml.cs">
       <DependentUpon>ThemeWindow.xaml</DependentUpon>
     </Compile>
@@ -301,6 +315,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\AutoRunWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MstscManagerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

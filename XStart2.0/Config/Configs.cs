@@ -31,6 +31,7 @@ namespace XStart2._0.Config {
         public static bool autoRun;// 随系统启动
         public static string openType = null;// 启动后打开的类别
         public static string clickType = Constants.CLICK_TYPE_SINGLE;// 默认单击
+        public static string rdpModel;// 远程方式
         public static bool closeBorderHide = true;// 靠边自动隐藏
         public static string urlOpen = Constants.URL_OPEN_DEFAULT;
         public static string urlOpenCustomBrowser;

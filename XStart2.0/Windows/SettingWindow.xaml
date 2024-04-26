@@ -67,12 +67,15 @@
                         <StackPanel>
                             <Grid Margin="5">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="14"/>
-                                    <ColumnDefinition Width="47"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="80"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="运行方式:" HorizontalAlignment="Right" Grid.ColumnSpan="2"/>
-                                <view:SliderButton Grid.Column="2" OnLabel="单击" OffLabel="双击" Width="65" ButtonWidth="25" IsChecked="{Binding ClickType,Converter={StaticResource ClickTypeConverter},Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center" Margin="8,0"/>
+                                <Label Grid.Column="0" Content="运行方式:" HorizontalAlignment="Right"/>
+                                <view:SliderButton Grid.Column="1" OnLabel="单击" OffLabel="双击" Width="65" ButtonWidth="25" IsChecked="{Binding ClickType,Converter={StaticResource ClickTypeConverter},Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center" Margin="8,0"/>
+                                <Label Grid.Column="2" Content="远程桌面:" HorizontalAlignment="Right"/>
+                                <view:SliderButton Grid.Column="3" OnLabel="个性" OffLabel="系统" Width="65" ButtonWidth="25" IsChecked="{Binding RdpModel,Converter={StaticResource RdpModelConverter},Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center" Margin="8,0"/>
                             </Grid>
                             <GroupBox Header="打开链接" Margin="5">
                                 <StackPanel>

@@ -258,6 +258,7 @@
                             <Setter TargetName="BackgroundLayer" Property="Fill" Value="Gray"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
                             <Setter TargetName="RefractionLayer" Property="Fill">
                                 <Setter.Value>
                                     <RadialGradientBrush GradientOrigin="0.496,1.052">

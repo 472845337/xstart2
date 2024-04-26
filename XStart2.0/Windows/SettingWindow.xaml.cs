@@ -21,6 +21,7 @@ namespace XStart2._0.Windows {
             settingVM.ExitWarn = mainVm.ExitWarn;
             settingVM.CloseBorderHide = mainVm.CloseBorderHide;
             settingVM.ClickType = mainVm.ClickType;
+            settingVM.RdpModel = mainVm.RdpModel;
             settingVM.UrlOpen = mainVm.UrlOpen;
             settingVM.UrlOpenCustomBrowser = mainVm.UrlOpenCustomBrowser;
             settingVM.IconSize = mainVm.IconSize;

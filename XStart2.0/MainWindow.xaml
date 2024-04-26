@@ -221,7 +221,7 @@
                                 <ContextMenu>
                                     <MenuItem Header="添加栏目" Click="AddColumn_Click">
                                         <MenuItem.Icon>
-                                            <Image Source="/Files/Icons/App/add.ico"/>
+                                            <Image Source="pack://application:,,,/Files/Icons/App/add.ico"/>
                                         </MenuItem.Icon>
                                     </MenuItem>
                                 </ContextMenu>
@@ -347,6 +347,12 @@
                                                                                      Width="{Binding Value, Converter={StaticResource ProjectWidthConverter}}" Orientation="{Binding Value.Orientation}" HideTitle="{Binding Value.HideTitle}">
                                                                         <Button.ContextMenu>
                                                                             <ContextMenu>
+                                                                                <MenuItem Header="运行" Click="AppRun_Click">
+                                                                                    <MenuItem.Icon>
+                                                                                        <Image Source="/Files/Icons/App/run.ico"/>
+                                                                                    </MenuItem.Icon>
+                                                                                </MenuItem>
+                                                                                <Separator/>
                                                                                 <MenuItem Header="添加项目" Click="AddProject_Click">
                                                                                     <MenuItem.Icon>
                                                                                         <Image Source="/Files/Icons/App/add.ico"/>
