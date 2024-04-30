@@ -181,20 +181,63 @@ namespace XStart2._0 {
             #endregion
 
             #region 天气参数配置
-            string weatherUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_URL];
+            string weatherApi = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_API];
             string weatherImgTheme = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_IMG_THEME];
-
-            Configs.weatherApiAppId = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_APP_ID];
-            Configs.weatherApiAppSecret = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_APP_SECRET];
-            Configs.weatherApiUrl = weatherUrl ?? Constants.WEATHER_API_URL;
+            Configs.weatherApi = weatherApi ?? Constants.WEATHER_API_GAODE;
             Configs.weatherImgTheme = weatherImgTheme ?? Constants.WEATHER_IMG_THEME_DEFAULT;
+            mainViewModel.WeatherApi = Configs.weatherApi;
+            mainViewModel.WeatherImgTheme = Configs.weatherImgTheme;
             Configs.lastWeacherCountry = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_COUNTRY];
             Configs.lastCountries = iniData[Constants.SECTION_WEATHER][Constants.KEY_LAST_CITYS];
-
-            mainViewModel.WeatherApiAppId = Configs.weatherApiAppId;
-            mainViewModel.WeatherApiAppSecret = Configs.weatherApiAppSecret;
-            mainViewModel.WeatherApiUrl = Configs.weatherApiUrl;
-            mainViewModel.WeatherImgTheme = Configs.weatherImgTheme;
+            #region 易客云
+            string weatherYkyUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_YKY_URL];
+            Configs.weatherYkyApiAppId = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_YKY_APP_ID];
+            Configs.weatherYkyApiAppSecret = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_YKY_APP_SECRET];
+            Configs.weatherYkyApiUrl = weatherYkyUrl ?? Constants.WEATHER_YKY_API_URL;
+            mainViewModel.WeatherYkyApiAppId = Configs.weatherYkyApiAppId;
+            mainViewModel.WeatherYkyApiAppSecret = Configs.weatherYkyApiAppSecret;
+            mainViewModel.WeatherYkyApiUrl = Configs.weatherYkyApiUrl;
+            #endregion
+            #region 高德
+            string gaodeApiUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_GAODE_URL];
+            string gaodeAppKey = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_GAODE_APP_KEY];
+            Configs.weatherGaodeApiUrl = gaodeApiUrl??Constants.WEATHER_GAODE_API_URL;
+            Configs.weatherGaodeAppKey = gaodeAppKey;
+            mainViewModel.WeatherGaodeApiUrl = Configs.weatherGaodeApiUrl;
+            mainViewModel.WeatherGaodeAppKey = Configs.weatherGaodeAppKey;
+            #endregion
+            #region 心知
+            string seniverseApiUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_SENIVERSE_URL];
+            string seniverseAppKey = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_SENIVERSE_APP_KEY];
+            Configs.weatherSeniverseApiUrl = seniverseApiUrl ?? Constants.WEATHER_SENIVERSE_API_URL;
+            Configs.weatherSeniverseAppKey = seniverseAppKey;
+            mainViewModel.WeatherSeniverseApiUrl = Configs.weatherSeniverseApiUrl;
+            mainViewModel.WeatherSeniverseAppKey = Configs.weatherSeniverseAppKey;
+            #endregion
+            #region 和风
+            string qApiUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_Q_URL];
+            string qAppKey = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_Q_APP_KEY];
+            Configs.weatherQApiUrl = qApiUrl ?? Constants.WEATHER_Q_API_URL;
+            Configs.weatherQAppKey = qAppKey;
+            mainViewModel.WeatherQApiUrl = Configs.weatherQApiUrl;
+            mainViewModel.WeatherQAppKey = Configs.weatherQAppKey;
+            #endregion
+            #region OpenWeather
+            string openApiUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_OPEN_URL];
+            string openAppKey = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_OPEN_APP_KEY];
+            Configs.weatherOpenApiUrl = openApiUrl ?? Constants.WEATHER_OPEN_API_URL;
+            Configs.weatherOpenAppKey = openAppKey;
+            mainViewModel.WeatherOpenApiUrl = Configs.weatherOpenApiUrl;
+            mainViewModel.WeatherOpenAppKey = Configs.weatherOpenAppKey;
+            #endregion
+            #region AccuWeather
+            string accuApiUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_ACCU_URL];
+            string accuAppKey = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_ACCU_APP_KEY];
+            Configs.weatherAccuApiUrl = accuApiUrl ?? Constants.WEATHER_ACCU_API_URL;
+            Configs.weatherAccuAppKey = accuAppKey;
+            mainViewModel.WeatherAccuApiUrl = Configs.weatherAccuApiUrl;
+            mainViewModel.WeatherAccuAppKey = Configs.weatherAccuAppKey;
+            #endregion
             #endregion
             #region 加载数据
             // 加载类别配置
@@ -600,10 +643,33 @@ namespace XStart2._0 {
                     changeOneLineMulti = true;
                     mainViewModel.OneLineMulti = settingVM.OneLineMulti;
                 }
-                mainViewModel.WeatherApiAppId = settingVM.WeatherApiAppId;
-                mainViewModel.WeatherApiAppSecret = settingVM.WeatherApiAppSecret;
-                mainViewModel.WeatherApiUrl = settingVM.WeatherApiUrl;
+                mainViewModel.WeatherApi = settingVM.WeatherApi;
                 mainViewModel.WeatherImgTheme = settingVM.WeatherImgTheme;
+                #region 易客云
+                mainViewModel.WeatherYkyApiAppId = settingVM.WeatherYkyApiAppId;
+                mainViewModel.WeatherYkyApiAppSecret = settingVM.WeatherYkyApiAppSecret;
+                mainViewModel.WeatherYkyApiUrl = settingVM.WeatherYkyApiUrl;
+                #endregion
+                #region 高德
+                mainViewModel.WeatherGaodeApiUrl = settingVM.WeatherGaodeApiUrl;
+                mainViewModel.WeatherGaodeAppKey = settingVM.WeatherGaodeAppKey;
+                #endregion
+                #region 心知
+                mainViewModel.WeatherSeniverseApiUrl = settingVM.WeatherSeniverseApiUrl;
+                mainViewModel.WeatherSeniverseAppKey = settingVM.WeatherSeniverseAppKey;
+                #endregion
+                #region 和风
+                mainViewModel.WeatherQApiUrl = settingVM.WeatherQApiUrl;
+                mainViewModel.WeatherQAppKey = settingVM.WeatherQAppKey;
+                #endregion
+                #region OpenWeather
+                mainViewModel.WeatherOpenApiUrl = settingVM.WeatherOpenApiUrl;
+                mainViewModel.WeatherOpenAppKey = settingVM.WeatherOpenAppKey;
+                #endregion
+                #region AccuWeather
+                mainViewModel.WeatherAccuApiUrl = settingVM.WeatherAccuApiUrl;
+                mainViewModel.WeatherAccuAppKey = settingVM.WeatherAccuAppKey;
+                #endregion
                 SaveSetting();
             }
             // 导入时的数据处理，在导入数据后，新添加的Type需要计算相关的尺寸信息
@@ -1323,8 +1389,14 @@ namespace XStart2._0 {
                 mainViewModel.HideTitle = false;
                 mainViewModel.OneLineMulti = false;
                 mainViewModel.Orientation = Constants.ORIENTATION_HORIZONTAL;
+                mainViewModel.WeatherApi = Constants.WEATHER_API_GAODE;
                 mainViewModel.WeatherImgTheme = Constants.WEATHER_IMG_THEME_DEFAULT;
-                mainViewModel.WeatherApiUrl = Constants.WEATHER_API_URL;
+                mainViewModel.WeatherYkyApiUrl = Constants.WEATHER_YKY_API_URL;
+                mainViewModel.WeatherGaodeApiUrl = Constants.WEATHER_GAODE_API_URL;
+                mainViewModel.WeatherSeniverseApiUrl = Constants.WEATHER_SENIVERSE_API_URL;
+                mainViewModel.WeatherQApiUrl = Constants.WEATHER_Q_API_URL;
+                mainViewModel.WeatherOpenApiUrl = Constants.WEATHER_OPEN_API_URL;
+                mainViewModel.WeatherAccuApiUrl = Constants.WEATHER_ACCU_API_URL;
                 WindowTheme.Instance.ThemeName = Constants.WINDOW_THEME_BLUE;
             }
             e.Handled = true;
@@ -1418,10 +1490,33 @@ namespace XStart2._0 {
             #endregion
 
             #region 天气配置
-            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_APP_ID, ref Configs.weatherApiAppId, mainViewModel.WeatherApiAppId);// 接口Appid
-            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_APP_SECRET, ref Configs.weatherApiAppSecret, mainViewModel.WeatherApiAppSecret);// 接口AppSecret
-            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_URL, ref Configs.weatherApiUrl, mainViewModel.WeatherApiUrl);// 接口URL
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_API, ref Configs.weatherApi, mainViewModel.WeatherApi);// API对接方
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_IMG_THEME, ref Configs.weatherImgTheme, mainViewModel.WeatherImgTheme);// 图片主题
+            #region 易客云
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_YKY_APP_ID, ref Configs.weatherYkyApiAppId, mainViewModel.WeatherYkyApiAppId);// 接口Appid
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_YKY_APP_SECRET, ref Configs.weatherYkyApiAppSecret, mainViewModel.WeatherYkyApiAppSecret);// 接口AppSecret
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_YKY_URL, ref Configs.weatherYkyApiUrl, mainViewModel.WeatherYkyApiUrl);// 接口URL
+            #endregion
+            #region 高德
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_GAODE_URL, ref Configs.weatherGaodeApiUrl, mainViewModel.WeatherGaodeApiUrl);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_GAODE_APP_KEY, ref Configs.weatherGaodeAppKey, mainViewModel.WeatherGaodeAppKey);
+            #endregion
+            #region 心知
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_SENIVERSE_URL, ref Configs.weatherSeniverseApiUrl, mainViewModel.WeatherSeniverseApiUrl);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_SENIVERSE_APP_KEY, ref Configs.weatherSeniverseAppKey, mainViewModel.WeatherSeniverseAppKey);
+            #endregion
+            #region 和风
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_Q_URL, ref Configs.weatherQApiUrl, mainViewModel.WeatherQApiUrl);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_Q_APP_KEY, ref Configs.weatherQAppKey, mainViewModel.WeatherQAppKey);
+            #endregion
+            #region OpenWeather
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_OPEN_URL, ref Configs.weatherOpenApiUrl, mainViewModel.WeatherOpenApiUrl);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_OPEN_APP_KEY, ref Configs.weatherOpenAppKey, mainViewModel.WeatherOpenAppKey);
+            #endregion
+            #region AccuWeather
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_ACCU_URL, ref Configs.weatherAccuApiUrl, mainViewModel.WeatherAccuApiUrl);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_ACCU_APP_KEY, ref Configs.weatherAccuAppKey, mainViewModel.WeatherAccuAppKey);
+            #endregion
             #endregion
 
             IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
@@ -1820,12 +1915,25 @@ namespace XStart2._0 {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Weather_Click(object sender, RoutedEventArgs e) {
-            if (string.IsNullOrEmpty(Configs.weatherApiAppId) || string.IsNullOrEmpty(Configs.weatherApiAppSecret)) {
-                if (MessageBoxResult.OK == MessageBox.Show("天气API参数未配置，是否立即配置？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+            bool openWeatherWindow = false;
+            if ((string.IsNullOrEmpty(Configs.weatherYkyApiAppId) || string.IsNullOrEmpty(Configs.weatherYkyApiAppSecret))
+                && string.IsNullOrEmpty(Configs.weatherGaodeAppKey)
+                && string.IsNullOrEmpty(Configs.weatherSeniverseAppKey)
+                && string.IsNullOrEmpty(Configs.weatherQAppKey)
+                && string.IsNullOrEmpty(Configs.weatherOpenAppKey)
+                && string.IsNullOrEmpty(Configs.weatherAccuAppKey)) {
+                MessageBoxResult result = MessageBox.Show("天气API参数未配置，是否立即配置？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.YesNoCancel);
+                if (MessageBoxResult.Yes == result) {
                     // 打开设置
                     OpenSettingWindow(2);
+                } else if (MessageBoxResult.No == result) {
+                    // 打开窗口
+                    openWeatherWindow = true;
                 }
             } else {
+                openWeatherWindow = true;
+            }
+            if (openWeatherWindow) {
                 if (Configs.WeatherHandler.ToInt32() > 0) {
                     // 打开当前窗口
                     DllUtils.SwitchToThisWindow(Configs.WeatherHandler, true);

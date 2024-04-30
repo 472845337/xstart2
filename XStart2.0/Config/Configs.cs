@@ -62,11 +62,34 @@ namespace XStart2._0.Config {
         public static string lastWeacherCountry;
 
         public static string lastCountries;
-        public static string weatherApiUrl;
-        public static string weatherApiAppId;
-        public static string weatherApiAppSecret;
+        public static string weatherApi;
         public static string weatherImgTheme;// 天气主题
 
+        #region 易客云
+        public static string weatherYkyApiUrl;
+        public static string weatherYkyApiAppId;
+        public static string weatherYkyApiAppSecret;
+        #endregion
+        #region 高德
+        public static string weatherGaodeApiUrl;
+        public static string weatherGaodeAppKey;
+        #endregion
+        #region 心知
+        public static string weatherSeniverseApiUrl;
+        public static string weatherSeniverseAppKey;
+        #endregion
+        #region 和风
+        public static string weatherQApiUrl;
+        public static string weatherQAppKey;
+        #endregion
+        #region OpenWeather
+        public static string weatherOpenApiUrl;
+        public static string weatherOpenAppKey;
+        #endregion
+        #region AccuWeather
+        public static string weatherAccuApiUrl;
+        public static string weatherAccuAppKey;
+        #endregion
         #endregion
 
         // 需要初始化，在窗口加载后

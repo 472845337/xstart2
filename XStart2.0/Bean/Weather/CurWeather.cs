@@ -59,5 +59,9 @@ namespace XStart2._0.Bean.Weather {
         public string Pressure { get; set; }// 气压
         [JsonProperty("humidity")]
         public string Humidity { get; set; }// 湿度
+        [JsonProperty("errcode")]
+        public int? ErrCode { get; set; }
+        [JsonProperty("errmsg")]
+        public string ErrMsg { get; set; }
     }
 }

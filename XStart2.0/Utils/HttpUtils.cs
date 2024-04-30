@@ -155,6 +155,34 @@ namespace XStart2._0.Utils {
             return responseFromServer;
         }
         /// <summary>
+        /// 和风天气请求
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="contentType"></param>
+        /// <returns></returns>
+        public static string GetQRequest(string url, string contentType) {
+            //定义request并设置request的路径
+            var request = HttpRequest(url, TypeGet, null, contentType, 5 * 1000);
+            //定义response为前面的request响应
+            HttpWebResponse response = null;
+            Stream dataStream = null;
+            string result = null;
+            try {
+                response = (HttpWebResponse)request.GetResponse();
+                //定义response字符流
+                dataStream = response.GetResponseStream();
+                // GZip解压
+                result = GZipUtil.DecompressStream(dataStream);
+            } catch (Exception e) {
+                throw e;
+            } finally {
+                //关闭资源
+                response?.Dispose();
+                dataStream?.Dispose();
+            }
+            return result;
+        }
+        /// <summary>
         /// 默认超时时间为15秒的同步Get请求
         /// </summary>
         /// <param name="url"></param>

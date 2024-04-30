@@ -133,8 +133,18 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <!-- 获取天气信息 -->
-                <Button HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Style="{StaticResource BtnConfirm_Style}" Margin="20 0 0 0" Content="查询天气" Click="GetWeather_Click" ToolTip="获取所选区县的天气"/>
+                <StackPanel Grid.Column="0">
+                    <!-- 获取天气信息 -->
+                    <Button HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource BtnConfirm_Style}" Margin="20 0 0 0" Content="查询天气" Click="GetWeather_Click" ToolTip="获取所选区县的天气"/>
+                    <ComboBox HorizontalAlignment="Left" Style="{StaticResource FormValue_Style}" Margin="20 5 0 0" SelectedValuePath="Content" SelectedValue="{Binding WeatherApi}" Width="80" SelectionChanged="ComboBox_SelectionChanged">
+                        <ComboBoxItem Content="易客云"/>
+                        <ComboBoxItem Content="高德"/>
+                        <ComboBoxItem Content="心知"/>
+                        <ComboBoxItem Content="和风"/>
+                        <ComboBoxItem Content="OpenWeather"/>
+                        <ComboBoxItem Content="AccuWeather"/>
+                    </ComboBox>
+                </StackPanel>
                 <StackPanel Grid.Column="1">
                     <TextBlock Text="{Binding CurWeather.City}" FontSize="28" Margin="0 5 0 0" HorizontalAlignment="Center"/>
                     <TextBlock FontSize="24" HorizontalAlignment="Center">
@@ -196,7 +206,7 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0">
                     <Run Text="&#xf073;" FontFamily="{StaticResource FontAwesome4}" FontSize="18" Foreground="RoyalBlue"/>
-                    <Run Text="7日天气预报"/>
+                    <Run Text="未来天气预报"/>
                 </TextBlock>
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding DayWeather.Data}" Margin="5">

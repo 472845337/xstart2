@@ -115,14 +115,30 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bean\Rdp.cs" />
+    <Compile Include="Bean\Weather\Accu\AccuCurrentConditions.cs" />
+    <Compile Include="Bean\Weather\Accu\AccuForecasts.cs" />
+    <Compile Include="Bean\Weather\Accu\AccuGeoPositionSearch.cs" />
+    <Compile Include="Bean\Weather\Accu\AccuWeather.cs" />
     <Compile Include="Bean\Weather\CityBean.cs" />
     <Compile Include="Bean\FontAwesome.cs" />
     <Compile Include="Bean\CopyProject.cs" />
     <Compile Include="Bean\MyDateTime.cs" />
     <Compile Include="Bean\Weather\CurWeather.cs" />
     <Compile Include="Bean\Weather\DayWeather.cs" />
+    <Compile Include="Bean\Weather\Gaode\GaodeWeather.cs" />
+    <Compile Include="Bean\Weather\Open\OpenAir.cs" />
+    <Compile Include="Bean\Weather\Open\OpenCurWeather.cs" />
+    <Compile Include="Bean\Weather\Open\OpenForecastWeather.cs" />
+    <Compile Include="Bean\Weather\Open\OpenWeather.cs" />
     <Compile Include="Bean\Weather\Province.cs" />
+    <Compile Include="Bean\Weather\Q\QAir.cs" />
+    <Compile Include="Bean\Weather\Q\QBaseWeather.cs" />
+    <Compile Include="Bean\Weather\Q\QDailyWeather.cs" />
+    <Compile Include="Bean\Weather\Q\QNowWeather.cs" />
+    <Compile Include="Bean\Weather\Seniverse\DailyWeather.cs" />
+    <Compile Include="Bean\Weather\Seniverse\NowWeather.cs" />
     <Compile Include="Bean\Weather\Theme.cs" />
+    <Compile Include="Bean\Weather\WeatherUtil.cs" />
     <Compile Include="Bean\WindowTheme.cs" />
     <Compile Include="Commands\BackUpCommand.cs" />
     <Compile Include="Commands\ResumeCommand.cs" />
@@ -148,11 +164,15 @@
     <Compile Include="Converters\WeaImgConverter.cs" />
     <Compile Include="Helper\DragDop\DragAdorner.cs" />
     <Compile Include="Utils\ColorUtils.cs" />
+    <Compile Include="Utils\DateUtil.cs" />
     <Compile Include="Utils\ElementUtils.cs" />
+    <Compile Include="Utils\GZipUtil.cs" />
     <Compile Include="Utils\HttpUtils.cs" />
     <Compile Include="Utils\IniParserUtils.cs" />
     <Compile Include="Utils\OpenNewWindowUtils.cs" />
+    <Compile Include="Utils\TempUtil.cs" />
     <Compile Include="Utils\TimeUtils.cs" />
+    <Compile Include="Utils\WindUtil.cs" />
     <Compile Include="ViewModels\ThemeViewModel.cs" />
     <Compile Include="ViewModels\WeatherViewModel.cs" />
     <Compile Include="View\DraggableGrid.cs" />
@@ -416,6 +436,12 @@
     <EmbeddedResource Include="Files\Citys\city.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+    <None Include="Files\Citys\city.json.bak">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -469,6 +495,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <Resource Include="Doc\WeatherApi.txt" />
+    <EmbeddedResource Include="AxInterop.MSTSCLib.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Interop.MSTSCLib.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="NAudio.dll" />
     <Content Include="System.Data.SQLite.dll" />
     <EmbeddedResource Include="X64\SQLite.Interop.dll">
@@ -485,6 +517,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

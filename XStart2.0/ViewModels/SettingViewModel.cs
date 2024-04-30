@@ -22,11 +22,21 @@ namespace XStart2._0.ViewModels {
         public string Orientation { get; set; }
         public bool HideTitle { get; set; }
         public bool OneLineMulti { get; set; }
-        public string WeatherApiAppId { get; set; }
-        public string WeatherApiAppSecret { get; set; }
-        public string WeatherApiUrl { get; set; }
+        public string WeatherApi { get; set; }
         public string WeatherImgTheme { get; set; }
-
+        public string WeatherYkyApiAppId { get; set; }
+        public string WeatherYkyApiAppSecret { get; set; }
+        public string WeatherYkyApiUrl { get; set; }
+        public string WeatherGaodeApiUrl { get; set; }
+        public string WeatherGaodeAppKey { get; set; }
+        public string WeatherSeniverseApiUrl { get; set; }
+        public string WeatherSeniverseAppKey { get; set; }
+        public string WeatherQApiUrl { get; set; }
+        public string WeatherQAppKey { get; set; }
+        public string WeatherOpenApiUrl { get; set; }
+        public string WeatherOpenAppKey { get; set; }
+        public string WeatherAccuApiUrl { get; set; }
+        public string WeatherAccuAppKey { get; set; }
         [DependsOn("WeatherImgTheme")]
         public ObservableCollection<Theme> ThemePngs { get; set; } = new ObservableCollection<Theme> {
             new Theme("xue","雪"),new Theme("lei", "雷"),new Theme("shachen","沙尘"),

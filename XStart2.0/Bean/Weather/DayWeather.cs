@@ -14,6 +14,10 @@ namespace XStart2._0.Bean.Weather {
         public string UpdateTime { get; set; }
         [JsonProperty("data")]
         public ObservableCollection<Data> Data { get; set; }
+        [JsonProperty("errcode")]
+        public int? ErrCode { get; set; }
+        [JsonProperty("errmsg")]
+        public string ErrMsg { get; set; }
     }
 
     /// <summary>

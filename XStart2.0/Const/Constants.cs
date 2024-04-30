@@ -124,19 +124,61 @@
         public const string ORIENTATION_HORIZONTAL = "Horizontal";
         public const string ORIENTATION_VERTICAL = "Vertical";
 
+        #region 天气
+        public const string KEY_WEATHER_API = "Api";
         public const string KEY_WEATHER_PROVINCE = "Province";
         public const string KEY_WEATHER_CITY = "City";
         public const string KEY_WEATHER_COUNTRY = "Country";
         public const string KEY_LAST_CITYS = "LastCitys";
-        public const string KEY_WEATHER_APP_ID = "AppId";
-        public const string KEY_WEATHER_APP_SECRET = "AppSecret";
-        public const string KEY_WEATHER_URL = "Url";
         public const string KEY_WEATHER_IMG_THEME = "Theme";
-
         public const string WEATHER_IMG_THEME_DEFAULT = "yikeyun";// 默认天气主题是易客云自已的
         public const string WEATHER_IMG_THEME_GIF = "gif";
-        public const string WEATHER_API_URL = "http://v1.yiketianqi.com";// API地址
-        public const string WEATHER_REGISTER_URL = "http://www.tianqiapi.com/user/register";// api注册地址
+
+        public const string WEATHER_API_YKY = "易客云";
+        public const string WEATHER_API_GAODE = "高德";
+        public const string WEATHER_API_SENIVERSE = "心知";
+        public const string WEATHER_API_Q = "和风";
+        public const string WEATHER_API_OPEN = "OpenWeather";
+        public const string WEATHER_API_ACCU = "AccuWeather";
+        #region 易客云
+        public const string KEY_WEATHER_YKY_APP_ID = "YkyAppId";
+        public const string KEY_WEATHER_YKY_APP_SECRET = "YkyAppSecret";
+        public const string KEY_WEATHER_YKY_URL = "YkyUrl";
+        public const string WEATHER_YKY_API_URL = "http://v1.yiketianqi.com";// API地址
+        public const string WEATHER_YKY_REGISTER_URL = "http://www.tianqiapi.com/user/register";// api注册地址
+        #endregion
+        #region 高德
+        public const string KEY_WEATHER_GAODE_URL = "GaodeUrl";
+        public const string KEY_WEATHER_GAODE_APP_KEY = "GaodeAppKey";
+        public const string WEATHER_GAODE_API_URL = "https://restapi.amap.com";
+        public const string WEATHER_GAODE_REGISTER_URL = "https://lbs.amap.com/dev/";
+        #endregion
+        #region 心知
+        public const string KEY_WEATHER_SENIVERSE_URL = "SeniverseUrl";
+        public const string KEY_WEATHER_SENIVERSE_APP_KEY = "SeniverseAppKey";
+        public const string WEATHER_SENIVERSE_API_URL = "https://api.seniverse.com";
+        public const string WEATHER_SENIVERSE_REGISTER_URL = "https://www.seniverse.com/";
+        #endregion
+        #region 和风
+        public const string KEY_WEATHER_Q_URL = "QUrl";
+        public const string KEY_WEATHER_Q_APP_KEY = "QAppKey";
+        public const string WEATHER_Q_API_URL = "https://devapi.qweather.com";
+        public const string WEATHER_Q_REGISTER_URL = "https://dev.qweather.com/";
+        #endregion
+        #region OpenWeather
+        public const string KEY_WEATHER_OPEN_URL = "OpenUrl";
+        public const string KEY_WEATHER_OPEN_APP_KEY = "OpenAppKey";
+        public const string WEATHER_OPEN_API_URL = "http://api.openweathermap.org";
+        public const string WEATHER_OPEN_REGISTER_URL = "https://openweathermap.org/";
+        #endregion
+        #region AccuWeather
+        public const string KEY_WEATHER_ACCU_URL = "AccuUrl";
+        public const string KEY_WEATHER_ACCU_APP_KEY = "AccuAppKey";
+        public const string WEATHER_ACCU_API_URL = "http://dataservice.accuweather.com";
+        public const string WEATHER_ACCU_REGISTER_URL = "https://developer.accuweather.com/";
+        #endregion
+        #endregion
+
 
         public const string WINDOW_THEME_BLUE = "blue";
         public const string WINDOW_THEME_GREEN = "green";

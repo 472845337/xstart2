@@ -79,13 +79,36 @@ namespace XStart2._0.ViewModels {
         public bool HideTitle { get; set; }
         public bool OneLineMulti { get; set; }
         [DoNotNotify]
-        public string WeatherApiAppId { get; set; }
-        [DoNotNotify]
-        public string WeatherApiAppSecret { get; set; }
-        [DoNotNotify]
-        public string WeatherApiUrl { get; set; }
+        public string WeatherApi { get; set; }
         [DoNotNotify]
         public string WeatherImgTheme { get; set; }
+
+        [DoNotNotify]
+        public string WeatherYkyApiAppId { get; set; }
+        [DoNotNotify]
+        public string WeatherYkyApiAppSecret { get; set; }
+        [DoNotNotify]
+        public string WeatherYkyApiUrl { get; set; }
+        [DoNotNotify]
+        public string WeatherGaodeApiUrl { get; set; }
+        [DoNotNotify]
+        public string WeatherGaodeAppKey { get; set; }
+        [DoNotNotify]
+        public string WeatherSeniverseApiUrl { get; set; }
+        [DoNotNotify]
+        public string WeatherSeniverseAppKey { get; set; }
+        [DoNotNotify]
+        public string WeatherQApiUrl { get; set; }
+        [DoNotNotify]
+        public string WeatherQAppKey { get; set; }
+        [DoNotNotify]
+        public string WeatherOpenApiUrl { get; set; }
+        [DoNotNotify]
+        public string WeatherOpenAppKey { get; set; }
+        [DoNotNotify]
+        public string WeatherAccuApiUrl { get; set; }
+        [DoNotNotify]
+        public string WeatherAccuAppKey { get; set; }
         // 操作信息颜色
         public Brush OperateMsgColor { get; private set; }
         // 操作信息

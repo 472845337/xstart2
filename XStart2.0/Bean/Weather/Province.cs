@@ -19,13 +19,15 @@ namespace XStart2._0.Bean.Weather {
     // 区县
     class Country {
         public string Id { get; set; }
+        public string AreaCode { get; set; }
         public string En { get; set; }
         public string Zh { get; set; }
         public string ProvinceEn { get; set; }
         public string ProvinceZh { get; set; }
         public string LeaderEn { get; set; }
         public string LeaderZh { get; set; }
-
+        public string Lat { get; set; }
+        public string Lon { get; set; }
         public string FullName { get { return $"{ProvinceZh} {LeaderZh} {Zh}"; } }
     }
 }

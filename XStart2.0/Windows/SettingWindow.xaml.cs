@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Windows;
 using XStart2._0.Commands;
-using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
@@ -30,10 +29,35 @@ namespace XStart2._0.Windows {
             settingVM.HideTitle = mainVm.HideTitle;
             settingVM.OneLineMulti = mainVm.OneLineMulti;
             settingVM.TopMost = true;
-            settingVM.WeatherApiAppId = Configs.weatherApiAppId;
-            settingVM.WeatherApiAppSecret = Configs.weatherApiAppSecret;
-            settingVM.WeatherApiUrl = Configs.weatherApiUrl;
-            settingVM.WeatherImgTheme = Configs.weatherImgTheme;
+            #region 天气配置
+            settingVM.WeatherApi = mainVm.WeatherApi;
+            settingVM.WeatherImgTheme = mainVm.WeatherImgTheme;
+            #region 易客云
+            settingVM.WeatherYkyApiAppId = mainVm.WeatherYkyApiAppId;
+            settingVM.WeatherYkyApiAppSecret = mainVm.WeatherYkyApiAppSecret;
+            settingVM.WeatherYkyApiUrl = mainVm.WeatherYkyApiUrl;
+            #endregion
+            #region 高德
+            settingVM.WeatherGaodeApiUrl = mainVm.WeatherGaodeApiUrl;
+            settingVM.WeatherGaodeAppKey = mainVm.WeatherGaodeAppKey;
+            #endregion
+            #region 心知
+            settingVM.WeatherSeniverseApiUrl = mainVm.WeatherSeniverseApiUrl;
+            settingVM.WeatherSeniverseAppKey = mainVm.WeatherSeniverseAppKey;
+            #endregion
+            #region 和风
+            settingVM.WeatherQApiUrl = mainVm.WeatherQApiUrl;
+            settingVM.WeatherQAppKey = mainVm.WeatherQAppKey;
+            #endregion
+            #region OpenWeather
+            settingVM.WeatherOpenApiUrl = mainVm.WeatherOpenApiUrl;
+            settingVM.WeatherOpenAppKey = mainVm.WeatherOpenAppKey;
+            #endregion
+            #region AccuWeather
+            settingVM.WeatherAccuApiUrl = mainVm.WeatherAccuApiUrl;
+            settingVM.WeatherAccuAppKey = mainVm.WeatherAccuAppKey;
+            #endregion
+            #endregion
             Loaded += SettingWindow_Loaded;
             Closing += SettingWindow_Closing;
         }
@@ -92,14 +116,29 @@ namespace XStart2._0.Windows {
             NotifyUtils.ShowNotification("桌面快捷方式创建成功！");
         }
 
-        /// <summary>
-        /// 打开注册页
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void GoRegesit_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-            OpenNewWindowUtils.SetTopmost(this);
-            ProjectUtils.ExecuteApp(new Bean.Project() { Kind = Bean.Project.KIND_URL, Path = Constants.WEATHER_REGISTER_URL });
+        #region 打开注册页
+        private void GoRegesitYky_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            OpenRegisterWeb(Constants.WEATHER_YKY_REGISTER_URL);
         }
+        private void GoRegesitGaode_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            OpenRegisterWeb(Constants.WEATHER_GAODE_REGISTER_URL);
+        }
+        private void GoRegesitSeniverse_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            OpenRegisterWeb(Constants.WEATHER_SENIVERSE_REGISTER_URL);
+        }
+        private void GoRegesitQ_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            OpenRegisterWeb(Constants.WEATHER_Q_REGISTER_URL);
+        }
+        private void GoRegesitOpen_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            OpenRegisterWeb(Constants.WEATHER_OPEN_REGISTER_URL);
+        }
+        private void GoRegesitAccu_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            OpenRegisterWeb(Constants.WEATHER_ACCU_REGISTER_URL);
+        }
+        private void OpenRegisterWeb(string registerUrl) {
+            OpenNewWindowUtils.SetTopmost(this);
+            ProjectUtils.ExecuteApp(new Bean.Project() { Kind = Bean.Project.KIND_URL, Path = registerUrl });
+        }
+        #endregion
     }
 }

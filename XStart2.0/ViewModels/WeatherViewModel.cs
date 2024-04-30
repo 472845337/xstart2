@@ -4,7 +4,7 @@ using XStart2._0.Bean.Weather;
 
 namespace XStart2._0.ViewModels {
     class WeatherViewModel : BaseViewModel {
-
+        public string WeatherApi { get; set; }
         public string Province { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
