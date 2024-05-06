@@ -21,6 +21,7 @@ namespace XStart2._0.Windows {
             settingVM.CloseBorderHide = mainVm.CloseBorderHide;
             settingVM.ClickType = mainVm.ClickType;
             settingVM.RdpModel = mainVm.RdpModel;
+            settingVM.TextEditor = mainVm.TextEditor;
             settingVM.UrlOpen = mainVm.UrlOpen;
             settingVM.UrlOpenCustomBrowser = mainVm.UrlOpenCustomBrowser;
             settingVM.IconSize = mainVm.IconSize;
@@ -140,5 +141,18 @@ namespace XStart2._0.Windows {
             ProjectUtils.ExecuteApp(new Bean.Project() { Kind = Bean.Project.KIND_URL, Path = registerUrl });
         }
         #endregion
+
+        private void SelectTextEditor_Click(object sender, RoutedEventArgs e) {
+            using System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "文本编辑器执行文件|*.exe" };
+            if (System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
+                settingVM.TextEditor = ofd.FileName;
+            }
+        }
+        private void SelectCustomBrowser_Click(object sender, RoutedEventArgs e) {
+            using System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "浏览器执行文件|*.exe" };
+            if (System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
+                settingVM.UrlOpenCustomBrowser = ofd.FileName;
+            }
+        }
     }
 }

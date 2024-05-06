@@ -115,6 +115,7 @@ namespace XStart2._0 {
             string autoRun = iniData[Constants.SECTION_CONFIG][Constants.KEY_AUTO_RUN];
             string exitWarn = iniData[Constants.SECTION_CONFIG][Constants.KEY_EXIT_WARN];
             string closeBorderHide = iniData[Constants.SECTION_CONFIG][Constants.KEY_CLOSE_BORDER_HIDE];
+            string textEditor = iniData[Constants.SECTION_CONFIG][Constants.KEY_TEXT_EDITOR];
             string urlOpen = iniData[Constants.SECTION_CONFIG][Constants.KEY_URL_OPEN];
             string urlOpenCustomBrowser = iniData[Constants.SECTION_CONFIG][Constants.KEY_URL_OPEN_CUSTOM_BROWSER];
             string iconSize = iniData[Constants.SECTION_CONFIG][Constants.KEY_ICON_SIZE];
@@ -131,6 +132,7 @@ namespace XStart2._0 {
             Configs.autoRun = !string.IsNullOrEmpty(autoRun) && Convert.ToBoolean(autoRun);
             Configs.exitWarn = string.IsNullOrEmpty(exitWarn) || Convert.ToBoolean(exitWarn);
             Configs.closeBorderHide = string.IsNullOrEmpty(closeBorderHide) || Convert.ToBoolean(closeBorderHide);
+            Configs.textEditor = textEditor;
             if (!string.IsNullOrEmpty(urlOpen)) { Configs.urlOpen = urlOpen; }
             Configs.urlOpenCustomBrowser = urlOpenCustomBrowser;
             Configs.iconSize = string.IsNullOrEmpty(iconSize) ? Constants.ICON_SIZE_32 : Convert.ToInt32(iconSize);
@@ -148,6 +150,7 @@ namespace XStart2._0 {
             mainViewModel.AutoRun = Configs.autoRun;
             mainViewModel.ExitWarn = Configs.exitWarn;
             mainViewModel.CloseBorderHide = Configs.closeBorderHide;
+            mainViewModel.TextEditor = Configs.textEditor;
             mainViewModel.UrlOpen = Configs.urlOpen;
             mainViewModel.UrlOpenCustomBrowser = Configs.urlOpenCustomBrowser;
             mainViewModel.IconSize = Configs.iconSize;
@@ -634,6 +637,7 @@ namespace XStart2._0 {
                 mainViewModel.CloseBorderHide = settingVM.CloseBorderHide;
                 mainViewModel.ClickType = settingVM.ClickType;
                 mainViewModel.RdpModel = settingVM.RdpModel;
+                mainViewModel.TextEditor = settingVM.TextEditor;
                 mainViewModel.UrlOpen = settingVM.UrlOpen;
                 mainViewModel.UrlOpenCustomBrowser = settingVM.UrlOpenCustomBrowser;
                 mainViewModel.IconSize = settingVM.IconSize;
@@ -1384,6 +1388,7 @@ namespace XStart2._0 {
                 mainViewModel.CloseBorderHide = false;
                 mainViewModel.AutoRun = true;
                 mainViewModel.ExitWarn = true;
+                mainViewModel.TextEditor = string.Empty;
                 mainViewModel.UrlOpen = Constants.URL_OPEN_DEFAULT;
                 mainViewModel.IconSize = Constants.ICON_SIZE_32;
                 mainViewModel.HideTitle = false;
@@ -1481,6 +1486,7 @@ namespace XStart2._0 {
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_AUTO_RUN, ref Configs.autoRun, mainViewModel.AutoRun);// 自启动
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_EXIT_WARN, ref Configs.exitWarn, mainViewModel.ExitWarn);// 退出警告
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE, ref Configs.closeBorderHide, mainViewModel.CloseBorderHide);// 靠边隐藏
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_TEXT_EDITOR, ref Configs.textEditor, mainViewModel.TextEditor);// 靠边隐藏
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN, ref Configs.urlOpen, mainViewModel.UrlOpen);// 浏览器打开链接
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN_CUSTOM_BROWSER, ref Configs.urlOpenCustomBrowser, mainViewModel.UrlOpenCustomBrowser);// 自定义浏览器
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_ICON_SIZE, ref Configs.iconSize, mainViewModel.IconSize);// 图标尺寸
@@ -1906,7 +1912,11 @@ namespace XStart2._0 {
         }
 
         private void OpenNotePad_Click(object sender, RoutedEventArgs e) {
-            Process.Start("notepad");
+            if (string.IsNullOrEmpty(mainViewModel.TextEditor)) {
+                Process.Start("notepad");
+            } else {
+                Process.Start(mainViewModel.TextEditor);
+            }
         }
 
         /// <summary>

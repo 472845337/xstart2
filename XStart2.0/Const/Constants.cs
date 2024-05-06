@@ -46,6 +46,7 @@
         public const string KEY_HIDE_TITLE = "HideTitle";// 隐藏标题
         public const string KEY_ONE_LINE_MULTI = "OneLineMulti";// 一行多个
         public const string KEY_CLOSE_BORDER_HIDE = "CloseBorderHide";// 靠边自动隐藏
+        public const string KEY_TEXT_EDITOR = "TextEditor";// 文本编辑器
         public const string KEY_DEL_COUNT = "DelCount";// 删除次数
         public const string KEY_SYSTEM_PROJECT_OPEN_PAGE = "SystemProjectOpenPage";
         public const string KEY_ADD_MULTI = "AddMulti";

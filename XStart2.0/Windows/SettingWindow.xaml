@@ -6,7 +6,7 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:view="clr-namespace:XStart2._0.View"
         mc:Ignorable="d"
-        Title="选项" Height="430" Width="500" Icon="pack://application:,,,/Files/Icons/App/setting.ico" Topmost="{Binding TopMost}" ResizeMode="NoResize">
+        Title="选项" Height="460" Width="500" Icon="pack://application:,,,/Files/Icons/App/setting.ico" Topmost="{Binding TopMost}" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -77,18 +77,28 @@
                                 <Label Grid.Column="2" Content="远程桌面:" HorizontalAlignment="Right"/>
                                 <view:SliderButton Grid.Column="3" OnLabel="个性" OffLabel="系统" Width="65" ButtonWidth="25" IsChecked="{Binding RdpModel,Converter={StaticResource RdpModelConverter},Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center" Margin="8,0"/>
                             </Grid>
+                            <Grid Height="36">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="72"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="文本编辑器" VerticalAlignment="Center"/>
+                                <TextBox VerticalContentAlignment="Center" Grid.Column="1" Margin="5" Text="{Binding TextEditor}"/>
+                                <Button Content="..." Grid.Column="2" Margin="5" Click="SelectTextEditor_Click"/>
+                            </Grid>
                             <GroupBox Header="打开链接" Margin="5">
                                 <StackPanel>
                                     <RadioButton GroupName="UrlOpen" Content="默认浏览器" Style="{StaticResource RadioButton_Style}" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlDefault',Mode=TwoWay}"/>
                                     <RadioButton GroupName="UrlOpen" Content="Edge浏览器" Style="{StaticResource RadioButton_Style}" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlEdge',Mode=TwoWay}"/>
                                     <RadioButton GroupName="UrlOpen" Content="自定义浏览器" Style="{StaticResource RadioButton_Style}" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlCustom',Mode=TwoWay}"/>
-                                    <Grid>
+                                    <Grid Height="36">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition/>
                                             <ColumnDefinition Width="32"/>
                                         </Grid.ColumnDefinitions>
                                         <TextBox Grid.Column="0" Margin="5" Text="{Binding UrlOpenCustomBrowser}"/>
-                                        <Button Content="..." Grid.Column="1" Margin="5"/>
+                                        <Button Content="..." Grid.Column="1" Margin="5" Click="SelectCustomBrowser_Click"/>
                                     </Grid>
                                 </StackPanel>
                             </GroupBox>
@@ -320,8 +330,8 @@
                                     <ComboBoxItem Content="yikeyun"/>
                                 </ComboBox>
                             </StackPanel>
-                            
-                            
+
+
                             <Border Grid.Row="2" Grid.ColumnSpan="6" Margin="10" BorderThickness="1" BorderBrush="Gray" CornerRadius="5">
                                 <ItemsControl ItemsSource="{Binding ThemePngs}">
                                     <ItemsControl.ItemsPanel>
@@ -338,7 +348,7 @@
                                                     <RowDefinition/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
-                                                <Image Grid.Row="0" Width="48" Height="48" gif:ImageBehavior.RepeatBehavior="Forever">
+                                                <Image Grid.Row="0" Width="42" Height="42" gif:ImageBehavior.RepeatBehavior="Forever">
                                                     <gif:ImageBehavior.AnimatedSource>
                                                         <MultiBinding Converter="{StaticResource WeaImgConverter}">
                                                             <Binding Path="ImgCode"/>

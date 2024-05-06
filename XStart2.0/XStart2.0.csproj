@@ -436,9 +436,6 @@
     <EmbeddedResource Include="Files\Citys\city.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <None Include="..\.editorconfig">
-      <Link>.editorconfig</Link>
-    </None>
     <None Include="Files\Citys\city.json.bak">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

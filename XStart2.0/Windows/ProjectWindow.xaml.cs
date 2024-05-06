@@ -101,7 +101,7 @@ namespace XStart2._0.Windows {
         }
         // 选择文件
         private void FileBtn_Click(object sender, RoutedEventArgs e) {
-            using System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "所有文件|*.*|可执行文件|.exe|音频文件|*.mp3;*.wav;*.wma;*.ape;*.flac|视频文件|*.avi;*.mp4;*.wmv;*.mkv;*.rmvb;*.mov;*.flv|图片文件|*.jpg;*.jpeg;*.gif;*.bmp;*.png;*.jfif|文档文件|*.doc;*.xls;*.ppt;*.docx;*.xlsx;*pptx;*.rtf;*.txt;*.pdf" };
+            using System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog() { Filter = "所有文件|*.*|可执行文件|*.exe|音频文件|*.mp3;*.wav;*.wma;*.ape;*.flac|视频文件|*.avi;*.mp4;*.wmv;*.mkv;*.rmvb;*.mov;*.flv|图片文件|*.jpg;*.jpeg;*.gif;*.bmp;*.png;*.jfif|文档文件|*.doc;*.xls;*.ppt;*.docx;*.xlsx;*pptx;*.rtf;*.txt;*.pdf" };
             if (System.Windows.Forms.DialogResult.OK == ofd.ShowDialog()) {
                 string filePath = ofd.FileName;
                 vm.PathReadonly = false;

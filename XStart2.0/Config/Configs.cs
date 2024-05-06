@@ -33,6 +33,7 @@ namespace XStart2._0.Config {
         public static string clickType = Constants.CLICK_TYPE_SINGLE;// 默认单击
         public static string rdpModel;// 远程方式
         public static bool closeBorderHide = true;// 靠边自动隐藏
+        public static string textEditor;
         public static string urlOpen = Constants.URL_OPEN_DEFAULT;
         public static string urlOpenCustomBrowser;
         public static int iconSize;
