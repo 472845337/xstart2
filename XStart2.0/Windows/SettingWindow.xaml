@@ -97,7 +97,7 @@
                                             <ColumnDefinition/>
                                             <ColumnDefinition Width="32"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBox Grid.Column="0" Margin="5" Text="{Binding UrlOpenCustomBrowser}"/>
+                                        <TextBox VerticalContentAlignment="Center" Grid.Column="0" Margin="5" Text="{Binding UrlOpenCustomBrowser}"/>
                                         <Button Content="..." Grid.Column="1" Margin="5" Click="SelectCustomBrowser_Click"/>
                                     </Grid>
                                 </StackPanel>

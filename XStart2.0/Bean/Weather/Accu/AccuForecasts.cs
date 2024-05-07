@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace XStart2._0.Bean.Weather.Accu {
     public class AccuForecasts : AccuWeather{
-        public const string ApiPath = "/forecasts/v1/daily/5day/";
+        public const string AQI_NAME = "AirQuality";
+        public const string ApiPath_1Day = "/forecasts/v1/daily/1day/";// 1日天气预报，用于获取空气质量
+        public const string ApiPath_5Day = "/forecasts/v1/daily/5day/";// 5日天气预报
         public HeadlineBean Headline { get; set; }
 
         public List<DailyForecast> DailyForecasts { get; set; }
@@ -27,16 +25,12 @@ namespace XStart2._0.Bean.Weather.Accu {
         public class DailyForecast {
             public string Date { get; set; }
             public long EpochDate { get; set; }
-            public TemperatureBean Temperature { get; set; }
+            public TemperatureRangeBeanNoUnit Temperature { get; set; }
             public List<AirAndPollenBean> AirAndPollen { get; set; }
             public DayBean Day { get; set; }
             public DayBean Night { get; set; }
         }
 
-        public class TemperatureBean {
-            public UnitBean Minimum { get; set; }
-            public UnitBean Maximum { get; set; }
-        }
         public class AirAndPollenBean {
             public string Name { get; set; }
             public int Value { get; set; }
@@ -59,34 +53,23 @@ namespace XStart2._0.Bean.Weather.Accu {
             public int RainProbability { get; set; }
             public int SnowProbability { get; set; }
             public int IceProbability { get; set; }
-            public WindBean Wind { get; set; }
-            public WindBean WindGust { get; set; }
-            public UnitBean TotalLiquid { get; set; }
-            public UnitBean Rain { get; set; }
-            public UnitBean Snow { get; set; }
-            public UnitBean Ice { get; set; }
+            public WindBeanNoUnit Wind { get; set; }
+            public WindBeanNoUnit WindGust { get; set; }
+            public ValueBean TotalLiquid { get; set; }
+            public ValueBean Rain { get; set; }
+            public ValueBean Snow { get; set; }
+            public ValueBean Ice { get; set; }
             public float HoursOfPrecipitation { get; set; }
             public float HoursOfRain { get; set; }
             public int CloudCover { get; set; }
-            public UnitBean Evapotranspiration { get; set; }
-            public UnitBean SolarIrradiance { get; set; }
+            public ValueBean Evapotranspiration { get; set; }
+            public ValueBean SolarIrradiance { get; set; }
         }
 
         public class LocalSourceBean {
             public int Id { get; set; }
             public string Name { get; set; }
             public string WeatherCode { get; set; }
-        }
-        public class WindBean {
-            public UnitBean Speed { get; set; }
-
-            public DirectionBean Direction { get; set; }
-        }
-
-        public class DirectionBean {
-            public double Degrees { get; set; }
-            public string Localized { get; set; }
-            public string English { get; set; }
         }
     }
 }

@@ -4,41 +4,30 @@ namespace XStart2._0.Bean.Weather {
     class WeatherUtil {
         public static string GetWeatherImg(string weather) {
             string weaImg = "qing";
-            switch (weather) {
-                case "晴":
-                    weaImg = "qing";
-                    break;
-                case "阴":
-                    weaImg = "yin";
-                    break;
-                case "冰雹":
-                    weaImg = "bingbao";
-                    break;
-                case "风":
-                    weaImg = "feng";
-                    break;
-                case "雷阵雨":
-                    weaImg = "lei";
-                    break;
-                case "霾":
-                    weaImg = "mai";
-                    break;
-                case "雾":
-                    weaImg = "wu";
-                    break;
-                case "雪":
-                    weaImg = "xue";
-                    break;
-                case "阵雨":
-                case "雨":
-                case "小雨":
-                case "中雨":
-                case "大雨":
-                    weaImg = "yu";
-                    break;
-                case "多云":
-                    weaImg = "yun";
-                    break;
+            if (weather.Contains("大部分")) {
+                if (weather.Contains("，")) {
+                    return GetWeatherImg(weather.Substring(0, weather.IndexOf("，")).Replace("大部分",""));
+                } else {
+                    return GetWeatherImg(weather.Replace("大部分", ""));
+                }
+            } else if (weather.Contains("雪")) {
+                weaImg = "xue";
+            } else if (weather.Contains("雷阵雨")) {
+                weaImg = "lei";
+            } else if (weather.Contains("雨")) {
+                weaImg = "yu";
+            } else if (weather.Contains("阴")) {
+                weaImg = "yin";
+            } else if (weather.Contains("云")) {
+                weaImg = "yun";
+            } else if (weather.Contains("冰雹")) {
+                weaImg = "bingbao";
+            } else if (weather.Contains("风")) {
+                weaImg = "feng";
+            } else if (weather.Contains("霾")) {
+                weaImg = "mai";
+            } else if (weather.Contains("雾")) {
+                weaImg = "wu";
             }
             return weaImg;
         }

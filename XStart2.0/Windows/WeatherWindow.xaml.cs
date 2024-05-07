@@ -391,7 +391,7 @@ namespace XStart2._0.Windows {
             #region 获取当日天气和空气质量
             string key = "";
             try {
-                string getKeyUrl = $"{Configs.weatherAccuApiUrl}{AccuGeoPositionSearch.ApiPath}?q={country.Lat},{country.Lon}apikey={Configs.weatherAccuAppKey}&language=zh-cn";
+                string getKeyUrl = $"{Configs.weatherAccuApiUrl}{AccuGeoPositionSearch.ApiPath}?q={country.Lat},{country.Lon}&apikey={Configs.weatherAccuAppKey}&language=zh-cn";
                 string getKeyJson = HttpUtils.GetRequest(getKeyUrl, HttpUtils.ContentTypeJson);
                 AccuGeoPositionSearch geoPositionSearch = JsonConvert.DeserializeObject<AccuGeoPositionSearch>(getKeyJson);
                 key = geoPositionSearch.Key;
@@ -400,14 +400,29 @@ namespace XStart2._0.Windows {
                 return;
             }
             try {
-                string curUrl = $"{Configs.weatherAccuApiUrl}{AccuCurrentConditions.ApiPath}{key}?apikey={Configs.weatherAccuAppKey}&language=zh-cn";
+                // 当前天气情况
+                string curUrl = $"{Configs.weatherAccuApiUrl}{AccuCurrentConditions.ApiPath}{key}?apikey={Configs.weatherAccuAppKey}&language=zh-cn&details=true";
+                // 当天气象预报（获取空气质量）
+                string oneDayForecastUrl = $"{Configs.weatherAccuApiUrl}{AccuForecasts.ApiPath_1Day}{key}?apikey={Configs.weatherAccuAppKey}&language=zh-cn&details=true&metric=true";
                 string curJson = HttpUtils.GetRequest(curUrl, HttpUtils.ContentTypeJson);
-                AccuCurrentConditions curConditions = JsonConvert.DeserializeObject<AccuCurrentConditions>(curJson);
+                string oneDayForecastJson = HttpUtils.GetRequest(oneDayForecastUrl, HttpUtils.ContentTypeJson);
+                List<AccuCurrentConditions> curConditions = JsonConvert.DeserializeObject<List<AccuCurrentConditions>>(curJson);
+                AccuForecasts oneDayForecasts = JsonConvert.DeserializeObject<AccuForecasts>(oneDayForecastJson);
                 vm.CurWeather = new CurWeather {
-                    City = country.Zh, Date = curConditions.LocalObservationDateTime, UpdateTime = curConditions.LocalObservationDateTime,
-                    Tem = curConditions.Temperature.Metric.Value.ToString(),
-                    Wea = curConditions.WeatherText, WeaImg = WeatherUtil.GetWeatherImg(curConditions.WeatherText)
+                    City = country.Zh, Date = curConditions[0].LocalObservationDateTime, UpdateTime = curConditions[0].LocalObservationDateTime,
+                    Tem = curConditions[0].Temperature.Metric.Value.ToString(), TemDay = curConditions[0].TemperatureSummary.Past24HourRange.Maximum.Metric.Value.ToString(),
+                    TemNight = curConditions[0].TemperatureSummary.Past24HourRange.Minimum.Metric.Value.ToString(),
+                    Pressure = curConditions[0].Pressure.Metric.Value.ToString(),
+                    Win = WindUtil.Deg2Direc(curConditions[0].Wind.Direction.Degrees),
+                    WinSpeed = WindUtil.Speed2Scale(WindUtil.SpeedConvert(curConditions[0].Wind.Speed.Metric.Value, 1)) + "级",
+                    Humidity = curConditions[0].RelativeHumidity.Value.ToString(),
+                    Wea = curConditions[0].WeatherText, WeaImg = WeatherUtil.GetWeatherImg(curConditions[0].WeatherText)
                 };
+                foreach (AccuForecasts.AirAndPollenBean airAndPollenBean in oneDayForecasts.DailyForecasts[0].AirAndPollen){
+                    if (AccuForecasts.AQI_NAME.Equals(airAndPollenBean.Name)) {
+                        vm.CurWeather.Air = airAndPollenBean.Value.ToString();
+                    }
+                }
             } catch (Exception e) {
                 MessageBox.Show($"获取天气数据异常：{e.Message}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
                 return;
@@ -420,15 +435,15 @@ namespace XStart2._0.Windows {
             };
             ObservableCollection<Data> datas = new ObservableCollection<Data>();
             try {
-                string forecastUrl = $"{Configs.weatherAccuApiUrl}{AccuForecasts.ApiPath}/{key}?apikey={Configs.weatherAccuAppKey}&language=zh-cn&details=true";
-                string forecastJson = HttpUtils.GetQRequest(forecastUrl, HttpUtils.ContentTypeJson);
+                string fiveDayForecastUrl = $"{Configs.weatherAccuApiUrl}{AccuForecasts.ApiPath_5Day}{key}?apikey={Configs.weatherAccuAppKey}&language=zh-cn&details=true&metric=true";
+                string forecastJson = HttpUtils.GetRequest(fiveDayForecastUrl, HttpUtils.ContentTypeJson);
                 AccuForecasts forecasts = JsonConvert.DeserializeObject<AccuForecasts>(forecastJson);
                 vmDayWeather.UpdateTime = forecasts.Headline.EffectiveDate;
                 foreach (AccuForecasts.DailyForecast forecast in forecasts.DailyForecasts) {
                     Data data = new Data {
                         Date = DateUtil.Format(DateUtil.GetTime(forecast.Date), "yyyy-MM-dd"), Wea = forecast.Day.IconPhrase, WeaImg = WeatherUtil.GetWeatherImg(forecast.Day.IconPhrase)
-                    , TemDay = TempUtil.F2C(forecast.Temperature.Maximum.Value, 1).ToString(), TemNight = TempUtil.F2C(forecast.Temperature.Minimum.Value, 1).ToString(),
-                        Win = forecast.Day.Wind.Direction.Localized, WinSpeed = WindUtil.Speed2Scale(forecast.Day.Wind.Speed.Value) + "级"
+                    , TemDay = forecast.Temperature.Maximum.Value.ToString(), TemNight = forecast.Temperature.Minimum.Value.ToString(),
+                        Win = forecast.Day.Wind.Direction.Localized, WinSpeed = WindUtil.Speed2Scale(WindUtil.SpeedConvert(forecast.Day.Wind.Speed.Value, 1)) + "级"
                     };
                     datas.Add(data);
                 }

@@ -28,6 +28,27 @@ namespace XStart2._0.Utils {
             return direc;
         }
 
+        /// <summary>
+        /// 风速转换
+        /// </summary>
+        /// <param name="speed"></param>
+        /// <param name="type">1:km/h->m/s;2:m/s->km/h</param>
+        /// <returns></returns>
+        public static double SpeedConvert(double speed, int type) {
+            double speedConvert = speed;
+            if(1 == type) {
+                speedConvert = speed / 3.6;
+            }else {
+                speedConvert = speed * 3.6;
+            }
+            return speedConvert;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="speed">风速，单位m/s</param>
+        /// <returns></returns>
         public static int Speed2Scale(double speed) {
             int scale = 0;
             if (speed < 0.2) {

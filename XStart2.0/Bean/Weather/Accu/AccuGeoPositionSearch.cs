@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace XStart2._0.Bean.Weather.Accu {
+    /// <summary>
+    /// 根据经纬度获取城市ID
+    /// </summary>
     public class AccuGeoPositionSearch : AccuWeather {
         public const string ApiPath = "/locations/v1/cities/geoposition/search";
         public int Version { get; set; }
@@ -49,18 +48,13 @@ namespace XStart2._0.Bean.Weather.Accu {
             public string Name { get; set; }
             public float GmtOffset { get; set; }
             public bool IsDaylightSaving { get; set; }
-            public DateTime NextOffsetChange { get; set; }
+            public DateTime? NextOffsetChange { get; set; }
         }
 
         public class GeoPositionBean {
             public double Latitude { get; set; }
             public double Longitude { get; set; }
-            public ElevationBean Elevation { get; set; }
-        }
-
-        public class ElevationBean {
-            public UnitBean Metric { get; set; }
-            public UnitBean Imperial { get; set; }
+            public UnitBean Elevation { get; set; }
         }
     }
 }
