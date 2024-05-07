@@ -101,6 +101,7 @@ namespace XStart2._0.Windows {
             }
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_LAST_CITYS, ref Configs.lastCountries, lastCountryStr.ToString());
             IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
+            Configs.WeatherHandler = IntPtr.Zero;
             DataContext = null;
         }
 

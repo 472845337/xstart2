@@ -448,9 +448,15 @@ namespace XStart2._0 {
                 // 取消退出
                 e.Cancel = true;
             } else {
-                // 子窗口退出
+                #region 子窗口退出
+                // 远程窗口关闭
                 mstscWindow.RealClose = true;
                 mstscWindow.Close();
+                // 天气窗口关闭
+                if (Configs.WeatherHandler.ToInt32() > 0) {
+                    DllUtils.SendMessage(Configs.WeatherHandler, WinApi.WM_CLOSE, 0, 0);
+                }
+                #endregion
                 // 退出时回收相关资源
                 Configs.Dispose();
                 AudioUtils.Dispose();
