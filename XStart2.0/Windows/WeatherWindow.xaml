@@ -127,24 +127,25 @@
         </Grid>
         <!-- 实时天气数据 -->
         <StackPanel Grid.Row="1">
+            <DockPanel LastChildFill="False">
+                <!-- 获取天气信息 -->
+                <Button DockPanel.Dock="Right" VerticalAlignment="Top" Style="{StaticResource BtnConfirm_Style}" Margin="0 0 10 0" Content="查询天气" Click="GetWeather_Click" ToolTip="获取所选区县的天气"/>
+                <ComboBox DockPanel.Dock="Left" Style="{StaticResource FormValue_Style}" Margin="10 0 0 0" SelectedValuePath="Content" SelectedValue="{Binding WeatherApi}" Width="120" SelectionChanged="ComboBox_SelectionChanged">
+                    <ComboBoxItem Content="易客云"/>
+                    <ComboBoxItem Content="高德"/>
+                    <ComboBoxItem Content="心知"/>
+                    <ComboBoxItem Content="和风"/>
+                    <ComboBoxItem Content="OpenWeather"/>
+                    <ComboBoxItem Content="AccuWeather"/>
+                    <ComboBoxItem Content="VisualCrossing"/>
+                </ComboBox>
+            </DockPanel>
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
                     <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0">
-                    <!-- 获取天气信息 -->
-                    <Button HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource BtnConfirm_Style}" Margin="20 0 0 0" Content="查询天气" Click="GetWeather_Click" ToolTip="获取所选区县的天气"/>
-                    <ComboBox HorizontalAlignment="Left" Style="{StaticResource FormValue_Style}" Margin="20 5 0 0" SelectedValuePath="Content" SelectedValue="{Binding WeatherApi}" Width="80" SelectionChanged="ComboBox_SelectionChanged">
-                        <ComboBoxItem Content="易客云"/>
-                        <ComboBoxItem Content="高德"/>
-                        <ComboBoxItem Content="心知"/>
-                        <ComboBoxItem Content="和风"/>
-                        <ComboBoxItem Content="OpenWeather"/>
-                        <ComboBoxItem Content="AccuWeather"/>
-                    </ComboBox>
-                </StackPanel>
                 <StackPanel Grid.Column="1">
                     <TextBlock Text="{Binding CurWeather.City}" FontSize="28" Margin="0 5 0 0" HorizontalAlignment="Center"/>
                     <TextBlock FontSize="24" HorizontalAlignment="Center">

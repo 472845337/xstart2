@@ -138,6 +138,8 @@
     <Compile Include="Bean\Weather\Seniverse\DailyWeather.cs" />
     <Compile Include="Bean\Weather\Seniverse\NowWeather.cs" />
     <Compile Include="Bean\Weather\Theme.cs" />
+    <Compile Include="Bean\Weather\VisualCrossing\VcBase.cs" />
+    <Compile Include="Bean\Weather\VisualCrossing\VcCurrentAndForecasts.cs" />
     <Compile Include="Bean\Weather\WeatherUtil.cs" />
     <Compile Include="Bean\WindowTheme.cs" />
     <Compile Include="Commands\BackUpCommand.cs" />

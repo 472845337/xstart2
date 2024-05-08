@@ -58,6 +58,10 @@ namespace XStart2._0.Windows {
             settingVM.WeatherAccuApiUrl = mainVm.WeatherAccuApiUrl;
             settingVM.WeatherAccuAppKey = mainVm.WeatherAccuAppKey;
             #endregion
+            #region Visual Crossing
+            settingVM.WeatherVcApiUrl = mainVm.WeatherVcApiUrl;
+            settingVM.WeatherVcAppKey = mainVm.WeatherVcAppKey;
+            #endregion
             #endregion
             Loaded += SettingWindow_Loaded;
             Closing += SettingWindow_Closing;
@@ -135,6 +139,9 @@ namespace XStart2._0.Windows {
         }
         private void GoRegesitAccu_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             OpenRegisterWeb(Constants.WEATHER_ACCU_REGISTER_URL);
+        }
+        private void GoRegesitVC_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            OpenRegisterWeb(Constants.WEATHER_VC_REGISTER_URL);
         }
         private void OpenRegisterWeb(string registerUrl) {
             OpenNewWindowUtils.SetTopmost(this);

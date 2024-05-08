@@ -141,6 +141,7 @@
         public const string WEATHER_API_Q = "和风";
         public const string WEATHER_API_OPEN = "OpenWeather";
         public const string WEATHER_API_ACCU = "AccuWeather";
+        public const string WEATHER_API_VC = "VisualCrossing";
         #region 易客云
         public const string KEY_WEATHER_YKY_APP_ID = "YkyAppId";
         public const string KEY_WEATHER_YKY_APP_SECRET = "YkyAppSecret";
@@ -177,6 +178,12 @@
         public const string KEY_WEATHER_ACCU_APP_KEY = "AccuAppKey";
         public const string WEATHER_ACCU_API_URL = "http://dataservice.accuweather.com";
         public const string WEATHER_ACCU_REGISTER_URL = "https://developer.accuweather.com/";
+        #endregion
+        #region VisualCrossing
+        public const string KEY_WEATHER_VC_URL = "VcUrl";
+        public const string KEY_WEATHER_VC_APP_KEY = "VcAppKey";
+        public const string WEATHER_VC_API_URL = "https://weather.visualcrossing.com";
+        public const string WEATHER_VC_REGISTER_URL = "https://www.visualcrossing.com/sign-up";
         #endregion
         #endregion
 

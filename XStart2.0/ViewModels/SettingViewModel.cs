@@ -38,6 +38,8 @@ namespace XStart2._0.ViewModels {
         public string WeatherOpenAppKey { get; set; }
         public string WeatherAccuApiUrl { get; set; }
         public string WeatherAccuAppKey { get; set; }
+        public string WeatherVcApiUrl { get; set; }
+        public string WeatherVcAppKey { get; set; }
         [DependsOn("WeatherImgTheme")]
         public ObservableCollection<Theme> ThemePngs { get; set; } = new ObservableCollection<Theme> {
             new Theme("xue","雪"),new Theme("lei", "雷"),new Theme("shachen","沙尘"),

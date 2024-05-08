@@ -91,6 +91,10 @@ namespace XStart2._0.Config {
         public static string weatherAccuApiUrl;
         public static string weatherAccuAppKey;
         #endregion
+        #region Visual Crossing
+        public static string weatherVcApiUrl;
+        public static string weatherVcAppKey;
+        #endregion
         #endregion
 
         // 需要初始化，在窗口加载后

@@ -241,6 +241,14 @@ namespace XStart2._0 {
             mainViewModel.WeatherAccuApiUrl = Configs.weatherAccuApiUrl;
             mainViewModel.WeatherAccuAppKey = Configs.weatherAccuAppKey;
             #endregion
+            #region Visual Crossing
+            string vcApiUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_VC_URL];
+            string vcAppKey = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_VC_APP_KEY];
+            Configs.weatherVcApiUrl = vcApiUrl ?? Constants.WEATHER_VC_API_URL;
+            Configs.weatherVcAppKey = vcAppKey;
+            mainViewModel.WeatherVcApiUrl = Configs.weatherVcApiUrl;
+            mainViewModel.WeatherVcAppKey = Configs.weatherVcAppKey;
+            #endregion
             #endregion
             #region 加载数据
             // 加载类别配置
@@ -679,6 +687,10 @@ namespace XStart2._0 {
                 #region AccuWeather
                 mainViewModel.WeatherAccuApiUrl = settingVM.WeatherAccuApiUrl;
                 mainViewModel.WeatherAccuAppKey = settingVM.WeatherAccuAppKey;
+                #endregion
+                #region Visual Crossig
+                mainViewModel.WeatherVcApiUrl = settingVM.WeatherVcApiUrl;
+                mainViewModel.WeatherVcAppKey = settingVM.WeatherVcAppKey;
                 #endregion
                 SaveSetting();
             }
@@ -1408,6 +1420,7 @@ namespace XStart2._0 {
                 mainViewModel.WeatherQApiUrl = Constants.WEATHER_Q_API_URL;
                 mainViewModel.WeatherOpenApiUrl = Constants.WEATHER_OPEN_API_URL;
                 mainViewModel.WeatherAccuApiUrl = Constants.WEATHER_ACCU_API_URL;
+                mainViewModel.WeatherVcApiUrl = Constants.WEATHER_VC_API_URL;
                 WindowTheme.Instance.ThemeName = Constants.WINDOW_THEME_BLUE;
             }
             e.Handled = true;
@@ -1420,11 +1433,11 @@ namespace XStart2._0 {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ShowAbout(object sender, RoutedEventArgs e) {
-            System.Text.StringBuilder aboutSb = new System.Text.StringBuilder();
+            StringBuilder aboutSb = new StringBuilder();
             //读取文件内容
             using (FileStream fs = File.OpenRead(Configs.AppStartPath + Constants.ABOUT_FILE)) {
                 byte[] b = new byte[1024];
-                System.Text.UTF8Encoding temp = new System.Text.UTF8Encoding(true);
+                UTF8Encoding temp = new UTF8Encoding(true);
                 while (fs.Read(b, 0, b.Length) > 0) {
                     aboutSb.Append(temp.GetString(b));
                 }
@@ -1528,6 +1541,10 @@ namespace XStart2._0 {
             #region AccuWeather
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_ACCU_URL, ref Configs.weatherAccuApiUrl, mainViewModel.WeatherAccuApiUrl);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_ACCU_APP_KEY, ref Configs.weatherAccuAppKey, mainViewModel.WeatherAccuAppKey);
+            #endregion
+            #region Visual Crossing
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_VC_URL, ref Configs.weatherVcApiUrl, mainViewModel.WeatherVcApiUrl);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_WEATHER, Constants.KEY_WEATHER_VC_APP_KEY, ref Configs.weatherVcAppKey, mainViewModel.WeatherVcAppKey);
             #endregion
             #endregion
 
@@ -1937,7 +1954,8 @@ namespace XStart2._0 {
                 && string.IsNullOrEmpty(Configs.weatherSeniverseAppKey)
                 && string.IsNullOrEmpty(Configs.weatherQAppKey)
                 && string.IsNullOrEmpty(Configs.weatherOpenAppKey)
-                && string.IsNullOrEmpty(Configs.weatherAccuAppKey)) {
+                && string.IsNullOrEmpty(Configs.weatherAccuAppKey)
+                && string.IsNullOrEmpty(Configs.weatherVcAppKey)) {
                 MessageBoxResult result = MessageBox.Show("天气API参数未配置，是否立即配置？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.YesNoCancel);
                 if (MessageBoxResult.Yes == result) {
                     // 打开设置
@@ -1988,19 +2006,17 @@ namespace XStart2._0 {
             OpenNewWindowUtils.SetTopmost(this);
             ThemeWindow themeWindow = new ThemeWindow();
             if (true == themeWindow.ShowDialog()) {
-                StringBuilder themeCustomSb = new StringBuilder();
-                themeCustomSb.Append(GetColorString(themeWindow.vm.ConfirmButtonBackGroundColor, 1)).Append(Constants.SPLIT_CHAR);
-                themeCustomSb.Append(GetColorString(themeWindow.vm.ConfirmButtonForeGroundColor, 0)).Append(Constants.SPLIT_CHAR);
-                themeCustomSb.Append(GetColorString(themeWindow.vm.ConfirmButtonMouseOverBackGroundColor, 1)).Append(Constants.SPLIT_CHAR);
-                themeCustomSb.Append(GetColorString(themeWindow.vm.ConfirmButtonMouseOverForeGroundColor, 0)).Append(Constants.SPLIT_CHAR);
-
-                themeCustomSb.Append(GetColorString(themeWindow.vm.CancelButtonBackGroundColor, 1)).Append(Constants.SPLIT_CHAR);
-                themeCustomSb.Append(GetColorString(themeWindow.vm.CancelButtonForeGroundColor, 0)).Append(Constants.SPLIT_CHAR);
-                themeCustomSb.Append(GetColorString(themeWindow.vm.CancelButtonMouseOverBackGroundColor, 1)).Append(Constants.SPLIT_CHAR);
-                themeCustomSb.Append(GetColorString(themeWindow.vm.CancelButtonMouseOverForeGroundColor, 0)).Append(Constants.SPLIT_CHAR);
-
-                themeCustomSb.Append(GetColorString(themeWindow.vm.ToggleButtonCheckedBackGroundColor, 1)).Append(Constants.SPLIT_CHAR);
-                themeCustomSb.Append(GetColorString(themeWindow.vm.ToggleButtonCheckedForeGroundColor, 0));
+                StringBuilder themeCustomSb = new StringBuilder()
+                    .Append(GetColorString(themeWindow.vm.ConfirmButtonBackGroundColor, 1)).Append(Constants.SPLIT_CHAR)
+                    .Append(GetColorString(themeWindow.vm.ConfirmButtonForeGroundColor, 0)).Append(Constants.SPLIT_CHAR)
+                    .Append(GetColorString(themeWindow.vm.ConfirmButtonMouseOverBackGroundColor, 1)).Append(Constants.SPLIT_CHAR)
+                    .Append(GetColorString(themeWindow.vm.ConfirmButtonMouseOverForeGroundColor, 0)).Append(Constants.SPLIT_CHAR)
+                    .Append(GetColorString(themeWindow.vm.CancelButtonBackGroundColor, 1)).Append(Constants.SPLIT_CHAR)
+                    .Append(GetColorString(themeWindow.vm.CancelButtonForeGroundColor, 0)).Append(Constants.SPLIT_CHAR)
+                    .Append(GetColorString(themeWindow.vm.CancelButtonMouseOverBackGroundColor, 1)).Append(Constants.SPLIT_CHAR)
+                    .Append(GetColorString(themeWindow.vm.CancelButtonMouseOverForeGroundColor, 0)).Append(Constants.SPLIT_CHAR)
+                    .Append(GetColorString(themeWindow.vm.ToggleButtonCheckedBackGroundColor, 1)).Append(Constants.SPLIT_CHAR)
+                    .Append(GetColorString(themeWindow.vm.ToggleButtonCheckedForeGroundColor, 0));
                 WindowTheme.Instance.ThemeCustom = themeCustomSb.ToString();
                 WindowTheme.Instance.ThemeName = Constants.WINDOW_THEME_CUSTOM;
             }

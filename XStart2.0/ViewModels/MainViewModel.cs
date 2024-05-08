@@ -110,6 +110,10 @@ namespace XStart2._0.ViewModels {
         public string WeatherAccuApiUrl { get; set; }
         [DoNotNotify]
         public string WeatherAccuAppKey { get; set; }
+        [DoNotNotify]
+        public string WeatherVcApiUrl { get; set; }
+        [DoNotNotify]
+        public string WeatherVcAppKey { get; set; }
         // 操作信息颜色
         public Brush OperateMsgColor { get; private set; }
         // 操作信息

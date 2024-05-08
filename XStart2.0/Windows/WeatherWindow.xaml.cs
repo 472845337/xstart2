@@ -16,6 +16,7 @@ using XStart2._0.Bean.Weather.Gaode;
 using XStart2._0.Bean.Weather.Open;
 using XStart2._0.Bean.Weather.Q;
 using XStart2._0.Bean.Weather.Seniverse;
+using XStart2._0.Bean.Weather.VisualCrossing;
 using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Utils;
@@ -153,6 +154,9 @@ namespace XStart2._0.Windows {
                     } else if (Constants.WEATHER_API_ACCU.Equals(vm.WeatherApi)) {
                         // AccuWeather天气
                         GetAccuWeather(country);
+                    } else if (Constants.WEATHER_API_VC.Equals(vm.WeatherApi)) {
+                        // Visual Crossing天气
+                        GetVcWeather(country);
                     }
                 });
                 task.Start();
@@ -162,7 +166,7 @@ namespace XStart2._0.Windows {
         /// <summary>
         /// 易客云天气
         /// </summary>
-        /// <param name="cityId"></param>
+        /// <param name="cityId">城市ID</param>
         private void GetYkyWeather(string cityId) {
             string curUrl = $"{Configs.weatherYkyApiUrl}{CurWeather.ApiPath}? appid={Configs.weatherYkyApiAppId}&appsecret={Configs.weatherYkyApiAppSecret}&unescape=1&cityid={cityId}";
             string curWeatherJson = HttpUtils.GetRequest(curUrl, HttpUtils.ContentTypeJson);
@@ -186,7 +190,7 @@ namespace XStart2._0.Windows {
         /// <summary>
         /// 高德天气
         /// </summary>
-        /// <param name="areaCode"></param>
+        /// <param name="areaCode">地区编码</param>
         private void GetGaoDeWeather(string areaCode) {
             string curUrl = $"{Configs.weatherGaodeApiUrl}{GaodeWeather.ApiPath}?key={Configs.weatherGaodeAppKey}&extensions=base&city={areaCode}";
             string curWeatherJson = HttpUtils.GetRequest(curUrl, HttpUtils.ContentTypeJson);
@@ -273,7 +277,7 @@ namespace XStart2._0.Windows {
         /// <summary>
         /// 和风天气
         /// </summary>
-        /// <param name="areaCode"></param>
+        /// <param name="country">城市对象</param>
         private void GetQWeather(Country country) {
             #region 获取当日天气和空气质量
             string curUrl = $"{Configs.weatherQApiUrl}{QNowWeather.ApiPath}?key={Configs.weatherQAppKey}&location={country.Id}";
@@ -328,7 +332,7 @@ namespace XStart2._0.Windows {
         /// <summary>
         /// OpenWeather天气
         /// </summary>
-        /// <param name="areaCode"></param>
+        /// <param name="country">城市对象</param>
         private void GetOpenWeather(Country country) {
             #region 获取当日天气
             string curUrl = $"{Configs.weatherOpenApiUrl}{OpenCurWeather.ApiPath}?appid={Configs.weatherOpenAppKey}&lat={country.Lat}&lon={country.Lon}&lang=zh_cn";
@@ -387,10 +391,10 @@ namespace XStart2._0.Windows {
         /// <summary>
         /// AccuWeather天气
         /// </summary>
-        /// <param name="areaCode"></param>
+        /// <param name="country">城市对象</param>
         private void GetAccuWeather(Country country) {
+            string key;
             #region 获取当日天气和空气质量
-            string key = "";
             try {
                 string getKeyUrl = $"{Configs.weatherAccuApiUrl}{AccuGeoPositionSearch.ApiPath}?q={country.Lat},{country.Lon}&apikey={Configs.weatherAccuAppKey}&language=zh-cn";
                 string getKeyJson = HttpUtils.GetRequest(getKeyUrl, HttpUtils.ContentTypeJson);
@@ -419,7 +423,7 @@ namespace XStart2._0.Windows {
                     Humidity = curConditions[0].RelativeHumidity.Value.ToString(),
                     Wea = curConditions[0].WeatherText, WeaImg = WeatherUtil.GetWeatherImg(curConditions[0].WeatherText)
                 };
-                foreach (AccuForecasts.AirAndPollenBean airAndPollenBean in oneDayForecasts.DailyForecasts[0].AirAndPollen){
+                foreach (AccuForecasts.AirAndPollenBean airAndPollenBean in oneDayForecasts.DailyForecasts[0].AirAndPollen) {
                     if (AccuForecasts.AQI_NAME.Equals(airAndPollenBean.Name)) {
                         vm.CurWeather.Air = airAndPollenBean.Value.ToString();
                     }
@@ -460,6 +464,50 @@ namespace XStart2._0.Windows {
             }
 
             #endregion
+        }
+
+        /// <summary>
+        /// Visual Crossing天气
+        /// </summary>
+        /// <param name="country">城市对象</param>
+        private void GetVcWeather(Country country) {
+            try {
+                // 当前日期
+                string now = DateUtil.Format(DateTime.Today, "yyyy-MM-dd");
+                // 七天后日期
+                string sevenDays = DateUtil.Format(DateUtil.OperateDateTime(DateTime.Today, 1, 3, 7), "yyyy-MM-dd");
+                string vcUrl = $"{Configs.weatherVcApiUrl}{VcCurrentAndForecasts.ApiPath}/{country.Lat},{country.Lon}/{now}/{sevenDays}?key={Configs.weatherVcAppKey}&unitGroup=metric&include=current&lang=zh";
+                string vcJson = HttpUtils.GetRequest(vcUrl, HttpUtils.ContentTypeJson);
+                VcCurrentAndForecasts currentAndForecasts = JsonConvert.DeserializeObject<VcCurrentAndForecasts>(vcJson);
+                vm.CurWeather = new CurWeather {
+                    City = country.Zh, Date = currentAndForecasts.days[0].datetime,
+                    Tem = currentAndForecasts.currentConditions.temp.ToString(), TemDay = currentAndForecasts.days[0].tempmax.ToString(),
+                    TemNight = currentAndForecasts.days[0].tempmin.ToString(),
+                    Pressure = currentAndForecasts.currentConditions.pressure.ToString(),
+                    Win = WindUtil.Deg2Direc(Convert.ToInt32(currentAndForecasts.currentConditions.winddir)),
+                    WinSpeed = WindUtil.Speed2Scale(WindUtil.SpeedConvert(currentAndForecasts.currentConditions.windspeed, 1)) + "级",
+                    Humidity = currentAndForecasts.currentConditions.humidity.ToString(),
+                    Wea = currentAndForecasts.currentConditions.conditions, WeaImg = WeatherUtil.GetWeatherImg(currentAndForecasts.currentConditions.conditions)
+                };
+
+                ObservableCollection<Data> datas = new ObservableCollection<Data>();
+                DayWeather vmDayWeather = new DayWeather {
+                    City = country.Zh,
+                };
+                foreach (VcCurrentAndForecasts.Day day in currentAndForecasts.days) {
+                    Data data = new Data {
+                        Date = day.datetime, Wea = day.conditions, WeaImg = WeatherUtil.GetWeatherImg(day.conditions)
+                    , TemDay = day.tempmax.ToString(), TemNight = day.tempmin.ToString(),
+                        Win = WindUtil.Deg2Direc(Convert.ToInt32(day.winddir)), WinSpeed = WindUtil.Speed2Scale(WindUtil.SpeedConvert(day.windspeed, 1)) + "级"
+                    };
+                    datas.Add(data);
+                }
+                vmDayWeather.Data = datas;
+                vm.DayWeather = vmDayWeather;
+
+            } catch (Exception e) {
+                MessageBox.Show($"获取天气数据异常：{e.Message}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+            }
         }
 
         private void OpenQuery_Click(object sender, RoutedEventArgs e) {
@@ -575,6 +623,12 @@ namespace XStart2._0.Windows {
                 // AccuWeather天气
                 if (string.IsNullOrEmpty(Configs.weatherAccuAppKey)) {
                     errMsg = "AccuWeather未配置参数！";
+                    result = false;
+                }
+            } else if (Constants.WEATHER_API_VC.Equals(weatherApi)) {
+                // Visual Crossing天气
+                if (string.IsNullOrEmpty(Configs.weatherVcAppKey)) {
+                    errMsg = "Visual Crossing未配置参数！";
                     result = false;
                 }
             }
