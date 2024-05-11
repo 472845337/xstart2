@@ -18,6 +18,8 @@ namespace XStart2._0.ViewModels {
         public string CurEraHour { get; set; }
         // 当前农历分
         public string CurEraMinute { get; set; }
+        // 当前节假日
+        public string CurHoliday { get; set; }
         // 农历年
         public string EraYear { get; set; }
         // 属相
@@ -30,5 +32,6 @@ namespace XStart2._0.ViewModels {
         public string SolarTerm { get; set; }
         // 周几
         public string WeekDay { get; set; }
+        public string Holiday { get; set; }
     }
 }

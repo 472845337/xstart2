@@ -476,6 +476,8 @@ namespace XStart2._0 {
                 AutoHideTimer.Stop();
                 currentDateTimer.Stop();
                 currentTimer.Stop();
+                AutoGcTimer.Stop();
+                OperateMessageTimer.Stop();
                 notifyIcon.Dispose();
                 DataContext = null;
                 e.Cancel = false;
@@ -2049,7 +2051,10 @@ namespace XStart2._0 {
                 return;
             }
             string[] argumentArray = arguments.Split(Constants.SPLIT_CHAR);
-
+            if(argumentArray.Length != 4) {
+                MessageBox.Show("远程参数不匹配！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                return;
+            }
             mstscWindow.AddRdp(project.Section, project.Name, argumentArray[0], string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]), argumentArray[2], argumentArray[3]);
         }
     }

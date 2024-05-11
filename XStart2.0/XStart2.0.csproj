@@ -114,6 +114,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Bean\Holiday\HcaRequest.cs" />
+    <Compile Include="Bean\Holiday\HcaResponse.cs" />
+    <Compile Include="Bean\Holiday\IsHolidayRequest.cs" />
+    <Compile Include="Bean\Holiday\IsHolidayResponse.cs" />
     <Compile Include="Bean\Rdp.cs" />
     <Compile Include="Bean\Weather\Accu\AccuCurrentConditions.cs" />
     <Compile Include="Bean\Weather\Accu\AccuForecasts.cs" />

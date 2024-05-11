@@ -1,6 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using XStart2._0.Bean.Holiday;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
 
@@ -19,7 +24,7 @@ namespace XStart2._0.Windows {
         }
 
         private void Window_Loaded(object sender, EventArgs e) {
-            SetLunarDateInfo(DateTime.Now);
+            SetLunarDateInfo(DateTime.UtcNow);
             CurrentMinuteTime_Tick(sender, e);
             DataContext = vm;
             // Tick 分钟间隔时发生。
@@ -49,6 +54,7 @@ namespace XStart2._0.Windows {
         }
 
         private void SetLunarDateInfo(DateTime dateTime) {
+            vm.Holiday = "";
             LunarCalendar lunarCalendar = new LunarCalendar(dateTime);
             vm.EraYear = lunarCalendar.GetEraYear();
             vm.Zodiac = lunarCalendar.ChineseZodiac;
@@ -56,18 +62,70 @@ namespace XStart2._0.Windows {
             vm.EraDay = lunarCalendar.GetEraDay();
             vm.WeekDay = lunarCalendar.ChineseWeek;
             vm.SolarTerm = string.IsNullOrEmpty(lunarCalendar.SolarTerm) ? lunarCalendar.SolarTermPrev : lunarCalendar.SolarTerm;
+            Task task = new Task(() => {
+                IsHolidayResponse response = GetIsHoliday(dateTime.ToString("yyyy-MM-dd"));
+                if (null != response && HcaResponse.CODE_SUCCESS.Equals(response.Code) && null != response.IsHoliday) {
+                    vm.Holiday = $"{((bool)response.IsHoliday ? "休" : "班")} {response.HolidayName}";
+                }
+            });
+            task.Start();
         }
 
         private void CurrentMinuteTime_Tick(object sender, EventArgs e) {
             // 下一分钟
             TimeSpan timeToGo = TimeUtils.GetTimeToNext(TimeEnum.MINUTE);
             currentMinuteTimer.Interval = timeToGo;
-            LunarCalendar lunarCalendar = new LunarCalendar(DateTime.Now);
+            DateTime now = DateTime.UtcNow;
+            LunarCalendar lunarCalendar = new LunarCalendar(now);
             vm.CurEraYear = lunarCalendar.GetEraYear();
             vm.CurZodiac = lunarCalendar.ChineseZodiac;
             vm.CurEraMonth = lunarCalendar.GetEraMonth();
             vm.CurEraDay = lunarCalendar.GetEraDay();
             vm.CurSolarTerm = string.IsNullOrEmpty(lunarCalendar.SolarTerm) ? lunarCalendar.SolarTermPrev : lunarCalendar.SolarTerm;
+            Task task = new Task(() => {
+                IsHolidayResponse response = GetIsHoliday(now.ToString("yyyy-MM-dd"));
+                if (null != response && HcaResponse.CODE_SUCCESS.Equals(response.Code) && null != response.IsHoliday) {
+                    vm.CurHoliday = $"{((bool)response.IsHoliday ? "休" : "班")} {response.HolidayName}";
+                }
+            });
+            task.Start();
+        }
+
+        private IsHolidayResponse GetIsHoliday(string date) {
+            IsHolidayRequest request = new IsHolidayRequest();
+            request.Loginname = "xstart";
+            request.Version = "1.0.0";
+            request.Token = "nvQcZJuwHpvfXjj86ZqbCUr1FhsmN0tw1HvGswjjsDmtLJmRWWJdWWclLheT7LcZTz5xeUzcF0oJyygwIV1nmZCEpX6a4QezppT8erUn9h6Myhocn9huDI2rMuhfeGoEEY6abOd0S4YzxXCG8yqaNikGxzA7ste9lkomad9yoJvjuj5SYl36SmwBPKmlDs7AIQwt5TA2";
+            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            request.Timestamp = Convert.ToInt64(ts.TotalMilliseconds);
+            request.Sign = GetSign(request);
+            request.Date = date;
+            IsHolidayResponse response = null;
+            try {
+                string responseJson = HttpUtils.PostRequest(HcaRequest.ApiUrl + IsHolidayRequest.ApiPath, JsonConvert.SerializeObject(request), HttpUtils.ContentTypeJson, 20000);
+                response = JsonConvert.DeserializeObject<IsHolidayResponse>(responseJson);
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// 生成签名
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="apiRequest"></param>
+        /// <returns></returns>
+        private string GetSign<T>(T apiRequest) where T : HcaRequest {
+            string checkContent = $"loginname={apiRequest.Loginname}&timestamp={apiRequest.Timestamp}&token={apiRequest.Token}&action={apiRequest.GetApiPath()}";
+            byte[] s = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(checkContent));
+            string sign = "";
+            for (int i = 0; i < s.Length; i++) {
+                // 加密结果"x2"结果为32位,"x3"结果为48位,"x4"结果为64位
+                sign += s[i].ToString("x2");
+            }
+            return sign;
         }
     }
 }
