@@ -22,11 +22,11 @@ namespace XStart2._0.Bean.Weather.Accu {
         public TimeZoneBean TimeZone { get; set; }
         public GeoPositionBean GeoPosition { get; set; }
         public bool IsAlias { get; set; }
-        public class RegionBean{
+        public class RegionBean {
             public string ID { get; set; }
             public string LocalizedName { get; set; }
             public string EnglishName { get; set; }
-            }
+        }
 
         public class CountryBean {
             public string ID { get; set; }

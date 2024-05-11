@@ -1,8 +1,7 @@
-﻿using System;
+﻿using MSTSCLib;
+using System;
 using System.Windows;
-using MSTSCLib;
 using XStart2._0.Bean;
-using XStart2._0.ViewModels;
 
 namespace XStart2._0.Windows {
     /// <summary>
@@ -25,7 +24,7 @@ namespace XStart2._0.Windows {
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
             var rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
             if (rdpTabControl.TabPages.Count > 0) {
-                if(MessageBoxResult.OK == MessageBox.Show("当前存在远程连接，确认关闭吗？", Const.Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                if (MessageBoxResult.OK == MessageBox.Show("当前存在远程连接，确认关闭吗？", Const.Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                     // 关闭所有连接
                     CloseAllRdp();
                 } else {
@@ -40,6 +39,7 @@ namespace XStart2._0.Windows {
                 e.Cancel = true;
             }
         }
+
         Rdp newRdp;
         public void AddRdp(string id, string title, string server, int port, string account, string password) {
             newRdp = new Rdp() { Id = id, Title = title, Server = server, Port = port, Account = account, Password = password };
@@ -85,6 +85,7 @@ namespace XStart2._0.Windows {
         private void RdpConnectTick(object sender, EventArgs e) {
             if (newRdp != null) {
                 System.Windows.Forms.TabPage tabPage = new System.Windows.Forms.TabPage();
+
                 tabPage.Text = newRdp.Title + "    ";// 标题要加长，用于放置自定义的关闭按钮
                 AxMSTSCLib.AxMsTscAxNotSafeForScripting rdpScript = new AxMSTSCLib.AxMsTscAxNotSafeForScripting();
                 System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
@@ -97,12 +98,22 @@ namespace XStart2._0.Windows {
                 try {
                     rdpScript.Server = newRdp.Server;
                     rdpScript.UserName = newRdp.Account;
+
                     rdpScript.ConnectingText = $"正在连接{newRdp.Title}...";
+                    // 设置端口和密码
                     IMsRdpClientAdvancedSettings7 iClientSetting = (IMsRdpClientAdvancedSettings7)rdpScript.AdvancedSettings;
                     if (newRdp.Port > 0) {
                         iClientSetting.RDPPort = newRdp.Port;
                     }
                     iClientSetting.ClearTextPassword = newRdp.Password;
+                    iClientSetting.EnableSuperPan = false;
+                    // 非全屏时也可执行win+*快捷键，对应于mstsc.exe里的本地资源-键盘-应用windows组合键
+                    // 0：仅在客户端计算机上本地应用组合键。
+                    // 1：在远程服务器上应用组合键。
+                    // 2：仅当客户端以全屏模式运行时，才将组合键应用于远程服务器。 这是默认值。
+                    IMsRdpClientSecuredSettings securedSetting = (IMsRdpClientSecuredSettings)rdpScript.SecuredSettings;
+                    securedSetting.KeyboardHookMode = 1;
+                    // 连接远程服务器
                     rdpScript.Connect();
                 } catch (Exception Ex) {
                     MessageBox.Show("远程连接异常： " + newRdp.Server + " 错误:  " + Ex.Message, Const.Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OKCancel);
@@ -142,7 +153,7 @@ namespace XStart2._0.Windows {
         }
 
         private void Disconnect_Click(object sender, EventArgs e) {
-            if(MessageBoxResult.OK == MessageBox.Show("确认关闭连接吗?" , Const.Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)){
+            if (MessageBoxResult.OK == MessageBox.Show("确认关闭连接吗?", Const.Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                 System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
                 if (rdpTabControl.SelectedIndex >= 0) {
                     CloseRdpAndPage(rdpTabControl, rdpTabControl.SelectedTab);
@@ -165,8 +176,7 @@ namespace XStart2._0.Windows {
             }
         }
 
-
-        int tabPageCloseSize = 15;
+        readonly int tabPageCloseSize = 15;
         //重绘关闭按钮
         public void AppRunTabControl_DrawItem(object sender, System.Windows.Forms.DrawItemEventArgs e) {
             try {
@@ -211,7 +221,7 @@ namespace XStart2._0.Windows {
                     var p1 = new System.Drawing.Point(myTabRect.X + 3, myTabRect.Y + 3);
                     var p2 = new System.Drawing.Point(myTabRect.X + myTabRect.Width - 3, myTabRect.Y + myTabRect.Height - 3);
                     e.Graphics.DrawLine(p, p1, p2);
-                    //画"/"线
+                    //画"\"线
                     var p3 = new System.Drawing.Point(myTabRect.X + 3, myTabRect.Y + myTabRect.Height - 3);
                     var p4 = new System.Drawing.Point(myTabRect.X + myTabRect.Width - 3, myTabRect.Y + 3);
                     e.Graphics.DrawLine(p, p3, p4);

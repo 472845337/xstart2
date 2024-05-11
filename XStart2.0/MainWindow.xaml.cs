@@ -204,7 +204,7 @@ namespace XStart2._0 {
             #region 高德
             string gaodeApiUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_GAODE_URL];
             string gaodeAppKey = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_GAODE_APP_KEY];
-            Configs.weatherGaodeApiUrl = gaodeApiUrl??Constants.WEATHER_GAODE_API_URL;
+            Configs.weatherGaodeApiUrl = gaodeApiUrl ?? Constants.WEATHER_GAODE_API_URL;
             Configs.weatherGaodeAppKey = gaodeAppKey;
             mainViewModel.WeatherGaodeApiUrl = Configs.weatherGaodeApiUrl;
             mainViewModel.WeatherGaodeAppKey = Configs.weatherGaodeAppKey;
@@ -463,6 +463,10 @@ namespace XStart2._0 {
                 // 天气窗口关闭
                 if (Configs.WeatherHandler.ToInt32() > 0) {
                     DllUtils.SendMessage(Configs.WeatherHandler, WinApi.WM_CLOSE, 0, 0);
+                }
+                // 日历窗口关闭
+                if (Configs.CalendarHandler.ToInt32() > 0) {
+                    DllUtils.SendMessage(Configs.CalendarHandler, WinApi.WM_CLOSE, 0, 0);
                 }
                 #endregion
                 // 退出时回收相关资源

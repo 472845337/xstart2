@@ -63,7 +63,7 @@ namespace XStart2._0.Windows {
         }
         static string UnicodeRegexToString(string source) {
             StringBuilder sb = new StringBuilder();
-            foreach(char ch in source.ToCharArray()) {
+            foreach (char ch in source.ToCharArray()) {
                 sb.Append(((int)ch).ToString("x").PadLeft(4, '0'));
             }
             return sb.ToString();
@@ -182,7 +182,7 @@ namespace XStart2._0.Windows {
             T t = System.Activator.CreateInstance<T>();
             FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Static | BindingFlags.Public);
             foreach (FieldInfo info in fields) {
-                yield return new FontAwesome { Name = info.Name, Value = info.GetValue(t) as string , FaName = faName};
+                yield return new FontAwesome { Name = info.Name, Value = info.GetValue(t) as string, FaName = faName };
             }
         }
     }

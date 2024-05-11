@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace XStart2._0.Bean.Weather.Q {
-    public class QNowWeather : QBaseWeather{
+    public class QNowWeather : QBaseWeather {
         public const string ApiPath = "/v7/weather/now";
 
         [JsonProperty("now")]

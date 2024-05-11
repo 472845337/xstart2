@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace XStart2._0.Utils {
-    class WindUtil {
+    public class WindUtil {
+        /// <summary>
+        /// 计算风向
+        /// </summary>
+        /// <param name="deg"></param>
+        /// <returns></returns>
         public static string Deg2Direc(int deg) {
             string direc = "";
             if (deg > 337 || deg <= 22) {
@@ -31,21 +31,21 @@ namespace XStart2._0.Utils {
         /// <summary>
         /// 风速转换
         /// </summary>
-        /// <param name="speed"></param>
+        /// <param name="speed">风速</param>
         /// <param name="type">1:km/h->m/s;2:m/s->km/h</param>
         /// <returns></returns>
         public static double SpeedConvert(double speed, int type) {
-            double speedConvert = speed;
-            if(1 == type) {
+            double speedConvert;
+            if (1 == type) {
                 speedConvert = speed / 3.6;
-            }else {
+            } else {
                 speedConvert = speed * 3.6;
             }
             return speedConvert;
         }
 
         /// <summary>
-        /// 
+        /// 计算风力等级
         /// </summary>
         /// <param name="speed">风速，单位m/s</param>
         /// <returns></returns>

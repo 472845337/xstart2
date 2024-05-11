@@ -6,7 +6,7 @@ namespace XStart2._0.Bean.Weather {
             string weaImg = "qing";
             if (weather.Contains("大部分")) {
                 if (weather.Contains("，")) {
-                    return GetWeatherImg(weather.Substring(0, weather.IndexOf("，")).Replace("大部分",""));
+                    return GetWeatherImg(weather.Substring(0, weather.IndexOf("，")).Replace("大部分", ""));
                 } else {
                     return GetWeatherImg(weather.Replace("大部分", ""));
                 }

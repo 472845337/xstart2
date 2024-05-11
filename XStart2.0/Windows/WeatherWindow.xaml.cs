@@ -480,25 +480,25 @@ namespace XStart2._0.Windows {
                 string vcJson = HttpUtils.GetRequest(vcUrl, HttpUtils.ContentTypeJson);
                 VcCurrentAndForecasts currentAndForecasts = JsonConvert.DeserializeObject<VcCurrentAndForecasts>(vcJson);
                 vm.CurWeather = new CurWeather {
-                    City = country.Zh, Date = currentAndForecasts.days[0].datetime,
-                    Tem = currentAndForecasts.currentConditions.temp.ToString(), TemDay = currentAndForecasts.days[0].tempmax.ToString(),
-                    TemNight = currentAndForecasts.days[0].tempmin.ToString(),
-                    Pressure = currentAndForecasts.currentConditions.pressure.ToString(),
-                    Win = WindUtil.Deg2Direc(Convert.ToInt32(currentAndForecasts.currentConditions.winddir)),
-                    WinSpeed = WindUtil.Speed2Scale(WindUtil.SpeedConvert(currentAndForecasts.currentConditions.windspeed, 1)) + "级",
-                    Humidity = currentAndForecasts.currentConditions.humidity.ToString(),
-                    Wea = currentAndForecasts.currentConditions.conditions, WeaImg = WeatherUtil.GetWeatherImg(currentAndForecasts.currentConditions.conditions)
+                    City = country.Zh, Date = currentAndForecasts.Days[0].DateTime,
+                    Tem = currentAndForecasts.CurrentConditions.Temp.ToString(), TemDay = currentAndForecasts.Days[0].TempMax.ToString(),
+                    TemNight = currentAndForecasts.Days[0].TempMin.ToString(),
+                    Pressure = currentAndForecasts.CurrentConditions.Pressure.ToString(),
+                    Win = WindUtil.Deg2Direc(Convert.ToInt32(currentAndForecasts.CurrentConditions.WindDir)),
+                    WinSpeed = WindUtil.Speed2Scale(WindUtil.SpeedConvert(currentAndForecasts.CurrentConditions.WindSpeed, 1)) + "级",
+                    Humidity = currentAndForecasts.CurrentConditions.Humidity.ToString(),
+                    Wea = currentAndForecasts.CurrentConditions.Conditions, WeaImg = WeatherUtil.GetWeatherImg(currentAndForecasts.CurrentConditions.Conditions)
                 };
 
                 ObservableCollection<Data> datas = new ObservableCollection<Data>();
                 DayWeather vmDayWeather = new DayWeather {
                     City = country.Zh,
                 };
-                foreach (VcCurrentAndForecasts.Day day in currentAndForecasts.days) {
+                foreach (VcCurrentAndForecasts.Day day in currentAndForecasts.Days) {
                     Data data = new Data {
-                        Date = day.datetime, Wea = day.conditions, WeaImg = WeatherUtil.GetWeatherImg(day.conditions)
-                    , TemDay = day.tempmax.ToString(), TemNight = day.tempmin.ToString(),
-                        Win = WindUtil.Deg2Direc(Convert.ToInt32(day.winddir)), WinSpeed = WindUtil.Speed2Scale(WindUtil.SpeedConvert(day.windspeed, 1)) + "级"
+                        Date = day.DateTime, Wea = day.Conditions, WeaImg = WeatherUtil.GetWeatherImg(day.Conditions)
+                    , TemDay = day.TempMax.ToString(), TemNight = day.TempMin.ToString(),
+                        Win = WindUtil.Deg2Direc(Convert.ToInt32(day.WindDir)), WinSpeed = WindUtil.Speed2Scale(WindUtil.SpeedConvert(day.WindSpeed, 1)) + "级"
                     };
                     datas.Add(data);
                 }

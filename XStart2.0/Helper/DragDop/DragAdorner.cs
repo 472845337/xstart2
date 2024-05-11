@@ -242,9 +242,9 @@ namespace DragDropAssist {
         #region Private Helpers
 
         private void UpdateLocation() {
-            AdornerLayer adornerLayer = this.Parent as AdornerLayer;
-            if (adornerLayer != null)
-                adornerLayer.Update(this.AdornedElement);
+            if (Parent is AdornerLayer adornerLayer) {
+                adornerLayer.Update(AdornedElement);
+            }
         }
 
         #endregion // Private Helpers

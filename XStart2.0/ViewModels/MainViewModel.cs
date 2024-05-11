@@ -136,8 +136,8 @@ namespace XStart2._0.ViewModels {
                 foreach (var type in XStartService.TypeDic) {
                     foreach (var column in type.Value.ColumnDic) {
                         bool isChange = false;
-                        if ((nameof(IconSize).Equals(field) && null == column.Value.IconSize) 
-                            || (nameof(Orientation).Equals(field) && string.IsNullOrEmpty(column.Value.Orientation)) 
+                        if ((nameof(IconSize).Equals(field) && null == column.Value.IconSize)
+                            || (nameof(Orientation).Equals(field) && string.IsNullOrEmpty(column.Value.Orientation))
                             || (nameof(HideTitle).Equals(field) && null == column.Value.HideTitle)) {
                             // 非自定义的栏目才修改
                             isChange = true;
@@ -146,7 +146,7 @@ namespace XStart2._0.ViewModels {
                             foreach (var project in column.Value.ProjectDic) {
                                 if (nameof(IconSize).Equals(field)) {
                                     project.Value.IconSize = IconSize;
-                                }else if (nameof(Orientation).Equals(field)) {
+                                } else if (nameof(Orientation).Equals(field)) {
                                     project.Value.Orientation = Orientation;
                                 } else if (nameof(HideTitle).Equals(field)) {
                                     project.Value.HideTitle = HideTitle;

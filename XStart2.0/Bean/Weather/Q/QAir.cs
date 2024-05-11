@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 
 namespace XStart2._0.Bean.Weather.Q {
-    public class QAir : QBaseWeather{
+    public class QAir : QBaseWeather {
         public const string ApiPath = "/v7/air/now";
         [JsonProperty("now")]
         public Air Now { get; set; }
         [JsonProperty("station")]
         public List<StationBean> Station { get; set; }
-        
+
         public class Air {
             [JsonProperty("pubTime")]
             public string PubTime { get; set; }
@@ -39,7 +39,7 @@ namespace XStart2._0.Bean.Weather.Q {
             public string Name { get; set; }
             [JsonProperty("id")]
             public string Id { get; set; }
-            
+
         }
     }
 }

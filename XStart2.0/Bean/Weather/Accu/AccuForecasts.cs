@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace XStart2._0.Bean.Weather.Accu {
-    public class AccuForecasts : AccuWeather{
+    public class AccuForecasts : AccuWeather {
         public const string AQI_NAME = "AirQuality";
         public const string ApiPath_1Day = "/forecasts/v1/daily/1day/";// 1日天气预报，用于获取空气质量
         public const string ApiPath_5Day = "/forecasts/v1/daily/5day/";// 5日天气预报

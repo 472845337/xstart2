@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace XStart2._0.Bean.Weather.Open {
-    public class OpenForecastWeather : OpenWeather{
+    public class OpenForecastWeather : OpenWeather {
         public const string ApiPath = "/data/2.5/forecast/daily";
         [JsonProperty("city")]
         public CityBean City { get; set; }

@@ -238,7 +238,9 @@
         // 应用命令
         public const int WM_APPCOMMAND = 0x319;
         public const int WM_USER = 0x0400;
-
+        // LowerLevel键盘截获
+        public const int WH_KEYBOARD_LL = 13;
+        public const int WH_KEYBOARD = 2;
         #region 鼠标键
         public const int MK_LBUTTON = 0x0001;// 鼠标左键
         public const int MK_RBUTTON = 0x0002;// 鼠标右键

@@ -7,7 +7,7 @@ using XStart2._0.Config;
 
 namespace XStart2._0.Utils {
     internal class IniParserUtils {
-        private static IniParser.FileIniDataParser iniParser = new IniParser.FileIniDataParser();
+        private static readonly IniParser.FileIniDataParser iniParser = new IniParser.FileIniDataParser();
         private static readonly Dictionary<string, IniData> iniDataDic = new Dictionary<string, IniData>();
 
         public static IniData GetIniData(string filePath) {

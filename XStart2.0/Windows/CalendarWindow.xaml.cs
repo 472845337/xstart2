@@ -25,7 +25,7 @@ namespace XStart2._0.Windows {
             // Tick 分钟间隔时发生。
             currentMinuteTimer.Tick += new EventHandler(CurrentMinuteTime_Tick);
             // Interval 获取或设置计时器刻度之间的时间段
-            currentMinuteTimer.Interval = TimeSpan.FromSeconds(1);
+            currentMinuteTimer.Interval = TimeSpan.FromHours(1);
             currentMinuteTimer.Start();
             // 赋值句柄
             var formDependency = PresentationSource.FromDependencyObject(this);
@@ -67,8 +67,6 @@ namespace XStart2._0.Windows {
             vm.CurZodiac = lunarCalendar.ChineseZodiac;
             vm.CurEraMonth = lunarCalendar.GetEraMonth();
             vm.CurEraDay = lunarCalendar.GetEraDay();
-            vm.CurEraHour = lunarCalendar.GetEraHour();
-            vm.CurEraMinute = lunarCalendar.GetEraMinute();
             vm.CurSolarTerm = string.IsNullOrEmpty(lunarCalendar.SolarTerm) ? lunarCalendar.SolarTermPrev : lunarCalendar.SolarTerm;
         }
     }

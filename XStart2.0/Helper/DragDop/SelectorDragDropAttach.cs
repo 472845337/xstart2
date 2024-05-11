@@ -26,8 +26,7 @@ namespace DragDropAssist {
         private static void OnIsItemsDragDropEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             bool b = (bool)e.NewValue;
             ItemsControl selector = d as ItemsControl;
-            SelectorDragDrop selectorDragDrop = selector?.GetValue(SelectorDragDropProperty) as SelectorDragDrop;
-            if (selectorDragDrop != null) {
+            if (selector?.GetValue(SelectorDragDropProperty) is SelectorDragDrop selectorDragDrop) {
                 selectorDragDrop.Selector = null;
             }
 

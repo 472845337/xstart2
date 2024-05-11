@@ -95,6 +95,20 @@ namespace XStart2._0.Utils {
             }
         }
 
+        public delegate int HookProc(int nCode, IntPtr wParam, IntPtr lParam);
+
+        //键盘Hook结构函数 
+        [StructLayout(LayoutKind.Sequential)]
+        public class KeyBoardHookStruct {
+            public int vkCode;
+            public int scanCode;
+            public int flags;
+            public int time;
+            public int dwExtraInfo;
+            public readonly IntPtr Extra;
+        }
+
+
         /** 强制GC API函数**/
         [DllImport(Kernel32)]
         public static extern int SetProcessWorkingSetSize(IntPtr process, int minSize, int maxSize);
@@ -269,5 +283,19 @@ namespace XStart2._0.Utils {
 
         [DllImport(User32, EntryPoint = "ScreenToClient")]
         public static extern int ScreenToClient(IntPtr hwnd, ref Point lpPoint);
+
+        //设置钩子 
+        [DllImport(User32)]
+        public static extern int SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hInstance, int threadId);
+        //抽掉钩子
+        [DllImport(User32, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool UnhookWindowsHookEx(int idHook);
+        //调用下一个钩子
+        [DllImport(User32)]
+        public static extern int CallNextHookEx(int idHook, int nCode, IntPtr wParam, IntPtr lParam);
+        // 获取异步的按键
+        [DllImport(User32)]
+        public static extern short GetAsyncKeyState(System.Windows.Forms.Keys vKey);
+
     }
 }

@@ -30,12 +30,12 @@ namespace XStart2._0.Utils {
         /// <returns></returns>
         public static DateTime OperateDateTime(DateTime dateTime, int operateType, int field, int value) {
             DateTime newDateTime = dateTime;
-            if(1 == operateType) {
+            if (1 == operateType) {
                 // 增
-                if(1 == field) {
+                if (1 == field) {
                     // 年
                     newDateTime = dateTime.AddYears(value);
-                }else if (2 == field) {
+                } else if (2 == field) {
                     // 月
                     newDateTime = dateTime.AddMonths(value);
                 } else if (3 == field) {
@@ -54,7 +54,7 @@ namespace XStart2._0.Utils {
                     // 毫秒
                     newDateTime = dateTime.AddMilliseconds(value);
                 }
-            }else if(2 == operateType) {
+            } else if (2 == operateType) {
                 // 设置
                 if (1 == field) {
                     // 年

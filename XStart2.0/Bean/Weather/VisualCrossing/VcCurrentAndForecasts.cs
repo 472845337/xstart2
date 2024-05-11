@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace XStart2._0.Bean.Weather.VisualCrossing {
     /// <summary>
@@ -10,43 +11,68 @@ namespace XStart2._0.Bean.Weather.VisualCrossing {
     /// &include=current
     /// &lang=zh
     /// </summary>
-    public class VcCurrentAndForecasts : VcBase{
+    public class VcCurrentAndForecasts : VcBase {
         public const string ApiPath = "/VisualCrossingWebServices/rest/services/timeline/";
+        [JsonProperty("queryCost")]
+        public long QueryCost { get; set; }
+        [JsonProperty("latitude")]
+        public double Latitude { get; set; }
+        [JsonProperty("longitude")]
+        public double Longitude { get; set; }
+        [JsonProperty("timezone")]
+        public string Timezone { get; set; }
+        [JsonProperty("tzoffset")]
+        public float TzOffset { get; set; }
+        [JsonProperty("days")]
 
-        public long queryCost { get; set; }
-        public double latitude { get; set; }
-        public double longitude { get; set; }
-        public string timezone { get; set; }
-        public float tzoffset { get; set; }
-
-        public List<Day> days { get; set; }
-
-        public CurrentConditionsBean currentConditions { get; set; }
+        public List<Day> Days { get; set; }
+        [JsonProperty("currentConditions")]
+        public CurrentConditionsBean CurrentConditions { get; set; }
 
         public class Day {
-            public string datetime { get; set; }
-            public long datetimeEpoch { get; set; }
-            public float tempmax { get; set; }
-            public float tempmin { get; set; }
-            public float temp { get; set; }
-            public float humidity { get; set; }
-            public float windspeed { get; set; }
-            public float winddir { get; set; }
-            public float pressure { get; set; }
-            public string conditions { get; set; }
-            public string icon { get; set; }
+            [JsonProperty("datetime")]
+            public string DateTime { get; set; }
+            [JsonProperty("datetimeEpoch")]
+            public long DateTimeEpoch { get; set; }
+            [JsonProperty("tempmax")]
+            public float TempMax { get; set; }
+            [JsonProperty("tempmin")]
+            public float TempMin { get; set; }
+            [JsonProperty("temp")]
+            public float Temp { get; set; }
+            [JsonProperty("humidity")]
+            public float Humidity { get; set; }
+            [JsonProperty("windspeed")]
+            public float WindSpeed { get; set; }
+            [JsonProperty("winddir")]
+            public float WindDir { get; set; }
+            [JsonProperty("pressure")]
+            public float Pressure { get; set; }
+            [JsonProperty("conditions")]
+            public string Conditions { get; set; }
+            [JsonProperty("icon")]
+            public string Icon { get; set; }
         }
 
         public class CurrentConditionsBean {
-            public string datetime { get; set; }
-            public float temp { get; set; }
-            public float humidity { get; set; }
-            public float windgust { get; set; }
-            public float windspeed { get; set; }
-            public float winddir { get; set; }
-            public float pressure { get; set; }
-            public float visibility { get; set; }
-            public string conditions { get; set; }
+            [JsonProperty("datetime")]
+            public string DateTime { get; set; }
+            [JsonProperty("temp")]
+            public float Temp { get; set; }
+            [JsonProperty("humidity")]
+            public float Humidity { get; set; }
+            [JsonProperty("windgust")]
+            public float WindGust { get; set; }
+            [JsonProperty("windspeed")]
+            public float WindSpeed { get; set; }
+            [JsonProperty("winddir")]
+            public float WindDir { get; set; }
+            [JsonProperty("pressure")]
+            public float Pressure { get; set; }
+            [JsonProperty("visibility")]
+            public float Visibility { get; set; }
+            [JsonProperty("conditions")]
+            public string Conditions { get; set; }
         }
     }
 }
