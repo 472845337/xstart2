@@ -18,6 +18,8 @@ namespace XStart2._0.ViewModels {
         public string CurEraHour { get; set; }
         // 当前农历分
         public string CurEraMinute { get; set; }
+        // 当前星期
+        public string CurWeekDay { get; set; }
         // 当前节假日
         public string CurHoliday { get; set; }
         // 农历年

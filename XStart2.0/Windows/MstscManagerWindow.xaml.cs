@@ -156,7 +156,7 @@ namespace XStart2._0.Windows {
             if (MessageBoxResult.OK == MessageBox.Show("确认关闭连接吗?", Const.Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                 System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
                 if (rdpTabControl.SelectedIndex >= 0) {
-                    CloseRdpAndPage(rdpTabControl, rdpTabControl.SelectedTab);
+                    CloseRdpAndPage(rdpTabControl, rdpTabControl.SelectedIndex);
                 }
             }
         }
@@ -258,8 +258,7 @@ namespace XStart2._0.Windows {
 
                 if (isClose != true) return;
                 // 远程关闭并关闭页面
-                var tabPage = rdpTabControl.SelectedTab;
-                CloseRdpAndPage(rdpTabControl, tabPage);
+                CloseRdpAndPage(rdpTabControl, rdpTabControl.SelectedIndex);
             }
         }
 
@@ -272,7 +271,8 @@ namespace XStart2._0.Windows {
             rdpTabControl.TabPages.Clear();
         }
 
-        private void CloseRdpAndPage(System.Windows.Forms.TabControl tabControl, System.Windows.Forms.TabPage tabPage) {
+        private void CloseRdpAndPage(System.Windows.Forms.TabControl tabControl, int index) {
+            System.Windows.Forms.TabPage tabPage = tabControl.TabPages[index];
             var rdpScript = (AxMSTSCLib.AxMsTscAxNotSafeForScripting)tabPage.Controls[0];
             if (null != rdpScript && rdpScript.Connected.ToString() == "1") {
                 if (MessageBoxResult.OK == MessageBox.Show($"确认退出{tabPage.Text.Trim()}远程", Const.Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
@@ -281,6 +281,9 @@ namespace XStart2._0.Windows {
                 }
             } else {
                 tabControl.TabPages.Remove(tabPage);
+            }
+            if(index > 0) {
+                tabControl.SelectedIndex = index - 1;
             }
         }
     }

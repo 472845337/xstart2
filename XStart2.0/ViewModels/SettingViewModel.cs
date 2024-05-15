@@ -8,6 +8,7 @@ using XStart2._0.Utils;
 
 namespace XStart2._0.ViewModels {
     public class SettingViewModel : BaseViewModel {
+        public bool MainTopMost { get; set; }// 主窗口是否置顶
         public bool Audio { get; set; }
         public bool AutoRun { get; set; }
         public bool ExitWarn { get; set; }

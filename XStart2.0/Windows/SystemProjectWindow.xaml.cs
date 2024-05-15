@@ -216,7 +216,7 @@ namespace XStart2._0.Windows {
                     name = $"清空{Path.GetFileName(Path.GetDirectoryName(dir))}目录";
                     arguments = Path.GetDirectoryName(dir);
                 } else {
-                    MessageBox.Show("未选择目录!", "错误");
+                    MessageBox.Show("未选择目录!", Constants.MESSAGE_BOX_TITLE_ERROR);
                     isAdd = false;
                 }
                 Topmost = true;

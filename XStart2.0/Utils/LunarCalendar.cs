@@ -29,7 +29,7 @@ namespace XStart2._0.Utils {
         };
         private static readonly string[] _chineseWeek =
         {
-            "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"
+            "日", "一", "二", "三", "四", "五", "六"
         };
 
         private static readonly string[] _celestialStem = { "甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸" };

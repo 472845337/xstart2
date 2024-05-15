@@ -201,6 +201,7 @@ namespace XStart2._0.Windows {
             }
             vm.CurWeather = new CurWeather {
                 City = curWeather.Lives[0].City, Date = curWeather.Lives[0].ReportTime, UpdateTime = curWeather.Lives[0].ReportTime,
+                Tem = curWeather.Lives[0].Temperature,
                 Wea = curWeather.Lives[0].Weather, WeaImg = WeatherUtil.GetWeatherImg(curWeather.Lives[0].Weather),
                 Humidity = curWeather.Lives[0].Humidity, Win = curWeather.Lives[0].WindDirection, WinSpeed = curWeather.Lives[0].WindPower + "级"
             };

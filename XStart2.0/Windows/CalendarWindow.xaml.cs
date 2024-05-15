@@ -24,7 +24,7 @@ namespace XStart2._0.Windows {
         }
 
         private void Window_Loaded(object sender, EventArgs e) {
-            SetLunarDateInfo(DateTime.UtcNow);
+            //SetLunarDateInfo(DateTime.UtcNow);
             CurrentMinuteTime_Tick(sender, e);
             DataContext = vm;
             // Tick 分钟间隔时发生。
@@ -81,6 +81,7 @@ namespace XStart2._0.Windows {
             vm.CurZodiac = lunarCalendar.ChineseZodiac;
             vm.CurEraMonth = lunarCalendar.GetEraMonth();
             vm.CurEraDay = lunarCalendar.GetEraDay();
+            vm.CurWeekDay = lunarCalendar.ChineseWeek;
             vm.CurSolarTerm = string.IsNullOrEmpty(lunarCalendar.SolarTerm) ? lunarCalendar.SolarTermPrev : lunarCalendar.SolarTerm;
             Task task = new Task(() => {
                 IsHolidayResponse response = GetIsHoliday(now.ToString("yyyy-MM-dd"));

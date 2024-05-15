@@ -14,8 +14,8 @@ namespace XStart2._0.Windows {
         public SettingViewModel settingVM = new SettingViewModel();
         public SettingWindow(MainViewModel mainVm) {
             InitializeComponent();
+            settingVM.MainTopMost = mainVm.TopMost;
             settingVM.Audio = mainVm.Audio;
-            settingVM.TopMost = mainVm.TopMost;
             settingVM.AutoRun = mainVm.AutoRun;
             settingVM.ExitWarn = mainVm.ExitWarn;
             settingVM.CloseBorderHide = mainVm.CloseBorderHide;
@@ -29,6 +29,7 @@ namespace XStart2._0.Windows {
             settingVM.Orientation = mainVm.Orientation;
             settingVM.HideTitle = mainVm.HideTitle;
             settingVM.OneLineMulti = mainVm.OneLineMulti;
+            // 设置页面置顶
             settingVM.TopMost = true;
             #region 天气配置
             settingVM.WeatherApi = mainVm.WeatherApi;

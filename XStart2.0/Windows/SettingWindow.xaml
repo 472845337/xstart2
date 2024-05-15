@@ -27,7 +27,7 @@
                                     <ColumnDefinition Width="80"/>
                                 </Grid.ColumnDefinitions>
                                 <Label Grid.Column="0" Content="程序置顶:" HorizontalAlignment="Right"/>
-                                <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding TopMost,Mode=TwoWay}"  Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                                <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding MainTopMost,Mode=TwoWay}"  Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                             </Grid>
                             <Grid Margin="5">
                                 <Grid.ColumnDefinitions>

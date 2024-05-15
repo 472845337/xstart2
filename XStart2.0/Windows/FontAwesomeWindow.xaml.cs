@@ -70,7 +70,7 @@ namespace XStart2._0.Windows {
         }
         private void ConfirmSelectFontAwesome(object sender, RoutedEventArgs e) {
             if (string.IsNullOrEmpty(VM.SelectedFa)) {
-                System.Windows.MessageBox.Show("未选择图标", "错误");
+                System.Windows.MessageBox.Show("未选择图标", Constants.MESSAGE_BOX_TITLE_ERROR);
                 return;
             }
             DialogResult = true;

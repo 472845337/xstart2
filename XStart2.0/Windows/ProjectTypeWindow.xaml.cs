@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using XStart2._0.Const;
 using XStart2._0.Utils;
 using XStart2._0.ViewModels;
 using static XStart2._0.Utils.FontAwesome6;
@@ -46,7 +47,7 @@ namespace XStart2._0.Windows {
         /// <param name="e"></param>
         private void ProjectType_Save(object sender, RoutedEventArgs e) {
             if (string.IsNullOrEmpty(VM.Name)) {
-                System.Windows.MessageBox.Show("类别名不能为空!", "错误");
+                System.Windows.MessageBox.Show("类别名不能为空!", Constants.MESSAGE_BOX_TITLE_ERROR);
                 return;
             }
 

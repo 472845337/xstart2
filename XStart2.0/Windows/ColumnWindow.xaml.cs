@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using XStart2._0.Const;
 using XStart2._0.ViewModels;
 
 namespace XStart2._0.Windows {
@@ -28,7 +29,7 @@ namespace XStart2._0.Windows {
 
         private void Save_Column(object sender, RoutedEventArgs e) {
             if (string.IsNullOrEmpty(vm.Name)) {
-                MessageBox.Show("名称不能为空！", "错误");
+                MessageBox.Show("名称不能为空！", Constants.MESSAGE_BOX_TITLE_ERROR);
                 return;
             } else {
                 DialogResult = true;

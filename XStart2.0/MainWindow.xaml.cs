@@ -649,9 +649,9 @@ namespace XStart2._0 {
             bool changeOneLineMulti = false;
             if (true == settingWindow.ShowDialog()) {
                 SettingViewModel settingVM = settingWindow.settingVM;
-                // 将设置的值赋值，关闭前定入配置
+                // 将设置的值赋值，关闭前写入配置
                 mainViewModel.Audio = settingVM.Audio;
-                mainViewModel.TopMost = settingVM.TopMost;
+                mainViewModel.TopMost = settingVM.MainTopMost;
                 mainViewModel.AutoRun = settingVM.AutoRun;
                 mainViewModel.ExitWarn = settingVM.ExitWarn;
                 mainViewModel.CloseBorderHide = settingVM.CloseBorderHide;
@@ -905,7 +905,7 @@ namespace XStart2._0 {
                 typeSection = element.Tag as string;
             }
             if (string.Empty.Equals(typeSection)) {
-                MessageBox.Show("无法获取当前类别", "错误");
+                MessageBox.Show("无法获取当前类别", Constants.MESSAGE_BOX_TITLE_ERROR);
                 return;
             }
             ColumnVM vm = new ColumnVM {
