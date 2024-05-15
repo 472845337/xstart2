@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Interop;
 using System.Windows.Media;
 using XStart2._0.Bean;
 using XStart2._0.Commands;
@@ -39,7 +40,7 @@ namespace XStart2._0 {
         System.Windows.Forms.NotifyIcon notifyIcon = null;
         public MainWindow() {
             InitializeComponent();
-            Configs.Handler = new System.Windows.Interop.WindowInteropHelper(this).Handle;
+            Configs.Handler = new WindowInteropHelper(this).Handle;
             // 时钟定时任务
             currentTimer.Tick += new EventHandler(CurrentTimer_Tick);
             currentTimer.Start();
@@ -411,45 +412,7 @@ namespace XStart2._0 {
             if (!Configs.inited) {
                 return;
             }
-            // 保存数据的调整（当前打开的类别，类别中打开的栏目，排序）
-            int typeIndex = 0;
-            foreach (KeyValuePair<string, Bean.Type> type in mainViewModel.Types) {
-                if (typeIndex != type.Value.Sort) {
-                    typeService.UpdateSort(type.Value.Section, typeIndex);
-                }
-                int columnIndex = 0;
-                foreach (KeyValuePair<string, Column> column in type.Value.ColumnDic) {
-                    if (columnIndex != column.Value.Sort) {
-                        columnService.UpdateSort(column.Value.Section, columnIndex);
-                    }
-                    if (column.Value.IsExpanded) {
-                        if (!column.Value.Section.Equals(XStartService.TypeDic[column.Value.TypeSection].OpenColumn)) {
-                            typeService.Update(new Bean.Type { Section = column.Value.TypeSection, OpenColumn = column.Value.Section });
-                        }
-                    }
-                    int projectIndex = 0;
-                    foreach (KeyValuePair<string, Project> project in column.Value.ProjectDic) {
-                        if (projectIndex != project.Value.Sort) {
-                            projectService.UpdateSort(project.Value.Section, projectIndex);
-                        }
-                        projectIndex++;
-                    }
-                    columnIndex++;
-                }
-                typeIndex++;
-            }
-
-            // 自启动
-            Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            if (mainViewModel.AutoRun) {
-                string exeLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
-                if (!exeLocation.Equals(registryKey.GetValue(Constants.APP_NAME))) {
-                    registryKey.SetValue(Constants.APP_NAME, System.Reflection.Assembly.GetExecutingAssembly().Location, Microsoft.Win32.RegistryValueKind.String);
-                }
-            } else {
-                registryKey.DeleteValue(Constants.APP_NAME, false);
-            }
-            registryKey.Dispose();
+            
             // 配置以及窗口数据保存
             SaveSetting();
             if (!Configs.forceExit && Configs.exitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
@@ -458,8 +421,15 @@ namespace XStart2._0 {
             } else {
                 #region 子窗口退出
                 // 远程窗口关闭
-                mstscWindow.RealClose = true;
-                mstscWindow.Close();
+                Configs.mstscRealClose = true;
+                if (Configs.MstscHandler.ToInt32() > 0) {
+                    DllUtils.SendMessage(Configs.MstscHandler, WinApi.WM_CLOSE, 0, 0);
+                    // 如果远程窗口取消关闭，则主窗口取消关闭
+                    if (Configs.MstscHandler.ToInt32() > 0) {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
                 // 天气窗口关闭
                 if (Configs.WeatherHandler.ToInt32() > 0) {
                     DllUtils.SendMessage(Configs.WeatherHandler, WinApi.WM_CLOSE, 0, 0);
@@ -469,6 +439,45 @@ namespace XStart2._0 {
                     DllUtils.SendMessage(Configs.CalendarHandler, WinApi.WM_CLOSE, 0, 0);
                 }
                 #endregion
+                // 保存数据的调整（当前打开的类别，类别中打开的栏目，排序）
+                int typeIndex = 0;
+                foreach (KeyValuePair<string, Bean.Type> type in mainViewModel.Types) {
+                    if (typeIndex != type.Value.Sort) {
+                        typeService.UpdateSort(type.Value.Section, typeIndex);
+                    }
+                    int columnIndex = 0;
+                    foreach (KeyValuePair<string, Column> column in type.Value.ColumnDic) {
+                        if (columnIndex != column.Value.Sort) {
+                            columnService.UpdateSort(column.Value.Section, columnIndex);
+                        }
+                        if (column.Value.IsExpanded) {
+                            if (!column.Value.Section.Equals(XStartService.TypeDic[column.Value.TypeSection].OpenColumn)) {
+                                typeService.Update(new Bean.Type { Section = column.Value.TypeSection, OpenColumn = column.Value.Section });
+                            }
+                        }
+                        int projectIndex = 0;
+                        foreach (KeyValuePair<string, Project> project in column.Value.ProjectDic) {
+                            if (projectIndex != project.Value.Sort) {
+                                projectService.UpdateSort(project.Value.Section, projectIndex);
+                            }
+                            projectIndex++;
+                        }
+                        columnIndex++;
+                    }
+                    typeIndex++;
+                }
+
+                // 自启动
+                Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+                if (mainViewModel.AutoRun) {
+                    string exeLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                    if (!exeLocation.Equals(registryKey.GetValue(Constants.APP_NAME))) {
+                        registryKey.SetValue(Constants.APP_NAME, System.Reflection.Assembly.GetExecutingAssembly().Location, Microsoft.Win32.RegistryValueKind.String);
+                    }
+                } else {
+                    registryKey.DeleteValue(Constants.APP_NAME, false);
+                }
+                registryKey.Dispose();
                 // 退出时回收相关资源
                 Configs.Dispose();
                 AudioUtils.Dispose();
@@ -2042,19 +2051,26 @@ namespace XStart2._0 {
                 return brush.Color.ToString();
             }
         }
-        MstscManagerWindow mstscWindow = new MstscManagerWindow();
+        MstscManagerWindow mstscWindow = null;
         private void OpenNewMstsc(Project project) {
-            mstscWindow.Show();
             string arguments = project.Arguments;
             if (string.IsNullOrEmpty(arguments)) {
                 MessageBox.Show("远程参数不能为空！", Constants.MESSAGE_BOX_TITLE_ERROR);
                 return;
             }
             string[] argumentArray = arguments.Split(Constants.SPLIT_CHAR);
-            if(argumentArray.Length != 4) {
+            if (argumentArray.Length != 4) {
                 MessageBox.Show("远程参数不匹配！", Constants.MESSAGE_BOX_TITLE_ERROR);
                 return;
             }
+            if (Configs.MstscHandler.ToInt32() == 0) {
+                // 新建窗口
+                mstscWindow = new MstscManagerWindow();
+                //分离任务栏图标主要代码。
+                new WindowInteropHelper(mstscWindow);
+                DllUtils.SetCurrentProcessExplicitAppUserModelID("Gx3OptimisationWindow");
+            }
+            mstscWindow.Show();
             mstscWindow.AddRdp(project.Section, project.Name, argumentArray[0], string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]), argumentArray[2], argumentArray[3]);
         }
     }

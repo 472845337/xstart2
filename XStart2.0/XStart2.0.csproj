@@ -483,6 +483,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <Resource Include="Files\Images\*.png" />
+	<Resource Include="Files\Images\*.ico" />
     <Resource Include="Files\xstart2.ico" />
     <Resource Include="Files\Icons\App\*.ico" />
     <EmbeddedResource Include="Files\Images\Avatar\DefaultUser.png">

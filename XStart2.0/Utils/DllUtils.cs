@@ -296,6 +296,9 @@ namespace XStart2._0.Utils {
         // 获取异步的按键
         [DllImport(User32)]
         public static extern short GetAsyncKeyState(System.Windows.Forms.Keys vKey);
+        // 导入 Windows API 中的设置任务栏应用程序 ID 的方法
+        [DllImport(Shell32, SetLastError = true)]
+        public static extern void SetCurrentProcessExplicitAppUserModelID([MarshalAs(UnmanagedType.LPWStr)] string AppID);
 
     }
 }

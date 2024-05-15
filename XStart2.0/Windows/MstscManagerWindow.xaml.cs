@@ -1,7 +1,9 @@
 ﻿using MSTSCLib;
 using System;
 using System.Windows;
+using System.Windows.Interop;
 using XStart2._0.Bean;
+using XStart2._0.Utils;
 
 namespace XStart2._0.Windows {
     /// <summary>
@@ -10,8 +12,6 @@ namespace XStart2._0.Windows {
     /// 只能使用WinForm的TabControl来加载不同的rdp连接
     /// </summary>
     public partial class MstscManagerWindow : Window {
-        // 是否真实关闭
-        public bool RealClose { get; set; } = false;
 
         private readonly System.Windows.Threading.DispatcherTimer RdpTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
         public MstscManagerWindow() {
@@ -32,7 +32,8 @@ namespace XStart2._0.Windows {
                     return;
                 }
             }
-            if (RealClose) {
+            if (Config.Configs.mstscRealClose) {
+                Config.Configs.MstscHandler = IntPtr.Zero;
                 e.Cancel = false;
             } else {
                 Hide();
@@ -80,6 +81,10 @@ namespace XStart2._0.Windows {
             }
             rdpHeight = height - 32;
             rdpWidth = width - 10;
+            // 赋值句柄
+            var formDependency = PresentationSource.FromDependencyObject(this);
+            HwndSource winformWindow = formDependency as HwndSource;
+            Config.Configs.MstscHandler = winformWindow.Handle;
         }
 
         private void RdpConnectTick(object sender, EventArgs e) {

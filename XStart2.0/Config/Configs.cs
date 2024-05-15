@@ -12,6 +12,8 @@ namespace XStart2._0.Config {
     class Configs {
         public static string AppStartPath = System.AppDomain.CurrentDomain.BaseDirectory;// 当前程序的启动目录
         public static System.IntPtr Handler = System.IntPtr.Zero;// 当前窗口句柄
+        public static System.IntPtr MstscHandler = System.IntPtr.Zero;// 远程窗口句柄
+        public static bool mstscRealClose = false;// 远程真实关闭
         public static System.IntPtr CalendarHandler = System.IntPtr.Zero;// 日历窗口句柄
         public static System.IntPtr WeatherHandler = System.IntPtr.Zero;// 天气窗口句柄
 
