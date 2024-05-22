@@ -37,7 +37,8 @@ namespace XStart2._0.ViewModels {
         public double MainLeft { get; set; }
         // 主窗口顶部位置
         public double MainTop { get; set; }
-
+        // 主窗口头部显示
+        public bool MainHeadShow { get; set; }
         // 类别名称是否展开
         [OnChangedMethod(nameof(ChangeTypeTab))]
         public bool TypeTabExpanded { get; set; }

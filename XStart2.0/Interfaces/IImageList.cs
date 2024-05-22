@@ -3,9 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace XStart2._0.Interfaces {
 
-    [ComImportAttribute()]
-    [GuidAttribute("46EB5926-582E-4017-9FDF-E8998DAA0950")]
-    [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport()]
+    [Guid("46EB5926-582E-4017-9FDF-E8998DAA0950")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IImageList {
         [PreserveSig]
         int Add(

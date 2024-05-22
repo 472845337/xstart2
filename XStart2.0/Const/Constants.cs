@@ -28,6 +28,7 @@
         public const string SECTION_WEATHER = "Weather";
         public const string SECTION_THEME = "Theme";
 
+        public const string KEY_MAIN_HEAD_SHOW = "MainHeadShow";
         public const string KEY_USER_AVATAR = "Avatar";
         public const string KEY_USER_NICKNAME = "NickName";
         public const string KEY_TYPE_TAB_EXPAND = "TypeTabExpand";

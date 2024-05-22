@@ -107,6 +107,7 @@ namespace XStart2._0 {
             WindowTheme.Instance.ThemeName = Configs.themeName;
             #endregion
             #region 加载设置项
+            string mainHeadShowStr = iniData[Constants.SECTION_CONFIG][Constants.KEY_MAIN_HEAD_SHOW];
             string typeTabExpandStr = iniData[Constants.SECTION_CONFIG][Constants.KEY_TYPE_TAB_EXPAND];
             string topMostStr = iniData[Constants.SECTION_CONFIG][Constants.KEY_TOP_MOST];
             string openType = iniData[Constants.SECTION_CONFIG][Constants.KEY_OPEN_TYPE];// 上次最后打开的类别
@@ -124,6 +125,7 @@ namespace XStart2._0 {
             string hideTitle = iniData[Constants.SECTION_CONFIG][Constants.KEY_HIDE_TITLE];// 标题隐藏
             string oneLineMulti = iniData[Constants.SECTION_CONFIG][Constants.KEY_ONE_LINE_MULTI];// 一行多个
 
+            Configs.mainHeadShow = string.IsNullOrEmpty(mainHeadShowStr) || Convert.ToBoolean(mainHeadShowStr);
             Configs.typeTabExpand = string.IsNullOrEmpty(typeTabExpandStr) || Convert.ToBoolean(typeTabExpandStr);
             Configs.topMost = !string.IsNullOrEmpty(topMostStr) && Convert.ToBoolean(topMostStr);
             Configs.openType = openType;
@@ -141,6 +143,7 @@ namespace XStart2._0 {
             Configs.hideTitle = !string.IsNullOrEmpty(hideTitle) && Convert.ToBoolean(hideTitle);
             Configs.oneLineMulti = !string.IsNullOrEmpty(oneLineMulti) && Convert.ToBoolean(oneLineMulti);
 
+            mainViewModel.MainHeadShow = Configs.mainHeadShow;
             mainViewModel.TypeTabExpanded = Configs.typeTabExpand;
             mainViewModel.ChangeTypeTab();// 初始化时要先触发一次
             mainViewModel.TopMost = Configs.topMost;
@@ -402,7 +405,7 @@ namespace XStart2._0 {
         private void MainWindow_Show(object sender, EventArgs e) {
             IsAllShow = true;
             // 将窗口置为当前并显示
-            IntPtr handle = new System.Windows.Interop.WindowInteropHelper(this).Handle;
+            IntPtr handle = new WindowInteropHelper(this).Handle;
             DllUtils.ShowWindow(handle, WinApi.SW_NORMAL);
             DllUtils.SwitchToThisWindow(handle, true);
         }
@@ -659,6 +662,7 @@ namespace XStart2._0 {
             if (true == settingWindow.ShowDialog()) {
                 SettingViewModel settingVM = settingWindow.settingVM;
                 // 将设置的值赋值，关闭前写入配置
+                mainViewModel.MainHeadShow = settingVM.MainHeadShow;
                 mainViewModel.Audio = settingVM.Audio;
                 mainViewModel.TopMost = settingVM.MainTopMost;
                 mainViewModel.AutoRun = settingVM.AutoRun;
@@ -1510,7 +1514,8 @@ namespace XStart2._0 {
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_THEME_CUSTOM, ref Configs.themeCustom, WindowTheme.Instance.ThemeCustom);
             #endregion
 
-            #region 样式
+            #region 配置项
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_MAIN_HEAD_SHOW, ref Configs.mainHeadShow, mainViewModel.MainHeadShow);// 主页面头部显示
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_OPEN_TYPE, ref Configs.openType, mainViewModel.OpenType);// 类别标题是否展开
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_TYPE_TAB_EXPAND, ref Configs.typeTabExpand, mainViewModel.TypeTabExpanded);// 类别标题是否展开
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_TOP_MOST, ref Configs.topMost, mainViewModel.TopMost);// 置顶

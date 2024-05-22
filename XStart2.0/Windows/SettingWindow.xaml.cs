@@ -14,6 +14,7 @@ namespace XStart2._0.Windows {
         public SettingViewModel settingVM = new SettingViewModel();
         public SettingWindow(MainViewModel mainVm) {
             InitializeComponent();
+            settingVM.MainHeadShow = mainVm.MainHeadShow;
             settingVM.MainTopMost = mainVm.TopMost;
             settingVM.Audio = mainVm.Audio;
             settingVM.AutoRun = mainVm.AutoRun;

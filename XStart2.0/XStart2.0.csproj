@@ -150,6 +150,7 @@
     <Compile Include="Commands\ResumeCommand.cs" />
     <Compile Include="Converters\BaseMultiValueConverter.cs" />
     <Compile Include="Converters\BaseValueConverter.cs" />
+    <Compile Include="Converters\Boolean2MainHeadShowConverter.cs" />
     <Compile Include="Converters\RdpModelConverter.cs" />
     <Compile Include="Converters\ProjectKind2EnabledConverter.cs" />
     <Compile Include="Converters\Boolean2IsCheckedConverter.cs" />
@@ -483,7 +484,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <Resource Include="Files\Images\*.png" />
-	<Resource Include="Files\Images\*.ico" />
+    <Resource Include="Files\Images\*.ico" />
     <Resource Include="Files\xstart2.ico" />
     <Resource Include="Files\Icons\App\*.ico" />
     <EmbeddedResource Include="Files\Images\Avatar\DefaultUser.png">

@@ -89,15 +89,16 @@ namespace XStart2._0.Windows {
 
         private void RdpConnectTick(object sender, EventArgs e) {
             if (newRdp != null) {
-                System.Windows.Forms.TabPage tabPage = new System.Windows.Forms.TabPage();
-
-                tabPage.Text = newRdp.Title + "    ";// 标题要加长，用于放置自定义的关闭按钮
-                AxMSTSCLib.AxMsTscAxNotSafeForScripting rdpScript = new AxMSTSCLib.AxMsTscAxNotSafeForScripting();
-                System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
-                rdpScript.Height = rdpHeight;
-                rdpScript.Width = rdpWidth;
+                System.Windows.Forms.TabPage tabPage = new System.Windows.Forms.TabPage {
+                    Text = newRdp.Title + "    "// 标题要加长，用于放置自定义的关闭按钮
+                };
+                AxMSTSCLib.AxMsTscAxNotSafeForScripting rdpScript = new AxMSTSCLib.AxMsTscAxNotSafeForScripting {
+                    Height = rdpHeight,
+                    Width = rdpWidth
+                };
                 tabPage.Controls.Add(rdpScript);
                 tabPage.Tag = newRdp;
+                System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
                 rdpTabControl.TabPages.Add(tabPage);
                 rdpTabControl.SelectedTab = tabPage;
                 try {
@@ -139,9 +140,10 @@ namespace XStart2._0.Windows {
                 DisconnectRdp(rdpScript);
                 tabPage.Controls.Clear();
                 // 启用新连接
-                rdpScript = new AxMSTSCLib.AxMsTscAxNotSafeForScripting();
-                rdpScript.Height = rdpHeight;
-                rdpScript.Width = rdpWidth;
+                rdpScript = new AxMSTSCLib.AxMsTscAxNotSafeForScripting {
+                    Height = rdpHeight,
+                    Width = rdpWidth
+                };
                 tabPage.Controls.Add(rdpScript);
                 try {
                     rdpScript.Server = rdp.Server;

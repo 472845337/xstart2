@@ -99,7 +99,7 @@
     <!-- 窗体布局-->
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="68"/>
+            <RowDefinition Height="{Binding MainHeadShow,Converter={StaticResource Boolean2MainHeadShowConverter}}"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -446,31 +446,31 @@
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="导出" Click="BackUp_Click">
-                                <MenuItem.Icon>
-                                    <Image Source="/Files/Icons/App/export.ico"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem Header="导入" Click="Recover_Click">
-                                <MenuItem.Icon>
-                                    <Image Source="/Files/Icons/App/import.ico"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <Separator/>
-                            <MenuItem Header="运行自启动" Click="AllAutoRun_Click">
-                                <MenuItem.Icon>
-                                    <Image Source="/Files/Icons/App/run.ico"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem Header="取消自启动" Click="CancelAllAutoRun_Click">
-                                <MenuItem.Icon>
-                                    <Image Source="/Files/Icons/App/remove.ico"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem Header="取消栏目自定义样式" Click="CancelAllCustomStyle_Click">
-                                <MenuItem.Icon>
-                                    <Image Source="/Files/Icons/App/Fresh.ico"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/export.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="导入" Click="Recover_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/import.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator/>
+                        <MenuItem Header="运行自启动" Click="AllAutoRun_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/run.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="取消自启动" Click="CancelAllAutoRun_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/remove.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="取消栏目自定义样式" Click="CancelAllCustomStyle_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/Fresh.ico"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
                         <Separator/>
                         <MenuItem Header="恢复默认" Click="RestoreDefault_Click">
                             <MenuItem.Icon>
