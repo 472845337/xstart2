@@ -44,8 +44,11 @@ namespace XStart2._0.Windows {
         }
 
         private void Window_Closing(object sender, System.EventArgs e) {
-            VM = null;
-            DataContext = null;
+            VM.CustomFontAwesomes.Clear();
+            VM.SolidFontAwesomes.GetEnumerator().Dispose();
+            VM.BrandsFontAwesomes.GetEnumerator().Dispose();
+            VM.FontAwesomes4.GetEnumerator().Dispose();
+            VM.QueryFontAwesomes.Clear();
         }
 
         private void SelectIconColor(object sender, RoutedEventArgs e) {

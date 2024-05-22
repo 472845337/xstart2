@@ -71,7 +71,6 @@ namespace XStart2._0.Windows {
                 VM.SelectedFa = faw.VM.SelectedFa;
                 VM.SelectedFf = faw.VM.SelectedFf;
             }
-            faw.Close();
         }
     }
 }
