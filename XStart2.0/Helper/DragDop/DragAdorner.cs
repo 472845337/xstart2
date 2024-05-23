@@ -14,15 +14,15 @@ namespace DragDropAssist {
     public class DragAdorner : Adorner {
         #region Data
 
-        private Rectangle child = null;
+        private readonly Rectangle child = null;
         private double offsetLeft = 0;
         private double offsetTop = 0;
         /// <summary>
-        /// ¹ÊÊÂ°å
+        /// ï¿½ï¿½ï¿½Â°ï¿½
         /// </summary>
         private Storyboard m_Sb;
-        private UIElement itemToDrag;
-        private double oldItemToDragOpacity;
+        private readonly UIElement itemToDrag;
+        private readonly double oldItemToDragOpacity;
 
         private static readonly Brush storkeBrush = GetStorkeBrush();
         private static readonly DropShadowEffect storkeEffect = GetStorkeEffect();
@@ -119,11 +119,12 @@ namespace DragDropAssist {
                 child.Effect = storkeEffect;
 
                 m_Sb = new Storyboard();
-                DoubleAnimation da = new DoubleAnimation();
-                da.From = (child.Width + child.Height) * 2 + 10;
-                da.To = 0;
-                da.Duration = new Duration(TimeSpan.FromSeconds(1.5d));
-                da.FillBehavior = FillBehavior.HoldEnd;
+                DoubleAnimation da = new DoubleAnimation {
+                    From = (child.Width + child.Height) * 2 + 10,
+                    To = 0,
+                    Duration = new Duration(TimeSpan.FromSeconds(1.5d)),
+                    FillBehavior = FillBehavior.HoldEnd
+                };
                 Storyboard.SetTarget(da, child);
                 Storyboard.SetTargetProperty(da, new PropertyPath(Rectangle.StrokeDashOffsetProperty));
                 m_Sb.Children.Add(da);

@@ -118,7 +118,7 @@ namespace XStart2._0.Utils {
                         case VOLUME_CD_PLAYER_ADD: {
                                 string deviceName = string.Empty; int volume = 0; DataFlow df = DataFlow.Capture;
                                 if (VOLUME_MIC_ADD.Equals(project.Path)) { deviceName = Constants.DEVICE_NAME_MIC; volume = Configs.micVolume; } else if (VOLUME_LINE_IN_ADD.Equals(project.Path)) { deviceName = Constants.DEVICE_NAME_LINE_IN; volume = Configs.lineInVolume; } else if (VOLUME_CD_PLAYER_ADD.Equals(project.Path)) { deviceName = Constants.DEVICE_NAME_CD_PLAYER; volume = Configs.cdPlayerVolume; df = DataFlow.Render; }
-                                if (volume == 100) throw new Exception("已达最高值！");
+                                if (volume == 100) { throw new Exception("已达最高值！"); }
                                 volume = (volume + Constants.VOLUME_STEP > 100) ? 100 : (volume + Constants.VOLUME_STEP);
                                 if (VOLUME_MIC_ADD.Equals(project.Path)) { Configs.micVolume = volume; } else if (VOLUME_LINE_IN_ADD.Equals(project.Path)) { Configs.lineInVolume = volume; } else if (VOLUME_CD_PLAYER_ADD.Equals(project.Path)) { Configs.cdPlayerVolume = volume; }
 
@@ -131,7 +131,7 @@ namespace XStart2._0.Utils {
                         case VOLUME_CD_PLAYER_REDUCE: {
                                 string deviceName = string.Empty; int volume = 0; DataFlow df = DataFlow.Capture;
                                 if (VOLUME_MIC_ADD.Equals(project.Path)) { deviceName = Constants.DEVICE_NAME_MIC; volume = Configs.micVolume; } else if (VOLUME_LINE_IN_ADD.Equals(project.Path)) { deviceName = Constants.DEVICE_NAME_LINE_IN; volume = Configs.lineInVolume; } else if (VOLUME_CD_PLAYER_ADD.Equals(project.Path)) { deviceName = Constants.DEVICE_NAME_CD_PLAYER; volume = Configs.cdPlayerVolume; df = DataFlow.Render; }
-                                if (volume <= 2) throw new Exception("已达最低值！");
+                                if (volume <= 2) { throw new Exception("已达最低值！"); }
                                 volume = (volume < Constants.VOLUME_STEP + 2) ? 2 : (volume - Constants.VOLUME_STEP);
                                 if (VOLUME_MIC_ADD.Equals(project.Path)) { Configs.micVolume = volume; } else if (VOLUME_LINE_IN_ADD.Equals(project.Path)) { Configs.lineInVolume = volume; } else if (VOLUME_CD_PLAYER_ADD.Equals(project.Path)) { Configs.cdPlayerVolume = volume; }
 
@@ -193,46 +193,46 @@ namespace XStart2._0.Utils {
             if (null == p || null == toP) {
                 return;
             }
-            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Section))) {
+            if (!notNull || !string.IsNullOrEmpty(p.Section)) {
                 toP.Section = p.Section;
             }
-            if (!notNull || (notNull && !string.IsNullOrEmpty(p.TypeSection))) {
+            if (!notNull || !string.IsNullOrEmpty(p.TypeSection)) {
                 toP.TypeSection = p.TypeSection;
             }
-            if (!notNull || (notNull && !string.IsNullOrEmpty(p.ColumnSection))) {
+            if (!notNull || !string.IsNullOrEmpty(p.ColumnSection)) {
                 toP.ColumnSection = p.ColumnSection;
             }
-            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Kind))) {
+            if (!notNull || !string.IsNullOrEmpty(p.Kind)) {
                 toP.Kind = p.Kind;
             }
-            if (!notNull || (notNull && !string.IsNullOrEmpty(p.FontColor))) {
+            if (!notNull || !string.IsNullOrEmpty(p.FontColor)) {
                 toP.FontColor = p.FontColor;
             }
-            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Arguments))) {
+            if (!notNull || !string.IsNullOrEmpty(p.Arguments)) {
                 toP.Arguments = p.Arguments;
             }
-            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Path))) {
+            if (!notNull || !string.IsNullOrEmpty(p.Path)) {
                 toP.Path = p.Path;
             }
-            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Name))) {
+            if (!notNull || !string.IsNullOrEmpty(p.Name)) {
                 toP.Name = p.Name;
             }
-            if (!notNull || (notNull && null != p.AutoRun)) {
+            if (!notNull || null != p.AutoRun) {
                 toP.AutoRun = p.AutoRun;
             }
-            if (!notNull || (notNull && !string.IsNullOrEmpty(p.IconPath))) {
+            if (!notNull || !string.IsNullOrEmpty(p.IconPath)) {
                 toP.IconPath = p.IconPath;
             }
-            if (!notNull || (notNull && null != p.IconIndex)) {
+            if (!notNull || null != p.IconIndex) {
                 toP.IconIndex = p.IconIndex;
             }
-            if (!notNull || (notNull && !string.IsNullOrEmpty(p.RunStartPath))) {
+            if (!notNull || !string.IsNullOrEmpty(p.RunStartPath)) {
                 toP.RunStartPath = p.RunStartPath;
             }
-            if (!notNull || (notNull && !string.IsNullOrEmpty(p.HotKey))) {
+            if (!notNull || !string.IsNullOrEmpty(p.HotKey)) {
                 toP.HotKey = p.HotKey;
             }
-            if (!notNull || (notNull && !string.IsNullOrEmpty(p.Remark))) {
+            if (!notNull || !string.IsNullOrEmpty(p.Remark)) {
                 toP.Remark = p.Remark;
             }
         }

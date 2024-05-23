@@ -136,7 +136,7 @@ namespace XStart2._0 {
             Configs.exitWarn = string.IsNullOrEmpty(exitWarn) || Convert.ToBoolean(exitWarn);
             Configs.closeBorderHide = string.IsNullOrEmpty(closeBorderHide) || Convert.ToBoolean(closeBorderHide);
             Configs.textEditor = textEditor;
-            if (!string.IsNullOrEmpty(urlOpen)) { Configs.urlOpen = urlOpen; }
+            Configs.urlOpen = string.IsNullOrEmpty(urlOpen) ? Constants.URL_OPEN_DEFAULT : urlOpen;
             Configs.urlOpenCustomBrowser = urlOpenCustomBrowser;
             Configs.iconSize = string.IsNullOrEmpty(iconSize) ? Constants.ICON_SIZE_32 : Convert.ToInt32(iconSize);
             Configs.orientation = string.IsNullOrEmpty(orientation) ? Constants.ORIENTATION_HORIZONTAL : orientation;
@@ -167,14 +167,18 @@ namespace XStart2._0 {
             #endregion
 
             #region 系统功能图标和操作
-            string systemProjectOpenPage = iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_SYSTEM_PROJECT_OPEN_PAGE];
+            string systemProjectOpenPage = iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_SYSTEM_PROJECT_OPEN_PAGE];// 系统功能最后一次打开的TabPage页
+            string addMulti = iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_ADD_MULTI];// 是否添加多个
+
             Configs.systemAppOpenPage = string.IsNullOrEmpty(systemProjectOpenPage) ? 0 : Convert.ToInt32(systemProjectOpenPage);
-            string addMulti = iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_ADD_MULTI];
             Configs.systemAppAddMulti = !string.IsNullOrEmpty(addMulti) && Convert.ToBoolean(addMulti);
+            // 系统功能图标初始化
             Configs.InitIconDic();
             SystemProjectParam.InitOperate();
+            // 任务栏状态获取
             Configs.taskbarHandler = DllUtils.FindWindow("Shell_TrayWnd", null);
             Configs.taskbarIsShow = (DllUtils.GetWindowLong(Configs.taskbarHandler, WinApi.GWL_STYLE) & WinApi.WS_VISIBLE) == WinApi.WS_VISIBLE;
+            // 音量状态获取
             DllUtils.waveOutGetVolume(0, out uint volume);
             uint leftVolume = volume & 0x0000FFFF, rightVolume = volume >> 16;
             Configs.volume = (leftVolume + rightVolume) / 2;
@@ -359,12 +363,16 @@ namespace XStart2._0 {
             notifyIcon.Icon = new System.Drawing.Icon(iconStream);
             notifyIcon.Visible = true;
             notifyIcon.DoubleClick += MainWindow_Show;
+            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu();
 
-            System.Windows.Forms.MenuItem showWindowMenuItem = new System.Windows.Forms.MenuItem("显示窗口");
-            showWindowMenuItem.Click += MainWindow_Show;
-            System.Windows.Forms.MenuItem closeWindowMenuItem = new System.Windows.Forms.MenuItem("退出");
-            closeWindowMenuItem.Click += WindowCloseMenu_Click;
-            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[] { showWindowMenuItem, closeWindowMenuItem });
+            notifyIcon.ContextMenu.MenuItems.Add("显示窗口", MainWindow_Show);
+            notifyIcon.ContextMenu.MenuItems.Add("设置", Open_Setting);
+            notifyIcon.ContextMenu.MenuItems.Add("-");
+            notifyIcon.ContextMenu.MenuItems.Add("日历", Calendar_Click);
+            notifyIcon.ContextMenu.MenuItems.Add("文本编辑器", OpenNotePad_Click);
+            notifyIcon.ContextMenu.MenuItems.Add("天气", Weather_Click);
+            notifyIcon.ContextMenu.MenuItems.Add("-");
+            notifyIcon.ContextMenu.MenuItems.Add("退出", WindowCloseMenu_Click);
             #endregion
 
             Configs.inited = true;
@@ -651,7 +659,7 @@ namespace XStart2._0 {
             #endregion
         }
 
-        private void Open_Setting(object sender, RoutedEventArgs e) {
+        private void Open_Setting(object sender, EventArgs e) {
             OpenSettingWindow();
         }
 
@@ -1941,7 +1949,7 @@ namespace XStart2._0 {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Calendar_Click(object sender, RoutedEventArgs e) {
+        private void Calendar_Click(object sender, EventArgs e) {
             if (Configs.CalendarHandler.ToInt32() > 0) {
                 // 打开当前窗口
                 DllUtils.SwitchToThisWindow(Configs.CalendarHandler, true);
@@ -1954,7 +1962,7 @@ namespace XStart2._0 {
 
         }
 
-        private void OpenNotePad_Click(object sender, RoutedEventArgs e) {
+        private void OpenNotePad_Click(object sender, EventArgs e) {
             if (string.IsNullOrEmpty(mainViewModel.TextEditor)) {
                 Process.Start("notepad");
             } else {
@@ -1967,7 +1975,7 @@ namespace XStart2._0 {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Weather_Click(object sender, RoutedEventArgs e) {
+        private void Weather_Click(object sender, EventArgs e) {
             bool openWeatherWindow = false;
             if ((string.IsNullOrEmpty(Configs.weatherYkyApiAppId) || string.IsNullOrEmpty(Configs.weatherYkyApiAppSecret))
                 && string.IsNullOrEmpty(Configs.weatherGaodeAppKey)

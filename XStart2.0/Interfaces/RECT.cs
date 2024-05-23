@@ -3,9 +3,9 @@
 namespace XStart2._0.Interfaces {
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT {
-        private int _Left;
-        private int _Top;
-        private int _Right;
-        private int _Bottom;
+        private readonly int _Left;
+        private readonly int _Top;
+        private readonly int _Right;
+        private readonly int _Bottom;
     }
 }

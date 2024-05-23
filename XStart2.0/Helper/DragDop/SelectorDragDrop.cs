@@ -120,12 +120,12 @@ namespace DragDropAssist {
                 if (this.selector != null) {
                     #region Unhook Events
 
-                    this.selector.PreviewMouseLeftButtonDown -= selector_PreviewMouseLeftButtonDown;
-                    this.selector.PreviewMouseMove -= selector_PreviewMouseMove;
-                    this.selector.DragOver -= selector_DragOver;
-                    this.selector.DragLeave -= selector_DragLeave;
-                    this.selector.DragEnter -= selector_DragEnter;
-                    this.selector.Drop -= selector_Drop;
+                    this.selector.PreviewMouseLeftButtonDown -= Selector_PreviewMouseLeftButtonDown;
+                    this.selector.PreviewMouseMove -= Selector_PreviewMouseMove;
+                    this.selector.DragOver -= Selector_DragOver;
+                    this.selector.DragLeave -= Selector_DragLeave;
+                    this.selector.DragEnter -= Selector_DragEnter;
+                    this.selector.Drop -= Selector_Drop;
 
                     #endregion // Unhook Events
                 }
@@ -138,12 +138,12 @@ namespace DragDropAssist {
 
                     #region Hook Events
 
-                    this.selector.PreviewMouseLeftButtonDown += selector_PreviewMouseLeftButtonDown;
-                    this.selector.PreviewMouseMove += selector_PreviewMouseMove;
-                    this.selector.DragOver += selector_DragOver;
-                    this.selector.DragLeave += selector_DragLeave;
-                    this.selector.DragEnter += selector_DragEnter;
-                    this.selector.Drop += selector_Drop;
+                    this.selector.PreviewMouseLeftButtonDown += Selector_PreviewMouseLeftButtonDown;
+                    this.selector.PreviewMouseMove += Selector_PreviewMouseMove;
+                    this.selector.DragOver += Selector_DragOver;
+                    this.selector.DragLeave += Selector_DragLeave;
+                    this.selector.DragEnter += Selector_DragEnter;
+                    this.selector.Drop += Selector_Drop;
 
                     #endregion // Hook Events
                 }
@@ -188,7 +188,7 @@ namespace DragDropAssist {
 
         #region selector_PreviewMouseLeftButtonDown
 
-        void selector_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+        void Selector_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             if (this.IsMouseOverScrollbar) {
                 //Set the flag to false when cursor is over scrollbar.
                 this.canInitiateDrag = false;
@@ -213,7 +213,7 @@ namespace DragDropAssist {
 
         #region selector_PreviewMouseMove
 
-        void selector_PreviewMouseMove(object sender, MouseEventArgs e) {
+        void Selector_PreviewMouseMove(object sender, MouseEventArgs e) {
             if (!this.CanStartDragOperation)
                 return;
 
@@ -243,7 +243,7 @@ namespace DragDropAssist {
 
         #region selector_DragOver
 
-        void selector_DragOver(object sender, DragEventArgs e) {
+        void Selector_DragOver(object sender, DragEventArgs e) {
             e.Effects = DragDropEffects.Move;
 
             if (this.ShowDragAdornerResolved)
@@ -258,7 +258,7 @@ namespace DragDropAssist {
 
         #region selector_DragLeave
 
-        void selector_DragLeave(object sender, DragEventArgs e) {
+        void Selector_DragLeave(object sender, DragEventArgs e) {
             if (!this.IsMouseOver(this.selector)) {
                 if (this.ItemUnderDragCursor != null)
                     this.ItemUnderDragCursor = null;
@@ -273,7 +273,7 @@ namespace DragDropAssist {
 
         #region selector_DragEnter
 
-        void selector_DragEnter(object sender, DragEventArgs e) {
+        void Selector_DragEnter(object sender, DragEventArgs e) {
             if (this.dragAdorner != null && this.dragAdorner.Visibility != Visibility.Visible) {
                 // Update the location of the adorner and then show it.				
                 this.UpdateDragAdornerLocation();
@@ -285,7 +285,7 @@ namespace DragDropAssist {
 
         #region selector_Drop
 
-        void selector_Drop(object sender, DragEventArgs e) {
+        void Selector_Drop(object sender, DragEventArgs e) {
             if (this.ItemUnderDragCursor != null)
                 this.ItemUnderDragCursor = null;
 
@@ -565,16 +565,16 @@ namespace DragDropAssist {
             VisualBrush brush = new VisualBrush(itemToDrag);
 
             // Create an element which displays the source item while it is dragged.
-            this.dragAdorner = new DragAdorner(this.selector, itemToDrag.RenderSize, brush, itemToDrag);
+            dragAdorner = new DragAdorner(selector, itemToDrag.RenderSize, brush, itemToDrag) {
+                // Set the drag adorner's opacity.		
+                Opacity = DragAdornerOpacity
+            };
 
-            // Set the drag adorner's opacity.		
-            this.dragAdorner.Opacity = this.DragAdornerOpacity;
-
-            AdornerLayer layer = AdornerLayer.GetAdornerLayer(this.selector);
+            AdornerLayer layer = AdornerLayer.GetAdornerLayer(selector);
             layer.Add(dragAdorner);
 
             // Save the location of the cursor when the left mouse button was pressed.
-            this.ptMouseDown = GetMousePosition(this.selector);
+            ptMouseDown = GetMousePosition(selector);
             return layer;
         }
 
@@ -818,80 +818,55 @@ namespace DragDropAssist {
     /// </summary>
     /// <typeparam name="ItemType">The type of data object being dropped.</typeparam>
     public class ProcessDropEventArgs : EventArgs {
-        #region Data
-        IEnumerable itemsSource;
-        object dataItem;
-        int oldIndex;
-        int newIndex;
-        DragDropEffects allowedEffects = DragDropEffects.None;
-        DragDropEffects effects = DragDropEffects.None;
+        #region Public Properties
 
-        #endregion // Data
+        /// <summary>
+        /// The items source of the selector where the drop occurred.
+        /// </summary>
+        public IEnumerable ItemsSource { get; }
+
+        /// <summary>
+        /// The data object which was dropped.
+        /// </summary>
+        public object DataItem { get; }
+
+        /// <summary>
+        /// The current index of the data item being dropped, in the ItemsSource collection.
+        /// </summary>
+        public int OldIndex { get; }
+
+        /// <summary>
+        /// The target index of the data item being dropped, in the ItemsSource collection.
+        /// </summary>
+        public int NewIndex { get; }
+
+        /// <summary>
+        /// The drag drop effects allowed to be performed.
+        /// </summary>
+        public DragDropEffects AllowedEffects { get; } = DragDropEffects.None;
+
+        /// <summary>
+        /// The drag drop effect(s) performed on the dropped item.
+        /// </summary>
+        public DragDropEffects Effects { get; set; } = DragDropEffects.None;
+
+        #endregion // Public Properties
 
         #region Constructor
-
         internal ProcessDropEventArgs(
             IEnumerable itemsSource,
             object dataItem,
             int oldIndex,
             int newIndex,
             DragDropEffects allowedEffects) {
-            this.itemsSource = itemsSource;
-            this.dataItem = dataItem;
-            this.oldIndex = oldIndex;
-            this.newIndex = newIndex;
-            this.allowedEffects = allowedEffects;
+            ItemsSource = itemsSource;
+            DataItem = dataItem;
+            OldIndex = oldIndex;
+            NewIndex = newIndex;
+            AllowedEffects = allowedEffects;
         }
 
         #endregion // Constructor
-
-        #region Public Properties
-
-        /// <summary>
-        /// The items source of the selector where the drop occurred.
-        /// </summary>
-        public IEnumerable ItemsSource {
-            get { return this.itemsSource; }
-        }
-
-        /// <summary>
-        /// The data object which was dropped.
-        /// </summary>
-        public object DataItem {
-            get { return this.dataItem; }
-        }
-
-        /// <summary>
-        /// The current index of the data item being dropped, in the ItemsSource collection.
-        /// </summary>
-        public int OldIndex {
-            get { return this.oldIndex; }
-        }
-
-        /// <summary>
-        /// The target index of the data item being dropped, in the ItemsSource collection.
-        /// </summary>
-        public int NewIndex {
-            get { return this.newIndex; }
-        }
-
-        /// <summary>
-        /// The drag drop effects allowed to be performed.
-        /// </summary>
-        public DragDropEffects AllowedEffects {
-            get { return allowedEffects; }
-        }
-
-        /// <summary>
-        /// The drag drop effect(s) performed on the dropped item.
-        /// </summary>
-        public DragDropEffects Effects {
-            get { return effects; }
-            set { effects = value; }
-        }
-
-        #endregion // Public Properties
     }
-
     #endregion // ProcessDropEventArgs
 }

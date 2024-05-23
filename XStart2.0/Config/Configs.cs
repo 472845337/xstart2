@@ -35,7 +35,7 @@ namespace XStart2._0.Config {
         public static string rdpModel;// 远程方式
         public static bool closeBorderHide = true;// 靠边自动隐藏
         public static string textEditor;
-        public static string urlOpen = Constants.URL_OPEN_DEFAULT;
+        public static string urlOpen;
         public static string urlOpenCustomBrowser;
         public static int iconSize;
         public static string orientation;
