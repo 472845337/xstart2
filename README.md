@@ -13,7 +13,14 @@
 4.Newtonsoft.Json    --json串处理\
 5.PropertyChanged.Fody    --属性通知\
 6.WpfAnimatedGif           --gif动画\
+7.MSTSCLib       --远程插件\
 
+#### 功能点
+快捷应用自启动
+软体主题变更
+文件，目录，系统功能快捷启动
+日历，天气插件
+远程桌面统一管理
 
 #### 安装教程
 
