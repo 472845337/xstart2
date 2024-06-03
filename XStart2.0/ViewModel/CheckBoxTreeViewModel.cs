@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
     /// <summary>
     ///  这个继承BaseViewModel后，没有效果，先使用原有的逻辑
     /// </summary>

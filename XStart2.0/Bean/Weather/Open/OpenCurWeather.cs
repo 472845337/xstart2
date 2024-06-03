@@ -4,7 +4,8 @@ using System.Collections.Generic;
 namespace XStart2._0.Bean.Weather.Open {
     public class OpenCurWeather : OpenWeather {
         public const string ApiPath = "/data/2.5/weather";
-        public CoordBean coord { get; set; }
+        [JsonProperty("coord")]
+        public CoordBean Coord { get; set; }
         public List<WeatherBean> Weather { get; set; }
         [JsonProperty("base")]
         public string Base { get; set; }

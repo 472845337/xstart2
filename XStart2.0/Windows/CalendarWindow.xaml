@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XStart2._0.Windows"
         mc:Ignorable="d"
-        Title="日历" Height="550" Width="700" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Icon="pack://application:,,,/Files/Icons/App/calendar.ico">
+        Title="日历" Height="570" Width="720" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Icon="pack://application:,,,/Files/Icons/App/calendar.ico">
     <Window.Resources>
         <Style x:Key="CalendarStyle1"
                TargetType="{x:Type Calendar}">
@@ -723,13 +723,13 @@
             CalendarDayButtonStyle="{DynamicResource CalendarDayButtonStyle1}"
             CalendarButtonStyle="{DynamicResource CalendarButtonStyle1}"
             Grid.Row="0" Grid.Column="0" SelectedDatesChanged="Calendar_SelectedDatesChanged" SelectionMode="SingleDate" IsTodayHighlighted="True"/>
-        <Grid Grid.Row="0" Grid.Column="1">
+        <Grid Grid.Row="0" Grid.Column="1" Margin="0 50 0 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="70"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -738,57 +738,59 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="年" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding EraYear}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="月" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding EraMonth}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="日" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
-            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding EraDay}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="星期" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
-            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding WeekDay}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
-            <TextBlock Grid.Row="5" Grid.Column="0" Text="节假日" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
-            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Holiday}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
-            <TextBlock Grid.Row="6" Grid.Column="0" Text="属相" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
-            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Zodiac}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
-            <TextBlock Grid.Row="7" Grid.Column="0" Text="节气" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
-            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding SolarTerm}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding SelectedDate}" FontSize="16" Style="{StaticResource FormLabel_Style}" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="14" Style="{StaticResource FormLabel_Style}">
+                <Run Text="农历："/>
+                <Run Text="{Binding ChineseDate}"/>
+            </TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" FontSize="14" Style="{StaticResource FormLabel_Style}">
+                <Run Text="干支："/>
+                <Run Text="{Binding EraDate}"/>
+            </TextBlock>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="星期" FontSize="14" Style="{StaticResource FormLabel_Style}"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding WeekDay}" IsReadOnly="True" FontSize="14" Style="{StaticResource FormValue_Style}"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="节假日" FontSize="14" Style="{StaticResource FormLabel_Style}"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Holiday}" IsReadOnly="True" FontSize="14" Style="{StaticResource FormValue_Style}"/>
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="属相" FontSize="14" Style="{StaticResource FormLabel_Style}"/>
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Zodiac}" IsReadOnly="True" FontSize="14" Style="{StaticResource FormValue_Style}"/>
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="节气" FontSize="14" Style="{StaticResource FormLabel_Style}"/>
+            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding SolarTerm}" IsReadOnly="True" FontSize="14" Style="{StaticResource FormValue_Style}"/>
         </Grid>
         <Separator Grid.Row="1" Grid.ColumnSpan="2"/>
-        <Grid Grid.Row="2" Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="70"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="70"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="70"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="70"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="年" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CurEraYear}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
-            <TextBlock Grid.Row="0" Grid.Column="2" Text="月" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
-            <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding CurEraMonth}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
-            <TextBlock Grid.Row="0" Grid.Column="4" Text="日" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
-            <TextBox Grid.Row="0" Grid.Column="5" Text="{Binding CurEraDay}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
-            <TextBlock Grid.Row="0" Grid.Column="6" Text="星期" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
-            <TextBox Grid.Row="0" Grid.Column="7" Text="{Binding CurWeekDay}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="属相" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CurZodiac}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
-            <TextBlock Grid.Row="1" Grid.Column="2" Text="节气" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
-            <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding CurSolarTerm}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
-            <TextBlock Grid.Row="1" Grid.Column="4" Text="节假日" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
-            <TextBox Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="3" Text="{Binding CurHoliday}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
-            <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="8" HorizontalAlignment="Right" FontSize="18" Style="{StaticResource FormLabel_Style}">
+        <GroupBox Grid.Row="2" Grid.ColumnSpan="2" Header="当前日期">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="农历" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding CurChineseDate}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
+                <TextBlock Grid.Row="0" Grid.Column="4" Text="干支" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
+                <TextBox Grid.Row="0" Grid.Column="5" Grid.ColumnSpan="3" Text="{Binding CurEraDate}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="星期" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CurWeekDay}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="属相" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
+                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding CurZodiac}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
+                <TextBlock Grid.Row="1" Grid.Column="4" Text="节气" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
+                <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding CurSolarTerm}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
+                <TextBlock Grid.Row="1" Grid.Column="6" Text="节假日" FontSize="18" Style="{StaticResource FormLabel_Style}"/>
+                <TextBox Grid.Row="1" Grid.Column="7" Text="{Binding CurHoliday}" IsReadOnly="True" FontSize="18" Style="{StaticResource FormValue_Style}"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="8" HorizontalAlignment="Right" FontSize="18" Style="{StaticResource FormLabel_Style}">
                 <Run Text="{Binding MyDateTime.CurDate}"/>
                 <Run Text="{Binding MyDateTime.CurTime}"/>
-            </TextBlock>
-        </Grid>
-        
+                </TextBlock>
+            </Grid>
+        </GroupBox>
     </Grid>
 </Window>

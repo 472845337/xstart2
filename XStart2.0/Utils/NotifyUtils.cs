@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using XStart2._0.ViewModels;
+using XStart2._0.ViewModel;
 using XStart2._0.Windows;
 
 namespace XStart2._0.Utils {

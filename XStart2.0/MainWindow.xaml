@@ -29,7 +29,7 @@
         <Style x:Key="MenuStyleKey" TargetType="MenuItem">
             <Setter Property="Background" Value="Transparent" />
         </Style>
-        <!-- 栏目样式 -->
+        <!-- 栏目标题样式 -->
         <Style x:Key="ExpanderTitle_Style" TargetType="ToggleButton">
             <Setter Property="Height" Value="36"/>
             <Setter Property="Background" Value="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}"/>
@@ -55,6 +55,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <!-- 栏目面板样式 -->
         <Style x:Key="ExpandablePanelStyle" TargetType="{x:Type Expander}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -80,7 +81,7 @@
             </Setter>
             <EventSetter Event="Expanded" Handler="Expander_Expanded_Handler"/>
         </Style>
-
+        <!-- 类别TabHeader上的右键菜单 -->
         <ContextMenu x:Key="TypeTabContextMenu">
             <ContextMenu.Items>
                 <MenuItem Name="AddType" Header="添加类别" Click="AddType_Click">
@@ -491,6 +492,11 @@
                     <MenuItem Click="Open_Setting">
                         <MenuItem.Icon>
                             <Image Source="/Files/Icons/App/setting.ico"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Click="Open_Query">
+                        <MenuItem.Icon>
+                            <Image Source="/Files/Icons/App/query.ico"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem>

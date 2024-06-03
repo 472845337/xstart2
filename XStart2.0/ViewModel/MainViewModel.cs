@@ -5,7 +5,7 @@ using XStart2._0.Const;
 using XStart2._0.Services;
 using XStart2._0.Utils;
 
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
     public class MainViewModel : BaseViewModel {
 
         #region 用户数据

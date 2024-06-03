@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
@@ -10,35 +11,28 @@ using XStart2._0.Interfaces;
 namespace XStart2._0.Utils {
     class IconUtils {
         /// <summary>
-        /// 获取exe文件中的图标
+        /// 获取ico文件中的图标
         /// </summary>
-        /// <param name="exePath"></param>
+        /// <param name="icoPath"></param>
         /// <returns></returns>
-        public static List<Bitmap> GetIconImage(string exePath) {
+        public static List<Bitmap> GetIconImage(string icoPath, int iconSize) {
             List<Bitmap> imageList = new List<Bitmap>();
 
             //第一步：获取程序中的图标数
-            int iconCount = DllUtils.ExtractIconEx(exePath, -1, null, null, 0);
+            uint _nIcons = DllUtils.PrivateExtractIcons(icoPath, 0, 0, 0, null, null, 0, 0);
 
             //第二步：创建存放大/小图标的空间
-            var largeIcons = new IntPtr[iconCount];
-            var smallIcons = new IntPtr[iconCount];
+            IntPtr[] phicon = new IntPtr[_nIcons];
+            uint[] piconid = new uint[_nIcons];
+            uint nIcons = DllUtils.PrivateExtractIcons(icoPath, 0, iconSize, iconSize, phicon, piconid, _nIcons, 0);
 
-            //第三步：抽取所有的大小图标保存到largeIcons和smallIcons中
-            DllUtils.ExtractIconEx(exePath, 0, largeIcons, smallIcons, iconCount);
-
-            //第四步：显示抽取的图标(推荐使用imageList和listview搭配显示）
-            for (int i = 0; i < iconCount; i++) {
-                IntPtr intPtr = largeIcons[i];
-                if (intPtr != IntPtr.Zero) {
-                    var icon = Icon.FromHandle(largeIcons[i]);
-                    imageList.Add(icon.ToBitmap());
-                    icon.Dispose();
-                    // 销毁图标
-                    DllUtils.DestroyIcon(largeIcons[i]);
-                    // 向控件发送关闭指令
-                    DllUtils.SendMessage(largeIcons[i], WinApi.WM_CLOSE, 0, 0);
-                }
+            //第三步：显示抽取的图标(推荐使用imageList和listview搭配显示）
+            for (int i = 0; i < nIcons; i++) {
+                Icon icon = Icon.FromHandle(phicon[i]);
+                Bitmap bitmap = icon.ToBitmap();
+                imageList.Add(bitmap);
+                icon.Dispose();
+                _ = DllUtils.DestroyIcon(phicon[i]);
             }
             return imageList;
         }
@@ -99,7 +93,15 @@ namespace XStart2._0.Utils {
         }
 
         public static BitmapImage GetBitmapImage(string fileName, int iconSize) {
-            return ImageUtils.BitmapToBitmapImage(GetIcon(fileName, iconSize));
+            if(fileName.EndsWith(".ico", true, CultureInfo.CurrentCulture) || fileName.EndsWith(".icon", true, CultureInfo.CurrentCulture)) {
+                // ICO文件类型获取图标内容
+                List<Bitmap> icos = GetIconImage(fileName, iconSize);
+                return ImageUtils.BitmapToBitmapImage(icos[icos.Count-1]);
+            } else {
+                // 获取文件类型匹配的系统图标，比如.mp3用千千静听打开的，那么就是获取千千静听软体图标
+                return ImageUtils.BitmapToBitmapImage(GetIcon(fileName, iconSize));
+            }
+            
         }
         /// <summary>
         /// 绘制方块图

@@ -52,8 +52,8 @@
                     <TextBox x:Name="ArgumentsTextBox" Grid.Row="4" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Arguments}" IsReadOnly="{Binding ArgumentsReadonly}"/>
                     <TextBlock Grid.Row="5" Grid.Column="0" Text="起始:" Style="{StaticResource FormLabel_Style}"/>
                     <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding RunStartPath}"/>
-                    <TextBlock Grid.Row="6" Grid.Column="0" Text="热键:" Style="{StaticResource FormLabel_Style}"/>
-                    <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding HotKey}"/>
+                    <!--<TextBlock Grid.Row="6" Grid.Column="0" Text="热键:" Style="{StaticResource FormLabel_Style}"/>
+                    <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding HotKey}"/>-->
                 </Grid>
             </TabItem>
             <TabItem Header="备注" Style="{StaticResource TabItem_Style}">

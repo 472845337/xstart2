@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using XStart2._0.Const;
-using XStart2._0.ViewModels;
+using XStart2._0.ViewModel;
 
 namespace XStart2._0.Windows {
     /// <summary>

@@ -32,10 +32,12 @@ namespace XStart2._0.Bean {
         [DoNotNotify]
         [TableParam("type_section", "VARCHAR")]
         public string TypeSection { get; set; }// 归属类别
+        public string TypeName { get; set; }// 类别名
         // 栏目-对应Column中的section
         [DoNotNotify]
         [TableParam("column_section", "VARCHAR")]
         public string ColumnSection { get; set; }// 归属栏目
+        public string ColumnName { get; set; }// 栏目名
 
         private string kind;
 

@@ -4,13 +4,55 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Windows;
+using System.Windows.Interop;
 using XStart2._0.Bean;
 using XStart2._0.Config;
 using XStart2._0.Const;
+using XStart2._0.Windows;
 using static XStart2._0.Bean.SystemProjectParam;
 
 namespace XStart2._0.Utils {
     public static class ProjectUtils {
+
+        /// <summary>
+        /// 执行项目
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="rdpModel"></param>
+        public static void ExecuteProject(Project project, string rdpModel = null) {
+            try {
+                // 获取该类别的应用是否配置确认信息，有确认信息，则弹出确认窗口
+                if (OperateParam.TryGetValue(project.Path, out SystemProject appOperateParam)) {
+                    if (null != appOperateParam && appOperateParam.Confirm) {
+                        if (MessageBoxResult.Cancel == MessageBox.Show(appOperateParam.ConfirmMsg, Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                            return;
+                        }
+                    }
+                }
+                #region 应用是否需要生成相关文件
+                if (MSTSC.Equals(project.Path)) {
+                    // 远程桌面
+                    string rdpFilePath = Configs.AppStartPath + @$"rdp\{project.Section}.rdp";
+                    if (!File.Exists(rdpFilePath)) {
+                        RdpUtils.FreshRdp(project, Constants.OPERATE_CREATE);
+                    }
+                }
+                #endregion
+                // 执行该应用 远程桌面特殊处理
+                if (Constants.RDP_MODEL_CUSTOM.Equals(rdpModel) && Project.KIND_SYSTEM.Equals(project.Kind) && MSTSC.Equals(project.Path)) {
+                    OpenNewMstsc(project);
+                } else {
+                    string result = ExecuteApp(project);
+                    if (!string.IsNullOrEmpty(result)) {
+                        NotifyUtils.ShowNotification(result);
+                    }
+                }
+
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message, Constants.MESSAGE_BOX_TITLE_ERROR);
+            }
+        }
 
         public static string ExecuteApp(Project project) {
             string result = string.Empty;
@@ -29,13 +71,15 @@ namespace XStart2._0.Utils {
                 case Project.KIND_SYSTEM:
                     // 系统功能
                     switch (project.Path) {
-                        case MSTSC:
-                            string rdpFilePath = Configs.AppStartPath + @$"rdp\{project.Section}.rdp";
-                            Process p = new Process();
-                            ProcessStartInfo pInfo = new ProcessStartInfo("mstsc", $"\"{rdpFilePath}\"");
-                            p.StartInfo = pInfo;
-                            p.Start();
-                            break;
+                        case MSTSC: {
+                                string rdpFilePath = Configs.AppStartPath + @$"rdp\{project.Section}.rdp";
+                                Process p = new Process();
+                                ProcessStartInfo pInfo = new ProcessStartInfo("mstsc", $"\"{rdpFilePath}\"");
+                                p.StartInfo = pInfo;
+                                p.Start();
+                                break;
+                            }
+
                         case NET_END: AsdlUtils.Disconnect(); break;
                         case OPEN_CD_ROM: CdRomUtils.OpenCdRom(); break;
                         case CLOSE_CD_ROM: CdRomUtils.CloseCdRom(); break;
@@ -242,5 +286,27 @@ namespace XStart2._0.Utils {
             return newP;
         }
 
+        static MstscManagerWindow mstscWindow = null;
+        private static void OpenNewMstsc(Project project) {
+            string arguments = project.Arguments;
+            if (string.IsNullOrEmpty(arguments)) {
+                MessageBox.Show("远程参数不能为空！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                return;
+            }
+            string[] argumentArray = arguments.Split(Constants.SPLIT_CHAR);
+            if (argumentArray.Length != 4) {
+                MessageBox.Show("远程参数不匹配！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                return;
+            }
+            if (Configs.MstscHandler.ToInt32() == 0) {
+                // 新建窗口
+                mstscWindow = new MstscManagerWindow();
+                //分离任务栏图标主要代码。
+                new WindowInteropHelper(mstscWindow);
+                DllUtils.SetCurrentProcessExplicitAppUserModelID("Gx3OptimisationWindow");
+            }
+            mstscWindow.Show();
+            mstscWindow.AddRdp(project.Section, project.Name, argumentArray[0], string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]), argumentArray[2], argumentArray[3]);
+        }
     }
 }

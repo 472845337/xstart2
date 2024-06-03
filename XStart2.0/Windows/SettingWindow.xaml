@@ -175,7 +175,7 @@
                     <WrapPanel Grid.Row="0">
                         <Button Style="{StaticResource BtnConfirm_Style}" Content="导出" Width="80" Margin="5" Click="BackUp_Click"/>
                         <Button Style="{StaticResource BtnConfirm_Style}" Content="导入" Width="80" Margin="5" Click="Recover_Click"/>
-                        <Button Style="{StaticResource BtnConfirm_Style}" Content="生成桌面快捷方式" Width="120" Margin="5" Click="CreateDeskLink_Click"/>
+                        <Button Style="{StaticResource BtnConfirm_Style}" Content="发送到桌面" Width="80" Margin="5" Click="CreateDeskLink_Click"/>
                     </WrapPanel>
                     <GroupBox Header="天气参数配置" Grid.Row="1" Margin="5">
                         <Grid>

@@ -6,7 +6,7 @@ using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Utils;
 
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
     public class SettingViewModel : BaseViewModel {
         public bool MainHeadShow { get; set; }
         public bool MainTopMost { get; set; }// 主窗口是否置顶

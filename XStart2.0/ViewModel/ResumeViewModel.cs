@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using XStart2._0.Bean;
 
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
     class ResumeViewModel : BaseViewModel {
 
         public string SelectBackUpFilePath { get; set; }

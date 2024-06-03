@@ -4,7 +4,7 @@ namespace XStart2._0.Bean.Holiday {
     /// <summary>
     /// 是否节假日反馈
     /// </summary>
-    class IsHolidayResponse : HcaResponse{
+    class IsHolidayResponse : HcaResponse {
         /// <summary>
         /// true or false
         /// </summary>

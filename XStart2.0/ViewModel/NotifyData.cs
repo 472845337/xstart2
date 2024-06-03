@@ -1,5 +1,5 @@
 ﻿
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
     class NotifyData : BaseViewModel {
 
         public string Title { get; set; }

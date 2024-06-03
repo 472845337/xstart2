@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
     public class ThemeViewModel : BaseViewModel {
 
         public SolidColorBrush ConfirmButtonBackGroundColor { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace XStart2._0.ViewModels {
+﻿namespace XStart2._0.ViewModel {
     public class MstscViewModel : BaseViewModel {
         public string Address { get; set; }
         public string Port { get; set; }

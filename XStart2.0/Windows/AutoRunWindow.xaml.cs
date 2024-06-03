@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using XStart2._0.Bean;
-using XStart2._0.ViewModels;
+using XStart2._0.ViewModel;
 
 namespace XStart2._0.Windows {
     /// <summary>

@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using XStart2._0.Bean;
 
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
     public class FontAwesomeVM : BaseViewModel {
         // 查询的字体名
         public string QueryFontAwesomeName { get; set; }

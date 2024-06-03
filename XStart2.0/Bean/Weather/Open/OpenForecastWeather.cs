@@ -19,9 +19,12 @@ namespace XStart2._0.Bean.Weather.Open {
             public string Name { get; set; }
             [JsonProperty("city")]
             public CoordBean Coord { get; set; }
-            public string country { get; set; }
-            public long population { get; set; }
-            public int timezone { get; set; }
+            [JsonProperty("country")]
+            public string Country { get; set; }
+            [JsonProperty("population")]
+            public long Population { get; set; }
+            [JsonProperty("timezone")]
+            public int Timezone { get; set; }
         }
 
         public class Forecast {

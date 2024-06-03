@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using XStart2._0.Bean;
 using XStart2._0.Services;
 
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
     class BackUpViewModel : BaseViewModel {
 
         public ObservableCollection<CheckBoxTreeViewModel> Items {
@@ -13,7 +13,7 @@ namespace XStart2._0.ViewModels {
         public void InitData() {
             Items = new ObservableCollection<CheckBoxTreeViewModel>();
             // 加载项目树
-            foreach (KeyValuePair<string, Bean.Type> typeKV in XStartService.TypeDic) {
+            foreach (KeyValuePair<string, Type> typeKV in XStartService.TypeDic) {
                 CheckBoxTreeViewModel typeTreeNode = new CheckBoxTreeViewModel { Section = typeKV.Value.Section, Header = typeKV.Value.Name, Children = new List<CheckBoxTreeViewModel>(), IsChecked = true };
                 foreach (KeyValuePair<string, Column> columnKV in typeKV.Value.ColumnDic) {
                     CheckBoxTreeViewModel columnNode = new CheckBoxTreeViewModel() { Section = columnKV.Value.Section, Header = columnKV.Value.Name, Children = new List<CheckBoxTreeViewModel>(), IsChecked = true };

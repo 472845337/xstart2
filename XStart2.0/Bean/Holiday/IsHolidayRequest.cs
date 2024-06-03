@@ -4,7 +4,7 @@ namespace XStart2._0.Bean.Holiday {
     /// <summary>
     /// 是否节假日请求
     /// </summary>
-    public class IsHolidayRequest : HcaRequest{
+    public class IsHolidayRequest : HcaRequest {
         public const string ApiPath = "is_holiday";
         /// <summary>
         /// 日期

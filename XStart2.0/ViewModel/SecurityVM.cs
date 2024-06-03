@@ -1,6 +1,6 @@
 ﻿using PropertyChanged;
 
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
     public class SecurityVM : BaseViewModel {
         // 种类，type，column
         [DoNotNotify]

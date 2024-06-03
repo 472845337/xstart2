@@ -237,7 +237,7 @@ namespace XStart2._0.Utils {
         #endregion
 
         #region ====== 辅助方法(Chinese) ======
-        private string GetYear() {
+        public string GetYear() {
             var yearArray = Array.ConvertAll(Year.ToString().ToCharArray(), x => int.Parse(x.ToString()));
             var year = new StringBuilder();
             foreach (var item in yearArray)
@@ -245,11 +245,11 @@ namespace XStart2._0.Utils {
             return year.ToString();
         }
 
-        private string GetMonth() {
+        public string GetMonth() {
             return $"{GetLeap()}{_chineseMonth[Month - 1]}";
         }
 
-        private string GetDay() {
+        public string GetDay() {
             return _chineseDay[Day - 1];
         }
 

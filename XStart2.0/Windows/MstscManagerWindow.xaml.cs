@@ -3,7 +3,6 @@ using System;
 using System.Windows;
 using System.Windows.Interop;
 using XStart2._0.Bean;
-using XStart2._0.Utils;
 
 namespace XStart2._0.Windows {
     /// <summary>
@@ -160,11 +159,9 @@ namespace XStart2._0.Windows {
         }
 
         private void Disconnect_Click(object sender, EventArgs e) {
-            if (MessageBoxResult.OK == MessageBox.Show("确认关闭连接吗?", Const.Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
-                System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
-                if (rdpTabControl.SelectedIndex >= 0) {
-                    CloseRdpAndPage(rdpTabControl, rdpTabControl.SelectedIndex);
-                }
+            System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
+            if (rdpTabControl.SelectedIndex >= 0) {
+                CloseRdpAndPage(rdpTabControl, rdpTabControl.SelectedIndex);
             }
         }
 
@@ -289,7 +286,7 @@ namespace XStart2._0.Windows {
             } else {
                 tabControl.TabPages.Remove(tabPage);
             }
-            if(index > 0) {
+            if (index > 0) {
                 tabControl.SelectedIndex = index - 1;
             }
         }

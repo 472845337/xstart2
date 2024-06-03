@@ -62,6 +62,18 @@
     <Reference Include="CliWrap, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CliWrap.2.5.0\lib\net45\CliWrap.dll</HintPath>
     </Reference>
+    <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net45\CommonServiceLocator.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.4.1.0, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.4.1.0, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    </Reference>
     <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <HintPath>..\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
@@ -91,6 +103,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -180,8 +195,9 @@
     <Compile Include="Utils\TempUtil.cs" />
     <Compile Include="Utils\TimeUtils.cs" />
     <Compile Include="Utils\WindUtil.cs" />
-    <Compile Include="ViewModels\ThemeViewModel.cs" />
-    <Compile Include="ViewModels\WeatherViewModel.cs" />
+    <Compile Include="ViewModel\ThemeViewModel.cs" />
+    <Compile Include="ViewModel\WeatherViewModel.cs" />
+    <Compile Include="ViewModel\QueryViewModel.cs" />
     <Compile Include="View\DraggableGrid.cs" />
     <Compile Include="Helper\DragDop\SelectorDragDrop.cs" />
     <Compile Include="Helper\DragDop\SelectorDragDropAttach.cs" />
@@ -227,24 +243,24 @@
     <Compile Include="Utils\RdpUtils.cs" />
     <Compile Include="Utils\WinApi.cs" />
     <Compile Include="Utils\WinUtils.cs" />
-    <Compile Include="ViewModels\AutoRunViewModel.cs" />
-    <Compile Include="ViewModels\ControlAppMemoryViewModel.cs" />
-    <Compile Include="ViewModels\MstscViewModel.cs" />
-    <Compile Include="ViewModels\ProjectViewModel.cs" />
-    <Compile Include="ViewModels\ResumeViewModel.cs" />
-    <Compile Include="ViewModels\BackUpViewModel.cs" />
-    <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\CalendarViewModel.cs" />
-    <Compile Include="ViewModels\CheckBoxTreeViewModel.cs" />
-    <Compile Include="ViewModels\ColumnVM.cs" />
-    <Compile Include="ViewModels\FontAwesomeVM.cs" />
-    <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\NotifyData.cs" />
-    <Compile Include="ViewModels\ProjectTypeVM.cs" />
-    <Compile Include="ViewModels\SecurityVM.cs" />
-    <Compile Include="ViewModels\SettingViewModel.cs" />
-    <Compile Include="ViewModels\SystemProjectViewModel.cs" />
-    <Compile Include="ViewModels\UserViewModel.cs" />
+    <Compile Include="ViewModel\AutoRunViewModel.cs" />
+    <Compile Include="ViewModel\ControlAppMemoryViewModel.cs" />
+    <Compile Include="ViewModel\MstscViewModel.cs" />
+    <Compile Include="ViewModel\ProjectViewModel.cs" />
+    <Compile Include="ViewModel\ResumeViewModel.cs" />
+    <Compile Include="ViewModel\BackUpViewModel.cs" />
+    <Compile Include="ViewModel\BaseViewModel.cs" />
+    <Compile Include="ViewModel\CalendarViewModel.cs" />
+    <Compile Include="ViewModel\CheckBoxTreeViewModel.cs" />
+    <Compile Include="ViewModel\ColumnVM.cs" />
+    <Compile Include="ViewModel\FontAwesomeVM.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\NotifyData.cs" />
+    <Compile Include="ViewModel\ProjectTypeVM.cs" />
+    <Compile Include="ViewModel\SecurityVM.cs" />
+    <Compile Include="ViewModel\SettingViewModel.cs" />
+    <Compile Include="ViewModel\SystemProjectViewModel.cs" />
+    <Compile Include="ViewModel\UserViewModel.cs" />
     <Compile Include="View\ImageButton.cs" />
     <Compile Include="View\SliderButton.cs" />
     <Compile Include="Windows\AutoRunWindow.xaml.cs">
@@ -252,6 +268,9 @@
     </Compile>
     <Compile Include="Windows\MstscManagerWindow.xaml.cs">
       <DependentUpon>MstscManagerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\QueryWindow.xaml.cs">
+      <DependentUpon>QueryWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ThemeWindow.xaml.cs">
       <DependentUpon>ThemeWindow.xaml</DependentUpon>
@@ -346,6 +365,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\MstscManagerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\QueryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

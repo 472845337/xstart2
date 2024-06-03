@@ -1,5 +1,5 @@
 ﻿
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
     public class ColumnVM : BaseViewModel {
 
         // 窗口的标题

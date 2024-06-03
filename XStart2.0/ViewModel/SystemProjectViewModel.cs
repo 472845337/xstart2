@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 
 
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
     public class SystemProjectViewModel : BaseViewModel {
         // 初始化时赋值
         [DoNotNotify]

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
     public class ProjectTypeVM : BaseViewModel {
         // 窗口的标题
         public string Title { get; set; }

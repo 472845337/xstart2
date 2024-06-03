@@ -15,7 +15,7 @@ using XStart2._0.Const;
 using XStart2._0.Helper;
 using XStart2._0.Services;
 using XStart2._0.Utils;
-using XStart2._0.ViewModels;
+using XStart2._0.ViewModel;
 using XStart2._0.Windows;
 
 namespace XStart2._0 {
@@ -301,6 +301,8 @@ namespace XStart2._0 {
                     // 项目不合规范，删除该项目
                     projectService.Delete(project.Section);
                 } else {
+                    project.TypeName = XStartService.TypeDic[project.TypeSection].Name;
+                    project.ColumnName = XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].Name;
                     XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic.Add(project.Section, project);
                 }
             }
@@ -392,7 +394,7 @@ namespace XStart2._0 {
                     List<Process> existList = ProcessUtils.GetProcessByName(ProcessUtils.GetProcessName(project.Path), project.Path);
                     if (null == existList || existList.Count == 0) {
                         try {
-                            ExecuteProject(project);
+                            ProjectUtils.ExecuteProject(project, mainViewModel.RdpModel);
                             runProjectCount++;
                         } catch (Exception ex) {
                             MessageBox.Show(ex.Message);
@@ -423,7 +425,7 @@ namespace XStart2._0 {
             if (!Configs.inited) {
                 return;
             }
-            
+
             // 配置以及窗口数据保存
             SaveSetting();
             if (!Configs.forceExit && Configs.exitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
@@ -740,6 +742,15 @@ namespace XStart2._0 {
             }
             settingWindow.Close();
             OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
+        }
+        /// <summary>
+        /// 查找应用
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Open_Query(object sender, EventArgs e) {
+            QueryWindow queryWindow = new QueryWindow(mainViewModel.RdpModel);
+            queryWindow.ShowDialog();
         }
         /// <summary>
         /// 添加类别
@@ -1165,7 +1176,7 @@ namespace XStart2._0 {
         // 打开项目
         private void ProjectButton_Open(object sender) {
             Project project = (Project)(sender as Button).Tag;
-            ExecuteProject(project);
+            ProjectUtils.ExecuteProject(project, mainViewModel.RdpModel);
         }
 
         private void AddProject_Click(object sender, RoutedEventArgs e) {
@@ -1230,7 +1241,7 @@ namespace XStart2._0 {
 
         private void AppRun_Click(object sender, RoutedEventArgs e) {
             Project project = GetProjectByMenu(sender);
-            ExecuteProject(project);
+            ProjectUtils.ExecuteProject(project, mainViewModel.RdpModel);
         }
 
         // 编辑项目
@@ -1271,40 +1282,6 @@ namespace XStart2._0 {
                         MessageBox.Show($"{project.Name}项目删除失败！");
                     }
                 }
-            }
-        }
-
-        private void ExecuteProject(Project project) {
-            try {
-                // 获取该类别的应用是否配置确认信息，有确认信息，则弹出确认窗口
-                if (SystemProjectParam.OperateParam.TryGetValue(project.Path, out Bean.SystemProject appOperateParam)) {
-                    if (null != appOperateParam && appOperateParam.Confirm) {
-                        if (MessageBoxResult.Cancel == MessageBox.Show(appOperateParam.ConfirmMsg, Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
-                            return;
-                        }
-                    }
-                }
-                #region 应用是否需要生成相关文件
-                if (SystemProjectParam.MSTSC.Equals(project.Path)) {
-                    // 远程桌面
-                    string rdpFilePath = Configs.AppStartPath + @$"rdp\{project.Section}.rdp";
-                    if (!File.Exists(rdpFilePath)) {
-                        RdpUtils.FreshRdp(project, Constants.OPERATE_CREATE);
-                    }
-                }
-                #endregion
-                // 执行该应用 远程桌面特殊处理
-                if (Constants.RDP_MODEL_CUSTOM.Equals(mainViewModel.RdpModel) && Project.KIND_SYSTEM.Equals(project.Kind) && SystemProjectParam.MSTSC.Equals(project.Path)) {
-                    OpenNewMstsc(project);
-                } else {
-                    string result = ProjectUtils.ExecuteApp(project);
-                    if (!string.IsNullOrEmpty(result)) {
-                        NotifyUtils.ShowNotification(result);
-                    }
-                }
-
-            } catch (Exception ex) {
-                MessageBox.Show(ex.Message, Constants.MESSAGE_BOX_TITLE_ERROR);
             }
         }
 
@@ -2063,28 +2040,6 @@ namespace XStart2._0 {
             } else {
                 return brush.Color.ToString();
             }
-        }
-        MstscManagerWindow mstscWindow = null;
-        private void OpenNewMstsc(Project project) {
-            string arguments = project.Arguments;
-            if (string.IsNullOrEmpty(arguments)) {
-                MessageBox.Show("远程参数不能为空！", Constants.MESSAGE_BOX_TITLE_ERROR);
-                return;
-            }
-            string[] argumentArray = arguments.Split(Constants.SPLIT_CHAR);
-            if (argumentArray.Length != 4) {
-                MessageBox.Show("远程参数不匹配！", Constants.MESSAGE_BOX_TITLE_ERROR);
-                return;
-            }
-            if (Configs.MstscHandler.ToInt32() == 0) {
-                // 新建窗口
-                mstscWindow = new MstscManagerWindow();
-                //分离任务栏图标主要代码。
-                new WindowInteropHelper(mstscWindow);
-                DllUtils.SetCurrentProcessExplicitAppUserModelID("Gx3OptimisationWindow");
-            }
-            mstscWindow.Show();
-            mstscWindow.AddRdp(project.Section, project.Name, argumentArray[0], string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]), argumentArray[2], argumentArray[3]);
         }
     }
 }

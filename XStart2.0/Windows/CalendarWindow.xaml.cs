@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using XStart2._0.Bean.Holiday;
 using XStart2._0.Utils;
-using XStart2._0.ViewModels;
+using XStart2._0.ViewModel;
 
 namespace XStart2._0.Windows {
     /// <summary>
@@ -55,11 +55,11 @@ namespace XStart2._0.Windows {
 
         private void SetLunarDateInfo(DateTime dateTime) {
             vm.Holiday = "";
+            vm.SelectedDate = dateTime.ToString("yyyy-MM-dd");
             LunarCalendar lunarCalendar = new LunarCalendar(dateTime);
-            vm.EraYear = lunarCalendar.GetEraYear();
+            vm.ChineseDate = $"{lunarCalendar.GetYear()}年 {lunarCalendar.GetMonth()}月 {lunarCalendar.GetDay()}";
+            vm.EraDate = $"{lunarCalendar.GetEraYear()}年 {lunarCalendar.GetEraMonth()}月 {lunarCalendar.GetEraDay()}日";
             vm.Zodiac = lunarCalendar.ChineseZodiac;
-            vm.EraMonth = lunarCalendar.GetEraMonth();
-            vm.EraDay = lunarCalendar.GetEraDay();
             vm.WeekDay = lunarCalendar.ChineseWeek;
             vm.SolarTerm = string.IsNullOrEmpty(lunarCalendar.SolarTerm) ? lunarCalendar.SolarTermPrev : lunarCalendar.SolarTerm;
             Task task = new Task(() => {
@@ -77,10 +77,9 @@ namespace XStart2._0.Windows {
             currentMinuteTimer.Interval = timeToGo;
             DateTime now = DateTime.UtcNow;
             LunarCalendar lunarCalendar = new LunarCalendar(now);
-            vm.CurEraYear = lunarCalendar.GetEraYear();
+            vm.CurChineseDate = $"{lunarCalendar.GetYear()}年 {lunarCalendar.GetMonth()}月 {lunarCalendar.GetDay()}";
+            vm.CurEraDate = $"{lunarCalendar.GetEraYear()}年 {lunarCalendar.GetEraMonth()}月 {lunarCalendar.GetEraDay()}日";
             vm.CurZodiac = lunarCalendar.ChineseZodiac;
-            vm.CurEraMonth = lunarCalendar.GetEraMonth();
-            vm.CurEraDay = lunarCalendar.GetEraDay();
             vm.CurWeekDay = lunarCalendar.ChineseWeek;
             vm.CurSolarTerm = string.IsNullOrEmpty(lunarCalendar.SolarTerm) ? lunarCalendar.SolarTermPrev : lunarCalendar.SolarTerm;
             Task task = new Task(() => {
@@ -93,10 +92,11 @@ namespace XStart2._0.Windows {
         }
 
         private IsHolidayResponse GetIsHoliday(string date) {
-            IsHolidayRequest request = new IsHolidayRequest();
-            request.Loginname = "xstart";
-            request.Version = "1.0.0";
-            request.Token = "nvQcZJuwHpvfXjj86ZqbCUr1FhsmN0tw1HvGswjjsDmtLJmRWWJdWWclLheT7LcZTz5xeUzcF0oJyygwIV1nmZCEpX6a4QezppT8erUn9h6Myhocn9huDI2rMuhfeGoEEY6abOd0S4YzxXCG8yqaNikGxzA7ste9lkomad9yoJvjuj5SYl36SmwBPKmlDs7AIQwt5TA2";
+            IsHolidayRequest request = new IsHolidayRequest {
+                Loginname = "xstart",
+                Version = "1.0.0",
+                Token = "nvQcZJuwHpvfXjj86ZqbCUr1FhsmN0tw1HvGswjjsDmtLJmRWWJdWWclLheT7LcZTz5xeUzcF0oJyygwIV1nmZCEpX6a4QezppT8erUn9h6Myhocn9huDI2rMuhfeGoEEY6abOd0S4YzxXCG8yqaNikGxzA7ste9lkomad9yoJvjuj5SYl36SmwBPKmlDs7AIQwt5TA2"
+            };
             TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             request.Timestamp = Convert.ToInt64(ts.TotalMilliseconds);
             request.Sign = GetSign(request);

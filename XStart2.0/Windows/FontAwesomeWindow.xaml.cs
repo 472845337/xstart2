@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using XStart2._0.Bean;
 using XStart2._0.Const;
 using XStart2._0.Utils;
-using XStart2._0.ViewModels;
+using XStart2._0.ViewModel;
 using static XStart2._0.Utils.FontAwesome6;
 
 namespace XStart2._0.Windows {

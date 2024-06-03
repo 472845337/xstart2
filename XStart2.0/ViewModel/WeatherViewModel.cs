@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using XStart2._0.Bean.Weather;
 
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
     class WeatherViewModel : BaseViewModel {
         public string WeatherApi { get; set; }
         public string Province { get; set; }

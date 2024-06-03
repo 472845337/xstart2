@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using XStart2._0.Bean;
 
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
 
     class AutoRunViewModel : BaseViewModel {
         // 是否启动时

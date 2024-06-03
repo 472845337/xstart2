@@ -4,7 +4,7 @@ using XStart2._0.Bean;
 using XStart2._0.Const;
 using XStart2._0.Services;
 
-namespace XStart2._0.ViewModels {
+namespace XStart2._0.ViewModel {
     public class ProjectViewModel : BaseViewModel {
         public string Title { get; set; }
         [DoNotNotify]
