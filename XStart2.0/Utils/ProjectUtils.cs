@@ -59,14 +59,22 @@ namespace XStart2._0.Utils {
             // 根据应用类型，区分执行
             switch (project.Kind) {
                 case Project.KIND_FILE:
-                    if (project.Path.EndsWith(".exe", true, CultureInfo.CurrentCulture) || project.Path.EndsWith(".bat", true, CultureInfo.CurrentCulture) || project.Path.EndsWith(".cmd", true, CultureInfo.CurrentCulture)) {
-                        CliWrapUtils.ExecuteApp(project.Path, string.IsNullOrEmpty(project.RunStartPath) ? Path.GetDirectoryName(project.Path) : project.RunStartPath, project.Arguments);
+                    if (File.Exists(project.Path)) {
+                        if (project.Path.EndsWith(".exe", true, CultureInfo.CurrentCulture) || project.Path.EndsWith(".bat", true, CultureInfo.CurrentCulture) || project.Path.EndsWith(".cmd", true, CultureInfo.CurrentCulture)) {
+                            CliWrapUtils.ExecuteApp(project.Path, string.IsNullOrEmpty(project.RunStartPath) ? Path.GetDirectoryName(project.Path) : project.RunStartPath, project.Arguments);
+                        } else {
+                            Process.Start(project.Path);
+                        }
                     } else {
-                        Process.Start(project.Path);
+                        MessageBox.Show("可执行文件不存在", Constants.MESSAGE_BOX_TITLE_ERROR);
                     }
                     break;
                 case Project.KIND_DIRECTORY:
-                    Process.Start(project.Path);
+                    if (Directory.Exists(project.Path)) {
+                        Process.Start(project.Path);
+                    } else {
+                        MessageBox.Show("当前目录不存在", Constants.MESSAGE_BOX_TITLE_ERROR);
+                    }
                     break;
                 case Project.KIND_SYSTEM:
                     // 系统功能
