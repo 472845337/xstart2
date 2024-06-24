@@ -91,7 +91,7 @@ namespace XStart2._0.Windows {
                 System.Windows.Forms.TabPage tabPage = new System.Windows.Forms.TabPage {
                     Text = newRdp.Title + "    "// 标题要加长，用于放置自定义的关闭按钮
                 };
-                AxMSTSCLib.AxMsTscAxNotSafeForScripting rdpScript = new AxMSTSCLib.AxMsTscAxNotSafeForScripting {
+                var rdpScript = new AxMSTSCLib.AxMsTscAxNotSafeForScripting {
                     Height = rdpHeight,
                     Width = rdpWidth
                 };
@@ -101,25 +101,8 @@ namespace XStart2._0.Windows {
                 rdpTabControl.TabPages.Add(tabPage);
                 rdpTabControl.SelectedTab = tabPage;
                 try {
-                    rdpScript.Server = newRdp.Server;
-                    rdpScript.UserName = newRdp.Account;
-
-                    rdpScript.ConnectingText = $"正在连接{newRdp.Title}...";
-                    // 设置端口和密码
-                    IMsRdpClientAdvancedSettings7 iClientSetting = (IMsRdpClientAdvancedSettings7)rdpScript.AdvancedSettings;
-                    if (newRdp.Port > 0) {
-                        iClientSetting.RDPPort = newRdp.Port;
-                    }
-                    iClientSetting.ClearTextPassword = newRdp.Password;
-                    iClientSetting.EnableSuperPan = false;
-                    // 非全屏时也可执行win+*快捷键，对应于mstsc.exe里的本地资源-键盘-应用windows组合键
-                    // 0：仅在客户端计算机上本地应用组合键。
-                    // 1：在远程服务器上应用组合键。
-                    // 2：仅当客户端以全屏模式运行时，才将组合键应用于远程服务器。 这是默认值。
-                    IMsRdpClientSecuredSettings securedSetting = (IMsRdpClientSecuredSettings)rdpScript.SecuredSettings;
-                    securedSetting.KeyboardHookMode = 1;
-                    // 连接远程服务器
-                    rdpScript.Connect();
+                    // 连接RDP
+                    ConnectRdp(rdpScript, newRdp);
                 } catch (Exception Ex) {
                     MessageBox.Show("远程连接异常： " + newRdp.Server + " 错误:  " + Ex.Message, Const.Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OKCancel);
                 } finally {
@@ -145,17 +128,32 @@ namespace XStart2._0.Windows {
                 };
                 tabPage.Controls.Add(rdpScript);
                 try {
-                    rdpScript.Server = rdp.Server;
-                    rdpScript.UserName = rdp.Account;
-                    rdpScript.ConnectingText = $"正在连接{rdp.Title}...";
-                    IMsRdpClientAdvancedSettings7 iClientSetting = (IMsRdpClientAdvancedSettings7)rdpScript.AdvancedSettings;
-                    iClientSetting.RDPPort = rdp.Port;
-                    iClientSetting.ClearTextPassword = rdp.Password;
-                    rdpScript.Connect();
+                    // 连接RDP
+                    ConnectRdp(rdpScript, rdp);
                 } catch (Exception Ex) {
                     MessageBox.Show("远程连接异常： " + rdp.Server + " 错误:  " + Ex.Message, Const.Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OKCancel);
                 }
             }
+        }
+
+        private void ConnectRdp(AxMSTSCLib.AxMsTscAxNotSafeForScripting rdpScript, Rdp rdp) {
+            rdpScript.Server = rdp.Server;
+            rdpScript.UserName = rdp.Account;
+            rdpScript.ConnectingText = $"正在连接{rdp.Title}...";
+            // 设置端口和密码
+            IMsRdpClientAdvancedSettings7 iClientSetting = (IMsRdpClientAdvancedSettings7)rdpScript.AdvancedSettings;
+            if (rdp.Port > 0) {
+                iClientSetting.RDPPort = rdp.Port;
+            }
+            iClientSetting.ClearTextPassword = rdp.Password;
+            iClientSetting.EnableSuperPan = false;
+            // 非全屏时也可执行win+*快捷键，对应于mstsc.exe里的本地资源-键盘-应用windows组合键
+            // 0：仅在客户端计算机上本地应用组合键。
+            // 1：在远程服务器上应用组合键。
+            // 2：仅当客户端以全屏模式运行时，才将组合键应用于远程服务器。 这是默认值。
+            IMsRdpClientSecuredSettings securedSetting = (IMsRdpClientSecuredSettings)rdpScript.SecuredSettings;
+            securedSetting.KeyboardHookMode = 1;
+            rdpScript.Connect();
         }
 
         private void Disconnect_Click(object sender, EventArgs e) {
