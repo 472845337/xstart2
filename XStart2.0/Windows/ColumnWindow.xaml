@@ -66,9 +66,28 @@
                 </Grid>
             </GroupBox>
         </Grid>
-        <StackPanel Style="{StaticResource FormButtonPanel_Style}" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
-            <Button Style="{StaticResource BtnConfirm_Style}" Click="Save_Column"/>
-            <Button Style="{StaticResource BtnCancel_Style}" Click="Window_Close"/>
-        </StackPanel>
+        <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" Margin="0 0 0 5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="类别"/>
+                <ComboBox Grid.Column="1" Style="{StaticResource FormValue_Style}" IsReadOnly="True"
+                          ItemsSource="{Binding Types}" 
+                          DisplayMemberPath="Name" 
+                          SelectedValuePath="Section"
+                          SelectedValue="{Binding TypeSection}">
+                </ComboBox>
+            </Grid>
+            <StackPanel Grid.Column="1" Style="{StaticResource FormButtonPanel_Style}">
+                <Button Style="{StaticResource BtnConfirm_Style}" Click="Save_Column"/>
+                <Button Style="{StaticResource BtnCancel_Style}" Click="Window_Close"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

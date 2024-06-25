@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using XStart2._0.Const;
+using XStart2._0.Services;
 using XStart2._0.ViewModel;
 
 namespace XStart2._0.Windows {
@@ -11,6 +12,7 @@ namespace XStart2._0.Windows {
         public ColumnWindow(ColumnVM columnVm) {
             InitializeComponent();
             vm = columnVm;
+            vm.Types = XStartService.TypeDic.Values;
             Loaded += Window_Loaded;
             Closing += Window_Closing;
         }

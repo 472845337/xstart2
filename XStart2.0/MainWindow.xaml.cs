@@ -291,16 +291,16 @@ namespace XStart2._0 {
 
             foreach (Project project in projects) {
                 Column column = XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection];
-                // 初始化项目的图示
-                project.IconSize = null != column.IconSize ? (int)column.IconSize : Configs.iconSize;
-                project.Orientation = string.IsNullOrEmpty(column.Orientation) ? Configs.orientation : column.Orientation;
-                project.HideTitle = null == column.HideTitle ? Configs.hideTitle : (bool)column.HideTitle;
-                if (string.IsNullOrEmpty(project.Name) || string.IsNullOrEmpty(project.TypeSection)
+                if (null == column || string.IsNullOrEmpty(project.Name) || string.IsNullOrEmpty(project.TypeSection)
                     || string.IsNullOrEmpty(project.ColumnSection) || !XStartService.TypeDic.TryGetValue(project.TypeSection, out _)
                     || !XStartService.TypeDic[project.TypeSection].ColumnDic.TryGetValue(project.ColumnSection, out _)) {
                     // 项目不合规范，删除该项目
                     projectService.Delete(project.Section);
                 } else {
+                    // 初始化项目的图示
+                    project.IconSize = null != column.IconSize ? (int)column.IconSize : Configs.iconSize;
+                    project.Orientation = string.IsNullOrEmpty(column.Orientation) ? Configs.orientation : column.Orientation;
+                    project.HideTitle = null == column.HideTitle ? Configs.hideTitle : (bool)column.HideTitle;
                     project.TypeName = XStartService.TypeDic[project.TypeSection].Name;
                     project.ColumnName = XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].Name;
                     XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic.Add(project.Section, project);
@@ -954,6 +954,7 @@ namespace XStart2._0 {
             ColumnVM vm = new ColumnVM {
                 Title = "修改栏目",
                 Name = column.Name,
+                PriTypeSection = column.TypeSection,
                 TypeSection = column.TypeSection,
                 Section = column.Section,
                 IconSize = column.IconSize,
@@ -964,6 +965,10 @@ namespace XStart2._0 {
             };
             ColumnWindow window = new ColumnWindow(vm) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
             OperateColumn(window);
+            if (!vm.PriTypeSection.Equals(vm.TypeSection)) {
+                CalculateWidthHeight(vm.PriTypeSection);
+                CalculateWidthHeight(vm.TypeSection);
+            }
         }
         private void DeleteColumn_Click(object sender, RoutedEventArgs e) {
             Column column = GetMenuOfColumn(sender);
@@ -994,16 +999,29 @@ namespace XStart2._0 {
                     ExpandColumn(column.TypeSection, column.Section);
                     NotifyUtils.ShowNotification("新增栏目成功！");
                 } else {
-                    Column bean = XStartService.TypeDic[columnWindow.vm.TypeSection].ColumnDic[columnWindow.vm.Section];
-                    bean.Name = columnWindow.vm.Name;
-                    bean.Orientation = columnWindow.vm.Orientation;
-                    bean.HideTitle = columnWindow.vm.HideTitle;
-                    bean.IconSize = columnWindow.vm.IconSize;
-                    if (bean.OneLineMulti != columnWindow.vm.OneLineMulti) {
-                        bean.OneLineMulti = columnWindow.vm.OneLineMulti;
-                        ComputedColumnProject(bean);
+                    Column column = XStartService.TypeDic[columnWindow.vm.PriTypeSection].ColumnDic[columnWindow.vm.Section];
+                    column.TypeSection = columnWindow.vm.TypeSection;
+                    column.Name = columnWindow.vm.Name;
+                    column.Orientation = columnWindow.vm.Orientation;
+                    column.HideTitle = columnWindow.vm.HideTitle;
+                    column.IconSize = columnWindow.vm.IconSize;
+                    if (column.OneLineMulti != columnWindow.vm.OneLineMulti) {
+                        column.OneLineMulti = columnWindow.vm.OneLineMulti;
+                        ComputedColumnProject(column);
                     }
-                    columnService.Update(bean, true);
+                    columnService.Update(column, true);
+                    if (!columnWindow.vm.PriTypeSection.Equals(columnWindow.vm.TypeSection)) {
+                        if (column.IsExpanded) {
+                            // 原类别中栏目展开第一个
+                            if (XStartService.TypeDic[columnWindow.vm.PriTypeSection].ColumnDic.Count > 0) {
+                                XStartService.TypeDic[columnWindow.vm.PriTypeSection].ColumnDic[0].IsExpanded = true;
+                            }
+                        }
+                        column.IsExpanded = false;
+                        // 变更了类别
+                        XStartService.TypeDic[columnWindow.vm.PriTypeSection].ColumnDic.Remove(column.Section);
+                        XStartService.TypeDic[columnWindow.vm.TypeSection].ColumnDic.Add(column.Section, column);
+                    }
                     NotifyUtils.ShowNotification("修改栏目成功！");
                 }
             }
