@@ -32,7 +32,9 @@ namespace XStart2._0.ViewModel {
                             // 名称，路径，备注包含
                             if ((!string.IsNullOrEmpty(project.Value.Name) && project.Value.Name.IndexOf(query, System.StringComparison.OrdinalIgnoreCase) > -1)
                             || (!string.IsNullOrEmpty(project.Value.Path) && project.Value.Path.IndexOf(query, System.StringComparison.OrdinalIgnoreCase) > -1)
-                            || (!string.IsNullOrEmpty(project.Value.Remark) && project.Value.Remark.IndexOf(query, System.StringComparison.OrdinalIgnoreCase) > -1)) {
+                            || (!string.IsNullOrEmpty(project.Value.Remark) && project.Value.Remark.IndexOf(query, System.StringComparison.OrdinalIgnoreCase) > -1)
+                            || (!string.IsNullOrEmpty(project.Value.Arguments) && project.Value.Arguments.IndexOf(query, System.StringComparison.OrdinalIgnoreCase) > -1)
+                            || (!string.IsNullOrEmpty(project.Value.RunStartPath) && project.Value.RunStartPath.IndexOf(query, System.StringComparison.OrdinalIgnoreCase) > -1)) {
                                 QueryProjects.Add(project.Value);
                             }
                         }

@@ -1010,7 +1010,13 @@ namespace XStart2._0 {
                         ComputedColumnProject(column);
                     }
                     columnService.Update(column, true);
+                    #region 变更了类别
                     if (!columnWindow.vm.PriTypeSection.Equals(columnWindow.vm.TypeSection)) {
+                        // 变更项目中的类别Section
+                        foreach(var projectKV in column.ProjectDic) {
+                            var projectUpdateModel = new Project() { Section = projectKV.Value.Section, TypeSection = column.TypeSection };
+                            projectService.Update(projectUpdateModel);
+                        }
                         if (column.IsExpanded) {
                             // 原类别中栏目展开第一个
                             if (XStartService.TypeDic[columnWindow.vm.PriTypeSection].ColumnDic.Count > 0) {
@@ -1018,10 +1024,11 @@ namespace XStart2._0 {
                             }
                         }
                         column.IsExpanded = false;
-                        // 变更了类别
+                        // 数据结构变更
                         XStartService.TypeDic[columnWindow.vm.PriTypeSection].ColumnDic.Remove(column.Section);
                         XStartService.TypeDic[columnWindow.vm.TypeSection].ColumnDic.Add(column.Section, column);
                     }
+                    #endregion
                     NotifyUtils.ShowNotification("修改栏目成功！");
                 }
             }
