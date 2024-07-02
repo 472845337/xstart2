@@ -15,8 +15,7 @@ namespace XStart2._0.Bean {
         public string TypeSection { get; set; }
         // 程序打开后，栏目是否展开
         [DoNotNotify]
-        [TableParam("start_open", "BIT")]
-        public bool? StartOpen { get; set; }
+        public bool StartOpen { get; set; }
         // 图标尺寸
         [OnChangedMethod(nameof(ChangeProjectStyle))]
         [TableParam("icon_size", "INT")]

@@ -321,6 +321,8 @@ namespace XStart2._0 {
                     } else {
                         if (column.Section.Equals(type.Value.OpenColumn)) {
                             column.StartOpen = true;
+                        } else {
+                            column.StartOpen = false;
                         }
                     }
                     if (true == column.StartOpen) {
