@@ -312,8 +312,11 @@ namespace XStart2._0.Utils {
                 //分离任务栏图标主要代码。
                 new WindowInteropHelper(mstscWindow);
                 DllUtils.SetCurrentProcessExplicitAppUserModelID("Gx3OptimisationWindow");
+                mstscWindow.Show();
+            } else {
+                mstscWindow.Show();
+                DllUtils.ShowWindow(Configs.MstscHandler, WinApi.SW_MAXIMIZE);
             }
-            mstscWindow.Show();
             mstscWindow.AddRdp(project.Section, project.Name, argumentArray[0], string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]), argumentArray[2], argumentArray[3]);
         }
     }

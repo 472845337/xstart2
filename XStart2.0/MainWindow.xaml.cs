@@ -325,7 +325,7 @@ namespace XStart2._0 {
                             column.StartOpen = false;
                         }
                     }
-                    if (true == column.StartOpen) {
+                    if (column.StartOpen) {
                         column.IsExpanded = true;
                         column.ColumnHeight = (int)type.Value.ExpandedColumnHeight;
                     } else {
