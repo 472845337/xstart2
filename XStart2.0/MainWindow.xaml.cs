@@ -976,7 +976,17 @@ namespace XStart2._0 {
             Column column = GetMenuOfColumn(sender);
             if (MessageBoxResult.OK == MessageBox.Show("确认删除栏目:" + column.Name, Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                 columnService.Delete(column.Section);
+                int deleteColumnIndex = XStartService.TypeDic[column.TypeSection].ColumnDic.IndexOf(column.Section);
                 XStartService.TypeDic[column.TypeSection].ColumnDic.Remove(column.Section);
+                // 如果当前栏目是展开的,展开上一个栏目
+                if (column.IsExpanded && XStartService.TypeDic[column.TypeSection].ColumnDic.Count > 0) {
+                    if (deleteColumnIndex > 0) {
+                        XStartService.TypeDic[column.TypeSection].ColumnDic[deleteColumnIndex-1].IsExpanded = true;
+                    } else {
+                        XStartService.TypeDic[column.TypeSection].ColumnDic[0].IsExpanded = true;
+                    }
+                    
+                }
                 NotifyUtils.ShowNotification("删除栏目成功！");
                 CalculateWidthHeight(column.TypeSection);
             }
