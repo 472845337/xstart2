@@ -819,6 +819,7 @@ namespace XStart2._0 {
             Bean.Type type = GetMenuOfType(sender);
             if (type.Locked) {
                 MessageBox.Show("当前类别已锁，不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                e.Handled = true;
                 return;
             }
             if (MessageBoxResult.OK == MessageBox.Show("确认删除该类别？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
@@ -974,9 +975,25 @@ namespace XStart2._0 {
         }
         private void DeleteColumn_Click(object sender, RoutedEventArgs e) {
             Column column = GetMenuOfColumn(sender);
-            if (MessageBoxResult.OK == MessageBox.Show("确认删除栏目:" + column.Name, Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+            if (column.Locked) {
+                MessageBox.Show($"当前栏目已锁，不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                e.Handled = true;
+                return;
+            }
+            string confirmMsg = "确认删除栏目:" + column.Name;
+            if (XStartService.TypeDic[column.TypeSection].ColumnDic[column.Section].ProjectDic.Count > 0) {
+                confirmMsg += "，包含项目也将会删除";
+            }
+            if (MessageBoxResult.OK == MessageBox.Show(confirmMsg+"？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                // 删除项目
+                foreach (KeyValuePair<string, Project> p in XStartService.TypeDic[column.TypeSection].ColumnDic[column.Section].ProjectDic) {
+                    projectService.Delete(p.Value.Section);
+                }
+                // 删除栏目
                 columnService.Delete(column.Section);
+                // 获取删除栏目的下标
                 int deleteColumnIndex = XStartService.TypeDic[column.TypeSection].ColumnDic.IndexOf(column.Section);
+                // 缓冲中删除栏目数据
                 XStartService.TypeDic[column.TypeSection].ColumnDic.Remove(column.Section);
                 // 如果当前栏目是展开的,展开上一个栏目
                 if (column.IsExpanded && XStartService.TypeDic[column.TypeSection].ColumnDic.Count > 0) {
@@ -985,9 +1002,9 @@ namespace XStart2._0 {
                     } else {
                         XStartService.TypeDic[column.TypeSection].ColumnDic[0].IsExpanded = true;
                     }
-                    
                 }
                 NotifyUtils.ShowNotification("删除栏目成功！");
+                // 重新计算类别所有栏目尺寸
                 CalculateWidthHeight(column.TypeSection);
             }
         }
