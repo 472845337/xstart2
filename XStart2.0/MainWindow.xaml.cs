@@ -29,7 +29,7 @@ namespace XStart2._0 {
         private readonly System.Windows.Threading.DispatcherTimer currentDateTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
         private readonly System.Windows.Threading.DispatcherTimer AutoGcTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMinutes(5) };
         private readonly System.Windows.Threading.DispatcherTimer OperateMessageTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromSeconds(5) };
-
+        private readonly System.Windows.Threading.DispatcherTimer DpiWatchTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromSeconds(2) };
         // 数据服务
         public TableService<Bean.Type> typeService = ServiceFactory.GetTypeService();
         public TableService<Column> columnService = ServiceFactory.GetColumnService();
@@ -40,6 +40,7 @@ namespace XStart2._0 {
         System.Windows.Forms.NotifyIcon notifyIcon = null;
         public MainWindow() {
             InitializeComponent();
+            
             Configs.Handler = new WindowInteropHelper(this).Handle;
             // 时钟定时任务
             currentTimer.Tick += new EventHandler(CurrentTimer_Tick);
@@ -55,6 +56,9 @@ namespace XStart2._0 {
             AutoGcTimer.Start();
             // 操作消息（在设置消息的时候启动，计时完成后停止）
             OperateMessageTimer.Tick += new EventHandler(OperateMessageTimer_Tick);
+            // 监控DPI变化
+            DpiWatchTimer.Tick += DpiWatchTimer_Tick;
+            DpiWatchTimer.Start();
             // 将模型赋值上下文
             DataContext = mainViewModel;
         }
@@ -88,6 +92,7 @@ namespace XStart2._0 {
             string widthStr = iniData[Constants.SECTION_SIZE][Constants.KEY_WIDTH];
             string themeName = iniData[Constants.SECTION_THEME][Constants.KEY_THEME_NAME];
             string themeCustom = iniData[Constants.SECTION_THEME][Constants.KEY_THEME_CUSTOM];
+            string dpiChangeStr = iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE];
 
             Configs.mainHeight = string.IsNullOrEmpty(heightStr) ? Constants.MAIN_HEIGHT : Convert.ToDouble(heightStr);
             Configs.mainWidth = string.IsNullOrEmpty(widthStr) ? Constants.MAIN_WIDTH : Convert.ToDouble(widthStr);
@@ -95,7 +100,7 @@ namespace XStart2._0 {
             Configs.mainTop = string.IsNullOrEmpty(topStr) ? Constants.MAIN_TOP : Convert.ToDouble(topStr);
             Configs.themeName = string.IsNullOrEmpty(themeName) ? Constants.WINDOW_THEME_BLUE : themeName;
             Configs.themeCustom = themeCustom;
-
+            Configs.dpiChange = string.IsNullOrEmpty(dpiChangeStr) ? false : Convert.ToBoolean(dpiChangeStr);
             // 尺寸
             mainViewModel.MainHeight = Configs.mainHeight;
             mainViewModel.MainWidth = Configs.mainWidth;
@@ -353,7 +358,7 @@ namespace XStart2._0 {
                 AudioUtils.PlayWav(AudioUtils.START);
             }
             // 自启动
-            if (autoRunProjects.Count > 0) {
+            if (autoRunProjects.Count > 0 && !Configs.dpiChange) {
                 // 新线程
                 Dispatcher.Invoke(new Action(delegate {
                     AutoRunProjectWindow(autoRunProjects);
@@ -986,9 +991,7 @@ namespace XStart2._0 {
             }
             if (MessageBoxResult.OK == MessageBox.Show(confirmMsg+"？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                 // 删除项目
-                foreach (KeyValuePair<string, Project> p in XStartService.TypeDic[column.TypeSection].ColumnDic[column.Section].ProjectDic) {
-                    projectService.Delete(p.Value.Section);
-                }
+                RemoveColumnProjects(column);
                 // 删除栏目
                 columnService.Delete(column.Section);
                 // 获取删除栏目的下标
@@ -1525,6 +1528,47 @@ namespace XStart2._0 {
             }
         }
 
+        bool dpiTick = false;
+        /// <summary>
+        /// DPI变化监控
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DpiWatchTimer_Tick(object sender, EventArgs e) {
+            if (dpiTick) {
+                return;
+            } else {
+                dpiTick = true;
+            }
+            Tuple<int, int> dpiTuple = GetDpi();
+            if(null == Configs.dpiTurple) {
+                Configs.dpiTurple = dpiTuple;
+                // 清除DpiChange
+                IniParser.Model.IniData iniData = new IniParser.Model.IniData();
+                iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE] = string.Empty;
+                IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
+            } else {
+                // 判断是否变更
+                if (!dpiTuple.Equals(Configs.dpiTurple)) {
+                    Configs.dpiChange = true;
+                    IniParser.Model.IniData iniData = new IniParser.Model.IniData();
+                    iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE] = Convert.ToString(true);
+                    IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
+                    Configs.forceExit = true;
+                    // MessageBox.Show("屏幕DPI发生变化，将重启",Constants.MESSAGE_BOX_TITLE_WARN);
+                    Application.Current.Shutdown();
+                    System.Windows.Forms.Application.Restart();
+                }
+            }
+            dpiTick = false;
+        }
+
+        public static Tuple<int, int> GetDpi() {
+            double width = SystemParameters.PrimaryScreenWidth;
+            double height = SystemParameters.PrimaryScreenHeight;
+            return new Tuple<int, int>((int)width, (int)height);
+        }
+
         private void OperateMessageTimer_Tick(object sender, EventArgs e) {
             // 执行完成后,定时器停止，清除消息
             OperateMessageTimer.Stop();
@@ -1619,66 +1663,85 @@ namespace XStart2._0 {
             AutoHideTimer.IsEnabled = true;
         }
         private void MainWindow_LocationChanged(object sender, EventArgs e) {
-            StopAnchor();
+            GetAnchorStyle();
         }
 
-        internal System.Windows.Forms.AnchorStyles stopAnchor = System.Windows.Forms.AnchorStyles.None;
+        internal int anchorStyle = Constants.ANCHOR_STYLE_NONE;
+        bool isTick = false;
         /// <summary>
         /// 计时器控制函数
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         public void AutoHideTimer_Tick(object sender, EventArgs e) {
-            Point toPoint = new Point(Left, Top);
-            double mouseDistance = 1;// 鼠标在边界距离多远范围
-            double resumeSize = 1;// 隐藏后剩余出来的边界大小
-            DllUtils.Point curPoint = new DllUtils.Point();
-            DllUtils.GetCursorPos(ref curPoint); //获取鼠标相对桌面的位置
-            bool isMouseEnter = curPoint.X >= Left - mouseDistance
-                               && curPoint.X <= Left + Width + mouseDistance
-                               && curPoint.Y >= Top - mouseDistance
-                               && curPoint.Y <= Top + Height + mouseDistance;
-            switch (stopAnchor) {
-                case System.Windows.Forms.AnchorStyles.Top:
-                    toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - resumeSize));
-                    break;
-                case System.Windows.Forms.AnchorStyles.Left:
-                    toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - resumeSize), Top);
-                    break;
-                case System.Windows.Forms.AnchorStyles.Right:
-                    toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - Width, Top) : new Point(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - resumeSize, Top);
-                    break;
-                case System.Windows.Forms.AnchorStyles.Bottom:
-                    toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - Height) : new Point(Left, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - resumeSize);
-                    break;
-            }
-            if (isMouseEnter) {
-                IsAllShow = false;
-            }
-            Animate2Location(this, toPoint);
-        }
-        private void StopAnchor() {
-            if (Top <= 0 && Left <= 0) {
-                stopAnchor = System.Windows.Forms.AnchorStyles.None;
-            } else if (Top <= 0) {
-                stopAnchor = System.Windows.Forms.AnchorStyles.Top;
-            } else if (Left <= 0) {
-                stopAnchor = System.Windows.Forms.AnchorStyles.Left;
-            } else if (Left >= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - Width) {
-                stopAnchor = System.Windows.Forms.AnchorStyles.Right;
-            } else if (Top >= System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - Height) {
-                stopAnchor = System.Windows.Forms.AnchorStyles.Bottom;
+            if (isTick) {
+                return;
             } else {
-                stopAnchor = System.Windows.Forms.AnchorStyles.None;
+                isTick = true;
+            }
+            try {
+                Point toPoint = new Point(Left, Top);
+                double mouseDistance = 1;// 鼠标在边界距离多远范围
+                double resumeSize = 1;// 隐藏后剩余出来的边界大小
+                DllUtils.Point curPoint = new DllUtils.Point();
+                DllUtils.GetCursorPos(ref curPoint); //获取鼠标相对桌面的位置
+                
+                // 获取屏幕的显示比例
+                System.Drawing.Size dsize = WinUtils.GetScreenByDevice();
+                double scaleX = dsize.Width / SystemParameters.PrimaryScreenWidth;
+                double scaleY = dsize.Height / SystemParameters.PrimaryScreenHeight;
+                double curPointX = curPoint.X / scaleX;
+                double curPointY = curPoint.Y / scaleY;
+                bool isMouseEnter = curPointX >= Left - mouseDistance
+                                   && curPointX <= Left + Width + mouseDistance
+                                   && curPointY >= Top - mouseDistance
+                                   && curPointY <= Top + Height + mouseDistance;
+                switch (anchorStyle) {
+                    case Constants.ANCHOR_STYLE_TOP:
+                        toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - resumeSize));
+                        break;
+                    case Constants.ANCHOR_STYLE_LEFT:
+                        toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - resumeSize), Top);
+                        break;
+                    case Constants.ANCHOR_STYLE_RIGHT:
+                        toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(SystemParameters.PrimaryScreenWidth - Width, Top) : new Point(SystemParameters.PrimaryScreenWidth - resumeSize, Top);
+                        break;
+                    case Constants.ANCHOR_STYLE_BOTTOM:
+                        toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, SystemParameters.PrimaryScreenHeight - Height) : new Point(Left, SystemParameters.PrimaryScreenHeight - resumeSize);
+                        break;
+                }
+                if (isMouseEnter) {
+                    IsAllShow = false;
+                }
+                Animate2Location(this, toPoint);
+            } catch {
+
+            } finally {
+                isTick = false;
+            }
+        }
+        private void GetAnchorStyle() {
+            if (Top <= 0 && Left <= 0) {
+                anchorStyle = Constants.ANCHOR_STYLE_NONE;
+            } else if (Top <= 0) {
+                anchorStyle = Constants.ANCHOR_STYLE_TOP;
+            } else if (Left <= 0) {
+                anchorStyle = Constants.ANCHOR_STYLE_LEFT;
+            } else if (Left >= SystemParameters.PrimaryScreenWidth - Width) {
+                anchorStyle = Constants.ANCHOR_STYLE_RIGHT;
+            } else if (Top >= SystemParameters.PrimaryScreenHeight - Height) {
+                anchorStyle = Constants.ANCHOR_STYLE_BOTTOM;
+            } else {
+                anchorStyle = Constants.ANCHOR_STYLE_NONE;
             }
         }
 
         readonly int step = 1;
         private void Animate2Location(Window window, Point destination) {
-            double curLeft = window.Left;
-            double curTop = window.Top;
-            double indexX = (destination.X - curLeft) / 200;
-            double indexY = (destination.Y - curTop) / 200;
+            double curLeft = NumberUtils.Accuracy(window.Left, 2);
+            double curTop = NumberUtils.Accuracy(window.Top, 2);
+            double indexX = NumberUtils.Accuracy((destination.X - curLeft) / 200, 2);
+            double indexY = NumberUtils.Accuracy((destination.Y - curTop) / 200,2);
             if (indexX == 0) {
                 indexX = destination.X > curLeft ? step : -step;
             }
@@ -1699,35 +1762,35 @@ namespace XStart2._0 {
             while (!xStop || !yStop) {
                 if (!xStop) {
                     if (indexX < 0) {
-                        if (aniLocationX + indexX <= destination.X) {
+                        if (NumberUtils.Accuracy(aniLocationX + indexX, 2) <= destination.X) {
                             aniLocationX = destination.X;
                             xStop = true;
                         } else {
-                            aniLocationX += indexX;
+                            aniLocationX = NumberUtils.Accuracy(aniLocationX + indexX, 2);
                         }
                     } else {
-                        if (aniLocationX + indexX >= destination.X) {
+                        if (NumberUtils.Accuracy(aniLocationX + indexX, 2) >= destination.X) {
                             aniLocationX = destination.X;
                             xStop = true;
                         } else {
-                            aniLocationX += indexX;
+                            aniLocationX = NumberUtils.Accuracy(aniLocationX + indexX, 2);
                         }
                     }
                 }
                 if (!yStop) {
                     if (indexY < 0) {
-                        if (aniLocationY + indexY < destination.Y) {
+                        if (NumberUtils.Accuracy(aniLocationY + indexY, 2) <= destination.Y) {
                             aniLocationY = destination.Y;
                             yStop = true;
                         } else {
-                            aniLocationY += indexY;
+                            aniLocationY  = NumberUtils.Accuracy(aniLocationY + indexY, 2);
                         }
                     } else {
-                        if (aniLocationY + indexY > destination.Y) {
+                        if (NumberUtils.Accuracy(aniLocationY + indexY, 2) >= destination.Y) {
                             aniLocationY = destination.Y;
                             yStop = true;
                         } else {
-                            aniLocationY += indexY;
+                            aniLocationY = NumberUtils.Accuracy(aniLocationY, 2) + indexY;
                         }
                     }
                 }

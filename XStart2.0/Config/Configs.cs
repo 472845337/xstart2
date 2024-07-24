@@ -44,6 +44,8 @@ namespace XStart2._0.Config {
         public static bool exitWarn;// 退出提醒
         public static bool forceExit = false;// 直接退出
         public static int delCount;
+        public static System.Tuple<int, int> dpiTurple;
+        public static bool dpiChange = false;
 
         public static System.IntPtr taskbarHandler = System.IntPtr.Zero;
 

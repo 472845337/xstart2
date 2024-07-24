@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace XStart2._0.Utils {
     public class WinUtils {
@@ -20,6 +21,19 @@ namespace XStart2._0.Utils {
                 }
             }
             return null;
+        }
+
+        private const int DESKTOPVERTRES = 117;
+        private const int DESKTOPHORZRES = 118;
+        // 获取真是屏幕宽高
+        public static System.Drawing.Size GetScreenByDevice() {
+            IntPtr hDc = DllUtils.GetDC(IntPtr.Zero);
+            System.Drawing.Size size = new System.Drawing.Size() {
+                Width = DllUtils.GetDeviceCaps(hDc, DESKTOPHORZRES),
+                Height = DllUtils.GetDeviceCaps(hDc, DESKTOPVERTRES)
+            };
+            DllUtils.ReleaseDC(IntPtr.Zero, hDc);
+            return size;
         }
     }
 }

@@ -191,6 +191,7 @@
     <Compile Include="Utils\GZipUtil.cs" />
     <Compile Include="Utils\HttpUtils.cs" />
     <Compile Include="Utils\IniParserUtils.cs" />
+    <Compile Include="Utils\NumberUtils.cs" />
     <Compile Include="Utils\OpenNewWindowUtils.cs" />
     <Compile Include="Utils\TempUtil.cs" />
     <Compile Include="Utils\TimeUtils.cs" />

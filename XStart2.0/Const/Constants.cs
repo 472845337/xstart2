@@ -59,6 +59,8 @@
         public const string KEY_THEME_NAME = "Name";
         public const string KEY_THEME_CUSTOM = "Custom";
 
+        public const string KEY_DPI_CHANGE = "DpiChange";
+
         public const int DEL_COUNT_LIMIT = 100;
 
         public const string EDGE_PATH = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe";
@@ -197,5 +199,12 @@
         public const string WINDOW_THEME_PURPLE = "purple";
         public const string WINDOW_THEME_BLACK = "black";
         public const string WINDOW_THEME_CUSTOM = "custom";
+
+        public const int ANCHOR_STYLE_NONE = 0;
+        public const int ANCHOR_STYLE_TOP = 1;
+        public const int ANCHOR_STYLE_LEFT = 2;
+        public const int ANCHOR_STYLE_RIGHT = 3;
+        public const int ANCHOR_STYLE_BOTTOM = 4;
+
     }
 }

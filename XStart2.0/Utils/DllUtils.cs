@@ -301,6 +301,11 @@ namespace XStart2._0.Utils {
         // 导入 Windows API 中的设置任务栏应用程序 ID 的方法
         [DllImport(Shell32, SetLastError = true)]
         public static extern void SetCurrentProcessExplicitAppUserModelID([MarshalAs(UnmanagedType.LPWStr)] string AppID);
-
+        [DllImport(Gdi32)]
+        public static extern int GetDeviceCaps(IntPtr hDc, int nIndex);
+        [DllImport(User32)]
+        public static extern IntPtr GetDC(IntPtr hDc);
+        [DllImport(User32)]
+        public static extern IntPtr ReleaseDC(IntPtr handler, IntPtr hDc);
     }
 }
