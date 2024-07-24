@@ -1680,6 +1680,8 @@ namespace XStart2._0 {
                 isTick = true;
             }
             try {
+                double screenWidth = SystemParameters.PrimaryScreenWidth;
+                double screenHeight = SystemParameters.PrimaryScreenHeight;
                 Point toPoint = new Point(Left, Top);
                 double mouseDistance = 1;// 鼠标在边界距离多远范围
                 double resumeSize = 1;// 隐藏后剩余出来的边界大小
@@ -1688,8 +1690,8 @@ namespace XStart2._0 {
                 
                 // 获取屏幕的显示比例
                 System.Drawing.Size dsize = WinUtils.GetScreenByDevice();
-                double scaleX = dsize.Width / SystemParameters.PrimaryScreenWidth;
-                double scaleY = dsize.Height / SystemParameters.PrimaryScreenHeight;
+                double scaleX = dsize.Width / screenWidth;
+                double scaleY = dsize.Height / screenHeight;
                 double curPointX = curPoint.X / scaleX;
                 double curPointY = curPoint.Y / scaleY;
                 bool isMouseEnter = curPointX >= Left - mouseDistance
@@ -1698,16 +1700,26 @@ namespace XStart2._0 {
                                    && curPointY <= Top + Height + mouseDistance;
                 switch (anchorStyle) {
                     case Constants.ANCHOR_STYLE_TOP:
-                        toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - resumeSize));
+                    case Constants.ANCHOR_STYLE_BOTTOM:
+                        if (Left + Width > screenWidth) {
+                            Left = screenWidth - Width;
+                        }
+                        if (anchorStyle == Constants.ANCHOR_STYLE_TOP) {
+                            toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - resumeSize));
+                        } else {
+                            toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, SystemParameters.PrimaryScreenHeight - Height) : new Point(Left, SystemParameters.PrimaryScreenHeight - resumeSize);
+                        }
                         break;
                     case Constants.ANCHOR_STYLE_LEFT:
-                        toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - resumeSize), Top);
-                        break;
                     case Constants.ANCHOR_STYLE_RIGHT:
-                        toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(SystemParameters.PrimaryScreenWidth - Width, Top) : new Point(SystemParameters.PrimaryScreenWidth - resumeSize, Top);
-                        break;
-                    case Constants.ANCHOR_STYLE_BOTTOM:
-                        toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, SystemParameters.PrimaryScreenHeight - Height) : new Point(Left, SystemParameters.PrimaryScreenHeight - resumeSize);
+                        if (Top + Height > screenHeight) {
+                            Top = screenHeight - Height;
+                        }
+                        if (anchorStyle == Constants.ANCHOR_STYLE_LEFT) {
+                            toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - resumeSize), Top);
+                        } else {
+                            toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(SystemParameters.PrimaryScreenWidth - Width, Top) : new Point(SystemParameters.PrimaryScreenWidth - resumeSize, Top);
+                        }
                         break;
                 }
                 if (isMouseEnter) {
