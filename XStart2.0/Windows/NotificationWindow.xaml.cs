@@ -4,27 +4,29 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using XStart2._0.ViewModel;
 
 namespace XStart2._0.Windows {
     /// <summary>
     /// NotificationWindow.xaml 的交互逻辑
     /// </summary>
     public partial class NotificationWindow : Window {
+        NotifyData vm = new NotifyData();
         public double TopFrom {
             get; set;
         }
-        // 消息标题
-        public string NotifyTitle { get; set; }
-        // 消息的背景色
-        public Color NotifyBackground { get; set; }
-        // 消息内容
-        public string NotifyContent { get; set; }
         // 保留时长，多少秒
         public int SaveTime { get; set; } = 5;
 
-        public NotificationWindow() {
+        public NotificationWindow(string title, string content, Color background, int height, int saveTime) {
             InitializeComponent();
             Loaded += NotificationWindow_Loaded;
+            vm.Title = title;
+            vm.Background = background.ToString();
+            vm.Height = height;
+            vm.Content = content;
+            vm.SaveTime = saveTime;
+            DataContext = vm;
         }
 
 

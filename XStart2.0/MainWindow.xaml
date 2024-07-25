@@ -138,7 +138,7 @@
             <!-- 小工具 -->
             <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5">
                 <Image Source="/Files/Images/Calendar.png" Style="{StaticResource HeaderTool_Style}" MouseLeftButtonUp="Calendar_Click" ToolTip="打开日历"/>
-                <Image Source="/Files/Images/NotePad.png" Style="{StaticResource HeaderTool_Style}" MouseLeftButtonUp="OpenNotePad_Click" ToolTip="新建记事本"/>
+                <Image Source="/Files/Images/NotePad.png" Style="{StaticResource HeaderTool_Style}" MouseLeftButtonUp="OpenNotePad_Click" ToolTip="打开记事本"/>
                 <Image Source="/Files/Images/Weather.png" Style="{StaticResource HeaderTool_Style}" MouseLeftButtonUp="Weather_Click" ToolTip="打开天气"/>
             </WrapPanel>
         </Grid>

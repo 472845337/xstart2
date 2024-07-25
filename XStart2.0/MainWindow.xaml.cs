@@ -1503,7 +1503,7 @@ namespace XStart2._0 {
                     aboutSb.Append(temp.GetString(b));
                 }
             }
-            NotifyUtils.ShowNotification(aboutSb.ToString(), Colors.LightBlue, "关于");
+            NotifyUtils.ShowNotification(aboutSb.ToString(), Colors.LightBlue, 120, "关于");
             e.Handled = true;
         }
 
