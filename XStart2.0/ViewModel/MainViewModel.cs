@@ -66,6 +66,7 @@ namespace XStart2._0.ViewModel {
         // 音效开关
         public bool Audio { get; set; }
         public bool AutoRun { get; set; }
+        public bool RunDirectly { get; set; }
         public bool ExitWarn { get; set; }
         public bool CloseBorderHide { get; set; }
         public string ClickType { get; set; }

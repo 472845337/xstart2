@@ -11,7 +11,7 @@ namespace XStart2._0.Windows {
     /// NotificationWindow.xaml 的交互逻辑
     /// </summary>
     public partial class NotificationWindow : Window {
-        NotifyData vm = new NotifyData();
+        readonly NotifyData vm = new NotifyData();
         public double TopFrom {
             get; set;
         }

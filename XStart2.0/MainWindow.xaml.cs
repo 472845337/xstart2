@@ -40,7 +40,7 @@ namespace XStart2._0 {
         System.Windows.Forms.NotifyIcon notifyIcon = null;
         public MainWindow() {
             InitializeComponent();
-            
+
             Configs.Handler = new WindowInteropHelper(this).Handle;
             // 时钟定时任务
             currentTimer.Tick += new EventHandler(CurrentTimer_Tick);
@@ -120,6 +120,7 @@ namespace XStart2._0 {
             string rdpModel = iniData[Constants.SECTION_CONFIG][Constants.KEY_RDP_MODEL];
             string audio = iniData[Constants.SECTION_CONFIG][Constants.KEY_AUDIO];
             string autoRun = iniData[Constants.SECTION_CONFIG][Constants.KEY_AUTO_RUN];
+            string runDirectly = iniData[Constants.SECTION_CONFIG][Constants.KEY_RUN_DIRECTLY];
             string exitWarn = iniData[Constants.SECTION_CONFIG][Constants.KEY_EXIT_WARN];
             string closeBorderHide = iniData[Constants.SECTION_CONFIG][Constants.KEY_CLOSE_BORDER_HIDE];
             string textEditor = iniData[Constants.SECTION_CONFIG][Constants.KEY_TEXT_EDITOR];
@@ -138,6 +139,7 @@ namespace XStart2._0 {
             Configs.rdpModel = string.IsNullOrEmpty(rdpModel) ? Constants.RDP_MODEL_CUSTOM : rdpModel;
             Configs.audio = !string.IsNullOrEmpty(audio) && Convert.ToBoolean(audio);
             Configs.autoRun = !string.IsNullOrEmpty(autoRun) && Convert.ToBoolean(autoRun);
+            Configs.runDirectly = string.IsNullOrEmpty(runDirectly) ? false : Convert.ToBoolean(runDirectly);
             Configs.exitWarn = string.IsNullOrEmpty(exitWarn) || Convert.ToBoolean(exitWarn);
             Configs.closeBorderHide = string.IsNullOrEmpty(closeBorderHide) || Convert.ToBoolean(closeBorderHide);
             Configs.textEditor = textEditor;
@@ -157,6 +159,7 @@ namespace XStart2._0 {
             mainViewModel.RdpModel = Configs.rdpModel;
             mainViewModel.Audio = Configs.audio;
             mainViewModel.AutoRun = Configs.autoRun;
+            mainViewModel.RunDirectly = Configs.runDirectly;
             mainViewModel.ExitWarn = Configs.exitWarn;
             mainViewModel.CloseBorderHide = Configs.closeBorderHide;
             mainViewModel.TextEditor = Configs.textEditor;
@@ -359,12 +362,14 @@ namespace XStart2._0 {
             }
             // 自启动
             if (autoRunProjects.Count > 0 && !Configs.dpiChange) {
-                // 新线程
-                Dispatcher.Invoke(new Action(delegate {
+                if (mainViewModel.RunDirectly) {
+                    RunProjects(autoRunProjects);
+                } else {
                     AutoRunProjectWindow(autoRunProjects);
-                }));
+                }
+            } else {
+                autoRunProjects.Clear();
             }
-            autoRunProjects.Clear();
             #region 任务栏图标
             notifyIcon = new System.Windows.Forms.NotifyIcon();
             using Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Files/xstart2.ico")).Stream;
@@ -393,10 +398,21 @@ namespace XStart2._0 {
             OpenNewWindowUtils.SetTopmost(this);
             AutoRunWindow autoRunWindow = new AutoRunWindow { AutoRunProjects = autoRunProjects, Topmost = true, IsStart = isStart };
             if (true == autoRunWindow.ShowDialog()) {
+                RunProjects(autoRunWindow.Projects);
+            }
+            if (autoRunWindow.IsExit) {
+                Close();
+            }
+            autoRunWindow.Close();
+            OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
+        }
+
+        private void RunProjects(List<Project> projects) {
+            Dispatcher.BeginInvoke(new Action(delegate {
                 int existProjectCount = 0;
                 int runProjectCount = 0;
                 // 启动项目
-                foreach (Project project in autoRunWindow.Projects) {
+                foreach (Project project in projects) {
                     // 判断是否启动过
                     List<Process> existList = ProcessUtils.GetProcessByName(ProcessUtils.GetProcessName(project.Path), project.Path);
                     if (null == existList || existList.Count == 0) {
@@ -411,12 +427,8 @@ namespace XStart2._0 {
                     }
                 }
                 SetOperateMsg(Colors.Green, $"{existProjectCount}个正在运行，执行{runProjectCount}个");
-            }
-            if (autoRunWindow.IsExit) {
-                Close();
-            }
-            autoRunWindow.Close();
-            OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
+                projects.Clear();
+            }));
         }
 
         private void MainWindow_Show(object sender, EventArgs e) {
@@ -683,6 +695,7 @@ namespace XStart2._0 {
                 mainViewModel.Audio = settingVM.Audio;
                 mainViewModel.TopMost = settingVM.MainTopMost;
                 mainViewModel.AutoRun = settingVM.AutoRun;
+                mainViewModel.RunDirectly = settingVM.RunDirectly;
                 mainViewModel.ExitWarn = settingVM.ExitWarn;
                 mainViewModel.CloseBorderHide = settingVM.CloseBorderHide;
                 mainViewModel.ClickType = settingVM.ClickType;
@@ -989,7 +1002,7 @@ namespace XStart2._0 {
             if (XStartService.TypeDic[column.TypeSection].ColumnDic[column.Section].ProjectDic.Count > 0) {
                 confirmMsg += "，包含项目也将会删除";
             }
-            if (MessageBoxResult.OK == MessageBox.Show(confirmMsg+"？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+            if (MessageBoxResult.OK == MessageBox.Show(confirmMsg + "？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                 // 删除项目
                 RemoveColumnProjects(column);
                 // 删除栏目
@@ -1001,7 +1014,7 @@ namespace XStart2._0 {
                 // 如果当前栏目是展开的,展开上一个栏目
                 if (column.IsExpanded && XStartService.TypeDic[column.TypeSection].ColumnDic.Count > 0) {
                     if (deleteColumnIndex > 0) {
-                        XStartService.TypeDic[column.TypeSection].ColumnDic[deleteColumnIndex-1].IsExpanded = true;
+                        XStartService.TypeDic[column.TypeSection].ColumnDic[deleteColumnIndex - 1].IsExpanded = true;
                     } else {
                         XStartService.TypeDic[column.TypeSection].ColumnDic[0].IsExpanded = true;
                     }
@@ -1045,7 +1058,7 @@ namespace XStart2._0 {
                     #region 变更了类别
                     if (!columnWindow.vm.PriTypeSection.Equals(columnWindow.vm.TypeSection)) {
                         // 变更项目中的类别Section
-                        foreach(var projectKV in column.ProjectDic) {
+                        foreach (var projectKV in column.ProjectDic) {
                             var projectUpdateModel = new Project() { Section = projectKV.Value.Section, TypeSection = column.TypeSection };
                             projectService.Update(projectUpdateModel);
                         }
@@ -1495,15 +1508,16 @@ namespace XStart2._0 {
         /// <param name="e"></param>
         private void ShowAbout(object sender, RoutedEventArgs e) {
             StringBuilder aboutSb = new StringBuilder();
-            //读取文件内容
-            using (FileStream fs = File.OpenRead(Configs.AppStartPath + Constants.ABOUT_FILE)) {
-                byte[] b = new byte[1024];
-                UTF8Encoding temp = new UTF8Encoding(true);
-                while (fs.Read(b, 0, b.Length) > 0) {
-                    aboutSb.Append(temp.GetString(b));
+            string[] aboutLines = File.ReadAllLines(Configs.AppStartPath + Constants.ABOUT_FILE, Encoding.UTF8);
+            int height = 54;
+            foreach (string line in aboutLines) {
+                if (aboutSb.Length > 0) {
+                    aboutSb.Append("\r\n");
                 }
+                aboutSb.Append(line);
+                height += 15;
             }
-            NotifyUtils.ShowNotification(aboutSb.ToString(), Colors.LightBlue, 120, "关于");
+            NotifyUtils.ShowNotification(aboutSb.ToString(), Colors.LightBlue, height, "关于");
             e.Handled = true;
         }
 
@@ -1541,7 +1555,7 @@ namespace XStart2._0 {
                 dpiTick = true;
             }
             Tuple<int, int> dpiTuple = GetDpi();
-            if(null == Configs.dpiTurple) {
+            if (null == Configs.dpiTurple) {
                 Configs.dpiTurple = dpiTuple;
                 // 清除DpiChange
                 IniParser.Model.IniData iniData = new IniParser.Model.IniData();
@@ -1606,6 +1620,7 @@ namespace XStart2._0 {
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_RDP_MODEL, ref Configs.rdpModel, mainViewModel.RdpModel);// 远程方式
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_AUDIO, ref Configs.audio, mainViewModel.Audio);// 音效开关
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_AUTO_RUN, ref Configs.autoRun, mainViewModel.AutoRun);// 自启动
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_RUN_DIRECTLY, ref Configs.runDirectly, mainViewModel.RunDirectly);// 自启动直接运行
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_EXIT_WARN, ref Configs.exitWarn, mainViewModel.ExitWarn);// 退出警告
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE, ref Configs.closeBorderHide, mainViewModel.CloseBorderHide);// 靠边隐藏
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_TEXT_EDITOR, ref Configs.textEditor, mainViewModel.TextEditor);// 靠边隐藏
@@ -1687,7 +1702,7 @@ namespace XStart2._0 {
                 double resumeSize = 1;// 隐藏后剩余出来的边界大小
                 DllUtils.Point curPoint = new DllUtils.Point();
                 DllUtils.GetCursorPos(ref curPoint); //获取鼠标相对桌面的位置
-                
+
                 // 获取屏幕的显示比例
                 System.Drawing.Size dsize = WinUtils.GetScreenByDevice();
                 double scaleX = dsize.Width / screenWidth;
@@ -1753,7 +1768,7 @@ namespace XStart2._0 {
             double curLeft = NumberUtils.Accuracy(window.Left, 2);
             double curTop = NumberUtils.Accuracy(window.Top, 2);
             double indexX = NumberUtils.Accuracy((destination.X - curLeft) / 200, 2);
-            double indexY = NumberUtils.Accuracy((destination.Y - curTop) / 200,2);
+            double indexY = NumberUtils.Accuracy((destination.Y - curTop) / 200, 2);
             if (indexX == 0) {
                 indexX = destination.X > curLeft ? step : -step;
             }
@@ -1795,7 +1810,7 @@ namespace XStart2._0 {
                             aniLocationY = destination.Y;
                             yStop = true;
                         } else {
-                            aniLocationY  = NumberUtils.Accuracy(aniLocationY + indexY, 2);
+                            aniLocationY = NumberUtils.Accuracy(aniLocationY + indexY, 2);
                         }
                     } else {
                         if (NumberUtils.Accuracy(aniLocationY + indexY, 2) >= destination.Y) {

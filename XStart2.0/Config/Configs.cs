@@ -30,6 +30,7 @@ namespace XStart2._0.Config {
         public static bool topMost;// 是否置顶
         public static bool audio;// 是否开启音效
         public static bool autoRun;// 随系统启动
+        public static bool runDirectly;// 自启动直接运行
         public static string openType = null;// 启动后打开的类别
         public static string clickType = Constants.CLICK_TYPE_SINGLE;// 默认单击
         public static string rdpModel;// 远程方式

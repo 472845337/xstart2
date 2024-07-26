@@ -13,8 +13,7 @@ namespace XStart2._0.Windows {
         readonly AutoRunViewModel vm = new AutoRunViewModel();
         public List<Project> AutoRunProjects { get; set; }
         public List<Project> Projects { get; set; }
-
-        public bool IsStart { get; set; } = true;
+        public bool IsStart { get; set; } = true;// 控制自启动窗口按钮，退出和跳过，手工打开自启动的窗口无该选项
         public bool IsExit { get; set; } = false;
         public AutoRunWindow() {
             InitializeComponent();

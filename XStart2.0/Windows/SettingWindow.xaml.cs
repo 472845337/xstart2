@@ -18,6 +18,7 @@ namespace XStart2._0.Windows {
             settingVM.MainTopMost = mainVm.TopMost;
             settingVM.Audio = mainVm.Audio;
             settingVM.AutoRun = mainVm.AutoRun;
+            settingVM.RunDirectly = mainVm.RunDirectly;
             settingVM.ExitWarn = mainVm.ExitWarn;
             settingVM.CloseBorderHide = mainVm.CloseBorderHide;
             settingVM.ClickType = mainVm.ClickType;

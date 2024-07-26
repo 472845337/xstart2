@@ -11,6 +11,7 @@ namespace XStart2._0.ViewModel {
         public bool MainHeadShow { get; set; }
         public bool MainTopMost { get; set; }// 主窗口是否置顶
         public bool Audio { get; set; }
+        public bool RunDirectly { get; set; }
         public bool AutoRun { get; set; }
         public bool ExitWarn { get; set; }
         public bool CloseBorderHide { get; set; }

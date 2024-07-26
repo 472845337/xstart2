@@ -37,6 +37,7 @@
         public const string KEY_TOP_MOST = "TopMost";
         public const string KEY_AUDIO = "Audio";
         public const string KEY_AUTO_RUN = "AutoRun";
+        public const string KEY_RUN_DIRECTLY = "RunDirectly";
         public const string KEY_EXIT_WARN = "ExitWarn";
         public const string KEY_STYLE = "Style";
         public const string KEY_OPEN_TYPE = "OpenType";// 启动后打开
