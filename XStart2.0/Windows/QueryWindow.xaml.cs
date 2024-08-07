@@ -27,7 +27,6 @@ namespace XStart2._0.Windows {
         private void ExecuteProject_MouseUp(object sender, MouseButtonEventArgs e) {
             Grid projectGrid = (Grid)sender;
             Project project = projectGrid.Tag as Project;
-            Console.WriteLine(project.Name);
             // 因为无查询结果也算是一个项目，所以需要排除
             if (!string.IsNullOrEmpty(project.Path)) {
                 ProjectUtils.ExecuteProject(project, vm.RdpModel);

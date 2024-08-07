@@ -27,7 +27,13 @@ namespace XStart2._0.ViewModel {
                 QueryProjects.Clear();
                 // 查询项目
                 foreach (KeyValuePair<string, Type> type in XStartService.TypeDic) {
+                    if (type.Value.Locked) {
+                        continue;
+                    }
                     foreach (KeyValuePair<string, Column> column in type.Value.ColumnDic) {
+                        if (column.Value.Locked) {
+                            continue;
+                        }
                         foreach (KeyValuePair<string, Project> project in column.Value.ProjectDic) {
                             // 名称，路径，备注包含
                             if ((!string.IsNullOrEmpty(project.Value.Name) && project.Value.Name.IndexOf(query, System.StringComparison.OrdinalIgnoreCase) > -1)
