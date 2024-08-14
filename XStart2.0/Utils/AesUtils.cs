@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -21,12 +20,8 @@ namespace XStart2._0.Utils {
             } catch (Exception e) {
                 throw e;
             } finally {
-                if (null != encryptor) {
-                    encryptor.Dispose();
-                }
-                if (null != aes) {
-                    aes.Dispose();
-                }
+                encryptor?.Dispose();
+                aes?.Dispose();
             }
         }
 
@@ -52,21 +47,11 @@ namespace XStart2._0.Utils {
             } catch (Exception e) {
                 throw e;
             } finally {
-                if (null != srDecrypt) {
-                    srDecrypt.Dispose();
-                }
-                if (null != csDecrypt) {
-                    csDecrypt.Dispose();
-                }
-                if (null != msDecrypt) {
-                    msDecrypt.Dispose();
-                }
-                if (null != decryptor) {
-                    decryptor.Dispose();
-                }
-                if (null != aes) {
-                    aes.Dispose();
-                }
+                srDecrypt?.Dispose();
+                csDecrypt?.Dispose();
+                msDecrypt?.Dispose();
+                decryptor?.Dispose();
+                aes?.Dispose();
             }
         }
     }

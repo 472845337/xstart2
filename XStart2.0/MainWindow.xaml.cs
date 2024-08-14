@@ -1035,10 +1035,10 @@ namespace XStart2._0 {
                         Orientation = columnWindow.vm.Orientation,
                         HideTitle = columnWindow.vm.HideTitle,
                         IconSize = columnWindow.vm.IconSize,
-                        OneLineMulti = columnWindow.vm.OneLineMulti
+                        OneLineMulti = columnWindow.vm.OneLineMulti,
+                        TypeSection = columnWindow.vm.TypeSection,
+                        IsExpanded = true
                     };
-                    column.TypeSection = columnWindow.vm.TypeSection;
-                    column.IsExpanded = true;
                     XStartService.AddNewData(column);
                     // 展开新增的栏目
                     ExpandColumn(column.TypeSection, column.Section);

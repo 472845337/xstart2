@@ -124,19 +124,19 @@ namespace XStart2._0.Bean {
             OperateParam.Add(REGEDIT, new SystemProject("regedit.exe", string.Empty));
             OperateParam.Add(CMD, new SystemProject("cmd.exe", string.Empty));
             OperateParam.Add(FOLDER_OPTIONS, new SystemProject("rundll32.exe", "shell32.dll,Options_RunDLL"));
-            OperateParam.Add(CLOSE_PC, new SystemProject("shutdown.exe", "/s /t 5", true, "确认关闭计算机吗?"));
-            OperateParam.Add(RESTART_PC, new SystemProject("shutdown.exe", "/r /t 5", true, "确认重启计算机吗?"));
-            OperateParam.Add(LOG_OUT, new SystemProject("shutdown.exe", "/l /t 5", true, "确认注销当前用户吗?"));
+            OperateParam.Add(CLOSE_PC, new SystemProject("shutdown.exe", "/s /t 5", "确认关闭计算机吗?"));
+            OperateParam.Add(RESTART_PC, new SystemProject("shutdown.exe", "/r /t 5", "确认重启计算机吗?"));
+            OperateParam.Add(LOG_OUT, new SystemProject("shutdown.exe", "/l /t 5", "确认注销当前用户吗?"));
             OperateParam.Add(LOCK_PC, new SystemProject("rundll32.exe", "user32.dll,LockWorkStation"));
-            OperateParam.Add(STANDBY_PC, new SystemProject("rundll32.exe", "powrprof.dll,SetSuspendState 0,1,0", true, "确认进入待机吗?"));
+            OperateParam.Add(STANDBY_PC, new SystemProject("rundll32.exe", "powrprof.dll,SetSuspendState 0,1,0", "确认进入待机吗?"));
             OperateParam.Add(SLEEP_PC, new SystemProject("shutdown.exe", "/h /t 0"));
             OperateParam.Add(SCREEN_SAVER, new SystemProject("scrnsave.scr", string.Empty));
-            OperateParam.Add(CLEAR_RECYCLE_BIN, new SystemProject(true, "确认清空回收站?"));
-            OperateParam.Add(CLEAR_IE_HISTORY, new SystemProject("RunDll32.exe", "InetCpl.cpl, ClearMyTracksByProcess 1", true, "确认清空IE历史记录?"));
-            OperateParam.Add(CLEAR_IE_COOKIES, new SystemProject("RunDll32.exe", "InetCpl.cpl, ClearMyTracksByProcess 2", true, "确认清空IE cookies?"));
+            OperateParam.Add(CLEAR_RECYCLE_BIN, new SystemProject("确认清空回收站?"));
+            OperateParam.Add(CLEAR_IE_HISTORY, new SystemProject("RunDll32.exe", "InetCpl.cpl, ClearMyTracksByProcess 1", "确认清空IE历史记录?"));
+            OperateParam.Add(CLEAR_IE_COOKIES, new SystemProject("RunDll32.exe", "InetCpl.cpl, ClearMyTracksByProcess 2", "确认清空IE cookies?"));
             OperateParam.Add(ADD_OR_REMOVE_APP, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL appwiz.cpl,,1"));
             OperateParam.Add(INTERNET_OPTIONS, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL inetcpl.cpl"));
-            OperateParam.Add(CLEAR_SOME_DIRECTORY, new SystemProject(true, "确认清空指定目录?"));
+            OperateParam.Add(CLEAR_SOME_DIRECTORY, new SystemProject("确认清空指定目录?"));
             //OperateParam.Add(USER_ACCOUNT, new SystemApp("netplwiz.exe", ""));
             OperateParam.Add(USER_ACCOUNT, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL nusrmgr.cpl"));
             OperateParam.Add(REGION_LANGUAGE_OPTIONS, new SystemProject("RunDll32.exe", "shell32.dll,Control_RunDLL intl.cpl"));
@@ -170,10 +170,8 @@ namespace XStart2._0.Bean {
         /// <summary>
         /// 执行前的确认信息
         /// </summary>
-        /// <param name="confirm">是否确认</param>
         /// <param name="confirmMsg">确认信息</param>
-        public SystemProject(bool confirm, string confirmMsg) {
-            Confirm = confirm;
+        public SystemProject(string confirmMsg) {
             ConfirmMsg = confirmMsg;
         }
 
@@ -184,17 +182,14 @@ namespace XStart2._0.Bean {
         /// <param name="param">执行的参数</param>
         /// <param name="confirm">是否确认</param>
         /// <param name="confirmMsg">确认信息</param>
-        public SystemProject(string execute, string param, bool confirm, string confirmMsg) {
+        public SystemProject(string execute, string param, string confirmMsg) {
             Execute = execute;
             Param = param;
-            Confirm = confirm;
             ConfirmMsg = confirmMsg;
         }
         public string Execute { get; set; }
 
         public string Param { get; set; }
-
-        public bool Confirm { get; set; }
 
         public string ConfirmMsg { get; set; }
     }

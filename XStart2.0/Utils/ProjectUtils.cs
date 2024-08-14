@@ -24,7 +24,7 @@ namespace XStart2._0.Utils {
             try {
                 // 获取该类别的应用是否配置确认信息，有确认信息，则弹出确认窗口
                 if (OperateParam.TryGetValue(project.Path, out SystemProject appOperateParam)) {
-                    if (null != appOperateParam && appOperateParam.Confirm) {
+                    if (null != appOperateParam && !string.IsNullOrEmpty(appOperateParam.ConfirmMsg)) {
                         if (MessageBoxResult.Cancel == MessageBox.Show(appOperateParam.ConfirmMsg, Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                             return;
                         }

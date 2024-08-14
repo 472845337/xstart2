@@ -63,9 +63,7 @@ namespace XStart2._0.ViewModel {
         /// 数据初始化时设置父节点的值
         /// </summary>
         private void SetParentValue() {
-            if (Children != null) {
-                Children.ForEach(ch => ch.Parent = this);
-            }
+            Children?.ForEach(ch => ch.Parent = this);
         }
     }
 }

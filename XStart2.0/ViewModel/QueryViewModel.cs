@@ -1,24 +1,16 @@
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using PropertyChanged;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using XStart2._0.Bean;
+using XStart2._0.Commands;
 using XStart2._0.Services;
 
 namespace XStart2._0.ViewModel {
     /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel.
-    /// </para>
-    /// <para>
-    /// You can also use Blend to data bind with the tool's support.
-    /// </para>
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
+    /// ≤È—Ø”¶”√
     /// </summary>
-    public class QueryViewModel : ViewModelBase {
+    [AddINotifyPropertyChangedInterface]
+    public class QueryViewModel {
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -56,7 +48,7 @@ namespace XStart2._0.ViewModel {
         public string RdpModel { get; set; }
 
         private string query;
-        public string Query { get { return query; } set { query = value; RaisePropertyChanged("Query"); QueryCommand.RaiseCanExecuteChanged(); } }
+        public string Query { get { return query; } set { query = value; QueryCommand.RaiseCanExecuteChanged(); } }
         public ObservableCollection<Project> QueryProjects { get; set; } = new ObservableCollection<Project>();
 
         public string QueryResult { get; set; }

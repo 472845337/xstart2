@@ -15,8 +15,7 @@ namespace XStart2._0.Bean {
         private static HighContrastHelper instance;
         public static HighContrastHelper Instance {
             get {
-                if (instance == null)
-                    instance = new HighContrastHelper();
+                instance ??= new HighContrastHelper();
                 return instance;
             }
         }
