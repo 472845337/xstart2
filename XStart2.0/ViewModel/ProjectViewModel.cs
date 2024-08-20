@@ -21,6 +21,7 @@ namespace XStart2._0.ViewModel {
         public string IconPath { get; set; }
         public string FontColor { get; set; }
         public string Arguments { get; set; }
+        public string ShowArguments { get; set; }
         // 参数是否可调
         public bool ArgumentsReadonly { get; set; } = false;
         public string RunStartPath { get; set; }

@@ -49,7 +49,7 @@
                         </Button>
                     </Grid>
                     <TextBlock Grid.Row="4" Grid.Column="0" Text="参数:" Style="{StaticResource FormLabel_Style}"/>
-                    <TextBox x:Name="ArgumentsTextBox" Grid.Row="4" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Arguments}" IsReadOnly="{Binding ArgumentsReadonly}"/>
+                    <TextBox x:Name="ArgumentsTextBox" Grid.Row="4" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding ShowArguments}" IsReadOnly="{Binding ArgumentsReadonly}"/>
                     <TextBlock Grid.Row="5" Grid.Column="0" Text="起始:" Style="{StaticResource FormLabel_Style}"/>
                     <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding RunStartPath}"/>
                     <!--<TextBlock Grid.Row="6" Grid.Column="0" Text="热键:" Style="{StaticResource FormLabel_Style}"/>

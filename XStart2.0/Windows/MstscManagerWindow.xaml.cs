@@ -172,7 +172,11 @@ namespace XStart2._0.Windows {
         private void DisconnectRdp(AxMSTSCLib.AxMsTscAxNotSafeForScripting rdpScript) {
             if (null != rdpScript) {
                 if (rdpScript.Connected.ToString() == "1") {
-                    rdpScript.Disconnect();
+                    try {
+                        rdpScript.Disconnect();
+                    } catch(Exception e) {
+                        Console.WriteLine(e.ToString());
+                    }
                 }
                 rdpScript.Dispose();
             }

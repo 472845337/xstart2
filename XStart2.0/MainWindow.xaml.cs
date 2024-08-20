@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using XStart2._0.Bean;
@@ -74,6 +75,7 @@ namespace XStart2._0 {
             #region 用户头像和昵称
             string avatarPath = iniData[Constants.SECTION_USER][Constants.KEY_USER_AVATAR];
             string nickName = iniData[Constants.SECTION_USER][Constants.KEY_USER_NICKNAME];
+            string admin = iniData[Constants.SECTION_USER][Constants.KEY_USER_ADMIN];
             if (!string.IsNullOrEmpty(avatarPath)) {
                 if (!File.Exists(avatarPath)) {
                     avatarPath = Configs.AppStartPath + Constants.AVATAR_PATH_NOTEXIST;
@@ -83,6 +85,9 @@ namespace XStart2._0 {
             }
             mainViewModel.AvatarPath = avatarPath;
             mainViewModel.NickName = string.IsNullOrEmpty(nickName) ? Constants.NICKNAME_DEFAULT : nickName;
+            // admin解密
+            Configs.admin = string.IsNullOrEmpty(admin) ? string.Empty : AesUtils.DecryptContent(admin);
+            mainViewModel.Admin = Configs.admin;
             #endregion
 
             #region 窗口相关加载，尺寸，位置，置顶
@@ -2183,6 +2188,55 @@ namespace XStart2._0 {
                 return type == 1 ? "#FFFFFF" : "#000000";
             } else {
                 return brush.Color.ToString();
+            }
+        }
+
+        private void Admin_Click(object sender, RoutedEventArgs e) {
+            bool update = false;
+            string admin = string.Empty;
+            if (string.IsNullOrEmpty(mainViewModel.Admin)) {
+                // 添加口令
+                AddSecurityWindow addSecurityWindow = new AddSecurityWindow() {
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    VM = new SecurityVM() { Title = "添加管理员口令", Kind = Constants.ADMIN, Operate = Constants.OPERATE_CREATE }
+                };
+                if (true == addSecurityWindow.ShowDialog()) {
+                    update = true;
+                    admin = addSecurityWindow.VM.Security;
+                }
+            } else {
+                // 修改口令
+                UpdateSecurityWindow updateSecurityWindow = new UpdateSecurityWindow() {
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    VM = new SecurityVM() { Title = "修改管理员口令", CurSecurity = mainViewModel.Admin, Kind = Constants.ADMIN, Operate = Constants.OPERATE_UPDATE }
+                };
+                if (true == updateSecurityWindow.ShowDialog()) {
+                    update = true;
+                    admin = updateSecurityWindow.VM.Security;
+                }
+            }
+            if (update) {
+                mainViewModel.Admin = admin;
+                Configs.admin = admin;
+                string entryptAdmin = AesUtils.EntryptContent(admin);
+                // 保存到配置
+                IniParserUtils.SaveIniData(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_ADMIN, entryptAdmin);
+            }
+        }
+
+        private void RemoveAdmin_Click(object sender, RoutedEventArgs e) {
+            if (!string.IsNullOrEmpty(mainViewModel.Admin)) {
+                RemoveSecurityWindow removeSecurityWindow = new RemoveSecurityWindow() {
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    VM = new SecurityVM() { Title = "移除管理员口令", CurSecurity = mainViewModel.Admin, Kind = Constants.ADMIN, Operate = Constants.OPERATE_REMOVE }
+                };
+                if(true == removeSecurityWindow.ShowDialog()) {
+                    mainViewModel.Admin = string.Empty;
+                    Configs.admin = string.Empty;
+                    IniParserUtils.SaveIniData(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_ADMIN, string.Empty);
+                }
+            } else {
+                MessageBox.Show("当前无管理员口令", Constants.MESSAGE_BOX_TITLE_ERROR);
             }
         }
     }

@@ -31,6 +31,7 @@
         public const string KEY_MAIN_HEAD_SHOW = "MainHeadShow";
         public const string KEY_USER_AVATAR = "Avatar";
         public const string KEY_USER_NICKNAME = "NickName";
+        public const string KEY_USER_ADMIN = "Admin";// 管理员密码
         public const string KEY_TYPE_TAB_EXPAND = "TypeTabExpand";
         public const string KEY_CLICK_TYPE = "ClickType";
         public const string KEY_RDP_MODEL = "RdpModel";
@@ -66,6 +67,7 @@
 
         public const string EDGE_PATH = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe";
 
+        public const string ADMIN = "admin";
         public const string TYPE = "type";
         public const string COLUMN = "column";
         public const string PROJECT = "project";

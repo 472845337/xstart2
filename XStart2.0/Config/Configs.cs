@@ -21,6 +21,8 @@ namespace XStart2._0.Config {
         public static bool mainHeadShow;// 主页面头是否显示
         public static bool typeTabExpand;// 类别标签头是否展开
 
+        public static string admin;
+
         public static double mainHeight;// 主窗口高
         public static double mainWidth;// 主窗口宽
         public static double mainTop;// 主窗口顶部位置

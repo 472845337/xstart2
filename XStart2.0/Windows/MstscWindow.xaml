@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XStart2._0.Windows"
+        xmlns:helper="clr-namespace:XStart2._0.Helper"
         mc:Ignorable="d"
         Title="远程" Height="210" Width="380" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="pack://application:,,,/Files/Icons/App/mstsc.ico">
     <Grid>
@@ -25,7 +26,15 @@
         <TextBlock Grid.Row="2" Grid.Column="0" Text="用户名" Style="{StaticResource FormLabel_Style}"/>
         <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Account}"/>
         <TextBlock Grid.Row="3" Grid.Column="0" Text="密码" Style="{StaticResource FormLabel_Style}"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Password}"/>
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <PasswordBox Grid.Column="0" Style="{StaticResource FormValue_Style}" helper:PasswordBoxHelper.Attach="True" helper:PasswordBoxHelper.Password="{Binding Password,Mode=TwoWay}" Visibility="{Binding PasswordTextHidden}"/>
+            <TextBox Grid.Column="0" Style="{StaticResource FormValue_Style}" Text="{Binding Password}" Visibility="{Binding PasswordTextShow}"/>
+            <Button Grid.Column="1" Style="{StaticResource BtnConfirm_Style}" VerticalAlignment="Center" Width="28" Content="{Binding SeePassword}" FontFamily="{StaticResource FontAwesomeSolid}" FontSize="12" Click="SeePassowrd_Click"/>
+        </Grid>
         <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Style="{StaticResource BtnConfirm_Style}" Click="Confirm_Click"/>
             <Button Style="{StaticResource BtnCancel_Style}" Click="Cancel_Click"/>

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.ViewModel;
 
@@ -40,6 +41,20 @@ namespace XStart2._0.Windows {
                 MessageBox.Show(errMsg, Constants.MESSAGE_BOX_TITLE_ERROR);
             }
             e.Handled = true;
+        }
+
+        private void SeePassowrd_Click(object sender, RoutedEventArgs e) {
+            if (!vm.ShowPassword && !string.IsNullOrEmpty(Configs.admin)) {
+                CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow(Configs.admin);
+                checkSecurityWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                Topmost = false;
+                if (true != checkSecurityWindow.ShowDialog()) {
+                    Topmost = true;
+                    return;
+                }
+            }
+            Topmost = true;
+            vm.ShowPassword = !vm.ShowPassword;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {

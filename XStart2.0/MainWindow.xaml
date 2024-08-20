@@ -479,6 +479,21 @@
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
+                        <MenuItem Header="管理员">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/user.ico"/>
+                            </MenuItem.Icon>
+                            <MenuItem Header="添加口令" Click="Admin_Click">
+                                <MenuItem.Icon>
+                                    <Image Source="/Files/Icons/App/security_add.ico"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="移除口令" Click="RemoveAdmin_Click">
+                                <MenuItem.Icon>
+                                    <Image Source="/Files/Icons/App/security_del.ico"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
                         <MenuItem Header="恢复默认" Click="RestoreDefault_Click">
                             <MenuItem.Icon>
                                 <Image Source="/Files/Icons/App/default.ico"/>
