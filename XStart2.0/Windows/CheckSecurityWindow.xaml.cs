@@ -10,10 +10,12 @@ namespace XStart2._0.Windows {
     /// </summary>
     public partial class CheckSecurityWindow : Window {
         SecurityVM vm;
-        public CheckSecurityWindow(string priSecurity) {
+        public CheckSecurityWindow(string title, string priSecurity) {
             InitializeComponent();
-            vm = new SecurityVM();
-            vm.PriSecurity = priSecurity;
+            vm = new SecurityVM {
+                Title = title,
+                PriSecurity = priSecurity
+            };
             Loaded += Window_Loaded;
         }
 

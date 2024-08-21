@@ -483,7 +483,7 @@
                             <MenuItem.Icon>
                                 <Image Source="/Files/Icons/App/user.ico"/>
                             </MenuItem.Icon>
-                            <MenuItem Header="添加口令" Click="Admin_Click">
+                            <MenuItem Header="配置口令" Click="Admin_Click">
                                 <MenuItem.Icon>
                                     <Image Source="/Files/Icons/App/security_add.ico"/>
                                 </MenuItem.Icon>

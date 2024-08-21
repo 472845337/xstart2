@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:XStart2._0.Windows"
         xmlns:helper="clr-namespace:XStart2._0.Helper"
         mc:Ignorable="d"
-        Title="校验口令" Height="110" Width="300" WindowStartupLocation="CenterScreen">
+        Title="{Binding Title}" Height="110" Width="300" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

@@ -32,7 +32,6 @@ namespace XStart2._0.Windows {
                 vm.IconIndex = Project.IconIndex;
                 vm.IconPath = Project.IconPath;
                 vm.Arguments = Project.Arguments;
-                InitShowArguments(vm.Path, vm.Arguments);
                 vm.RunStartPath = Project.RunStartPath;
                 vm.HotKey = Project.HotKey;
                 vm.Remark = Project.Remark;
@@ -85,7 +84,13 @@ namespace XStart2._0.Windows {
                 Project.Kind = vm.Kind;
                 Project.IconIndex = vm.IconIndex;
                 Project.IconPath = vm.IconPath;
-                Project.Arguments = vm.Arguments;
+                // 特殊处理的参数排除
+                if (SystemProjectParam.MSTSC.Equals(vm.Path) || SystemProjectParam.CLEAR_SOME_DIRECTORY.Equals(vm.Path)|| SystemProjectParam.CONTROL_APP_MEMORY.Equals(vm.Path)) {
+                    Project.Arguments = vm.Arguments;
+                } else {
+                    Project.Arguments = vm.ShowArguments;
+                }
+                
                 Project.RunStartPath = vm.RunStartPath;
                 Project.HotKey = vm.HotKey;
                 Project.Remark = vm.Remark;
@@ -159,7 +164,6 @@ namespace XStart2._0.Windows {
                 vm.IconIndex = spw.Project.IconIndex;
                 vm.IconPath = spw.Project.IconPath;
                 vm.Arguments = spw.Project.Arguments;
-                InitShowArguments(vm.Path, vm.Arguments);
                 vm.RunStartPath = spw.Project.RunStartPath;
                 vm.HotKey = spw.Project.HotKey;
                 vm.Remark = spw.Project.Remark;
@@ -209,7 +213,6 @@ namespace XStart2._0.Windows {
             mstsc.vm.Password = argumentArray[3];
             if (true == mstsc.ShowDialog()) {
                 vm.Arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}";
-                InitShowArguments(SystemProjectParam.MSTSC, vm.Arguments);
             }
             mstsc.Close();
             OpenNewWindowUtils.RecoverTopmost(this, vm);
@@ -228,13 +231,6 @@ namespace XStart2._0.Windows {
             }
             cam.Close();
             OpenNewWindowUtils.RecoverTopmost(this, vm);
-        }
-
-        private void InitShowArguments(string path, string arguments) {
-            if (SystemProjectParam.MSTSC.Equals(path)) {
-                string[] argumentArray = arguments.Split(Constants.SPLIT_CHAR);
-                vm.ShowArguments = $"{argumentArray[0]}{Constants.SPLIT_CHAR}{argumentArray[1]}{Constants.SPLIT_CHAR}{argumentArray[2]}{Constants.SPLIT_CHAR}******";
-            }
         }
     }
 }

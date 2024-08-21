@@ -20,6 +20,7 @@ namespace XStart2._0.ViewModel {
         [OnChangedMethod(nameof(InitIcon))]
         public string IconPath { get; set; }
         public string FontColor { get; set; }
+        [OnChangedMethod(nameof(InitShowArguments))]
         public string Arguments { get; set; }
         public string ShowArguments { get; set; }
         // 参数是否可调
@@ -37,6 +38,17 @@ namespace XStart2._0.ViewModel {
         public void InitIcon() {
             if (!string.IsNullOrEmpty(Path) || !string.IsNullOrEmpty(IconPath)) {
                 Icon = XStartService.GetIconImage(Kind, Path, IconPath, Constants.ICON_SIZE_32);
+            }
+        }
+
+        private void InitShowArguments() {
+            if (!string.IsNullOrEmpty(Arguments)) {
+                if (SystemProjectParam.MSTSC.Equals(Path)) {
+                    string[] argumentArray = Arguments.Split(Constants.SPLIT_CHAR);
+                    ShowArguments = $"{argumentArray[0]}{Constants.SPLIT_CHAR}{argumentArray[1]}{Constants.SPLIT_CHAR}{argumentArray[2]}{Constants.SPLIT_CHAR}******";
+                } else {
+                    ShowArguments = Arguments;
+                }
             }
         }
     }
