@@ -19,8 +19,8 @@ namespace XStart2._0.ViewModel {
         public System.Windows.Media.Imaging.BitmapImage Avatar { get; set; }
         // 昵称
         public string NickName { get; set; }
-        // 管理员
-        public string Admin { get; set; }
+        // 管理员口令
+        public string Security { get; set; }
         #endregion
 
         #region 时间数据

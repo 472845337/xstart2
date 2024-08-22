@@ -117,6 +117,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Bean\Admin.cs" />
     <Compile Include="Bean\Holiday\HcaRequest.cs" />
     <Compile Include="Bean\Holiday\HcaResponse.cs" />
     <Compile Include="Bean\Holiday\IsHolidayRequest.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Converters\WeatherAirConverter.cs" />
     <Compile Include="Converters\WeaImgConverter.cs" />
     <Compile Include="Helper\DragDop\DragAdorner.cs" />
+    <Compile Include="Services\AdminService.cs" />
     <Compile Include="Utils\ColorUtils.cs" />
     <Compile Include="Utils\DateUtil.cs" />
     <Compile Include="Utils\ElementUtils.cs" />

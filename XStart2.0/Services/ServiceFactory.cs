@@ -5,6 +5,7 @@ namespace XStart2._0.Services {
         private static TableService<Type> typeService;
         private static TableService<Column> columnService;
         private static TableService<Project> projectService;
+        private static TableService<Admin> adminService;
 
         public static TableService<Type> GetTypeService() {
             if (null == typeService) {
@@ -27,6 +28,13 @@ namespace XStart2._0.Services {
             return projectService;
         }
 
+        public static TableService<Admin> GetAdminService() {
+            if (null == adminService) {
+                adminService = AdminService.Instance;
+            }
+            return adminService;
+        }
+
         public static S GetService<T, S>() where T : TableData where S : TableService<T> {
             if (typeof(T) == typeof(Type)) {
                 return GetTypeService() as S;
@@ -34,6 +42,8 @@ namespace XStart2._0.Services {
                 return GetColumnService() as S;
             } else if (typeof(T) == typeof(Project)) {
                 return GetProjectService() as S;
+            } else if (typeof(T) == typeof(Admin)) { 
+                return GetAdminService() as S;
             } else {
                 return null;
             }

@@ -116,7 +116,7 @@ namespace XStart2._0.Services {
             if (!string.IsNullOrEmpty(whereSql)) {
                 selectSql.Append(" WHERE ").Append(whereSql);
             }
-            if (!string.IsNullOrEmpty(queryModel.OrderBy)) {
+            if (!string.IsNullOrEmpty(queryModel?.OrderBy)) {
                 selectSql.Append(" ORDER BY ").Append(queryModel.OrderBy);
             }
             // 执行查询
@@ -143,6 +143,15 @@ namespace XStart2._0.Services {
             return list;
         }
 
+        public T SelectFirst(T queryModel) {
+            List<T> list = SelectList(queryModel);
+            if (null != list && list.Count>0) {
+                return list[0];
+            } else {
+                return null;
+            }
+        }
+
         private void InitSql(T t, ref string paramSql, ref string whereSql, ref List<SQLiteParameter> paramList) {
             var infos = typeof(T).GetProperties();
             paramList = new List<SQLiteParameter>();
@@ -153,7 +162,7 @@ namespace XStart2._0.Services {
                 if (null == tableParam) {
                     continue;
                 }
-                if (null != property.GetValue(t, null)) {
+                if (null != t && null != property.GetValue(t, null)) {
                     if (whereSb.Length > 0) {
                         whereSb.Append(" AND ");
                     }

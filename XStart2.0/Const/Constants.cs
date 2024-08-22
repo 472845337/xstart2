@@ -20,7 +20,6 @@
 
         public const string SET_FILE = "Config/Ini/Set.ini";
 
-        public const string SECTION_USER = "User";
         public const string SECTION_LOCATION = "Location";
         public const string SECTION_SIZE = "Size";
         public const string SECTION_CONFIG = "Config";
@@ -29,9 +28,6 @@
         public const string SECTION_THEME = "Theme";
 
         public const string KEY_MAIN_HEAD_SHOW = "MainHeadShow";
-        public const string KEY_USER_AVATAR = "Avatar";
-        public const string KEY_USER_NICKNAME = "NickName";
-        public const string KEY_USER_ADMIN = "Admin";// 管理员密码
         public const string KEY_TYPE_TAB_EXPAND = "TypeTabExpand";
         public const string KEY_CLICK_TYPE = "ClickType";
         public const string KEY_RDP_MODEL = "RdpModel";

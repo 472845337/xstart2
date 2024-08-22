@@ -6,7 +6,6 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using XStart2._0.Bean;
@@ -35,6 +34,7 @@ namespace XStart2._0 {
         public TableService<Bean.Type> typeService = ServiceFactory.GetTypeService();
         public TableService<Column> columnService = ServiceFactory.GetColumnService();
         public TableService<Project> projectService = ServiceFactory.GetProjectService();
+        public TableService<Admin> adminService = ServiceFactory.GetAdminService();
         // 模型
         readonly MainViewModel mainViewModel = new MainViewModel();
         private static bool IsAllShow = true;
@@ -72,10 +72,17 @@ namespace XStart2._0 {
             #region 读取配置文件
             var iniData = IniParserUtils.GetIniData(Constants.SET_FILE);
             #endregion
-            #region 用户头像和昵称
-            string avatarPath = iniData[Constants.SECTION_USER][Constants.KEY_USER_AVATAR];
-            string nickName = iniData[Constants.SECTION_USER][Constants.KEY_USER_NICKNAME];
-            string admin = iniData[Constants.SECTION_USER][Constants.KEY_USER_ADMIN];
+            #region 管理员信息
+            Admin admin = adminService.SelectFirst(null);
+            if (null == admin) {
+                admin = new Admin() { Section = Guid.NewGuid().ToString() };
+                adminService.Insert(admin);
+            }
+            Configs.admin = admin;
+
+            string avatarPath = admin.Avator;
+            string nickName = admin.Name;
+            string security = admin.Password;
             if (!string.IsNullOrEmpty(avatarPath)) {
                 if (!File.Exists(avatarPath)) {
                     avatarPath = Configs.AppStartPath + Constants.AVATAR_PATH_NOTEXIST;
@@ -85,9 +92,8 @@ namespace XStart2._0 {
             }
             mainViewModel.AvatarPath = avatarPath;
             mainViewModel.NickName = string.IsNullOrEmpty(nickName) ? Constants.NICKNAME_DEFAULT : nickName;
-            // admin解密
-            Configs.admin = string.IsNullOrEmpty(admin) ? string.Empty : AesUtils.DecryptContent(admin);
-            mainViewModel.Admin = Configs.admin;
+            // admin口令
+            mainViewModel.Security = security;
             #endregion
 
             #region 窗口相关加载，尺寸，位置，置顶
@@ -361,7 +367,7 @@ namespace XStart2._0 {
             int openTypeIndex = mainViewModel.Types.IndexOf(openType);
             mainViewModel.SelectedIndex = openTypeIndex < 0 ? 0 : openTypeIndex;
             #endregion
-
+            OpenCheckSecurityWindow(true);
             if (mainViewModel.Audio) {
                 AudioUtils.PlayWav(AudioUtils.START);
             }
@@ -385,6 +391,7 @@ namespace XStart2._0 {
             notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu();
 
             notifyIcon.ContextMenu.MenuItems.Add("显示窗口", MainWindow_Show);
+            notifyIcon.ContextMenu.MenuItems.Add("窗口锁定", LockApp_Click);
             notifyIcon.ContextMenu.MenuItems.Add("设置", Open_Setting);
             notifyIcon.ContextMenu.MenuItems.Add("-");
             notifyIcon.ContextMenu.MenuItems.Add("日历", Calendar_Click);
@@ -397,6 +404,35 @@ namespace XStart2._0 {
             Configs.inited = true;
             IsAllShow = true;
             SetOperateMsg(Colors.Green, "加载完成");
+        }
+
+        private void OpenCheckSecurityWindow(bool isInit = false) {
+            if (string.IsNullOrEmpty(Configs.admin.Password)) {
+                if (!isInit) {
+                    if(MessageBoxResult.OK == MessageBox.Show("请先配置管理员口令！", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                        SetAdminSecurity_Click(null, null);
+                    }
+                    return;
+                } else {
+                    return;
+                }
+            }
+            OpenNewWindowUtils.SetTopmost(this);
+            if (!isInit) {
+                Hide();
+            }
+            CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入管理员口令", Configs.admin.Password, "关闭该窗口将退出程序！");
+            if(true == checkSecurityWindow.ShowDialog()) {
+                if (!isInit) {
+                    Show();
+                }
+            } else {
+                Configs.forceExit = true;
+                Configs.inited = true;
+                Close();
+            }
+            checkSecurityWindow.Close();
+            OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
         }
 
         private void AutoRunProjectWindow(List<Project> autoRunProjects, bool isStart = true) {
@@ -524,7 +560,7 @@ namespace XStart2._0 {
                 currentTimer.Stop();
                 AutoGcTimer.Stop();
                 OperateMessageTimer.Stop();
-                notifyIcon.Dispose();
+                notifyIcon?.Dispose();
                 DataContext = null;
                 e.Cancel = false;
             }
@@ -1972,17 +2008,16 @@ namespace XStart2._0 {
         private void User_Click(object sender, RoutedEventArgs e) {
             UserWindow userWindow = new UserWindow(mainViewModel.AvatarPath, mainViewModel.NickName) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
             if (true == userWindow.ShowDialog()) {
-                IniParser.Model.IniData iniData = new IniParser.Model.IniData();
                 // 保存配置项
                 if (!mainViewModel.AvatarPath.Equals(userWindow.vm.AvatarPath)) {
-                    iniData[Constants.SECTION_USER][Constants.KEY_USER_AVATAR] = userWindow.vm.AvatarPath;
+                    Configs.admin.Avator = userWindow.vm.AvatarPath;
                     mainViewModel.AvatarPath = userWindow.vm.AvatarPath;
                 }
                 if (!mainViewModel.NickName.Equals(userWindow.vm.NickName)) {
-                    iniData[Constants.SECTION_USER][Constants.KEY_USER_NICKNAME] = userWindow.vm.NickName;
+                    Configs.admin.Name = userWindow.vm.NickName;
                     mainViewModel.NickName = userWindow.vm.NickName;
                 }
-                IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
+                adminService.Update(Configs.admin);
             }
             userWindow.Close();
         }
@@ -2191,10 +2226,11 @@ namespace XStart2._0 {
             }
         }
 
-        private void Admin_Click(object sender, RoutedEventArgs e) {
+        private void SetAdminSecurity_Click(object sender, RoutedEventArgs e) {
+            OpenNewWindowUtils.SetTopmost(this);
             bool update = false;
-            string admin = string.Empty;
-            if (string.IsNullOrEmpty(mainViewModel.Admin)) {
+            string security = string.Empty;
+            if (string.IsNullOrEmpty(mainViewModel.Security)) {
                 // 添加口令
                 AddSecurityWindow addSecurityWindow = new AddSecurityWindow() {
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
@@ -2202,42 +2238,49 @@ namespace XStart2._0 {
                 };
                 if (true == addSecurityWindow.ShowDialog()) {
                     update = true;
-                    admin = addSecurityWindow.VM.Security;
+                    security = addSecurityWindow.VM.Security;
                 }
             } else {
                 // 修改口令
                 UpdateSecurityWindow updateSecurityWindow = new UpdateSecurityWindow() {
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                    VM = new SecurityVM() { Title = "修改管理员口令", CurSecurity = mainViewModel.Admin, Kind = Constants.ADMIN, Operate = Constants.OPERATE_UPDATE }
+                    VM = new SecurityVM() { Title = "修改管理员口令", CurSecurity = mainViewModel.Security, Kind = Constants.ADMIN, Operate = Constants.OPERATE_UPDATE }
                 };
                 if (true == updateSecurityWindow.ShowDialog()) {
                     update = true;
-                    admin = updateSecurityWindow.VM.Security;
+                    security = updateSecurityWindow.VM.Security;
                 }
             }
             if (update) {
-                mainViewModel.Admin = admin;
-                Configs.admin = admin;
-                string entryptAdmin = AesUtils.EntryptContent(admin);
-                // 保存到配置
-                IniParserUtils.SaveIniData(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_ADMIN, entryptAdmin);
+                mainViewModel.Security = security;
+                Configs.admin.Password = security;
+                // 保存
+                adminService.Update(Configs.admin);
+                NotifyUtils.ShowNotification("口令配置成功！");
             }
+            OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
         }
 
-        private void RemoveAdmin_Click(object sender, RoutedEventArgs e) {
-            if (!string.IsNullOrEmpty(mainViewModel.Admin)) {
+        private void RemoveAdminSecurity_Click(object sender, RoutedEventArgs e) {
+            if (!string.IsNullOrEmpty(mainViewModel.Security)) {
                 RemoveSecurityWindow removeSecurityWindow = new RemoveSecurityWindow() {
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                    VM = new SecurityVM() { Title = "移除管理员口令", CurSecurity = mainViewModel.Admin, Kind = Constants.ADMIN, Operate = Constants.OPERATE_REMOVE }
+                    VM = new SecurityVM() { Title = "移除管理员口令", CurSecurity = mainViewModel.Security, Kind = Constants.ADMIN, Operate = Constants.OPERATE_REMOVE }
                 };
                 if(true == removeSecurityWindow.ShowDialog()) {
-                    mainViewModel.Admin = string.Empty;
-                    Configs.admin = string.Empty;
-                    IniParserUtils.SaveIniData(Constants.SET_FILE, Constants.SECTION_USER, Constants.KEY_USER_ADMIN, string.Empty);
+                    mainViewModel.Security = string.Empty;
+                    Configs.admin.Password = string.Empty;
+                    adminService.Update(Configs.admin);
+                    NotifyUtils.ShowNotification("口令已移除！");
                 }
             } else {
                 MessageBox.Show("当前无管理员口令", Constants.MESSAGE_BOX_TITLE_ERROR);
             }
+        }
+
+        private void LockApp_Click(object sender, EventArgs e) {
+            // 锁定窗口
+            OpenCheckSecurityWindow();
         }
     }
 }

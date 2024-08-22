@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Media.Imaging;
+using XStart2._0.Bean;
 using XStart2._0.Bean.Weather;
 using XStart2._0.Const;
 using XStart2._0.Utils;
@@ -21,7 +22,7 @@ namespace XStart2._0.Config {
         public static bool mainHeadShow;// 主页面头是否显示
         public static bool typeTabExpand;// 类别标签头是否展开
 
-        public static string admin;
+        public static Admin admin;// 管理员信息，头像，昵称，口令
 
         public static double mainHeight;// 主窗口高
         public static double mainWidth;// 主窗口宽

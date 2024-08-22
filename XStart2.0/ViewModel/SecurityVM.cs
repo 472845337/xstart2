@@ -11,6 +11,7 @@ namespace XStart2._0.ViewModel {
         [DoNotNotify]
         public string Operate { get; set; }
         public string Title { get; set; }
+        public string ExitMsg { get; set; }
         // 当前口令
         [DoNotNotify]
         public string CurSecurity { get; set; }
