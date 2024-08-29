@@ -61,7 +61,7 @@ namespace XStart2._0.Windows {
         private void SelectIconColor(object sender, RoutedEventArgs e) {
             using ColorDialog colorDialog = new ColorDialog();
             if (System.Windows.Forms.DialogResult.OK == colorDialog.ShowDialog()) {
-                VM.SelectedIconColor = System.Drawing.ColorTranslator.ToHtml(colorDialog.Color);
+                VM.SelectedIconColor = ColorUtils.GetHtml(colorDialog.Color);
             }
         }
         // 选择更多的图标

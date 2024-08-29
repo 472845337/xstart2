@@ -1,0 +1,41 @@
+﻿<Window x:Class="XStart2._0.Windows.MainBackgroundWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XStart2._0.Windows"
+        mc:Ignorable="d"
+        Title="窗口背景" Height="300" Width="300" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="背景"/>
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource Btn_Style}" Content="空白" ToolTip="不指定背景" Click="CancelBackground_Click"/>
+            <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource BtnConfirm_Style}" Content="纯色" ToolTip="指定颜色做为主窗口背景" Click="ColorBackground_Click"/>
+            <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource BtnConfirm_Style}" Content="本地图片" ToolTip="指定本地图片做为主窗口背景" Click="ImageBackground_Click"/>
+            <Border Grid.Row="1" Grid.ColumnSpan="3" BorderBrush="Gray" BorderThickness="1" Margin="0 0 5 0">
+                <TextBlock Background="{Binding Background,Converter={StaticResource MainBackgroundConverter}}"/>
+            </Border>
+        </Grid>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button Style="{StaticResource BtnConfirm_Style}" Click="Confirm_Click"/>
+            <Button Style="{StaticResource BtnCancel_Style}" Click="Cancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

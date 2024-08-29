@@ -20,7 +20,7 @@
         Loaded="Window_Loaded"
         Closing="Window_Closing"
         LocationChanged="MainWindow_LocationChanged"
-        Topmost="{Binding TopMost}" Icon="pack://application:,,,/Files/xstart2.ico" ResizeMode="CanResizeWithGrip">
+        Topmost="{Binding TopMost}" Icon="pack://application:,,,/Files/xstart2.ico" ResizeMode="CanResizeWithGrip" Background="{Binding MainBackground, Converter={StaticResource MainBackgroundConverter}}">
     <!--<b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
             <b:InvokeCommandAction Command="{Binding MainWindowLoadedCommand}"/>
@@ -145,7 +145,7 @@
         <TabControl Grid.Row="1" x:Name="MainTabControl" TabStripPlacement="Left" ItemsSource="{Binding Types}"
                     SizeChanged="MainTabControl_SizeChanged" ContextMenu="{StaticResource TypeTabContextMenu}"
                     SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="{Binding SelectedIndex}"
-                    assist:SelectorDragDropAttach.IsItemsDragDropEnabled="True">
+                    assist:SelectorDragDropAttach.IsItemsDragDropEnabled="True" Background="Transparent">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <DockPanel LastChildFill="True" Tag="{Binding Value.Section}"  Height="32" 
@@ -432,9 +432,9 @@
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
-        <StatusBar Grid.Row="2" Height="30" HorizontalAlignment="Stretch">
-            <StatusBarItem>
-                <Menu DockPanel.Dock="Left">
+        <StatusBar Grid.Row="2" Height="30" HorizontalAlignment="Stretch" Background="Transparent">
+            <StatusBarItem Background="Transparent">
+                <Menu DockPanel.Dock="Left" Background="Transparent">
                     <MenuItem>
                         <MenuItem.Header>
                             <TextBlock Text="{Binding TypeTabToggleIcon}" Foreground="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" FontFamily="{StaticResource FontAwesomeSolid}" FontSize="18" ToolTip="类别名称显示切换" MouseLeftButtonUp="ToggleTabItem"/>
@@ -443,7 +443,7 @@
                     <MenuItem Header="菜单" Width="42" Height="24">
                         <MenuItem IsCheckable="True" IsChecked="{Binding TopMost}" Header="置顶" Style="{StaticResource MenuStyleKey}"/>
                         <MenuItem IsCheckable="True" IsChecked="{Binding Audio}" Header="音效" Style="{StaticResource MenuStyleKey}"/>
-                        <MenuItem IsCheckable="True" IsChecked="{Binding CloseBorderHide}" Header="靠边隐藏" Style="{StaticResource MenuStyleKey}" Click="CloseBorderHide_Click"/>
+                        <MenuItem IsCheckable="True" IsChecked="{Binding CloseBorderHide}" Header="靠边隐藏" Style="{StaticResource MenuStyleKey}"/>
                         <MenuItem IsCheckable="True" IsChecked="{Binding AutoRun}" Header="开机启动" Style="{StaticResource MenuStyleKey}"/>
                         <MenuItem IsCheckable="True" IsChecked="{Binding ExitWarn}" Header="退出提醒" Style="{StaticResource MenuStyleKey}"/>
                         <Separator/>
@@ -535,52 +535,62 @@
                         <MenuItem.Icon>
                             <Image Source="/Files/Icons/App/theme.ico"/>
                         </MenuItem.Icon>
-                        <MenuItem Header="蓝" Click="ChangeTheme_Click" Tag="blue">
+                        <MenuItem Header="主题">
                             <MenuItem.Icon>
-                                <Image Source="/Files/Icons/App/blue.ico"/>
+                                <Image Source="/Files/Icons/App/app.ico"/>
                             </MenuItem.Icon>
+                            <MenuItem Header="蓝" Click="ChangeTheme_Click" Tag="blue">
+                                <MenuItem.Icon>
+                                    <Image Source="/Files/Icons/App/blue.ico"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="绿" Click="ChangeTheme_Click" Tag="green">
+                                <MenuItem.Icon>
+                                    <Image Source="/Files/Icons/App/green.ico"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="橙" Click="ChangeTheme_Click" Tag="orange">
+                                <MenuItem.Icon>
+                                    <Image Source="/Files/Icons/App/orange.ico"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="红" Click="ChangeTheme_Click" Tag="red">
+                                <MenuItem.Icon>
+                                    <Image Source="/Files/Icons/App/red.ico"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="灰" Click="ChangeTheme_Click" Tag="gray">
+                                <MenuItem.Icon>
+                                    <Image Source="/Files/Icons/App/gray.ico"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="紫" Click="ChangeTheme_Click" Tag="purple">
+                                <MenuItem.Icon>
+                                    <Image Source="/Files/Icons/App/purple.ico"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="黑" Click="ChangeTheme_Click" Tag="black">
+                                <MenuItem.Icon>
+                                    <Image Source="/Files/Icons/App/black.ico"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="自定义">
+                                <MenuItem.Icon>
+                                    <Image Source="/Files/Icons/App/theme.ico"/>
+                                </MenuItem.Icon>
+                                <MenuItem Header="配置" Click="CustomTheme_Click"/>
+                                <MenuItem Header="应用" Click="ChangeTheme_Click" Tag="custom"/>
+                            </MenuItem>
                         </MenuItem>
-                        <MenuItem Header="绿" Click="ChangeTheme_Click" Tag="green">
+                        <MenuItem Header="背景" Click="Background_Click">
                             <MenuItem.Icon>
-                                <Image Source="/Files/Icons/App/green.ico"/>
+                                <Image Source="/Files/Icons/App/font_icon.ico"/>
                             </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="橙" Click="ChangeTheme_Click" Tag="orange">
-                            <MenuItem.Icon>
-                                <Image Source="/Files/Icons/App/orange.ico"/>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="红" Click="ChangeTheme_Click" Tag="red">
-                            <MenuItem.Icon>
-                                <Image Source="/Files/Icons/App/red.ico"/>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="灰" Click="ChangeTheme_Click" Tag="gray">
-                            <MenuItem.Icon>
-                                <Image Source="/Files/Icons/App/gray.ico"/>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="紫" Click="ChangeTheme_Click" Tag="purple">
-                            <MenuItem.Icon>
-                                <Image Source="/Files/Icons/App/purple.ico"/>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="黑" Click="ChangeTheme_Click" Tag="black">
-                            <MenuItem.Icon>
-                                <Image Source="/Files/Icons/App/black.ico"/>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="自定义">
-                            <MenuItem.Icon>
-                                <Image Source="/Files/Icons/App/theme.ico"/>
-                            </MenuItem.Icon>
-                            <MenuItem Header="配置" Click="CustomTheme_Click"/>
-                            <MenuItem Header="应用" Click="ChangeTheme_Click" Tag="custom"/>
                         </MenuItem>
                     </MenuItem>
                 </Menu>
             </StatusBarItem>
-            <StatusBarItem HorizontalAlignment="Right" Margin="0 0 10 0">
+            <StatusBarItem HorizontalAlignment="Right" Margin="0 0 10 0" Background="Transparent">
                 <TextBlock Text="{Binding OperateMsg}" Foreground="{Binding OperateMsgColor}"/>
             </StatusBarItem>
         </StatusBar>

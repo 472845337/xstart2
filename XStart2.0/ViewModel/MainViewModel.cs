@@ -1,5 +1,6 @@
 ﻿using PropertyChanged;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using XStart2._0.Bean;
 using XStart2._0.Const;
 using XStart2._0.Services;
@@ -9,11 +10,11 @@ namespace XStart2._0.ViewModel {
     public class MainViewModel : BaseViewModel {
 
         #region 用户数据
-        [DoNotNotify]
-        private string avatarPath;
-        public string AvatarPath { get => avatarPath; set { avatarPath = value; SetAvatar(); } }
+        [OnChangedMethod(nameof(SetAvatar))]
+        public string AvatarPath { get; set; }
         private void SetAvatar() {
-            Avatar = ImageUtils.File2BitmapImage(avatarPath);
+            // gif读取的流不能关闭（始终保持占用文件）,所以不可以使用ImageUtils的File2BitmapImage方法
+            Avatar = ImageUtils.GetImageOutMs(AvatarPath);
         }
         // 头像
         public System.Windows.Media.Imaging.BitmapImage Avatar { get; set; }
@@ -31,6 +32,8 @@ namespace XStart2._0.ViewModel {
         #endregion
 
         #region 窗口相关
+        // 主窗口背景，纯色，背景图
+        public string MainBackground { get; set; }
         // 主窗口高度
         public double MainHeight { get; set; }
         // 主窗口宽度
@@ -70,7 +73,10 @@ namespace XStart2._0.ViewModel {
         public bool AutoRun { get; set; }
         public bool RunDirectly { get; set; }
         public bool ExitWarn { get; set; }
+        [OnChangedMethod(nameof(AutoHideToggle))]
         public bool CloseBorderHide { get; set; }
+        [DoNotNotify]
+        public System.Windows.Threading.DispatcherTimer AutoHideTimer { get; set; }
         public string ClickType { get; set; }
         public string RdpModel { get; set; }
         public string TextEditor { get; set; }
@@ -169,5 +175,13 @@ namespace XStart2._0.ViewModel {
         }
 
         #endregion
+
+        public void AutoHideToggle() {
+            if (CloseBorderHide) {
+                AutoHideTimer.IsEnabled = true;
+            } else {
+                AutoHideTimer.IsEnabled = false;
+            }
+        }
     }
 }

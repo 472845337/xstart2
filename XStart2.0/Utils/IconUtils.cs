@@ -93,15 +93,15 @@ namespace XStart2._0.Utils {
         }
 
         public static BitmapImage GetBitmapImage(string fileName, int iconSize) {
-            if(fileName.EndsWith(".ico", true, CultureInfo.CurrentCulture) || fileName.EndsWith(".icon", true, CultureInfo.CurrentCulture)) {
+            if (fileName.EndsWith(".ico", true, CultureInfo.CurrentCulture) || fileName.EndsWith(".icon", true, CultureInfo.CurrentCulture)) {
                 // ICO文件类型获取图标内容
                 List<Bitmap> icos = GetIconImage(fileName, iconSize);
-                return ImageUtils.BitmapToBitmapImage(icos[icos.Count-1]);
+                return ImageUtils.BitmapToBitmapImage(icos[icos.Count - 1]);
             } else {
                 // 获取文件类型匹配的系统图标，比如.mp3用千千静听打开的，那么就是获取千千静听软体图标
                 return ImageUtils.BitmapToBitmapImage(GetIcon(fileName, iconSize));
             }
-            
+
         }
         /// <summary>
         /// 绘制方块图

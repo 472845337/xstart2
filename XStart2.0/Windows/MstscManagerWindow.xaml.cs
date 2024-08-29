@@ -174,7 +174,7 @@ namespace XStart2._0.Windows {
                 if (rdpScript.Connected.ToString() == "1") {
                     try {
                         rdpScript.Disconnect();
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         Console.WriteLine(e.ToString());
                     }
                 }

@@ -145,7 +145,7 @@ namespace XStart2._0.Services {
 
         public T SelectFirst(T queryModel) {
             List<T> list = SelectList(queryModel);
-            if (null != list && list.Count>0) {
+            if (null != list && list.Count > 0) {
                 return list[0];
             } else {
                 return null;

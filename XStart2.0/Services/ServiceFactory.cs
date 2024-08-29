@@ -42,7 +42,7 @@ namespace XStart2._0.Services {
                 return GetColumnService() as S;
             } else if (typeof(T) == typeof(Project)) {
                 return GetProjectService() as S;
-            } else if (typeof(T) == typeof(Admin)) { 
+            } else if (typeof(T) == typeof(Admin)) {
                 return GetAdminService() as S;
             } else {
                 return null;

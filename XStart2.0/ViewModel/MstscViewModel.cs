@@ -24,7 +24,7 @@ namespace XStart2._0.ViewModel {
                 PasswordTextShow = Visibility.Collapsed;
                 PasswordTextHidden = Visibility.Visible;
             }
-            
+
         }
     }
 }

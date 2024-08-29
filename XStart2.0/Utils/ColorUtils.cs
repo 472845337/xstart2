@@ -2,8 +2,12 @@
 
 namespace XStart2._0.Utils {
     public class ColorUtils {
-        private static Color GetColor(string htmlColor) {
+        public static Color GetColor(string htmlColor) {
             return (Color)ColorConverter.ConvertFromString(htmlColor);
+        }
+
+        public static string GetHtml(System.Drawing.Color color) {
+            return string.Format("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
         }
 
         private static Color GetColor(System.Drawing.Color color) {

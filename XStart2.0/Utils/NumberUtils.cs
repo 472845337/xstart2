@@ -14,7 +14,7 @@ namespace XStart2._0.Utils {
 
         private static int GetDigit(int digit) {
             int a = 1;
-            for(int i = 0; i < digit; i++) {
+            for (int i = 0; i < digit; i++) {
                 a *= 10;
             }
             return a;

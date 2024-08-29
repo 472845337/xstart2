@@ -12,9 +12,9 @@ namespace XStart2._0.Converters {
                     themePath = value[1] as string;
                 }
                 if (Constants.WEATHER_IMG_THEME_GIF.Equals(themePath)) {
-                    return ImageUtils.File2BitmapImage($"{Config.Configs.AppStartPath}Files/Images/Weather/{themePath}/{value[0]}.gif");
+                    return ImageUtils.GetImageOutMs($"{Config.Configs.AppStartPath}Files/Images/Weather/{themePath}/{value[0]}.gif");
                 } else {
-                    return ImageUtils.File2BitmapImage($"{Config.Configs.AppStartPath}Files/Images/Weather/{themePath}/{value[0]}.png");
+                    return ImageUtils.GetImageOutMs($"{Config.Configs.AppStartPath}Files/Images/Weather/{themePath}/{value[0]}.png");
                 }
 
             } else {

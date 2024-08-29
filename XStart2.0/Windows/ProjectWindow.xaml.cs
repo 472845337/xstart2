@@ -85,12 +85,12 @@ namespace XStart2._0.Windows {
                 Project.IconIndex = vm.IconIndex;
                 Project.IconPath = vm.IconPath;
                 // 特殊处理的参数排除
-                if (SystemProjectParam.MSTSC.Equals(vm.Path) || SystemProjectParam.CLEAR_SOME_DIRECTORY.Equals(vm.Path)|| SystemProjectParam.CONTROL_APP_MEMORY.Equals(vm.Path)) {
+                if (SystemProjectParam.MSTSC.Equals(vm.Path) || SystemProjectParam.CLEAR_SOME_DIRECTORY.Equals(vm.Path) || SystemProjectParam.CONTROL_APP_MEMORY.Equals(vm.Path)) {
                     Project.Arguments = vm.Arguments;
                 } else {
                     Project.Arguments = vm.ShowArguments;
                 }
-                
+
                 Project.RunStartPath = vm.RunStartPath;
                 Project.HotKey = vm.HotKey;
                 Project.Remark = vm.Remark;

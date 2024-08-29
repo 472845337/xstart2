@@ -20,6 +20,7 @@
 
         public const string SET_FILE = "Config/Ini/Set.ini";
 
+        public const string SECTION_MAIN = "main";
         public const string SECTION_LOCATION = "Location";
         public const string SECTION_SIZE = "Size";
         public const string SECTION_CONFIG = "Config";
@@ -50,6 +51,7 @@
         public const string KEY_SYSTEM_PROJECT_OPEN_PAGE = "SystemProjectOpenPage";
         public const string KEY_ADD_MULTI = "AddMulti";
 
+        public const string KEY_MAIN_BACKGROUND = "Background";
         public const string KEY_LEFT = "Left";
         public const string KEY_TOP = "Top";
         public const string KEY_HEIGHT = "Height";

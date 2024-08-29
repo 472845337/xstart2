@@ -19,7 +19,7 @@ namespace XStart2._0.Windows {
             DataContext = vm;
         }
 
-        private void Window_Closing(object sender, System.EventArgs e) {
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
             DataContext = null;
         }
 

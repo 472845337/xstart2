@@ -156,6 +156,7 @@
     <Compile Include="Converters\BaseMultiValueConverter.cs" />
     <Compile Include="Converters\BaseValueConverter.cs" />
     <Compile Include="Converters\Boolean2MainHeadShowConverter.cs" />
+    <Compile Include="Converters\MainBackgroundConverter.cs" />
     <Compile Include="Converters\RdpModelConverter.cs" />
     <Compile Include="Converters\ProjectKind2EnabledConverter.cs" />
     <Compile Include="Converters\Boolean2IsCheckedConverter.cs" />
@@ -187,6 +188,7 @@
     <Compile Include="Utils\TempUtil.cs" />
     <Compile Include="Utils\TimeUtils.cs" />
     <Compile Include="Utils\WindUtil.cs" />
+    <Compile Include="ViewModel\MainBackgroundViewModel.cs" />
     <Compile Include="ViewModel\ThemeViewModel.cs" />
     <Compile Include="ViewModel\WeatherViewModel.cs" />
     <Compile Include="ViewModel\QueryViewModel.cs" />
@@ -260,6 +262,9 @@
     </Compile>
     <Compile Include="Windows\CheckSecurityWindow.xaml.cs">
       <DependentUpon>CheckSecurityWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MainBackgroundWindow.xaml.cs">
+      <DependentUpon>MainBackgroundWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MstscManagerWindow.xaml.cs">
       <DependentUpon>MstscManagerWindow.xaml</DependentUpon>
@@ -360,6 +365,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\CheckSecurityWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MainBackgroundWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

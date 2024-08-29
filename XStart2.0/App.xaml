@@ -18,6 +18,7 @@
             <FontFamily x:Key="FontAwesomeRegular">pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Regular</FontFamily>
             <FontFamily x:Key="FontAwesomeBrands">pack://application:,,,/Resources/Fonts/#Font Awesome 6 Brands Regular</FontFamily>
             <FontFamily x:Key="FontAwesome4">pack://application:,,,/Resources/Fonts/#FontAwesome</FontFamily>
+            <con:MainBackgroundConverter x:Key="MainBackgroundConverter" />
             <con:Boolean2MainHeadShowConverter x:Key="Boolean2MainHeadShowConverter" />
             <con:InverseBooleanConverter x:Key="InverseBooleanConverter" />
             <con:Boolean2VisibilityConverter x:Key="Boolean2VisibilityConverter" />

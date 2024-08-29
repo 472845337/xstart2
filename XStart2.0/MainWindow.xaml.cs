@@ -24,7 +24,6 @@ namespace XStart2._0 {
     /// </summary>
     public partial class MainWindow : Window {
         // 时钟定时器
-        private readonly System.Windows.Threading.DispatcherTimer AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
         private readonly System.Windows.Threading.DispatcherTimer currentTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
         private readonly System.Windows.Threading.DispatcherTimer currentDateTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
         private readonly System.Windows.Threading.DispatcherTimer AutoGcTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMinutes(5) };
@@ -49,9 +48,6 @@ namespace XStart2._0 {
             // 日期定时任务(配置的是1秒，但是执行后，计算下一天的时间差)
             currentDateTimer.Tick += new EventHandler(CurrentDate_Tick);
             currentDateTimer.Start();
-            // 靠边隐藏定时器
-            AutoHideTimer.Tick += new EventHandler(AutoHideTimer_Tick);
-            AutoHideTimer.Start();
             // 自动GC
             AutoGcTimer.Tick += new EventHandler(AutoGcTimer_Tick);
             AutoGcTimer.Start();
@@ -97,6 +93,7 @@ namespace XStart2._0 {
             #endregion
 
             #region 窗口相关加载，尺寸，位置，置顶
+            string mainBackgroundPath = iniData[Constants.SECTION_MAIN][Constants.KEY_MAIN_BACKGROUND];
             string leftStr = iniData[Constants.SECTION_LOCATION][Constants.KEY_LEFT];
             string topStr = iniData[Constants.SECTION_LOCATION][Constants.KEY_TOP];
             string heightStr = iniData[Constants.SECTION_SIZE][Constants.KEY_HEIGHT];
@@ -105,6 +102,7 @@ namespace XStart2._0 {
             string themeCustom = iniData[Constants.SECTION_THEME][Constants.KEY_THEME_CUSTOM];
             string dpiChangeStr = iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE];
 
+            Configs.mainBackground = mainBackgroundPath;
             Configs.mainHeight = string.IsNullOrEmpty(heightStr) ? Constants.MAIN_HEIGHT : Convert.ToDouble(heightStr);
             Configs.mainWidth = string.IsNullOrEmpty(widthStr) ? Constants.MAIN_WIDTH : Convert.ToDouble(widthStr);
             Configs.mainLeft = string.IsNullOrEmpty(leftStr) ? Constants.MAIN_LEFT : Convert.ToDouble(leftStr);
@@ -112,6 +110,8 @@ namespace XStart2._0 {
             Configs.themeName = string.IsNullOrEmpty(themeName) ? Constants.WINDOW_THEME_BLUE : themeName;
             Configs.themeCustom = themeCustom;
             Configs.dpiChange = string.IsNullOrEmpty(dpiChangeStr) ? false : Convert.ToBoolean(dpiChangeStr);
+            // 背景
+            mainViewModel.MainBackground = Configs.mainBackground;
             // 尺寸
             mainViewModel.MainHeight = Configs.mainHeight;
             mainViewModel.MainWidth = Configs.mainWidth;
@@ -172,7 +172,13 @@ namespace XStart2._0 {
             mainViewModel.AutoRun = Configs.autoRun;
             mainViewModel.RunDirectly = Configs.runDirectly;
             mainViewModel.ExitWarn = Configs.exitWarn;
+
+            #region 自动隐藏
+            mainViewModel.AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
+            mainViewModel.AutoHideTimer.Tick += AutoHideTimer_Tick;
             mainViewModel.CloseBorderHide = Configs.closeBorderHide;
+            #endregion
+
             mainViewModel.TextEditor = Configs.textEditor;
             mainViewModel.UrlOpen = Configs.urlOpen;
             mainViewModel.UrlOpenCustomBrowser = Configs.urlOpenCustomBrowser;
@@ -409,7 +415,7 @@ namespace XStart2._0 {
         private void OpenCheckSecurityWindow(bool isInit = false) {
             if (string.IsNullOrEmpty(Configs.admin.Password)) {
                 if (!isInit) {
-                    if(MessageBoxResult.OK == MessageBox.Show("请先配置管理员口令！", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                    if (MessageBoxResult.OK == MessageBox.Show("请先配置管理员口令！", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                         SetAdminSecurity_Click(null, null);
                     }
                     return;
@@ -422,7 +428,7 @@ namespace XStart2._0 {
                 Hide();
             }
             CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入管理员口令", Configs.admin.Password, "关闭该窗口将退出程序！");
-            if(true == checkSecurityWindow.ShowDialog()) {
+            if (true == checkSecurityWindow.ShowDialog()) {
                 if (!isInit) {
                     Show();
                 }
@@ -555,7 +561,7 @@ namespace XStart2._0 {
                 Configs.Dispose();
                 AudioUtils.Dispose();
                 DataBase.SqLiteFactory.CloseAllSqLite();
-                AutoHideTimer.Stop();
+                mainViewModel.AutoHideTimer.Stop();
                 currentDateTimer.Stop();
                 currentTimer.Stop();
                 AutoGcTimer.Stop();
@@ -1644,6 +1650,7 @@ namespace XStart2._0 {
             IniParser.Model.IniData iniData = new IniParser.Model.IniData();
 
             #region 窗口位置和尺寸保存
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_MAIN, Constants.KEY_MAIN_BACKGROUND, ref Configs.mainBackground, mainViewModel.MainBackground);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_SIZE, Constants.KEY_HEIGHT, ref Configs.mainHeight, mainViewModel.MainHeight);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_SIZE, Constants.KEY_WIDTH, ref Configs.mainWidth, mainViewModel.MainWidth);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_LEFT, ref Configs.mainLeft, mainViewModel.MainLeft);
@@ -1712,12 +1719,6 @@ namespace XStart2._0 {
         #endregion
 
         #region 窗口靠边隐藏
-        public void CancelAnchor() {
-            AutoHideTimer.IsEnabled = false;
-        }
-        public void EnableAnchor() {
-            AutoHideTimer.IsEnabled = true;
-        }
         private void MainWindow_LocationChanged(object sender, EventArgs e) {
             GetAnchorStyle();
         }
@@ -1866,16 +1867,6 @@ namespace XStart2._0 {
                 window.Top = aniLocationY;
                 index++;
             }
-        }
-
-        private void CloseBorderHide_Click(object sender, RoutedEventArgs e) {
-            if (!mainViewModel.CloseBorderHide) {
-                // 不隐藏
-                CancelAnchor();
-            } else {
-                EnableAnchor();
-            }
-
         }
         #endregion
 
@@ -2212,6 +2203,22 @@ namespace XStart2._0 {
             themeWindow.Close();
             OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
         }
+
+        /// <summary>
+        /// 打开背景色设置页
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Background_Click(object sender, RoutedEventArgs e) {
+            OpenNewWindowUtils.SetTopmost(this);
+            MainBackgroundWindow window = new MainBackgroundWindow(mainViewModel.MainBackground);
+            if (true == window.ShowDialog()) {
+                mainViewModel.MainBackground = window.Bg;
+            }
+            window.Close();
+            OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
+        }
+
         /// <summary>
         /// 获取画刷的颜色，如果brush为null,type==1表示背景色，type!=1 表示文字色
         /// </summary>
@@ -2267,7 +2274,7 @@ namespace XStart2._0 {
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     VM = new SecurityVM() { Title = "移除管理员口令", CurSecurity = mainViewModel.Security, Kind = Constants.ADMIN, Operate = Constants.OPERATE_REMOVE }
                 };
-                if(true == removeSecurityWindow.ShowDialog()) {
+                if (true == removeSecurityWindow.ShowDialog()) {
                     mainViewModel.Security = string.Empty;
                     Configs.admin.Password = string.Empty;
                     adminService.Update(Configs.admin);
