@@ -6,7 +6,13 @@
         xmlns:local="clr-namespace:XStart2._0.Windows"
         mc:Ignorable="d"
         Title="{Binding Title}" Width="300" Height="{Binding Height, Mode = TwoWay}" Icon="pack://application:,,,/Files/Icons/App/info.ico">
-    <Grid Background="{Binding Background}" Margin="5">
-        <TextBlock Grid.Row ="0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Content}" VerticalAlignment="Top"/>
+    <Grid Margin="5">
+        <RichTextBox Background="{Binding Background}">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="{Binding Content}"/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
     </Grid>
 </Window>

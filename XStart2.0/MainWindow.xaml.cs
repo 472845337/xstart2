@@ -1564,7 +1564,7 @@ namespace XStart2._0 {
                 aboutSb.Append(line);
                 height += 15;
             }
-            NotifyUtils.ShowNotification(aboutSb.ToString(), Colors.LightBlue, height, "关于");
+            NotifyUtils.ShowNotification(aboutSb.ToString(), Colors.LightBlue, height, "关于", 10);
             e.Handled = true;
         }
 
