@@ -56,6 +56,7 @@
         public const string KEY_TOP = "Top";
         public const string KEY_HEIGHT = "Height";
         public const string KEY_WIDTH = "Width";
+        public const string KEY_OPACITY = "Opacity";
         public const string KEY_THEME_NAME = "Name";
         public const string KEY_THEME_CUSTOM = "Custom";
 

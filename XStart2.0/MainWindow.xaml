@@ -35,10 +35,42 @@
         <Style x:Key="MenuStyleKey" TargetType="MenuItem">
             <Setter Property="Background" Value="Transparent" />
         </Style>
+        <!-- TabItem 样式 -->
+        <Style TargetType="TabItem">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}"
+                                     Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <SolidColorBrush Color="{Binding ToggleButtonIsCheckedBackGround,Source={x:Static bean:WindowTheme.Instance}}"
+                                             Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <SolidColorBrush Color="{Binding ButtonConfirmIsMouseOverBackGround,Source={x:Static bean:WindowTheme.Instance}}"
+                                             Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <!-- 栏目标题样式 -->
         <Style x:Key="ExpanderTitle_Style" TargetType="ToggleButton">
             <Setter Property="Height" Value="36"/>
-            <Setter Property="Background" Value="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}"
+                                     Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Foreground" Value="{Binding ButtonConfirmForeGround,Source={x:Static bean:WindowTheme.Instance}}"/>
             <!-- 添加模板，用于置Background,否则无效 -->
             <Setter Property="Template">
@@ -52,11 +84,21 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="{Binding ToggleButtonIsCheckedBackGround,Source={x:Static bean:WindowTheme.Instance}}"/>
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <SolidColorBrush Color="{Binding ToggleButtonIsCheckedBackGround,Source={x:Static bean:WindowTheme.Instance}}"
+                                             Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
+                        </Setter.Value>
+                    </Setter>
                     <Setter Property="Foreground" Value="{Binding ToggleButtonIsCheckedForeGround,Source={x:Static bean:WindowTheme.Instance}}"/>
                 </Trigger>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{Binding ButtonConfirmIsMouseOverBackGround,Source={x:Static bean:WindowTheme.Instance}}"/>
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <SolidColorBrush Color="{Binding ButtonConfirmIsMouseOverBackGround,Source={x:Static bean:WindowTheme.Instance}}"
+                                             Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
+                        </Setter.Value>
+                    </Setter>
                     <Setter Property="Foreground" Value="{Binding ButtonConfirmIsMouseOverForeGround,Source={x:Static bean:WindowTheme.Instance}}"/>
                 </Trigger>
             </Style.Triggers>
@@ -223,7 +265,7 @@
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
-                        <ScrollViewer Visibility="{Binding Value.Unlocked, Converter={StaticResource Boolean2VisibilityConverter}}" VerticalScrollBarVisibility="{Binding Value.VerticalScroll}" Tag="{Binding Value.Section}">
+                        <ScrollViewer Template="{StaticResource CustomScrollViewer}" Visibility="{Binding Value.Unlocked, Converter={StaticResource Boolean2VisibilityConverter}}" VerticalScrollBarVisibility="{Binding Value.VerticalScroll}" Tag="{Binding Value.Section}">
                             <ScrollViewer.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="添加栏目" Click="AddColumn_Click">
@@ -311,7 +353,7 @@
                                                         </StackPanel>
                                                     </Grid>
                                                 </StackPanel>
-                                                <ScrollViewer Visibility="{Binding Value.Unlocked, Converter={StaticResource Boolean2VisibilityConverter}}" 
+                                                <ScrollViewer Template="{StaticResource CustomScrollViewer}" Visibility="{Binding Value.Unlocked, Converter={StaticResource Boolean2VisibilityConverter}}" 
                                                               VerticalScrollBarVisibility="Auto" Height="{Binding Value.ColumnHeight}" ScrollChanged="ScrollChanged" 
                                                               Tag="{Binding Value}">
                                                     <ScrollViewer.ContextMenu>
@@ -581,6 +623,11 @@
                                 <MenuItem Header="配置" Click="CustomTheme_Click"/>
                                 <MenuItem Header="应用" Click="ChangeTheme_Click" Tag="custom"/>
                             </MenuItem>
+                        </MenuItem>
+                        <MenuItem Header="不透明度" Click="Opacity_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Files/Icons/App/opacity.ico"/>
+                            </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="背景" Click="Background_Click">
                             <MenuItem.Icon>

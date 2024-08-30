@@ -98,6 +98,7 @@ namespace XStart2._0 {
             string topStr = iniData[Constants.SECTION_LOCATION][Constants.KEY_TOP];
             string heightStr = iniData[Constants.SECTION_SIZE][Constants.KEY_HEIGHT];
             string widthStr = iniData[Constants.SECTION_SIZE][Constants.KEY_WIDTH];
+            string opacityStr = iniData[Constants.SECTION_THEME][Constants.KEY_OPACITY];
             string themeName = iniData[Constants.SECTION_THEME][Constants.KEY_THEME_NAME];
             string themeCustom = iniData[Constants.SECTION_THEME][Constants.KEY_THEME_CUSTOM];
             string dpiChangeStr = iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE];
@@ -107,6 +108,7 @@ namespace XStart2._0 {
             Configs.mainWidth = string.IsNullOrEmpty(widthStr) ? Constants.MAIN_WIDTH : Convert.ToDouble(widthStr);
             Configs.mainLeft = string.IsNullOrEmpty(leftStr) ? Constants.MAIN_LEFT : Convert.ToDouble(leftStr);
             Configs.mainTop = string.IsNullOrEmpty(topStr) ? Constants.MAIN_TOP : Convert.ToDouble(topStr);
+            Configs.opacity = NumberUtils.IsNumeric(opacityStr, out double opacity) ? opacity : 1D;
             Configs.themeName = string.IsNullOrEmpty(themeName) ? Constants.WINDOW_THEME_BLUE : themeName;
             Configs.themeCustom = themeCustom;
             Configs.dpiChange = string.IsNullOrEmpty(dpiChangeStr) ? false : Convert.ToBoolean(dpiChangeStr);
@@ -119,6 +121,7 @@ namespace XStart2._0 {
             mainViewModel.MainLeft = Configs.mainLeft;
             mainViewModel.MainTop = Configs.mainTop;
             // 主题
+            WindowTheme.Instance.Opacity = Configs.opacity;
             WindowTheme.Instance.ThemeCustom = Configs.themeCustom;
             WindowTheme.Instance.ThemeName = Configs.themeName;
             #endregion
@@ -1542,6 +1545,7 @@ namespace XStart2._0 {
                 mainViewModel.WeatherOpenApiUrl = Constants.WEATHER_OPEN_API_URL;
                 mainViewModel.WeatherAccuApiUrl = Constants.WEATHER_ACCU_API_URL;
                 mainViewModel.WeatherVcApiUrl = Constants.WEATHER_VC_API_URL;
+                WindowTheme.Instance.Opacity = 1D;
                 WindowTheme.Instance.ThemeName = Constants.WINDOW_THEME_BLUE;
             }
             e.Handled = true;
@@ -1655,6 +1659,7 @@ namespace XStart2._0 {
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_SIZE, Constants.KEY_WIDTH, ref Configs.mainWidth, mainViewModel.MainWidth);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_LEFT, ref Configs.mainLeft, mainViewModel.MainLeft);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_TOP, ref Configs.mainTop, mainViewModel.MainTop);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_OPACITY, ref Configs.opacity, WindowTheme.Instance.Opacity);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_THEME_NAME, ref Configs.themeName, WindowTheme.Instance.ThemeName);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_THEME_CUSTOM, ref Configs.themeCustom, WindowTheme.Instance.ThemeCustom);
             #endregion
@@ -2162,6 +2167,20 @@ namespace XStart2._0 {
         private void SetOperateMsg(Color color, string msg) {
             OperateMessageTimer.Start();
             mainViewModel.InitOperateMsg(color, msg);
+        }
+
+        /// <summary>
+        /// 设置不透明度
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Opacity_Click(object sender, RoutedEventArgs e) {
+            OpenNewWindowUtils.SetTopmost(this);
+            OpacityWindow opacityWindow = new OpacityWindow(WindowTheme.Instance.Opacity);
+            if (true == opacityWindow.ShowDialog()) {
+                WindowTheme.Instance.Opacity = opacityWindow.opacity;
+            }
+            OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
         }
 
         private void ChangeTheme_Click(object sender, RoutedEventArgs e) {

@@ -1,0 +1,51 @@
+﻿<Window x:Class="XStart2._0.Windows.OpacityWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XStart2._0.Windows"
+        xmlns:bean="clr-namespace:XStart2._0.Bean"
+        mc:Ignorable="d"
+        Title="不透明度" Height="180" Width="400" Icon="pack://application:,,,/Files/Icons/App/opacity.ico" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="OpacityButton" TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="80" />
+            <Setter Property="Height" Value="60" />
+            <!-- 添加模板，用于置Background,否则无效 -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="不透明度" Style="{StaticResource FormLabel_Style}"/>
+        <Slider Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" Maximum="10" Minimum="0" TickFrequency="1" IsMoveToPointEnabled="True" IsSnapToTickEnabled="True"  Value="{Binding Opacity}"/>
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center">
+            <TextBlock Text="{Binding ShowOpacity}" HorizontalAlignment="Center"/>
+            <Button Style="{StaticResource OpacityButton}" Content="不透明度">
+                <Button.Background>
+                    <SolidColorBrush Color="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Opacity="{Binding ShowOpacity}"/>
+                </Button.Background>
+            </Button>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button Style="{StaticResource BtnConfirm_Style}" Click="Confirm_Click"/>
+            <Button Style="{StaticResource BtnCancel_Style}" Click="Cancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

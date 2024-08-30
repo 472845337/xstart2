@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:view="clr-namespace:XStart2._0.View"
                     xmlns:con="clr-namespace:XStart2._0.Converters"
+                    xmlns:bean="clr-namespace:XStart2._0.Bean"
                     >
     <con:OrientationConverter x:Key="OrientationConverter"/>
     <con:Orientation2CenterConverter x:Key="Orientation2CenterConverter"/>
@@ -24,7 +25,11 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="AliceBlue"/>
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="AliceBlue" Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
+                                </Setter.Value>
+                            </Setter>
                             <Setter Property="Cursor" Value="Hand"/>
                             <Setter Property="BorderBrush" Value="LightGray"/>
                         </Trigger>

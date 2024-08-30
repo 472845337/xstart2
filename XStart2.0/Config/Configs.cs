@@ -29,6 +29,7 @@ namespace XStart2._0.Config {
         public static double mainWidth;// 主窗口宽
         public static double mainTop;// 主窗口顶部位置
         public static double mainLeft;// 主窗口左边位置
+        public static double opacity;// 不透明度
         public static string themeName;// 主题
         public static string themeCustom;// 自定义主题
         public static bool topMost;// 是否置顶
