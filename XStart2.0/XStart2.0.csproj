@@ -156,7 +156,6 @@
     <Compile Include="Converters\BaseMultiValueConverter.cs" />
     <Compile Include="Converters\BaseValueConverter.cs" />
     <Compile Include="Converters\Boolean2MainHeadShowConverter.cs" />
-    <Compile Include="Converters\MainBackgroundConverter.cs" />
     <Compile Include="Converters\RdpModelConverter.cs" />
     <Compile Include="Converters\ProjectKind2EnabledConverter.cs" />
     <Compile Include="Converters\Boolean2IsCheckedConverter.cs" />
@@ -180,6 +179,7 @@
     <Compile Include="Utils\ColorUtils.cs" />
     <Compile Include="Utils\DateUtil.cs" />
     <Compile Include="Utils\ElementUtils.cs" />
+    <Compile Include="Utils\FontUtils.cs" />
     <Compile Include="Utils\GZipUtil.cs" />
     <Compile Include="Utils\HttpUtils.cs" />
     <Compile Include="Utils\IniParserUtils.cs" />
@@ -188,8 +188,7 @@
     <Compile Include="Utils\TempUtil.cs" />
     <Compile Include="Utils\TimeUtils.cs" />
     <Compile Include="Utils\WindUtil.cs" />
-    <Compile Include="ViewModel\MainBackgroundViewModel.cs" />
-    <Compile Include="ViewModel\OpacityViewModel.cs" />
+    <Compile Include="ViewModel\BeautifulViewModel.cs" />
     <Compile Include="ViewModel\ThemeViewModel.cs" />
     <Compile Include="ViewModel\WeatherViewModel.cs" />
     <Compile Include="ViewModel\QueryViewModel.cs" />
@@ -264,14 +263,11 @@
     <Compile Include="Windows\CheckSecurityWindow.xaml.cs">
       <DependentUpon>CheckSecurityWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\MainBackgroundWindow.xaml.cs">
-      <DependentUpon>MainBackgroundWindow.xaml</DependentUpon>
+    <Compile Include="Windows\BeautifulWindow.xaml.cs">
+      <DependentUpon>BeautifulWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MstscManagerWindow.xaml.cs">
       <DependentUpon>MstscManagerWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\OpacityWindow.xaml.cs">
-      <DependentUpon>OpacityWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\QueryWindow.xaml.cs">
       <DependentUpon>QueryWindow.xaml</DependentUpon>
@@ -376,15 +372,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\MainBackgroundWindow.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Windows\BeautifulWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\MstscManagerWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\OpacityWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

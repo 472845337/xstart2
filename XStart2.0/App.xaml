@@ -19,7 +19,6 @@
             <FontFamily x:Key="FontAwesomeRegular">pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Regular</FontFamily>
             <FontFamily x:Key="FontAwesomeBrands">pack://application:,,,/Resources/Fonts/#Font Awesome 6 Brands Regular</FontFamily>
             <FontFamily x:Key="FontAwesome4">pack://application:,,,/Resources/Fonts/#FontAwesome</FontFamily>
-            <con:MainBackgroundConverter x:Key="MainBackgroundConverter" />
             <con:Boolean2MainHeadShowConverter x:Key="Boolean2MainHeadShowConverter" />
             <con:InverseBooleanConverter x:Key="InverseBooleanConverter" />
             <con:Boolean2VisibilityConverter x:Key="Boolean2VisibilityConverter" />
@@ -48,13 +47,68 @@
             </Style>
             <!-- 文本主题样式 -->
             <Style x:Key="TextBlock_ThemeStyle" TargetType="TextBlock">
-                <Setter Property="Foreground" Value="{Binding ButtonConfirmForeGround,Source={x:Static bean:WindowTheme.Instance}}" />
+                <Setter Property="Foreground" Value="{Binding ProjectForeground,Source={x:Static bean:WindowTheme.Instance}}" />
+                <Setter Property="FontFamily" Value="{Binding MainFontFamily,Source={x:Static bean:WindowTheme.Instance}}"/>
+            </Style>
+            <!-- CheckBox主题样式 -->
+            <Style x:Key="CheckBox_ThemeStyle" TargetType="CheckBox">
+                <Setter Property="Foreground" Value="{Binding ProjectForeground,Source={x:Static bean:WindowTheme.Instance}}" />
+                <Setter Property="FontFamily" Value="{Binding MainFontFamily,Source={x:Static bean:WindowTheme.Instance}}"/>
+            </Style>
+            <!-- 标题按钮Path -->
+            <Style TargetType="Path">
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="SnapsToDevicePixels" Value="False"/>
+                <Setter Property="UseLayoutRounding" Value="False"/>
+            </Style>
+            <!-- 标题栏按钮 -->
+            <Style x:Key="TitleButton_Style" TargetType="Button">
+                <Setter Property="Height" Value="28"/>
+                <Setter Property="Width" Value="36"/>
+                <!-- 添加模板，用于置Background,否则无效 -->
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="0">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!-- 最小化按钮样式 -->
+            <Style x:Key="MinimumButton_Style" TargetType="Button" BasedOn="{StaticResource TitleButton_Style}">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="LightGray"/>
+                        <Setter Property="Foreground" Value="Black"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <!-- 最大化按钮样式 -->
+            <Style x:Key="MaximumButton_Style" TargetType="Button" BasedOn="{StaticResource TitleButton_Style}">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="LightGray"/>
+                        <Setter Property="Foreground" Value="Black"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <!-- 关闭按钮样式 -->
+            <Style x:Key="CloseButton_Style" TargetType="Button" BasedOn="{StaticResource TitleButton_Style}">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="Red"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Trigger>
+                </Style.Triggers>
             </Style>
             <!-- 按钮样式-->
             <Style x:Key="Btn_Style" TargetType="{x:Type Button}" BasedOn="{StaticResource CursorHand_Style}">
                 <Setter Property="Width" Value="60" />
                 <Setter Property="Height" Value="28" />
                 <Setter Property="Margin" Value="5" />
+                <Setter Property="FontFamily" Value="{Binding MainFontFamily,Source={x:Static bean:WindowTheme.Instance}}"/>
                 <!-- 添加模板，用于置Background,否则无效 -->
                 <Setter Property="Template">
                     <Setter.Value>
@@ -65,6 +119,12 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+            </Style>
+            <!-- 菜单样式 -->
+            <Style TargetType="MenuItem">
+                <Setter Property="Foreground" Value="{Binding ProjectForeground,Source={x:Static bean:WindowTheme.Instance}}" />
+                <Setter Property="FontFamily" Value="{Binding MainFontFamily,Source={x:Static bean:WindowTheme.Instance}}"/>
+                <Setter Property="FontSize" Value="{Binding MainFontSize,Source={x:Static bean:WindowTheme.Instance}}"/>
             </Style>
             <!-- 确认按钮样式 -->
             <Style x:Key="BtnConfirm_Style" TargetType="{x:Type Button}" BasedOn="{StaticResource Btn_Style}">

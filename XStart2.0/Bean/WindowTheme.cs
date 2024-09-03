@@ -16,8 +16,12 @@ namespace XStart2._0.Bean {
         // 主题名称
         [OnChangedMethod(nameof(ChangeTheme))]
         public string ThemeName { get; set; }
-        // 不透明度
-        public double Opacity { get; set; }
+        // 项目文本颜色
+        public string ProjectForeground { get; set; }
+        // 文本字体
+        public string MainFontFamily { get; set; }
+        // 字体大小
+        public int MainFontSize { get; set; }
         // 自定义主题颜色
         [OnChangedMethod(nameof(ChangeTheme))]
         public string ThemeCustom { get; set; }

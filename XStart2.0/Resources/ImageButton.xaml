@@ -20,14 +20,15 @@
                             <TextBlock Grid.Column="1" Text="{TemplateBinding Content}"
                                        HorizontalAlignment="{Binding Orientation, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource Orientation2CenterConverter}}"
                                        Visibility="{Binding HideTitle, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource HideTitle2VisibilityConverter} }"
-                                       VerticalAlignment="Center" Margin="5 0 0 0" TextTrimming="CharacterEllipsis"/>
+                                       VerticalAlignment="Center" Margin="5 0 0 0" TextTrimming="CharacterEllipsis"
+                                       Foreground="{TemplateBinding Foreground}" FontFamily="{TemplateBinding FontFamily}"/>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background">
                                 <Setter.Value>
-                                    <SolidColorBrush Color="AliceBlue" Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
+                                    <SolidColorBrush Color="AliceBlue"/>
                                 </Setter.Value>
                             </Setter>
                             <Setter Property="Cursor" Value="Hand"/>

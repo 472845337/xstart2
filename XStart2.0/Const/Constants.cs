@@ -52,6 +52,9 @@
         public const string KEY_ADD_MULTI = "AddMulti";
 
         public const string KEY_MAIN_BACKGROUND = "Background";
+        public const string KEY_PROJECT_FOREGROUND = "ProjectForeground";
+        public const string KEY_MAIN_FONTFAMILY = "FontFaimly";
+        public const string KEY_MAIN_FONTSIZE = "FontSize";
         public const string KEY_LEFT = "Left";
         public const string KEY_TOP = "Top";
         public const string KEY_HEIGHT = "Height";
@@ -75,6 +78,8 @@
         public const double MAIN_WIDTH = 400;
         public const double MAIN_LEFT = 300;
         public const double MAIN_TOP = 50;
+
+        public const string DEFAULT_FONT_FAMILY = "微软雅黑";
 
         public const double TYPE_EXPAND_WIDTH = 100;
         public const double TYPE_COLLAPSE_WIDTH = 28;

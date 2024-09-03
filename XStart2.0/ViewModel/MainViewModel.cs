@@ -1,6 +1,5 @@
 ﻿using PropertyChanged;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using XStart2._0.Bean;
 using XStart2._0.Const;
 using XStart2._0.Services;
@@ -9,6 +8,7 @@ using XStart2._0.Utils;
 namespace XStart2._0.ViewModel {
     public class MainViewModel : BaseViewModel {
 
+        public PathGeometry MaximumButtonPathData { get; set; }
         #region 用户数据
         [OnChangedMethod(nameof(SetAvatar))]
         public string AvatarPath { get; set; }
@@ -33,7 +33,13 @@ namespace XStart2._0.ViewModel {
 
         #region 窗口相关
         // 主窗口背景，纯色，背景图
+        [OnChangedMethod(nameof(ConvertBrush))]
         public string MainBackground { get; set; }
+        // 背景不透明度
+        [OnChangedMethod(nameof(ConvertBrush))]
+        public double Opacity { get; set; }
+        // 根据MainBackground和Opacity生成背景画刷
+        public Brush BackgroundBrush { get; set; }
         // 主窗口高度
         public double MainHeight { get; set; }
         // 主窗口宽度
@@ -182,6 +188,23 @@ namespace XStart2._0.ViewModel {
             } else {
                 AutoHideTimer.IsEnabled = false;
             }
+        }
+
+        public void ConvertBrush() {
+            Brush backgrounBrush;
+            if (string.IsNullOrEmpty(MainBackground)) {
+                backgrounBrush = new SolidColorBrush(Colors.White);
+            } else if (MainBackground.StartsWith("#")) {
+                backgrounBrush = ColorUtils.GetBrush(MainBackground);
+            } else {
+                // 读取图片文件
+                backgrounBrush = new ImageBrush {
+                    ImageSource = ImageUtils.File2BitmapImage(MainBackground)
+                };
+            }
+            backgrounBrush.Opacity = Opacity;
+            backgrounBrush.Freeze();
+            BackgroundBrush = backgrounBrush;
         }
     }
 }
