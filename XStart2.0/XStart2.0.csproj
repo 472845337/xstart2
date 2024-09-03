@@ -257,6 +257,7 @@
     <Compile Include="ViewModel\UserViewModel.cs" />
     <Compile Include="View\ImageButton.cs" />
     <Compile Include="View\SliderButton.cs" />
+    <Compile Include="View\TextPath.cs" />
     <Compile Include="Windows\AutoRunWindow.xaml.cs">
       <DependentUpon>AutoRunWindow.xaml</DependentUpon>
     </Compile>

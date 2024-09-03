@@ -14,10 +14,10 @@
                 <ControlTemplate TargetType="{x:Type view:ImageButton}">
                     <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
                         <StackPanel Orientation="{Binding Orientation, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource OrientationConverter}}">
-                            <Border Grid.Column="0" Padding="3" Width="{TemplateBinding IconSize}">
+                            <Border Padding="3" Width="{TemplateBinding IconSize}">
                                 <Image Source="{TemplateBinding ButtonIcon}" Stretch="Fill" Margin="2"/>
                             </Border>
-                            <TextBlock Grid.Column="1" Text="{TemplateBinding Content}"
+                            <TextBlock Text="{TemplateBinding Content}"
                                        HorizontalAlignment="{Binding Orientation, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource Orientation2CenterConverter}}"
                                        Visibility="{Binding HideTitle, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource HideTitle2VisibilityConverter} }"
                                        VerticalAlignment="Center" Margin="5 0 0 0" TextTrimming="CharacterEllipsis"
@@ -28,7 +28,7 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background">
                                 <Setter.Value>
-                                    <SolidColorBrush Color="AliceBlue"/>
+                                    <SolidColorBrush Color="AliceBlue" Opacity="{Binding DataContext.Opacity,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
                                 </Setter.Value>
                             </Setter>
                             <Setter Property="Cursor" Value="Hand"/>
