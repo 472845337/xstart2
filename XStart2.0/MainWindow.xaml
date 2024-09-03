@@ -18,10 +18,11 @@
         Left="{Binding MainLeft, Mode=TwoWay}"
         Top="{Binding MainTop, Mode=TwoWay}" 
         AllowsTransparency="True"
+        WindowStyle="None"
         Loaded="Window_Loaded"
         Closing="Window_Closing"
         LocationChanged="MainWindow_LocationChanged"
-        Topmost="{Binding TopMost}" Icon="pack://application:,,,/Files/xstart2.ico" ResizeMode="CanResizeWithGrip" WindowStyle="None" 
+        Topmost="{Binding TopMost}" Icon="pack://application:,,,/Files/xstart2.ico" ResizeMode="CanResizeWithGrip"
         Background="{Binding BackgroundBrush}"
         FontSize="{Binding MainFontSize,Source={x:Static bean:WindowTheme.Instance}}">
 
@@ -35,10 +36,9 @@
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="3"/>
     </WindowChrome.WindowChrome>
     <Window.Resources>
-        <Style x:Key="HeaderTool_Style" TargetType="Image">
+        <Style x:Key="HeaderTool_Style" TargetType="Image" BasedOn="{StaticResource CursorHand_Style}">
             <Setter Property="Height" Value="25"/>
             <Setter Property="Margin" Value="2"/>
-            <Setter Property="Cursor" Value="Hand"/>
         </Style>
         <Style x:Key="MenuStyleKey" TargetType="MenuItem">
             <Setter Property="Background" Value="Transparent" />
@@ -48,27 +48,55 @@
             <Setter Property="Background">
                 <Setter.Value>
                     <SolidColorBrush Color="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}"
-                                     Opacity="{Binding DataContext.Opacity,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                     Opacity="{Binding DataContext.Opacity,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
                 </Setter.Value>
             </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background">
-                        <Setter.Value>
-                            <SolidColorBrush Color="{Binding ToggleButtonIsCheckedBackGround,Source={x:Static bean:WindowTheme.Instance}}"
-                                             Opacity="{Binding DataContext.Opacity,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
-                        </Setter.Value>
-                    </Setter>
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background">
-                        <Setter.Value>
-                            <SolidColorBrush Color="{Binding ButtonConfirmIsMouseOverBackGround,Source={x:Static bean:WindowTheme.Instance}}"
-                                             Opacity="{Binding DataContext.Opacity,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
-                        </Setter.Value>
-                    </Setter>
-                </Trigger>
-            </Style.Triggers>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border 
+                            Name="Border" 
+                            Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Padding="{TemplateBinding Padding}">
+                            <ContentPresenter x:Name="ContentSite"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                ContentSource="Header"
+                                Margin="0"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="{Binding ToggleButtonIsCheckedBackGround,Source={x:Static bean:WindowTheme.Instance}}"
+                                                Opacity="{Binding DataContext.Opacity,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Padding" Value="0,2,0,2"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                    <Condition Property="IsSelected" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <MultiTrigger.Setters>
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="{Binding ButtonCancelIsMouseOverBackGround,Source={x:Static bean:WindowTheme.Instance}}"
+                                                            Opacity="{Binding DataContext.Opacity,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </MultiTrigger.Setters>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
         <!-- 栏目标题样式 -->
         <Style x:Key="ExpanderTitle_Style" TargetType="ToggleButton">

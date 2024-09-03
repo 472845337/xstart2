@@ -1,7 +1,6 @@
 ﻿using PropertyChanged;
 using System.Windows.Media;
 using XStart2._0.Const;
-using XStart2._0.Utils;
 
 namespace XStart2._0.Bean {
 
@@ -63,8 +62,7 @@ namespace XStart2._0.Bean {
             } else if (Constants.WINDOW_THEME_CUSTOM.Equals(ThemeName)) {
                 if (!string.IsNullOrEmpty(ThemeCustom)) {
                     string[] colors = ThemeCustom.Split(Constants.SPLIT_CHAR);
-                    SetThemeColor(colors[0], colors[1], colors[2], colors[3], colors[4], colors[5], colors[6]
-                        , colors[7], colors[8], colors[9]);
+                    SetThemeColor(colors[0], colors[1], colors[2], colors[3], colors[4], colors[5], colors[6], colors[7], colors[8], colors[9]);
                 }
             }
         }
