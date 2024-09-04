@@ -13,7 +13,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type view:ImageButton}">
                     <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
-                        <StackPanel Orientation="{Binding Orientation, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource OrientationConverter}}">
+                        <VirtualizingStackPanel Orientation="{Binding Orientation, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource OrientationConverter}}">
                             <Border Padding="3" Width="{TemplateBinding IconSize}">
                                 <Image Source="{TemplateBinding ButtonIcon}" Stretch="Fill" Margin="2"/>
                             </Border>
@@ -22,7 +22,7 @@
                                        Visibility="{Binding HideTitle, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource HideTitle2VisibilityConverter} }"
                                        VerticalAlignment="Center" Margin="5 0 0 0" TextTrimming="CharacterEllipsis"
                                        Foreground="{TemplateBinding Foreground}" FontFamily="{TemplateBinding FontFamily}"/>
-                        </StackPanel>
+                        </VirtualizingStackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">

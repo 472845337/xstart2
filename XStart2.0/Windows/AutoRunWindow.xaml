@@ -14,7 +14,7 @@
             <ItemsControl ItemsSource="{Binding AutoRunProjects}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical"></StackPanel>
+                        <VirtualizingStackPanel Orientation="Vertical"></VirtualizingStackPanel>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>

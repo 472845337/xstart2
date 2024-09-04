@@ -44,10 +44,10 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Vertical" Width="60">
+                                <VirtualizingStackPanel Orientation="Vertical" Width="60">
                                     <TextBlock Style="{StaticResource FontAwesome_Style}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome" Tag="{Binding FaName}"/>
                                     <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
-                                </StackPanel>
+                                </VirtualizingStackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -63,10 +63,10 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Vertical" Width="60">
+                                <VirtualizingStackPanel Orientation="Vertical" Width="60">
                                     <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeSolid}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome" Tag="{Binding FaName}"/>
                                     <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
-                                </StackPanel>
+                                </VirtualizingStackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -82,10 +82,10 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Vertical" Width="60">
+                                <VirtualizingStackPanel Orientation="Vertical" Width="60">
                                     <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeRegular}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome" Tag="{Binding FaName}"/>
                                     <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
-                                </StackPanel>
+                                </VirtualizingStackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -101,10 +101,10 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Vertical" Width="60">
+                                <VirtualizingStackPanel Orientation="Vertical" Width="60">
                                     <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesomeBrands}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome" Tag="{Binding FaName}"/>
                                     <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
-                                </StackPanel>
+                                </VirtualizingStackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -120,10 +120,10 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Vertical" Width="60">
+                                <VirtualizingStackPanel Orientation="Vertical" Width="60">
                                     <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{StaticResource FontAwesome4}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome" Tag="{Binding FaName}"/>
                                     <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
-                                </StackPanel>
+                                </VirtualizingStackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -139,10 +139,10 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Vertical" Width="60">
+                                <VirtualizingStackPanel Orientation="Vertical" Width="60">
                                     <TextBlock Style="{StaticResource FontAwesome_Style}" FontFamily="{Binding FfName}" Text="{Binding Value}" FontSize="24" MouseLeftButtonUp="SelectedFontAwesome" Tag="{Binding FaName}"/>
                                     <TextBlock Style="{StaticResource FontAwesomeName_Style}" Text="{Binding Name}"/>
-                                </StackPanel>
+                                </VirtualizingStackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

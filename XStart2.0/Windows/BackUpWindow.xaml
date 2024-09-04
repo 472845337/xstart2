@@ -14,11 +14,11 @@
         <TreeView Grid.Row="0" ItemsSource="{Binding Items}" >
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <StackPanel Orientation="Horizontal">
+                    <VirtualizingStackPanel Orientation="Horizontal">
                         <CheckBox IsChecked="{Binding IsChecked,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"></CheckBox>
                         <Image Source="{Binding Data, Converter={StaticResource Project2IconConverter}}" Stretch="Fill" Margin="2"/>
                         <TextBlock Text="{Binding Header}" Margin="5" VerticalAlignment="Center"/>
-                    </StackPanel>
+                    </VirtualizingStackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>

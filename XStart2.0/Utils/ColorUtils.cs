@@ -17,6 +17,10 @@ namespace XStart2._0.Utils {
             return string.Format("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
         }
 
+        public static string GetHtml(Color color) {
+            return string.Format("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
+        }
+
         private static Color GetColor(System.Drawing.Color color) {
             return new Color() { R = color.R, G = color.G, B = color.B, A = color.A };
         }

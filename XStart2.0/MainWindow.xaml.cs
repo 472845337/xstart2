@@ -61,9 +61,28 @@ namespace XStart2._0 {
             DataContext = mainViewModel;
         }
 
+        /// <summary>
+        /// 窗口左键拖动，取消鼠标靠近边缘最大化
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            DragMove();
+            if (e.ChangedButton == MouseButton.Left) {
+                if (Mouse.LeftButton == MouseButtonState.Pressed) {
+                    var windowMode = this.ResizeMode;
+                    if (this.ResizeMode != ResizeMode.NoResize) {
+                        this.ResizeMode = ResizeMode.NoResize;
+                    }
+                    // this.UpdateLayout();
+                    DragMove();
+                    if (this.ResizeMode != windowMode) {
+                        this.ResizeMode = windowMode;
+                    }
+                    // this.UpdateLayout();
+                }
+            }
         }
+
         private void Minimum_Click(object sender, RoutedEventArgs e) {
             this.WindowState = WindowState.Minimized;
         }
@@ -1499,11 +1518,24 @@ namespace XStart2._0 {
                 }
             }
             if (autoRunProjects.Count > 0) {
-                foreach (Project project in autoRunProjects) {
-                    project.AutoRun = false;
-                    projectService.Update(new Project() { Section = project.Section, AutoRun = false });
+                bool isConfirm = false;
+                if (string.IsNullOrEmpty(mainViewModel.Security)) {
+                    if(MessageBoxResult.OK == MessageBox.Show("确认取消当前所有自启动项目？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                        isConfirm = true;
+                    }
+                } else {
+                    CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入密理员口令", mainViewModel.Security);
+                    if(true == checkSecurityWindow.ShowDialog()) {
+                        isConfirm = true;
+                    }
                 }
-                NotifyUtils.ShowNotification("已取消所有项目自启动！");
+                if (isConfirm) {
+                    foreach (Project project in autoRunProjects) {
+                        project.AutoRun = false;
+                        projectService.Update(new Project() { Section = project.Section, AutoRun = false });
+                    }
+                    NotifyUtils.ShowNotification("已取消所有项目自启动！");
+                }
             } else {
                 MessageBox.Show("当前无自启动项目！", Constants.MESSAGE_BOX_TITLE_ERROR);
             }
@@ -2266,7 +2298,7 @@ namespace XStart2._0 {
             if (null == brush) {
                 return type == 1 ? "#FFFFFF" : "#000000";
             } else {
-                return brush.Color.ToString();
+                return ColorUtils.GetHtml(brush.Color);
             }
         }
 
