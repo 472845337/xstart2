@@ -1,4 +1,7 @@
-﻿namespace XStart2._0.Utils {
+﻿using System.Collections.Generic;
+using System.Windows.Input;
+
+namespace XStart2._0.Utils {
     public class WinApi {
         //创建一个窗口   
         public const int WM_CREATE = 0x01;
@@ -391,6 +394,17 @@
             FEATURE_FEEDS = 26,
             FEATURE_BLOCK_INPUT_PROMPTS = 27,
             FEATURE_ENTRY_COUNT = 28
+        }
+        // 自定主窗口尺寸变化枚举
+        public enum ResizeDirection {
+            Left = 1,
+            Right = 2,
+            Top = 3,
+            TopLeft = 4,
+            TopRight = 5,
+            Bottom = 6,
+            BottomLeft = 7,
+            BottomRight = 8,
         }
     }
 }

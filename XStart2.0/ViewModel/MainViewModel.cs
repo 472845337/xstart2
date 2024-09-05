@@ -193,7 +193,7 @@ namespace XStart2._0.ViewModel {
         public void ConvertBrush() {
             Brush backgrounBrush;
             if (string.IsNullOrEmpty(MainBackground)) {
-                backgrounBrush = ColorUtils.GetBrush(Colors.White);
+                backgrounBrush = ColorUtils.GetBrush(Colors.Transparent);
             } else if (MainBackground.StartsWith("#")) {
                 backgrounBrush = ColorUtils.GetBrush(MainBackground);
             } else {

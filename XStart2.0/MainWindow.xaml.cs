@@ -18,6 +18,7 @@ using XStart2._0.Services;
 using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 using XStart2._0.Windows;
+using static XStart2._0.Utils.WinApi;
 
 namespace XStart2._0 {
     /// <summary>
@@ -41,8 +42,6 @@ namespace XStart2._0 {
         System.Windows.Forms.NotifyIcon notifyIcon = null;
         public MainWindow() {
             InitializeComponent();
-
-            Configs.Handler = new WindowInteropHelper(this).Handle;
             // 时钟定时任务
             currentTimer.Tick += new EventHandler(CurrentTimer_Tick);
             currentTimer.Start();
@@ -67,20 +66,19 @@ namespace XStart2._0 {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            if (e.ChangedButton == MouseButton.Left) {
-                if (Mouse.LeftButton == MouseButtonState.Pressed) {
-                    var windowMode = this.ResizeMode;
-                    if (this.ResizeMode != ResizeMode.NoResize) {
-                        this.ResizeMode = ResizeMode.NoResize;
-                    }
-                    // this.UpdateLayout();
-                    DragMove();
-                    if (this.ResizeMode != windowMode) {
-                        this.ResizeMode = windowMode;
-                    }
-                    // this.UpdateLayout();
-                }
+            DragMove();
+        }
+
+        private void ResizePressed(object sender, MouseEventArgs e) {
+            FrameworkElement element = sender as FrameworkElement;
+            ResizeDirection direction = (ResizeDirection)Enum.Parse(typeof(ResizeDirection), element.Name.Replace("Resize", ""));
+            if (e.LeftButton == MouseButtonState.Pressed) {
+                ResizeWindow(direction);
             }
+        }
+
+        private void ResizeWindow(ResizeDirection direction) {
+            DllUtils.SendMessage(Configs.Handler, WM_SYSCOMMAND, (IntPtr)(61440 + direction), IntPtr.Zero);
         }
 
         private void Minimum_Click(object sender, RoutedEventArgs e) {
@@ -449,7 +447,7 @@ namespace XStart2._0 {
             notifyIcon.ContextMenu.MenuItems.Add("-");
             notifyIcon.ContextMenu.MenuItems.Add("退出", WindowCloseMenu_Click);
             #endregion
-
+            Configs.Handler = new WindowInteropHelper(this).Handle;
             Configs.inited = true;
             IsAllShow = true;
             SetOperateMsg(Colors.Green, "加载完成");
@@ -545,7 +543,7 @@ namespace XStart2._0 {
                 // 远程窗口关闭
                 Configs.mstscRealClose = true;
                 if (Configs.MstscHandler.ToInt32() > 0) {
-                    DllUtils.SendMessage(Configs.MstscHandler, WinApi.WM_CLOSE, 0, 0);
+                    DllUtils.SendMessage(Configs.MstscHandler, WinApi.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
                     // 如果远程窗口取消关闭，则主窗口取消关闭
                     if (Configs.MstscHandler.ToInt32() > 0) {
                         e.Cancel = true;
@@ -554,11 +552,11 @@ namespace XStart2._0 {
                 }
                 // 天气窗口关闭
                 if (Configs.WeatherHandler.ToInt32() > 0) {
-                    DllUtils.SendMessage(Configs.WeatherHandler, WinApi.WM_CLOSE, 0, 0);
+                    DllUtils.SendMessage(Configs.WeatherHandler, WinApi.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
                 }
                 // 日历窗口关闭
                 if (Configs.CalendarHandler.ToInt32() > 0) {
-                    DllUtils.SendMessage(Configs.CalendarHandler, WinApi.WM_CLOSE, 0, 0);
+                    DllUtils.SendMessage(Configs.CalendarHandler, WinApi.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
                 }
                 #endregion
                 // 保存数据的调整（当前打开的类别，类别中打开的栏目，排序）

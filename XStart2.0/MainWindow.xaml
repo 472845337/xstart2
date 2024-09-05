@@ -17,12 +17,11 @@
         Width="{Binding MainWidth, Mode=TwoWay}"
         Left="{Binding MainLeft, Mode=TwoWay}"
         Top="{Binding MainTop, Mode=TwoWay}" 
-        AllowsTransparency="True"
         WindowStyle="None"
         Loaded="Window_Loaded"
         Closing="Window_Closing"
         LocationChanged="MainWindow_LocationChanged"
-        Topmost="{Binding TopMost}" Icon="pack://application:,,,/Files/xstart2.ico" ResizeMode="CanResizeWithGrip"
+        Topmost="{Binding TopMost}" Icon="pack://application:,,,/Files/xstart2.ico" ResizeMode="NoResize"
         Background="{Binding BackgroundBrush}"
         FontSize="{Binding MainFontSize,Source={x:Static bean:WindowTheme.Instance}}">
 
@@ -33,7 +32,7 @@
     </b:Interaction.Triggers>-->
     <!-- WindowChrome AllowsTransparency=true设置后，窗口是不能在边框进行缩放的，加上这个就可以 -->
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="0" ResizeBorderThickness="3"/>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="0" GlassFrameThickness="-1"/>
     </WindowChrome.WindowChrome>
     <Window.Resources>
         <Style x:Key="HeaderTool_Style" TargetType="Image" BasedOn="{StaticResource CursorHand_Style}">
@@ -183,11 +182,29 @@
         </ContextMenu>
     </Window.Resources>
     <!-- 窗体布局-->
-    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="2">
-        <Grid>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4"/>
+            <RowDefinition/>
+            <RowDefinition Height="4"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="4"/>
+        </Grid.ColumnDefinitions>
+        <Rectangle Name="ResizeTopLeft" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="0" Grid.Column="0" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeNWSE"/>
+        <Rectangle Name="ResizeTop" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="0" Grid.Column="1" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeNS"/>
+        <Rectangle Name="ResizeTopRight" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="0" Grid.Column="2" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeNESW"/>
+        <Rectangle Name="ResizeLeft" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="1" Grid.Column="0" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeWE"/>
+        <Rectangle Name="ResizeRight" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="1" Grid.Column="2" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeWE"/>
+        <Rectangle Name="ResizeBottomLeft" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="3" Grid.Column="0" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeNESW"/>
+        <Rectangle Name="ResizeBottom" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="3" Grid.Column="1" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeNS"/>
+        <Rectangle Name="ResizeBottomRight" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="3" Grid.Column="2" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeNWSE"/>
+        <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="28"/>
-                <RowDefinition Height="{Binding MainHeadShow,Converter={StaticResource Boolean2MainHeadShowConverter}}"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -198,7 +215,7 @@
                         <Setter Property="Background">
                             <Setter.Value>
                                 <SolidColorBrush Color="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}"
-                                                 Opacity="{Binding Opacity}"/>
+                                         Opacity="{Binding Opacity}"/>
                             </Setter.Value>
                         </Setter>
                     </Style>
@@ -216,7 +233,7 @@
                     </Button.Content>
                 </Button>
             </DockPanel>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" Visibility="{Binding MainHeadShow,Converter={StaticResource Boolean2MainHeadShowConverter}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition MinWidth="80"/>
@@ -230,7 +247,7 @@
                                 <Binding Path="Avatar"/>
                             </gif:ImageBehavior.AnimatedSource>
                             <Image.Clip>
-                                <RectangleGeometry RadiusX="5" RadiusY="5" Rect="0,0,50,50"/>
+                                <RectangleGeometry RadiusX="4" RadiusY="4" Rect="0,0,48,48"/>
                             </Image.Clip>
                         </Image>
                     </Border>
@@ -249,14 +266,14 @@
                 </WrapPanel>
             </Grid>
             <TabControl Grid.Row="2" x:Name="MainTabControl" TabStripPlacement="Left" ItemsSource="{Binding Types}"
-                    SizeChanged="MainTabControl_SizeChanged" ContextMenu="{StaticResource TypeTabContextMenu}"
-                    SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="{Binding SelectedIndex}"
-                    assist:SelectorDragDropAttach.IsItemsDragDropEnabled="True" Background="Transparent">
+            SizeChanged="MainTabControl_SizeChanged" ContextMenu="{StaticResource TypeTabContextMenu}"
+            SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="{Binding SelectedIndex}"
+            assist:SelectorDragDropAttach.IsItemsDragDropEnabled="True" Background="Transparent">
                 <TabControl.ItemTemplate>
                     <DataTemplate>
                         <DockPanel LastChildFill="True" Tag="{Binding Value.Section}"  Height="32" 
-                               Width="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=DataContext.TypeWidth}"
-                               AllowDrop="True" DragDrop.DragEnter="Type_DragEnter">
+                       Width="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=DataContext.TypeWidth}"
+                       AllowDrop="True" DragDrop.DragEnter="Type_DragEnter">
                             <DockPanel.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="添加类别" Click="AddType_Click">
@@ -340,12 +357,12 @@
                                     </ContextMenu>
                                 </ScrollViewer.ContextMenu>
                                 <ItemsControl ItemsSource="{Binding Value.ColumnDic}"
-                                          assist:SelectorDragDropAttach.IsItemsDragDropEnabled="True">
+                                  assist:SelectorDragDropAttach.IsItemsDragDropEnabled="True">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Expander helper:ElementParamHelper.TypeSection="{Binding Value.TypeSection}" helper:ElementParamHelper.ColumnSection="{Binding Value.Section}"
-                                          Header="{Binding Value.Name}" IsExpanded="{Binding Value.IsExpanded}" Style="{StaticResource ExpandablePanelStyle}" BorderBrush="Transparent"
-                                                  AllowDrop="True" DragDrop.Drop="Project_DragDrop">
+                                  Header="{Binding Value.Name}" IsExpanded="{Binding Value.IsExpanded}" Style="{StaticResource ExpandablePanelStyle}" BorderBrush="Transparent"
+                                          AllowDrop="True" DragDrop.Drop="Project_DragDrop">
                                                 <Expander.ContextMenu>
                                                     <ContextMenu>
                                                         <MenuItem Header="添加栏目" Click="AddColumn_Click">
@@ -413,13 +430,13 @@
                                                             <VirtualizingStackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
                                                                 <CheckBox Style="{StaticResource CheckBox_ThemeStyle}" Content="记住口令" IsChecked="{Binding Value.RememberSecurity}" Margin="5" VerticalAlignment="Center"/>
                                                                 <Button Style="{StaticResource BtnConfirm_Style}" Click="UnlockColumn_Click"
-                                                                    helper:ElementParamHelper.TypeSection="{Binding Value.TypeSection}" helper:ElementParamHelper.ColumnSection="{Binding Value.Section}"/>
+                                                            helper:ElementParamHelper.TypeSection="{Binding Value.TypeSection}" helper:ElementParamHelper.ColumnSection="{Binding Value.Section}"/>
                                                             </VirtualizingStackPanel>
                                                         </Grid>
                                                     </VirtualizingStackPanel>
                                                     <ScrollViewer Template="{StaticResource CustomScrollViewer}" Visibility="{Binding Value.Unlocked, Converter={StaticResource Boolean2VisibilityConverter}}" 
-                                                              VerticalScrollBarVisibility="Auto" Height="{Binding Value.ColumnHeight}" ScrollChanged="ScrollChanged" 
-                                                              Tag="{Binding Value}">
+                                                      VerticalScrollBarVisibility="Auto" Height="{Binding Value.ColumnHeight}" ScrollChanged="ScrollChanged" 
+                                                      Tag="{Binding Value}">
                                                         <ScrollViewer.ContextMenu>
                                                             <ContextMenu>
                                                                 <MenuItem Header="添加项目" Click="AddProject_Click">
@@ -440,7 +457,7 @@
                                                             </ContextMenu>
                                                         </ScrollViewer.ContextMenu>
                                                         <ItemsControl ItemsSource="{Binding Value.ProjectDic}"
-                                                                  assist:SelectorDragDropAttach.IsItemsDragDropEnabled="True">
+                                                          assist:SelectorDragDropAttach.IsItemsDragDropEnabled="True">
                                                             <ItemsControl.ItemsPanel>
                                                                 <ItemsPanelTemplate>
                                                                     <WrapPanel ItemWidth="{Binding Value.ProjectWidth}"/>
@@ -454,13 +471,13 @@
                                                                             <ColumnDefinition Width="24"/>
                                                                         </Grid.ColumnDefinitions>
                                                                         <view:ImageButton Grid.Column="0" Content="{Binding Value.Name}" Style="{StaticResource ProjectButton}"
-                                                                                      Foreground="{Binding ProjectForeground,Source={x:Static bean:WindowTheme.Instance}}"
-                                                                                      FontFamily="{Binding MainFontFamily,Source={x:Static bean:WindowTheme.Instance}}"
-                                                                                      ToolTip="{Binding Value.ToolTipContent}" Tag="{Binding Value}"
-                                                                                      Click="ProjectButton_Click" MouseDoubleClick="ProjectButton_DoubleClick"
-                                                                                      ButtonIcon="{Binding Value.Icon}" IconSize="{Binding Value.IconSize}"
-                                                                                      Width="{Binding Value, Converter={StaticResource ProjectWidthConverter}}"
-                                                                                      Orientation="{Binding Value.Orientation}" HideTitle="{Binding Value.HideTitle}">
+                                                                              Foreground="{Binding ProjectForeground,Source={x:Static bean:WindowTheme.Instance}}"
+                                                                              FontFamily="{Binding MainFontFamily,Source={x:Static bean:WindowTheme.Instance}}"
+                                                                              ToolTip="{Binding Value.ToolTipContent}" Tag="{Binding Value}"
+                                                                              Click="ProjectButton_Click" MouseDoubleClick="ProjectButton_DoubleClick"
+                                                                              ButtonIcon="{Binding Value.Icon}" IconSize="{Binding Value.IconSize}"
+                                                                              Width="{Binding Value, Converter={StaticResource ProjectWidthConverter}}"
+                                                                              Orientation="{Binding Value.Orientation}" HideTitle="{Binding Value.HideTitle}">
                                                                             <Button.ContextMenu>
                                                                                 <ContextMenu>
                                                                                     <MenuItem Header="运行" Click="AppRun_Click">
@@ -525,7 +542,7 @@
                                                                             </Button.ContextMenu>
                                                                         </view:ImageButton>
                                                                         <ToggleButton Grid.Column="1" Style="{StaticResource GlassToggleButton}" Height="20" Margin="2" Background="Green" Tag="{Binding Value}"
-                                                                    IsChecked="{Binding Value.AutoRun, Converter={StaticResource ProjectAutoRunConverter}}" IsEnabled="{Binding Value.CanAutoRun}" ToolTip="{Binding Value.CanAutoRun, Converter={StaticResource ProjectAutoRunToolTipConverter}}" Click="ToggleAutoRun_Click" ToolTipService.ShowOnDisabled="True"/>
+                                                            IsChecked="{Binding Value.AutoRun, Converter={StaticResource ProjectAutoRunConverter}}" IsEnabled="{Binding Value.CanAutoRun}" ToolTip="{Binding Value.CanAutoRun, Converter={StaticResource ProjectAutoRunToolTipConverter}}" Click="ToggleAutoRun_Click" ToolTipService.ShowOnDisabled="True"/>
                                                                     </view:DraggableGrid>
                                                                 </DataTemplate>
                                                             </ItemsControl.ItemTemplate>
@@ -704,5 +721,5 @@
                 </StatusBarItem>
             </StatusBar>
         </Grid>
-    </Border>
+    </Grid>
 </Window>

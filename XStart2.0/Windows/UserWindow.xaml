@@ -24,7 +24,7 @@
                     <Binding Path="Avatar"/>
                 </gif:ImageBehavior.AnimatedSource>
                 <Image.Clip>
-                    <RectangleGeometry RadiusX="10" RadiusY="10" Rect="0,0,100,100"/>
+                    <RectangleGeometry RadiusX="9" RadiusY="9" Rect="0,0,98,98"/>
                 </Image.Clip>
             </Image>
         </Border>

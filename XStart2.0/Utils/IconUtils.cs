@@ -88,7 +88,7 @@ namespace XStart2._0.Utils {
             Bitmap bs = icon.ToBitmap();
             icon.Dispose();
             DllUtils.DestroyIcon(shfi.hIcon); //释放资源
-            DllUtils.SendMessage(shfi.hIcon, WinApi.WM_CLOSE, 0, 0);
+            DllUtils.SendMessage(shfi.hIcon, WinApi.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
             return bs;
         }
 

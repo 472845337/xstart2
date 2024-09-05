@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:XStart2._0.Windows"
         xmlns:bean="clr-namespace:XStart2._0.Bean"
         mc:Ignorable="d"
-        Title="窗口背景" Height="400" Width="300" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
+        Title="美化" Icon="pack://application:,,,/Files/Icons/App/font_icon.ico" Height="400" Width="300" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
     <Window.Resources>
         <Style x:Key="OpacityButton" TargetType="{x:Type Button}">
             <Setter Property="Width" Value="240" />
@@ -39,13 +39,13 @@
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="不透明度"/>
         <Slider Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" Maximum="10" Minimum="0" TickFrequency="1" IsMoveToPointEnabled="True" IsSnapToTickEnabled="True"  Value="{Binding Opacity}"/>
-        <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="项目文本颜色"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="字体颜色"/>
         <Border Grid.Row="1" Grid.Column="1" Margin="5 5 5 0" BorderBrush="Gray" BorderThickness="1">
             <TextBlock Background="{Binding Foreground}" MouseLeftButtonUp="Foreground_MouseLeftButtonUp"/>
         </Border>
-        <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="大小"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="字体大小"/>
         <Slider Grid.Row="2" Grid.Column="1" Style="{StaticResource FormValue_Style}" Maximum="24" Minimum="10" TickFrequency="2" IsMoveToPointEnabled="True" IsSnapToTickEnabled="True"  Value="{Binding TextFontSize}"/>
-        <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="字体"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="字体样式"/>
         <ComboBox Style="{StaticResource FormValue_Style}" VerticalContentAlignment="Center" Grid.Row="3" Grid.Column="1" IsReadOnly="True" ItemsSource="{Binding SystemFonts}" SelectedValue="{Binding TextFontFamily}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
@@ -55,14 +55,19 @@
         </ComboBox>
         <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="背景"/>
         <Grid Grid.Row="4" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Style="{StaticResource Btn_Style}" Content="空白" ToolTip="不指定背景" Click="CancelBackground_Click"/>
+            <Button Grid.Column="0" Style="{StaticResource Btn_Style}" Content="透明" ToolTip="透明背景，该选项将非常消耗性能" Click="CancelBackground_Click"/>
             <Button Grid.Column="1" Style="{StaticResource BtnConfirm_Style}" Content="纯色" ToolTip="指定颜色做为主窗口背景" Click="ColorBackground_Click"/>
             <Button Grid.Column="2" Style="{StaticResource BtnConfirm_Style}" Content="本地图片" ToolTip="指定本地图片做为主窗口背景" Click="ImageBackground_Click"/>
+            <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Text="透明背景，将会占用大量内存！" Foreground="Red"/>
         </Grid>
         <Border Grid.Row="5" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1">
             <Grid Background="{Binding BackgroundBrush}">

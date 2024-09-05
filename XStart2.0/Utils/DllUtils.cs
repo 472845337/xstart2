@@ -188,7 +188,7 @@ namespace XStart2._0.Utils {
         /// <param name="lParam">消息</param>
         /// <returns></returns>
         [DllImport(User32)]
-        public static extern IntPtr SendMessage(IntPtr handle, uint wMsg, int wParam, int lParam);
+        public static extern IntPtr SendMessage(IntPtr handle, uint wMsg, IntPtr wParam, IntPtr lParam);
 
         //typedef struct _MINIDUMP_EXCEPTION_INFORMATION {
         //    DWORD ThreadId;

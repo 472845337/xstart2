@@ -96,7 +96,7 @@ namespace XStart2._0.Utils {
                             DllUtils.ShowWindow(Configs.taskbarHandler, toggle);
                             Configs.taskbarIsShow = !Configs.taskbarIsShow;
                             break;
-                        case TURN_OFF_MONITOR: DllUtils.SendMessage(WinApi.HWND_BROADCAST, WinApi.WM_SYSCOMMAND, WinApi.SC_MONITORPOWER, 2); break;
+                        case TURN_OFF_MONITOR: DllUtils.SendMessage(WinApi.HWND_BROADCAST, WinApi.WM_SYSCOMMAND, (IntPtr)WinApi.SC_MONITORPOWER, (IntPtr)2); break;
                         case CLEAR_RECYCLE_BIN: DllUtils.SHEmptyRecycleBin(Configs.Handler, null, WinApi.SHERB_NOCONFIRMATION); break;
                         case CLEAR_IE_ADDRESS: {
                                 using RegistryKey userKey = Registry.CurrentUser.CreateSubKey(@"Software/Microsoft/Internet Explorer/TypedURLs");
@@ -139,9 +139,9 @@ namespace XStart2._0.Utils {
                                 }
                             }
                             break;
-                        case VOLUME_ADD: DllUtils.SendMessage(Configs.Handler, WinApi.WM_APPCOMMAND, Configs.Handler.ToInt32(), WinApi.APPCOMMAND_VOLUME_UP); break;
-                        case VOLUME_REDUCE: DllUtils.SendMessage(Configs.Handler, WinApi.WM_APPCOMMAND, Configs.Handler.ToInt32(), WinApi.APPCOMMAND_VOLUME_DOWN); break;
-                        case VOLUME_SILENT_TOGGLE: DllUtils.SendMessage(Configs.Handler, WinApi.WM_APPCOMMAND, Configs.Handler.ToInt32(), WinApi.APPCOMMAND_VOLUME_MUTE); break;
+                        case VOLUME_ADD: DllUtils.SendMessage(Configs.Handler, WinApi.WM_APPCOMMAND, Configs.Handler, (IntPtr)WinApi.APPCOMMAND_VOLUME_UP); break;
+                        case VOLUME_REDUCE: DllUtils.SendMessage(Configs.Handler, WinApi.WM_APPCOMMAND, Configs.Handler, (IntPtr)WinApi.APPCOMMAND_VOLUME_DOWN); break;
+                        case VOLUME_SILENT_TOGGLE: DllUtils.SendMessage(Configs.Handler, WinApi.WM_APPCOMMAND, Configs.Handler, (IntPtr)WinApi.APPCOMMAND_VOLUME_MUTE); break;
                         case VOLUME_WAVE_ADD: {
                                 uint left = Configs.volume > (0xffff - Constants.VOLUME_WAVE_STEP) ? 0xffff : (Configs.volume + Constants.VOLUME_WAVE_STEP);//左声道音量
                                 uint right = Configs.volume > (0xffff - Constants.VOLUME_WAVE_STEP) ? 0xffff : (Configs.volume + Constants.VOLUME_WAVE_STEP);//右
