@@ -6,17 +6,27 @@ namespace XStart2._0.Windows {
     /// AvatarWindow.xaml 的交互逻辑
     /// </summary>
     public partial class UserWindow : Window {
-        public UserViewModel vm = new UserViewModel();
-        public UserWindow(string avatarPath, string nickName) {
+        private UserViewModel vm = new UserViewModel();
+        public string AvatarPath {  get; set; }
+        public double GifSpeedRatio { get; set; }
+        public string NickName {  get; set; }
+        public int AvatarSize {  get; set; }
+        public UserWindow(string avatarPath, double gifSpeedRadio, string nickName, int avatarSize) {
             InitializeComponent();
             Loaded += Window_Loaded;
             Closing += Window_Closing;
-            vm.AvatarPath = avatarPath;
-            vm.NickName = nickName;
+            AvatarPath = avatarPath;
+            AvatarSize = avatarSize;
+            GifSpeedRatio = gifSpeedRadio;
+            NickName = nickName;
+            DataContext = vm;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            DataContext = vm;
+            vm.AvatarPath = AvatarPath;
+            vm.AvatarSize = AvatarSize;
+            vm.GifSpeedRatio = GifSpeedRatio;
+            vm.NickName = NickName;
         }
         private void Window_Closing(object sender, System.EventArgs e) {
             DataContext = null;
@@ -32,7 +42,10 @@ namespace XStart2._0.Windows {
         }
 
         private void Confirm_Click(object sender, RoutedEventArgs e) {
-
+            AvatarPath = vm.AvatarPath;
+            AvatarSize = vm.AvatarSize;
+            GifSpeedRatio = vm.GifSpeedRatio;
+            NickName = vm.NickName;
             DialogResult = true;
         }
 

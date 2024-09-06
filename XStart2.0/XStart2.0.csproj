@@ -153,6 +153,7 @@
     <Compile Include="Commands\BackUpCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\ResumeCommand.cs" />
+    <Compile Include="Converters\AvatarSizeConverter.cs" />
     <Compile Include="Converters\BaseMultiValueConverter.cs" />
     <Compile Include="Converters\BaseValueConverter.cs" />
     <Compile Include="Converters\Boolean2MainHeadShowConverter.cs" />

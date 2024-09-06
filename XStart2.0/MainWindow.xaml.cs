@@ -82,9 +82,10 @@ namespace XStart2._0 {
         }
 
         private void Maximum_Click(object sender, RoutedEventArgs e) {
-            if(WindowState == WindowState.Normal) {
-                this.MaxHeight = SystemParameters.WorkArea.Height;
-                this.MaxWidth = SystemParameters.WorkArea.Width;
+            if (WindowState == WindowState.Normal) {
+                // 避免最大化后，遮盖任务栏
+                MaxHeight = SystemParameters.WorkArea.Height;
+                MaxWidth = SystemParameters.WorkArea.Width;
                 WindowState = WindowState.Maximized;
                 mainViewModel.IsMaximum = true;
             } else {
@@ -118,6 +119,8 @@ namespace XStart2._0 {
             Configs.admin = admin;
 
             string avatarPath = admin.Avator;
+            int avatarSize = null == admin.AvatorSize ? Constants.AVATAR_SIZE : (int)admin.AvatorSize;
+            double gifSpeedRatio = null == admin.GifSpeedRatio? 1D : Math.Round((double)admin.GifSpeedRatio, 2);// 要对double的精度进行处理
             string nickName = admin.Name;
             string security = admin.Password;
             if (!string.IsNullOrEmpty(avatarPath)) {
@@ -128,6 +131,8 @@ namespace XStart2._0 {
                 avatarPath = Configs.AppStartPath + Constants.AVATAR_PATH_DEFAULT;
             }
             mainViewModel.AvatarPath = avatarPath;
+            mainViewModel.GifSpeedRatio = gifSpeedRatio;
+            mainViewModel.AvatarSize = avatarSize;
             mainViewModel.NickName = string.IsNullOrEmpty(nickName) ? Constants.NICKNAME_DEFAULT : nickName;
             // admin口令
             mainViewModel.Security = security;
@@ -147,7 +152,7 @@ namespace XStart2._0 {
             string mainFontFamily = iniData[Constants.SECTION_THEME][Constants.KEY_MAIN_FONTFAMILY];
             string mainFontSizeStr = iniData[Constants.SECTION_THEME][Constants.KEY_MAIN_FONTSIZE];
 
-            Configs.isMaximum = string.IsNullOrEmpty(isMaximum)? false:Convert.ToBoolean(isMaximum);
+            Configs.isMaximum = string.IsNullOrEmpty(isMaximum) ? false : Convert.ToBoolean(isMaximum);
             Configs.mainHeight = string.IsNullOrEmpty(heightStr) ? Constants.MAIN_HEIGHT : Convert.ToDouble(heightStr);
             Configs.mainWidth = string.IsNullOrEmpty(widthStr) ? Constants.MAIN_WIDTH : Convert.ToDouble(widthStr);
             Configs.mainLeft = string.IsNullOrEmpty(leftStr) ? Constants.MAIN_LEFT : Convert.ToDouble(leftStr);
@@ -1805,7 +1810,9 @@ namespace XStart2._0 {
 
         #region 窗口靠边隐藏
         private void MainWindow_LocationChanged(object sender, EventArgs e) {
-            GetAnchorStyle();
+            if (!mainViewModel.IsMaximum) {
+                GetAnchorStyle();
+            }
         }
 
         internal int anchorStyle = Constants.ANCHOR_STYLE_NONE;
@@ -1816,7 +1823,7 @@ namespace XStart2._0 {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         public void AutoHideTimer_Tick(object sender, EventArgs e) {
-            if (isTick) {
+            if (isTick || mainViewModel.IsMaximum) {
                 return;
             } else {
                 isTick = true;
@@ -2082,18 +2089,33 @@ namespace XStart2._0 {
 
         #region 用户头像和昵称修改
         private void User_Click(object sender, RoutedEventArgs e) {
-            UserWindow userWindow = new UserWindow(mainViewModel.AvatarPath, mainViewModel.NickName) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
+            UserWindow userWindow = new UserWindow(mainViewModel.AvatarPath, mainViewModel.GifSpeedRatio, mainViewModel.NickName, mainViewModel.AvatarSize) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
             if (true == userWindow.ShowDialog()) {
+                bool isChange = false;
                 // 保存配置项
-                if (!mainViewModel.AvatarPath.Equals(userWindow.vm.AvatarPath)) {
-                    Configs.admin.Avator = userWindow.vm.AvatarPath;
-                    mainViewModel.AvatarPath = userWindow.vm.AvatarPath;
+                if (!mainViewModel.AvatarPath.Equals(userWindow.AvatarPath)) {
+                    Configs.admin.Avator = userWindow.AvatarPath;
+                    mainViewModel.AvatarPath = userWindow.AvatarPath;
+                    isChange = true;
                 }
-                if (!mainViewModel.NickName.Equals(userWindow.vm.NickName)) {
-                    Configs.admin.Name = userWindow.vm.NickName;
-                    mainViewModel.NickName = userWindow.vm.NickName;
+                if (mainViewModel.GifSpeedRatio != userWindow.GifSpeedRatio) {
+                    Configs.admin.GifSpeedRatio = userWindow.GifSpeedRatio;
+                    mainViewModel.GifSpeedRatio = userWindow.GifSpeedRatio;
+                    isChange = true;
                 }
-                adminService.Update(Configs.admin);
+                if (!mainViewModel.NickName.Equals(userWindow.NickName)) {
+                    Configs.admin.Name = userWindow.NickName;
+                    mainViewModel.NickName = userWindow.NickName;
+                    isChange = true;
+                }
+                if(mainViewModel.AvatarSize != userWindow.AvatarSize) {
+                    Configs.admin.AvatorSize = userWindow.AvatarSize;
+                    mainViewModel.AvatarSize = userWindow.AvatarSize;
+                    isChange = true;
+                }
+                if (isChange) {
+                    adminService.Update(Configs.admin);
+                }
             }
             userWindow.Close();
         }

@@ -1,4 +1,5 @@
 ﻿
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -125,15 +126,15 @@ namespace XStart2._0.Services {
                 // 数据拼装
                 while (reader.Read()) {
                     T t = Activator.CreateInstance<T>();
-                    PropertyInfo[] infos = typeof(T).GetProperties();
-                    foreach (var info in infos) {
-                        TableParam tableParam = GetAttributeByProperty<TableParam>(info);
+                    PropertyInfo[] properties = typeof(T).GetProperties();
+                    foreach (var property in properties) {
+                        TableParam tableParam = GetAttributeByProperty<TableParam>(property);
                         if (null == tableParam) {
                             continue;
                         }
-                        object obj = reader[tableParam.param];
-                        if (null != obj && DBNull.Value != obj) {
-                            info.SetValue(t, obj);
+                        object value = reader[tableParam.param];
+                        if (null != value && DBNull.Value != value) {
+                            property.SetValue(t, value);
                         }
                     }
 

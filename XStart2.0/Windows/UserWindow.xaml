@@ -6,33 +6,61 @@
         xmlns:local="clr-namespace:XStart2._0.Windows"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
-        Title="用户信息" Height="230" Width="320" Icon="pack://application:,,,/Files/Icons/App/user.ico">
+        Title="用户信息" Height="Auto" Width="Auto" Icon="pack://application:,,,/Files/Icons/App/user.ico" SizeToContent="WidthAndHeight">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
             <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Style="{StaticResource BottomButtonPanel_RowDefinition_Style}"/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="头像"/>
-        <Border Grid.Row="0" Grid.Column="1" Height="100" Width="100" BorderBrush="LightGray" BorderThickness="1" CornerRadius="10" Margin="5" HorizontalAlignment="Left" MouseLeftButtonUp="SelectAvatar_Click">
-            <Image gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimationSpeedRatio="0.5" Stretch="Fill">
-                <gif:ImageBehavior.AnimatedSource>
-                    <Binding Path="Avatar"/>
-                </gif:ImageBehavior.AnimatedSource>
-                <Image.Clip>
-                    <RectangleGeometry RadiusX="9" RadiusY="9" Rect="0,0,98,98"/>
-                </Image.Clip>
-            </Image>
-        </Border>
-        <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="昵称"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding NickName}" MaxLength="10"/>
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Style="{StaticResource BtnConfirm_Style}" Click="Confirm_Click"/>
-            <Button Style="{StaticResource BtnCancel_Style}" Click="Cancel_Click"/>
+        <Grid Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition MinWidth="200"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="32"/>
+                <RowDefinition Style="{StaticResource BottomButtonPanel_RowDefinition_Style}"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="昵称"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding NickName}" MaxLength="10"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="头像大小"/>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <Slider Style="{StaticResource FormValue_Style}" Grid.Column="0" Minimum="50" Maximum="250" TickFrequency="10" IsMoveToPointEnabled="True" IsSnapToTickEnabled="True"  Value="{Binding AvatarSize}"/>
+                <TextBlock Style="{StaticResource FormLabel_Style}" Margin="0 0 5 0" Grid.Column="1" Text="{Binding AvatarSize}"/>
+            </Grid>
+            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="Gif速率"/>
+            <Grid Grid.Row="2" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <Slider Style="{StaticResource FormValue_Style}" Grid.Column="0" Minimum="0.1" Maximum="2.0" TickFrequency="0.1" IsMoveToPointEnabled="True" IsSnapToTickEnabled="True"  Value="{Binding GifSpeedRatio}"/>
+                <TextBlock Style="{StaticResource FormLabel_Style}" Margin="0 0 5 0" Grid.Column="1" Text="{Binding GifSpeedRatio}"/>
+            </Grid>
+            
+            <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Style="{StaticResource BtnConfirm_Style}" Click="Confirm_Click"/>
+                <Button Style="{StaticResource BtnCancel_Style}" Click="Cancel_Click"/>
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Top" Style="{StaticResource CursorHand_Style}">
+            <Border Height="{Binding AvatarSize}" Width="{Binding AvatarSize}" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" Margin="5" HorizontalAlignment="Left" MouseLeftButtonUp="SelectAvatar_Click">
+                <Image gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimationSpeedRatio="{Binding GifSpeedRatio}" Stretch="Fill">
+                    <gif:ImageBehavior.AnimatedSource>
+                        <Binding Path="Avatar"/>
+                    </gif:ImageBehavior.AnimatedSource>
+                    <Image.Clip>
+                        <RectangleGeometry RadiusX="4" RadiusY="4" Rect="{Binding AvatarSize,Converter={StaticResource AvatarSizeConverter}}"/>
+                    </Image.Clip>
+                </Image>
+            </Border>
         </StackPanel>
     </Grid>
+    
 </Window>

@@ -38,6 +38,7 @@
             <con:WeaImgConverter x:Key="WeaImgConverter" />
             <con:WeatherAirConverter x:Key="WeatherAirConverter" />
             <con:WeatherAirColorConverter x:Key="WeatherAirColorConverter" />
+            <con:AvatarSizeConverter x:Key="AvatarSizeConverter"/>
             <!-- 鼠标指针-手样式 -->
             <Style x:Key="CursorHand_Style" TargetType="FrameworkElement">
                 <Style.Triggers>

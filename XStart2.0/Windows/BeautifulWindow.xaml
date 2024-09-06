@@ -25,10 +25,10 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
@@ -38,13 +38,13 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="不透明度"/>
-        <Slider Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" Maximum="10" Minimum="0" TickFrequency="1" IsMoveToPointEnabled="True" IsSnapToTickEnabled="True"  Value="{Binding Opacity}"/>
+        <Slider VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" Maximum="10" Minimum="0" TickFrequency="1" IsMoveToPointEnabled="True" IsSnapToTickEnabled="True"  Value="{Binding Opacity}"/>
         <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="字体颜色"/>
         <Border Grid.Row="1" Grid.Column="1" Margin="5 5 5 0" BorderBrush="Gray" BorderThickness="1">
             <TextBlock Background="{Binding Foreground}" MouseLeftButtonUp="Foreground_MouseLeftButtonUp"/>
         </Border>
         <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="字体大小"/>
-        <Slider Grid.Row="2" Grid.Column="1" Style="{StaticResource FormValue_Style}" Maximum="24" Minimum="10" TickFrequency="2" IsMoveToPointEnabled="True" IsSnapToTickEnabled="True"  Value="{Binding TextFontSize}"/>
+        <Slider VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" Style="{StaticResource FormValue_Style}" Maximum="24" Minimum="10" TickFrequency="2" IsMoveToPointEnabled="True" IsSnapToTickEnabled="True"  Value="{Binding TextFontSize}"/>
         <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="字体样式"/>
         <ComboBox Style="{StaticResource FormValue_Style}" VerticalContentAlignment="Center" Grid.Row="3" Grid.Column="1" IsReadOnly="True" ItemsSource="{Binding SystemFonts}" SelectedValue="{Binding TextFontFamily}">
             <ComboBox.ItemTemplate>

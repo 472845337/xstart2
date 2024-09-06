@@ -18,6 +18,10 @@ namespace XStart2._0.ViewModel {
         }
         // 头像
         public System.Windows.Media.Imaging.BitmapImage Avatar { get; set; }
+        // gif动画速率
+        public double GifSpeedRatio {  get; set; }
+        // 头像尺寸
+        public int AvatarSize { get; set; }
         // 昵称
         public string NickName { get; set; }
         // 管理员口令

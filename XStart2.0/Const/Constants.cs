@@ -116,6 +116,7 @@
 
         public const string AVATAR_PATH_DEFAULT = "Files/Images/Avatar/DefaultUser.png";
         public const string AVATAR_PATH_NOTEXIST = "Files/Images/Avatar/NotExist.png";
+        public const int AVATAR_SIZE = 50;
 
         public const string NICKNAME_DEFAULT = "我的昵称";
 
