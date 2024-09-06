@@ -46,6 +46,7 @@ namespace XStart2._0.Windows {
             ViewModel.SystemProject recycleBin = new ViewModel.SystemProject() { Name = "RecycleBinButton", Content = "回收站", Image = Configs.iconDic32[RECYCLE_BIN] };
             ViewModel.SystemProject ieButton = new ViewModel.SystemProject() { Name = "IEButton", Content = "Internet Explorer", Image = Configs.iconDic32[IE] };
             ViewModel.SystemProject internetButton = new ViewModel.SystemProject() { Name = "InternetButton", Content = "网上邻居", Image = Configs.iconDic32[INTERNET] };
+            ViewModel.SystemProject taskmgrButton = new ViewModel.SystemProject() { Name = "TaskmgrButton", Content = "任务管理器", Image = Configs.iconDic32[TASKMGR] };
             ViewModel.SystemProject explorerButton = new ViewModel.SystemProject() { Name = "ExplorerButton", Content = "资源管理器", Image = Configs.iconDic32[EXPLORER] };
             ViewModel.SystemProject printFaxButton = new ViewModel.SystemProject() { Name = "PrintFaxButton", Content = "打印机和传真", Image = Configs.iconDic32[PRINT_FAX] };
             ViewModel.SystemProject regeditButton = new ViewModel.SystemProject() { Name = "RegeditButton", Content = "注册表编辑器", Image = Configs.iconDic32[REGEDIT] };
@@ -58,6 +59,7 @@ namespace XStart2._0.Windows {
             systemLinks.Add(recycleBin);
             systemLinks.Add(ieButton);
             systemLinks.Add(internetButton);
+            systemLinks.Add(taskmgrButton);
             systemLinks.Add(explorerButton);
             systemLinks.Add(printFaxButton);
             systemLinks.Add(regeditButton);

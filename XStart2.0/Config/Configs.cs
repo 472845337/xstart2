@@ -128,6 +128,7 @@ namespace XStart2._0.Config {
             {RECYCLE_BIN,"Files/Icons/System/RecycleBin.ico"},
             {IE,"Files/Icons/System/IE.ico"},
             {INTERNET, "Files/Icons/System/Network.ico"},
+            {TASKMGR, "Files/Icons/System/Taskmgr.ico"},
             {EXPLORER, "Files/Icons/System/WindowExplorer.ico"},
             {PRINT_FAX, "Files/Icons/System/PrintAndFax.ico"},
             {REGEDIT,"Files/Icons/System/Regedit.ico"},

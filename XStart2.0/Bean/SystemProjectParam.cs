@@ -14,6 +14,7 @@ namespace XStart2._0.Bean {
         public const string RECYCLE_BIN = "#RecycleBin";
         public const string IE = "#IE";
         public const string INTERNET = "#Internet";
+        public const string TASKMGR = "#Taskmgr";
         public const string EXPLORER = "#Explorer";
         public const string PRINT_FAX = "#PrintFax";
         public const string REGEDIT = "#Regedit";
@@ -119,6 +120,7 @@ namespace XStart2._0.Bean {
             OperateParam.Add(RECYCLE_BIN, new SystemProject("explorer.exe", "::{645FF040-5081-101B-9F08-00AA002F954E}"));
             OperateParam.Add(IE, new SystemProject("iexplorer.exe", string.Empty));
             OperateParam.Add(INTERNET, new SystemProject("explorer.exe", "::{208D2C60-3AEA-1069-A2D7-08002B30309D}"));
+            OperateParam.Add(TASKMGR, new SystemProject("taskmgr.exe", string.Empty));
             OperateParam.Add(EXPLORER, new SystemProject("explorer.exe", string.Empty));
             OperateParam.Add(PRINT_FAX, new SystemProject("explorer.exe", "::{2227A280-3AEA-1069-A2DE-08002B30309D}"));
             OperateParam.Add(REGEDIT, new SystemProject("regedit.exe", string.Empty));
