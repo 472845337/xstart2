@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows.Input;
-
-namespace XStart2._0.Utils {
+﻿namespace XStart2._0.Utils {
     public class WinApi {
         //创建一个窗口   
         public const int WM_CREATE = 0x01;

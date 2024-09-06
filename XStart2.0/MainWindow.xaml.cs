@@ -81,8 +81,20 @@ namespace XStart2._0 {
             DllUtils.SendMessage(Configs.Handler, WM_SYSCOMMAND, (IntPtr)(61440 + direction), IntPtr.Zero);
         }
 
+        private void Maximum_Click(object sender, RoutedEventArgs e) {
+            if(WindowState == WindowState.Normal) {
+                this.MaxHeight = SystemParameters.WorkArea.Height;
+                this.MaxWidth = SystemParameters.WorkArea.Width;
+                WindowState = WindowState.Maximized;
+                mainViewModel.IsMaximum = true;
+            } else {
+                WindowState = WindowState.Normal;
+                mainViewModel.IsMaximum = false;
+            }
+        }
+
         private void Minimum_Click(object sender, RoutedEventArgs e) {
-            this.WindowState = WindowState.Minimized;
+            WindowState = WindowState.Minimized;
         }
 
         private void Close_Click(object sender, RoutedEventArgs e) {
@@ -122,7 +134,7 @@ namespace XStart2._0 {
             #endregion
 
             #region 窗口相关加载，尺寸，位置，置顶
-
+            string isMaximum = iniData[Constants.SECTION_LOCATION][Constants.KEY_IS_MAXIMUM];
             string leftStr = iniData[Constants.SECTION_LOCATION][Constants.KEY_LEFT];
             string topStr = iniData[Constants.SECTION_LOCATION][Constants.KEY_TOP];
             string heightStr = iniData[Constants.SECTION_SIZE][Constants.KEY_HEIGHT];
@@ -135,6 +147,7 @@ namespace XStart2._0 {
             string mainFontFamily = iniData[Constants.SECTION_THEME][Constants.KEY_MAIN_FONTFAMILY];
             string mainFontSizeStr = iniData[Constants.SECTION_THEME][Constants.KEY_MAIN_FONTSIZE];
 
+            Configs.isMaximum = string.IsNullOrEmpty(isMaximum)? false:Convert.ToBoolean(isMaximum);
             Configs.mainHeight = string.IsNullOrEmpty(heightStr) ? Constants.MAIN_HEIGHT : Convert.ToDouble(heightStr);
             Configs.mainWidth = string.IsNullOrEmpty(widthStr) ? Constants.MAIN_WIDTH : Convert.ToDouble(widthStr);
             Configs.mainLeft = string.IsNullOrEmpty(leftStr) ? Constants.MAIN_LEFT : Convert.ToDouble(leftStr);
@@ -146,12 +159,17 @@ namespace XStart2._0 {
             Configs.projectForeground = string.IsNullOrEmpty(projectForeground) ? "#000000" : projectForeground;
             Configs.mainFontFamily = string.IsNullOrEmpty(mainFontFamily) || !FontUtils.IsSystemFont(mainFontFamily) ? "微软雅黑" : mainFontFamily;
             Configs.mainFontSize = NumberUtils.IsInt(mainFontSizeStr, out int mainFontSize) ? mainFontSize : 14;
+            // 是否最大化
+            mainViewModel.IsMaximum = Configs.isMaximum;
             // 尺寸
             mainViewModel.MainHeight = Configs.mainHeight;
             mainViewModel.MainWidth = Configs.mainWidth;
             // 位置
             mainViewModel.MainLeft = Configs.mainLeft;
             mainViewModel.MainTop = Configs.mainTop;
+            if (mainViewModel.IsMaximum) {
+                Maximum_Click(sender, e);
+            }
             // 主题
             mainViewModel.Opacity = Configs.opacity;// 不透明度
             WindowTheme.Instance.ThemeName = Configs.themeName;// 主题名
@@ -1518,12 +1536,12 @@ namespace XStart2._0 {
             if (autoRunProjects.Count > 0) {
                 bool isConfirm = false;
                 if (string.IsNullOrEmpty(mainViewModel.Security)) {
-                    if(MessageBoxResult.OK == MessageBox.Show("确认取消当前所有自启动项目？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                    if (MessageBoxResult.OK == MessageBox.Show("确认取消当前所有自启动项目？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                         isConfirm = true;
                     }
                 } else {
                     CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入密理员口令", mainViewModel.Security);
-                    if(true == checkSecurityWindow.ShowDialog()) {
+                    if (true == checkSecurityWindow.ShowDialog()) {
                         isConfirm = true;
                     }
                 }
@@ -1714,10 +1732,13 @@ namespace XStart2._0 {
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_PROJECT_FOREGROUND, ref Configs.projectForeground, WindowTheme.Instance.ProjectForeground);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_MAIN_FONTFAMILY, ref Configs.mainFontFamily, WindowTheme.Instance.MainFontFamily);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_MAIN_FONTSIZE, ref Configs.mainFontSize, WindowTheme.Instance.MainFontSize);
-            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_SIZE, Constants.KEY_HEIGHT, ref Configs.mainHeight, mainViewModel.MainHeight);
-            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_SIZE, Constants.KEY_WIDTH, ref Configs.mainWidth, mainViewModel.MainWidth);
-            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_LEFT, ref Configs.mainLeft, mainViewModel.MainLeft);
-            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_TOP, ref Configs.mainTop, mainViewModel.MainTop);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_IS_MAXIMUM, ref Configs.isMaximum, mainViewModel.IsMaximum);
+            if (!mainViewModel.IsMaximum) {
+                IniParserUtils.ConfigIniData(iniData, Constants.SECTION_SIZE, Constants.KEY_HEIGHT, ref Configs.mainHeight, mainViewModel.MainHeight);
+                IniParserUtils.ConfigIniData(iniData, Constants.SECTION_SIZE, Constants.KEY_WIDTH, ref Configs.mainWidth, mainViewModel.MainWidth);
+                IniParserUtils.ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_LEFT, ref Configs.mainLeft, mainViewModel.MainLeft);
+                IniParserUtils.ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_TOP, ref Configs.mainTop, mainViewModel.MainTop);
+            }
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_OPACITY, ref Configs.opacity, mainViewModel.Opacity);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_THEME_NAME, ref Configs.themeName, WindowTheme.Instance.ThemeName);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_THEME_CUSTOM, ref Configs.themeCustom, WindowTheme.Instance.ThemeCustom);

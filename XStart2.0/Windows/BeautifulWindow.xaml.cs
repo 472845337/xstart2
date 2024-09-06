@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Forms;
-using System.Collections.ObjectModel;
 using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 
@@ -11,9 +11,9 @@ namespace XStart2._0.Windows {
     public partial class BeautifulWindow : Window {
         readonly BeautifulViewModel vm = new BeautifulViewModel();
         public string Bg { get; private set; }
-        public string Ff {  get; private set; }
+        public string Ff { get; private set; }
         public string Fg { get; private set; }
-        public int Fs {  get; private set; }
+        public int Fs { get; private set; }
         public double Op { get; private set; }
         public BeautifulWindow(string background, string foreground, string fontFamily, int fontSize, double opacity) {
             InitializeComponent();
@@ -32,7 +32,7 @@ namespace XStart2._0.Windows {
             vm.Foreground = Fg;
             vm.TextFontFamily = Ff;
             vm.TextFontSize = Fs;
-            vm.Opacity = Op*10;
+            vm.Opacity = Op * 10;
         }
 
         private void CancelBackground_Click(object sender, RoutedEventArgs e) {

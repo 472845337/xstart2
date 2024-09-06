@@ -40,6 +40,8 @@ namespace XStart2._0.ViewModel {
         public double Opacity { get; set; }
         // 根据MainBackground和Opacity生成背景画刷
         public Brush BackgroundBrush { get; set; }
+        // 是否最大化
+        public bool IsMaximum {  get; set; }
         // 主窗口高度
         public double MainHeight { get; set; }
         // 主窗口宽度

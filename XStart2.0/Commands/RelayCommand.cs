@@ -11,10 +11,7 @@ namespace XStart2._0.Commands {
             _canExecute = canExecute;
         }
         public void RaiseCanExecuteChanged() {
-            EventHandler canExecuteChanged = CanExecuteChanged;
-            if (canExecuteChanged != null) {
-                canExecuteChanged.Invoke(this, EventArgs.Empty);
-            }
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public bool CanExecute(object parameter) {

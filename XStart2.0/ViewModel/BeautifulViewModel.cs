@@ -4,7 +4,7 @@ using System.Windows.Media;
 using XStart2._0.Utils;
 
 namespace XStart2._0.ViewModel {
-    internal class BeautifulViewModel : BaseViewModel{
+    internal class BeautifulViewModel : BaseViewModel {
         public ObservableCollection<string> SystemFonts { get; set; }
         [OnChangedMethod(nameof(ConvertBrush))]
         public string Background { get; set; }

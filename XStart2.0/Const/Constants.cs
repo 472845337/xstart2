@@ -55,6 +55,7 @@
         public const string KEY_PROJECT_FOREGROUND = "ProjectForeground";
         public const string KEY_MAIN_FONTFAMILY = "FontFaimly";
         public const string KEY_MAIN_FONTSIZE = "FontSize";
+        public const string KEY_IS_MAXIMUM = "IsMaximum";
         public const string KEY_LEFT = "Left";
         public const string KEY_TOP = "Top";
         public const string KEY_HEIGHT = "Height";

@@ -19,8 +19,8 @@ namespace XStart2._0.Utils {
             return fontNameList;
         }
 
-        internal static bool IsSystemFont(string fontName) { 
-            if(null == fontNameList) {
+        internal static bool IsSystemFont(string fontName) {
+            if (null == fontNameList) {
                 fontNameList = GetSystemFonts();
             }
             return fontNameList.Contains(fontName);

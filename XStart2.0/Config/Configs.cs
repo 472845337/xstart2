@@ -28,6 +28,7 @@ namespace XStart2._0.Config {
         public static string projectForeground;// 项目文本背景
         public static string mainFontFamily;// 主窗口字体
         public static int mainFontSize;// 主窗口字体大小
+        public static bool isMaximum;// 是否最大化
         public static double mainHeight;// 主窗口高
         public static double mainWidth;// 主窗口宽
         public static double mainTop;// 主窗口顶部位置
