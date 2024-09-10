@@ -17,6 +17,7 @@ namespace XStart2._0.Config {
         public static bool mstscRealClose = false;// 远程真实关闭
         public static System.IntPtr CalendarHandler = System.IntPtr.Zero;// 日历窗口句柄
         public static System.IntPtr WeatherHandler = System.IntPtr.Zero;// 天气窗口句柄
+        public static System.IntPtr AboutHandler = System.IntPtr.Zero;// 关于窗口句柄
 
         public static bool inited = false;// 是否初始化
         public static bool mainHeadShow;// 主页面头是否显示
@@ -43,7 +44,8 @@ namespace XStart2._0.Config {
         public static string openType = null;// 启动后打开的类别
         public static string clickType = Constants.CLICK_TYPE_SINGLE;// 默认单击
         public static string rdpModel;// 远程方式
-        public static bool closeBorderHide = true;// 靠边自动隐藏
+        public static bool showInTaskbar;// 显示在任务栏
+        public static bool closeBorderHide;// 靠边自动隐藏
         public static string textEditor;
         public static string urlOpen;
         public static string urlOpenCustomBrowser;
@@ -52,6 +54,7 @@ namespace XStart2._0.Config {
         public static bool hideTitle;
         public static bool oneLineMulti;
         public static bool exitWarn;// 退出提醒
+        public static bool exitButtonType;// 退出按钮类型，true:退出，false:最小化
         public static bool forceExit = false;// 直接退出
         public static int delCount;
         public static System.Tuple<int, int> dpiTurple;

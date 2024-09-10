@@ -6,18 +6,18 @@
         xmlns:local="clr-namespace:XStart2._0.Windows"
         xmlns:helper="clr-namespace:XStart2._0.Helper"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="110" Width="300" WindowStartupLocation="CenterScreen" Topmost="True">
+        Title="{Binding Title}" Height="116" Width="320" WindowStartupLocation="CenterScreen" Topmost="True" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Style="{StaticResource BottomButtonPanel_RowDefinition_Style}"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="口令"/>
-        <PasswordBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" helper:PasswordBoxHelper.Attach="True" helper:PasswordBoxHelper.Password="{Binding Security,Mode=TwoWay}"/>
+        <PasswordBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" helper:PasswordBoxHelper.Attach="True" helper:PasswordBoxHelper.Password="{Binding Security,Mode=TwoWay}" KeyUp="EnterKey"/>
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource FormButtonPanel_Style}">
             <Button Style="{StaticResource BtnConfirm_Style}" Click="CheckSecurity"/>
             <Button Style="{StaticResource BtnCancel_Style}" Click="CancelSecurity"/>

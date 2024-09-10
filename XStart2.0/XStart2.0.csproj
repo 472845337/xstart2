@@ -181,6 +181,7 @@
     <Compile Include="Utils\ColorUtils.cs" />
     <Compile Include="Utils\DateUtil.cs" />
     <Compile Include="Utils\ElementUtils.cs" />
+    <Compile Include="Utils\EventUtils.cs" />
     <Compile Include="Utils\FontUtils.cs" />
     <Compile Include="Utils\GZipUtil.cs" />
     <Compile Include="Utils\HttpUtils.cs" />
@@ -260,6 +261,9 @@
     <Compile Include="View\ImageButton.cs" />
     <Compile Include="View\SliderButton.cs" />
     <Compile Include="View\TextPath.cs" />
+    <Compile Include="Windows\AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\AutoRunWindow.xaml.cs">
       <DependentUpon>AutoRunWindow.xaml</DependentUpon>
     </Compile>
@@ -366,6 +370,10 @@
     <Page Include="Resources\SliderButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AutoRunWindow.xaml">
       <SubType>Designer</SubType>
@@ -510,9 +518,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Files\Audio\*.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Files\Doc\*.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Files\Icons\*.ico">

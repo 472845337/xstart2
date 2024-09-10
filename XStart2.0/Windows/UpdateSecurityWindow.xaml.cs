@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using XStart2._0.Const;
+using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 
 namespace XStart2._0.Windows {
@@ -44,6 +45,24 @@ namespace XStart2._0.Windows {
 
         private void CancelSecurity(object sender, RoutedEventArgs e) {
             DialogResult = false;
+        }
+
+        private void PriPasswordBox_KeyUp(object sender, System.Windows.Input.KeyEventArgs e) {
+            if(EventUtils.InputKey(sender, e, System.Windows.Input.Key.Enter)) {
+                // 自动置到下一个控件了，无需处理
+            }
+        }
+
+        private void PasswordBox_KeyUp(object sender, System.Windows.Input.KeyEventArgs e) {
+            if (EventUtils.InputKey(sender, e, System.Windows.Input.Key.Enter)) {
+                // 自动置到下一个控件了，无需处理
+            }
+        }
+
+        private void ConfirmPasswordBox_KeyUp(object sender, System.Windows.Input.KeyEventArgs e) {
+            if(EventUtils.InputKey(sender, e, System.Windows.Input.Key.Enter)) {
+                SaveSecurity(sender, e);
+            }
         }
     }
 }

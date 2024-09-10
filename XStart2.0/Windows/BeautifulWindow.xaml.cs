@@ -48,7 +48,7 @@ namespace XStart2._0.Windows {
         }
 
         private void ImageBackground_Click(object sender, RoutedEventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            OpenFileDialog openFileDialog = new OpenFileDialog { Filter = "图片文件|*.jpg;*.jpeg;*.bmp;*.png" };
             if (System.Windows.Forms.DialogResult.OK == openFileDialog.ShowDialog()) {
                 vm.Background = openFileDialog.FileName;
             }

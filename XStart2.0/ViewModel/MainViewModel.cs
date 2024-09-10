@@ -85,6 +85,8 @@ namespace XStart2._0.ViewModel {
         public bool AutoRun { get; set; }
         public bool RunDirectly { get; set; }
         public bool ExitWarn { get; set; }
+        public bool ExitButtonType { get; set; }// 关闭按钮类型，true:表示退出，false:表示最小化
+        public bool ShowInTaskbar {  get; set; }
         [OnChangedMethod(nameof(AutoHideToggle))]
         public bool CloseBorderHide { get; set; }
         [DoNotNotify]

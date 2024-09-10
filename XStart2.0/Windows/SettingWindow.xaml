@@ -6,7 +6,7 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:view="clr-namespace:XStart2._0.View"
         mc:Ignorable="d"
-        Title="选项" Height="460" Width="500" Icon="pack://application:,,,/Files/Icons/App/setting.ico" Topmost="{Binding TopMost}" ResizeMode="NoResize">
+        Title="选项" Height="480" Width="500" Icon="pack://application:,,,/Files/Icons/App/setting.ico" Topmost="{Binding TopMost}" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -21,59 +21,75 @@
                     </Grid.RowDefinitions>
                     <GroupBox Grid.Row="0" Header="开关配置" Margin="5">
                         <WrapPanel>
-                            <Grid Margin="5">
+                            <Grid Margin="3">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="80"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="显示头:" HorizontalAlignment="Right"/>
+                                <Label Grid.Column="0" Content="显示头" HorizontalAlignment="Right"/>
                                 <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding MainHeadShow,Mode=TwoWay}"  Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                             </Grid>
-                            <Grid Margin="5">
+                            <Grid Margin="3">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="80"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="程序置顶:" HorizontalAlignment="Right"/>
+                                <Label Grid.Column="0" Content="置顶" HorizontalAlignment="Right"/>
                                 <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding MainTopMost,Mode=TwoWay}"  Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                             </Grid>
-                            <Grid Margin="5">
+                            <Grid Margin="3">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="80"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="操作音效:" HorizontalAlignment="Right"/>
+                                <Label Grid.Column="0" Content="音效" HorizontalAlignment="Right"/>
                                 <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="开" OffLabel="关" Width="55" ButtonWidth="25" IsChecked="{Binding Audio,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                             </Grid>
-                            <Grid Margin="5">
+                            <Grid Margin="3">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="80"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="靠边隐藏:" HorizontalAlignment="Right"/>
+                                <Label Grid.Column="0" Content="任务栏" HorizontalAlignment="Right"/>
+                                <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="显示" OffLabel="隐藏" Width="70" ButtonWidth="25" IsChecked="{Binding ShowInTaskbar,Mode=TwoWay}"  Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                            </Grid>
+                            <Grid Margin="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="靠边隐藏" HorizontalAlignment="Right"/>
                                 <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding CloseBorderHide,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                             </Grid>
-                            <Grid Margin="5" Height="26">
+                            <Grid Margin="3">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="80"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="开机启动:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Label Grid.Column="0" Content="开机启动" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                 <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding AutoRun,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                             </Grid>
-                            <Grid Margin="5">
+                            <Grid Margin="3">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="80"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="退出提醒:" HorizontalAlignment="Right"/>
+                                <Label Grid.Column="0" Content="退出提醒" HorizontalAlignment="Right"/>
                                 <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding ExitWarn,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
+                            </Grid>
+                            <Grid Margin="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="关闭按钮" HorizontalAlignment="Right"/>
+                                <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="退出" OffLabel="最小化" Width="75" ButtonWidth="25" IsChecked="{Binding ExitButtonType,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                             </Grid>
                         </WrapPanel>
                     </GroupBox>
-                    <GroupBox Grid.Row="1" Header="项目运行" Margin="5">
+                    <GroupBox Grid.Row="1" Header="项目运行" Margin="3">
                         <StackPanel>
-                            <Grid Margin="5">
+                            <Grid Margin="3">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
@@ -82,11 +98,11 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="自启动:" HorizontalAlignment="Right"/>
+                                <Label Grid.Column="0" Content="自启动" HorizontalAlignment="Right"/>
                                 <view:SliderButton Grid.Column="1" OnLabel="自动" OffLabel="人工" Width="65" ButtonWidth="25" IsChecked="{Binding RunDirectly,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center" Margin="8,0"/>
-                                <Label Grid.Column="2" Content="运行方式:" HorizontalAlignment="Right"/>
+                                <Label Grid.Column="2" Content="运行方式" HorizontalAlignment="Right"/>
                                 <view:SliderButton Grid.Column="3" OnLabel="单击" OffLabel="双击" Width="65" ButtonWidth="25" IsChecked="{Binding ClickType,Converter={StaticResource ClickTypeConverter},Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center" Margin="8,0"/>
-                                <Label Grid.Column="4" Content="远程桌面:" HorizontalAlignment="Right"/>
+                                <Label Grid.Column="4" Content="远程桌面" HorizontalAlignment="Right"/>
                                 <view:SliderButton Grid.Column="5" OnLabel="个性" OffLabel="系统" Width="65" ButtonWidth="25" IsChecked="{Binding RdpModel,Converter={StaticResource RdpModelConverter},Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center" Margin="8,0"/>
                             </Grid>
                             <Grid Height="36">
@@ -99,7 +115,7 @@
                                 <TextBox VerticalContentAlignment="Center" Grid.Column="1" Margin="5" Text="{Binding TextEditor}"/>
                                 <Button Content="..." Grid.Column="2" Margin="5" Click="SelectTextEditor_Click"/>
                             </Grid>
-                            <GroupBox Header="打开链接" Margin="5">
+                            <GroupBox Header="打开链接">
                                 <StackPanel>
                                     <RadioButton GroupName="UrlOpen" Content="默认浏览器" Style="{StaticResource RadioButton_Style}" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlDefault',Mode=TwoWay}"/>
                                     <RadioButton GroupName="UrlOpen" Content="Edge浏览器" Style="{StaticResource RadioButton_Style}" IsChecked="{Binding UrlOpen,Converter={StaticResource UrlOpenConverter},ConverterParameter='UrlEdge',Mode=TwoWay}"/>
@@ -148,7 +164,7 @@
                                 <ColumnDefinition Width="60"/>
                                 <ColumnDefinition Width="80"/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Content="排列:" HorizontalAlignment="Right"/>
+                            <Label Grid.Column="0" Content="排列" HorizontalAlignment="Right"/>
                             <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="横排" OffLabel="竖排" Width="65" ButtonWidth="25" IsChecked="{Binding Orientation,Converter={StaticResource Orientation2BoolConverter}, Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                         </Grid>
                         <Grid Margin="5">
@@ -156,7 +172,7 @@
                                 <ColumnDefinition Width="60"/>
                                 <ColumnDefinition Width="80"/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Content="隐藏标题:" HorizontalAlignment="Right"/>
+                            <Label Grid.Column="0" Content="隐藏标题" HorizontalAlignment="Right"/>
                             <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding HideTitle,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                         </Grid>
                         <Grid Margin="5">
@@ -164,7 +180,7 @@
                                 <ColumnDefinition Width="60"/>
                                 <ColumnDefinition Width="80"/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Content="一行多个:" HorizontalAlignment="Right"/>
+                            <Label Grid.Column="0" Content="一行多个" HorizontalAlignment="Right"/>
                             <view:SliderButton Grid.Row="3" Grid.Column="1" OnLabel="是" OffLabel="否" Width="55" ButtonWidth="25" IsChecked="{Binding OneLineMulti,Mode=TwoWay}" Style="{StaticResource SliderButton_Style}" HorizontalAlignment="Center"/>
                         </Grid>
                     </WrapPanel>

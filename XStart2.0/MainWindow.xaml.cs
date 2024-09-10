@@ -18,7 +18,6 @@ using XStart2._0.Services;
 using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 using XStart2._0.Windows;
-using static XStart2._0.Utils.WinApi;
 
 namespace XStart2._0 {
     /// <summary>
@@ -71,14 +70,14 @@ namespace XStart2._0 {
 
         private void ResizePressed(object sender, MouseEventArgs e) {
             FrameworkElement element = sender as FrameworkElement;
-            ResizeDirection direction = (ResizeDirection)Enum.Parse(typeof(ResizeDirection), element.Name.Replace("Resize", ""));
+            WinApi.ResizeDirection direction = (WinApi.ResizeDirection)Enum.Parse(typeof(WinApi.ResizeDirection), element.Name.Replace("Resize", string.Empty));
             if (e.LeftButton == MouseButtonState.Pressed) {
                 ResizeWindow(direction);
             }
         }
 
-        private void ResizeWindow(ResizeDirection direction) {
-            DllUtils.SendMessage(Configs.Handler, WM_SYSCOMMAND, (IntPtr)(61440 + direction), IntPtr.Zero);
+        private void ResizeWindow(WinApi.ResizeDirection direction) {
+            DllUtils.SendMessage(Configs.Handler, WinApi.WM_SYSCOMMAND, (IntPtr)(61440 + direction), IntPtr.Zero);
         }
 
         private void Maximum_Click(object sender, RoutedEventArgs e) {
@@ -95,11 +94,16 @@ namespace XStart2._0 {
         }
 
         private void Minimum_Click(object sender, RoutedEventArgs e) {
-            WindowState = WindowState.Minimized;
+            this.Visibility = Visibility.Collapsed;
         }
 
         private void Close_Click(object sender, RoutedEventArgs e) {
-            Close();
+            if (mainViewModel.ExitButtonType) {
+                Close();
+            } else {
+                NotifyUtils.ShowNotification("关闭按钮配置了最小化，调整请在配置面板中修改！");
+                Minimum_Click(sender, e);
+            }
         }
 
         /// <summary>
@@ -197,6 +201,8 @@ namespace XStart2._0 {
             string autoRun = iniData[Constants.SECTION_CONFIG][Constants.KEY_AUTO_RUN];
             string runDirectly = iniData[Constants.SECTION_CONFIG][Constants.KEY_RUN_DIRECTLY];
             string exitWarn = iniData[Constants.SECTION_CONFIG][Constants.KEY_EXIT_WARN];
+            string exitButtonType = iniData[Constants.SECTION_CONFIG][Constants.KEY_EXIT_BUTTON_TYPE];
+            string showInTaskbar = iniData[Constants.SECTION_CONFIG][Constants.KEY_SHOW_IN_TASKBAR];
             string closeBorderHide = iniData[Constants.SECTION_CONFIG][Constants.KEY_CLOSE_BORDER_HIDE];
             string textEditor = iniData[Constants.SECTION_CONFIG][Constants.KEY_TEXT_EDITOR];
             string urlOpen = iniData[Constants.SECTION_CONFIG][Constants.KEY_URL_OPEN];
@@ -216,6 +222,8 @@ namespace XStart2._0 {
             Configs.autoRun = !string.IsNullOrEmpty(autoRun) && Convert.ToBoolean(autoRun);
             Configs.runDirectly = string.IsNullOrEmpty(runDirectly) ? false : Convert.ToBoolean(runDirectly);
             Configs.exitWarn = string.IsNullOrEmpty(exitWarn) || Convert.ToBoolean(exitWarn);
+            Configs.exitButtonType = !string.IsNullOrEmpty(exitButtonType) && Convert.ToBoolean(exitButtonType);
+            Configs.showInTaskbar = string.IsNullOrEmpty(showInTaskbar) || Convert.ToBoolean(showInTaskbar);
             Configs.closeBorderHide = string.IsNullOrEmpty(closeBorderHide) || Convert.ToBoolean(closeBorderHide);
             Configs.textEditor = textEditor;
             Configs.urlOpen = string.IsNullOrEmpty(urlOpen) ? Constants.URL_OPEN_DEFAULT : urlOpen;
@@ -236,10 +244,12 @@ namespace XStart2._0 {
             mainViewModel.AutoRun = Configs.autoRun;
             mainViewModel.RunDirectly = Configs.runDirectly;
             mainViewModel.ExitWarn = Configs.exitWarn;
+            mainViewModel.ExitButtonType = Configs.exitButtonType;
 
             #region 自动隐藏
             mainViewModel.AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
             mainViewModel.AutoHideTimer.Tick += AutoHideTimer_Tick;
+            mainViewModel.ShowInTaskbar = Configs.showInTaskbar;
             mainViewModel.CloseBorderHide = Configs.closeBorderHide;
             #endregion
 
@@ -460,15 +470,15 @@ namespace XStart2._0 {
             notifyIcon.DoubleClick += MainWindow_Show;
             notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu();
 
-            notifyIcon.ContextMenu.MenuItems.Add("显示窗口", MainWindow_Show);
-            notifyIcon.ContextMenu.MenuItems.Add("窗口锁定", LockApp_Click);
-            notifyIcon.ContextMenu.MenuItems.Add("设置", Open_Setting);
-            notifyIcon.ContextMenu.MenuItems.Add("-");
-            notifyIcon.ContextMenu.MenuItems.Add("日历", Calendar_Click);
-            notifyIcon.ContextMenu.MenuItems.Add("文本编辑器", OpenNotePad_Click);
-            notifyIcon.ContextMenu.MenuItems.Add("天气", Weather_Click);
-            notifyIcon.ContextMenu.MenuItems.Add("-");
-            notifyIcon.ContextMenu.MenuItems.Add("退出", WindowCloseMenu_Click);
+            notifyIcon.ContextMenu.MenuItems.Add(0, new System.Windows.Forms.MenuItem("显示窗口", MainWindow_Show));
+            notifyIcon.ContextMenu.MenuItems.Add(1, new System.Windows.Forms.MenuItem("窗口锁定", LockApp_Click));
+            notifyIcon.ContextMenu.MenuItems.Add(2, new System.Windows.Forms.MenuItem("设置", Open_Setting));
+            notifyIcon.ContextMenu.MenuItems.Add(3, new System.Windows.Forms.MenuItem("-"));
+            notifyIcon.ContextMenu.MenuItems.Add(4, new System.Windows.Forms.MenuItem("日历", Calendar_Click));
+            notifyIcon.ContextMenu.MenuItems.Add(5, new System.Windows.Forms.MenuItem("文本编辑器", OpenNotePad_Click));
+            notifyIcon.ContextMenu.MenuItems.Add(6, new System.Windows.Forms.MenuItem("天气", Weather_Click));
+            notifyIcon.ContextMenu.MenuItems.Add(7, new System.Windows.Forms.MenuItem("-"));
+            notifyIcon.ContextMenu.MenuItems.Add(8, new System.Windows.Forms.MenuItem("退出", WindowCloseMenu_Click));
             #endregion
             Configs.Handler = new WindowInteropHelper(this).Handle;
             Configs.inited = true;
@@ -492,9 +502,15 @@ namespace XStart2._0 {
                 Hide();
             }
             CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入管理员口令", Configs.admin.Password, "关闭该窗口将退出程序！");
+            if (Configs.inited) {
+                // 图标上的按钮失效处理
+                SetNotifyIconEnable(false);
+            }
             if (true == checkSecurityWindow.ShowDialog()) {
                 if (!isInit) {
                     Show();
+                    IsAllShow = true;
+                    SetNotifyIconEnable(true);
                 }
             } else {
                 Configs.forceExit = true;
@@ -503,6 +519,15 @@ namespace XStart2._0 {
             }
             checkSecurityWindow.Close();
             OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
+        }
+
+        private void SetNotifyIconEnable(bool enable) {
+            notifyIcon.ContextMenu.MenuItems[0].Enabled = enable;
+            notifyIcon.ContextMenu.MenuItems[1].Enabled = enable;
+            notifyIcon.ContextMenu.MenuItems[2].Enabled = enable;
+            notifyIcon.ContextMenu.MenuItems[4].Enabled = enable;
+            notifyIcon.ContextMenu.MenuItems[5].Enabled = enable;
+            notifyIcon.ContextMenu.MenuItems[6].Enabled = enable;
         }
 
         private void AutoRunProjectWindow(List<Project> autoRunProjects, bool isStart = true) {
@@ -548,6 +573,7 @@ namespace XStart2._0 {
             IntPtr handle = new WindowInteropHelper(this).Handle;
             DllUtils.ShowWindow(handle, WinApi.SW_NORMAL);
             DllUtils.SwitchToThisWindow(handle, true);
+            this.Visibility = Visibility.Visible;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
@@ -558,7 +584,7 @@ namespace XStart2._0 {
 
             // 配置以及窗口数据保存
             SaveSetting();
-            if (!Configs.forceExit && Configs.exitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+            if (!Configs.forceExit && mainViewModel.ExitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.None, MessageBoxOptions.DefaultDesktopOnly)) {
                 // 取消退出
                 e.Cancel = true;
             } else {
@@ -580,6 +606,10 @@ namespace XStart2._0 {
                 // 日历窗口关闭
                 if (Configs.CalendarHandler.ToInt32() > 0) {
                     DllUtils.SendMessage(Configs.CalendarHandler, WinApi.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                }
+                // 关于窗口关闭
+                if(Configs.AboutHandler.ToInt32() > 0) {
+                    DllUtils.SendMessage(Configs.AboutHandler, WinApi.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
                 }
                 #endregion
                 // 保存数据的调整（当前打开的类别，类别中打开的栏目，排序）
@@ -637,7 +667,12 @@ namespace XStart2._0 {
         }
 
         private void WindowCloseMenu_Click(object sender, EventArgs e) {
-            if (!Configs.exitWarn || MessageBoxResult.OK == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+            if (mainViewModel.ExitWarn) {
+                if (MessageBoxResult.OK == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.None, MessageBoxOptions.DefaultDesktopOnly)) {
+                    Configs.forceExit = true;
+                    Application.Current.Shutdown();
+                }
+            } else {
                 Configs.forceExit = true;
                 Application.Current.Shutdown();
             }
@@ -808,6 +843,8 @@ namespace XStart2._0 {
                 mainViewModel.AutoRun = settingVM.AutoRun;
                 mainViewModel.RunDirectly = settingVM.RunDirectly;
                 mainViewModel.ExitWarn = settingVM.ExitWarn;
+                mainViewModel.ExitButtonType = settingVM.ExitButtonType;
+                mainViewModel.ShowInTaskbar = settingVM.ShowInTaskbar;
                 mainViewModel.CloseBorderHide = settingVM.CloseBorderHide;
                 mainViewModel.ClickType = settingVM.ClickType;
                 mainViewModel.RdpModel = settingVM.RdpModel;
@@ -1020,8 +1057,8 @@ namespace XStart2._0 {
         }
         // 解锁类别
         private void UnlockType_Click(object sender, RoutedEventArgs e) {
-            Button unlockButton = sender as Button;
-            string typeSection = unlockButton.Tag as string;
+            Control unlockControl = sender as Control;
+            string typeSection = unlockControl.Tag as string;
             Bean.Type type = XStartService.TypeDic[typeSection];
             // 比较密码是否匹配
             if (type.Password.Equals(type.UnlockSecurity)) {
@@ -1222,9 +1259,9 @@ namespace XStart2._0 {
         }
         // 解锁栏目
         private void UnlockColumn_Click(object sender, RoutedEventArgs e) {
-            Button unlockButton = sender as Button;
-            string columnSection = unlockButton.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
-            string typeSection = unlockButton.GetValue(ElementParamHelper.TypeSectionProperty) as string;
+            Control unlockControl = sender as Control;
+            string columnSection = unlockControl.GetValue(ElementParamHelper.ColumnSectionProperty) as string;
+            string typeSection = unlockControl.GetValue(ElementParamHelper.TypeSectionProperty) as string;
             Column column = XStartService.TypeDic[typeSection].ColumnDic[columnSection];
             // 比较密码是否匹配
             if (column.Password.Equals(column.UnlockSecurity)) {
@@ -1348,7 +1385,7 @@ namespace XStart2._0 {
                 ProjectButton_Open(sender);
             }
         }
-        private void ProjectButton_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+        private void ProjectButton_DoubleClick(object sender, MouseButtonEventArgs e) {
             if (Constants.CLICK_TYPE_DOUBLE.Equals(mainViewModel.ClickType)) {
                 // 运行项目
                 ProjectButton_Open(sender);
@@ -1602,9 +1639,11 @@ namespace XStart2._0 {
                 mainViewModel.Audio = true;
                 mainViewModel.ClickType = Constants.CLICK_TYPE_SINGLE;
                 mainViewModel.RdpModel = Constants.RDP_MODEL_CUSTOM;
+                mainViewModel.ShowInTaskbar = true;
                 mainViewModel.CloseBorderHide = false;
                 mainViewModel.AutoRun = true;
                 mainViewModel.ExitWarn = true;
+                mainViewModel.ExitButtonType = false;
                 mainViewModel.TextEditor = string.Empty;
                 mainViewModel.UrlOpen = Constants.URL_OPEN_DEFAULT;
                 mainViewModel.IconSize = Constants.ICON_SIZE_32;
@@ -1637,18 +1676,14 @@ namespace XStart2._0 {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ShowAbout(object sender, RoutedEventArgs e) {
-            StringBuilder aboutSb = new StringBuilder();
-            string[] aboutLines = File.ReadAllLines(Configs.AppStartPath + Constants.ABOUT_FILE, Encoding.UTF8);
-            int height = 54;
-            foreach (string line in aboutLines) {
-                if (aboutSb.Length > 0) {
-                    aboutSb.Append("\r\n");
-                }
-                aboutSb.Append(line);
-                height += 15;
+            if (Configs.AboutHandler.ToInt32() > 0) {
+                // 打开当前窗口
+                DllUtils.SwitchToThisWindow(Configs.AboutHandler, true);
+                DllUtils.ShowWindow(Configs.AboutHandler, WinApi.SW_NORMAL);
+            } else {
+                AboutWindow aboutWindow = new AboutWindow();
+                aboutWindow.Show();
             }
-            NotifyUtils.ShowNotification(aboutSb.ToString(), Colors.LightBlue, height, "关于", 10);
-            e.Handled = true;
         }
 
         //计时执行的程序
@@ -1760,6 +1795,8 @@ namespace XStart2._0 {
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_AUTO_RUN, ref Configs.autoRun, mainViewModel.AutoRun);// 自启动
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_RUN_DIRECTLY, ref Configs.runDirectly, mainViewModel.RunDirectly);// 自启动直接运行
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_EXIT_WARN, ref Configs.exitWarn, mainViewModel.ExitWarn);// 退出警告
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_EXIT_BUTTON_TYPE, ref Configs.exitButtonType, mainViewModel.ExitButtonType);// 关闭按钮类型
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_SHOW_IN_TASKBAR, ref Configs.showInTaskbar, mainViewModel.ShowInTaskbar);// 显示任务栏
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_BORDER_HIDE, ref Configs.closeBorderHide, mainViewModel.CloseBorderHide);// 靠边隐藏
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_TEXT_EDITOR, ref Configs.textEditor, mainViewModel.TextEditor);// 靠边隐藏
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_CONFIG, Constants.KEY_URL_OPEN, ref Configs.urlOpen, mainViewModel.UrlOpen);// 浏览器打开链接
@@ -2089,6 +2126,7 @@ namespace XStart2._0 {
 
         #region 用户头像和昵称修改
         private void User_Click(object sender, RoutedEventArgs e) {
+            OpenNewWindowUtils.SetTopmost(this);
             UserWindow userWindow = new UserWindow(mainViewModel.AvatarPath, mainViewModel.GifSpeedRatio, mainViewModel.NickName, mainViewModel.AvatarSize) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
             if (true == userWindow.ShowDialog()) {
                 bool isChange = false;
@@ -2118,7 +2156,9 @@ namespace XStart2._0 {
                 }
             }
             userWindow.Close();
+            OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
         }
+        
         #endregion
 
         #region 项目拖拽
@@ -2398,6 +2438,37 @@ namespace XStart2._0 {
         private void LockApp_Click(object sender, EventArgs e) {
             // 锁定窗口
             OpenCheckSecurityWindow();
+        }
+        /// <summary>
+        /// 栏目标题回车键切换选中状态屏蔽
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HeaderSite_PreviewKeyDown(object sender, KeyEventArgs e) {
+            ToggleButton toggleButton = sender as ToggleButton;
+            if (toggleButton != null && null != toggleButton.IsChecked && (bool)toggleButton.IsChecked) {
+                if(EventUtils.InputKey(sender, e, Key.Enter)) {
+                    // 当前togglebutton是选中状态时，回车不执行事件传递
+                    e.Handled = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 类别解锁回车
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PasswordBox_KeyUp(object sender, KeyEventArgs e) {
+            if(EventUtils.InputKey(sender, e, Key.Enter)) {
+                UnlockType_Click(sender, e);
+            }
+        }
+
+        private void ColumnPasswordBox_KeyUp(object sender, KeyEventArgs e) {
+            if(EventUtils.InputKey(sender, e, Key.Enter)) {
+                UnlockColumn_Click(sender, e);
+            }
         }
     }
 }

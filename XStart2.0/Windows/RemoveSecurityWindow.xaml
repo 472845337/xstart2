@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:XStart2._0.Windows"
         xmlns:helper="clr-namespace:XStart2._0.Helper"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="120" Width="400" ResizeMode="NoResize" Icon="pack://application:,,,/Files/Icons/App/security_del.ico">
+        Title="{Binding Title}" Height="116" Width="320" ResizeMode="NoResize" Icon="pack://application:,,,/Files/Icons/App/security_del.ico">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="60"/>
@@ -17,7 +17,10 @@
             <RowDefinition Style="{StaticResource BottomButtonPanel_RowDefinition_Style}"/>
         </Grid.RowDefinitions>
         <TextBlock Style="{StaticResource FormLabel_Style}" Grid.Row="0" Grid.Column="0" Text="原口令："/>
-        <PasswordBox Style="{StaticResource FormValue_Style}" Grid.Row="0" Grid.Column="1" helper:PasswordBoxHelper.Attach="True" helper:PasswordBoxHelper.Password="{Binding PriSecurity, Mode=TwoWay}"/>
+        <PasswordBox Style="{StaticResource FormValue_Style}" Grid.Row="0" Grid.Column="1" 
+                     helper:PasswordBoxHelper.Attach="True" 
+                     helper:PasswordBoxHelper.Password="{Binding PriSecurity, Mode=TwoWay}"
+                     KeyUp="PasswordBox_KeyUp"/>
         <StackPanel Style="{StaticResource FormButtonPanel_Style}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <Button Style="{StaticResource BtnConfirm_Style}" Click="SaveSecurity"/>
             <Button Style="{StaticResource BtnCancel_Style}" Click="CancelSecurity"/>

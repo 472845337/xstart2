@@ -20,6 +20,8 @@ namespace XStart2._0.Windows {
             settingVM.AutoRun = mainVm.AutoRun;
             settingVM.RunDirectly = mainVm.RunDirectly;
             settingVM.ExitWarn = mainVm.ExitWarn;
+            settingVM.ExitButtonType = mainVm.ExitButtonType;
+            settingVM.ShowInTaskbar = mainVm.ShowInTaskbar;
             settingVM.CloseBorderHide = mainVm.CloseBorderHide;
             settingVM.ClickType = mainVm.ClickType;
             settingVM.RdpModel = mainVm.RdpModel;

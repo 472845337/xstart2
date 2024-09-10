@@ -1,6 +1,9 @@
 ﻿
 using System.Windows;
+using System.Windows.Controls;
+using XStart2._0.Config;
 using XStart2._0.Const;
+using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 
 
@@ -27,11 +30,22 @@ namespace XStart2._0.Windows {
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
             // 口令校验窗口关闭前，退出提醒
-            if ((null == DialogResult || false == DialogResult) && !string.IsNullOrEmpty(vm.ExitMsg)) {
+            if (!Configs.forceExit && (null == DialogResult || false == DialogResult) && !string.IsNullOrEmpty(vm.ExitMsg)) {
                 // 取消或退出时进行提醒
-                if (MessageBoxResult.Cancel == MessageBox.Show(vm.ExitMsg, Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                if (MessageBoxResult.Cancel == MessageBox.Show(vm.ExitMsg, Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.No, MessageBoxOptions.DefaultDesktopOnly)) {
                     e.Cancel = true;
                 }
+            }
+        }
+
+        /// <summary>
+        /// 搜索框回车执行查询
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void EnterKey(object sender, System.Windows.Input.KeyEventArgs e) {
+            if(EventUtils.InputKey(sender, e, System.Windows.Input.Key.Enter)) {
+                CheckSecurity(sender, e);
             }
         }
 

@@ -13,7 +13,6 @@
         public const string RDP_MODEL_CUSTOM = "2";// 个性远程方式
 
         public const string APP_ICON = "Files/Icons/xstart2.ico";
-        public const string ABOUT_FILE = "Files/Doc/about.txt";
         public const string AUDIO_CHANGE = "Files/Audio/Change.wav";
         public const string AUDIO_START = "Files/Audio/Start.wav";
         public const string CITY_JSON_FILE = "Files/Citys/city.json";
@@ -37,6 +36,7 @@
         public const string KEY_AUTO_RUN = "AutoRun";
         public const string KEY_RUN_DIRECTLY = "RunDirectly";
         public const string KEY_EXIT_WARN = "ExitWarn";
+        public const string KEY_EXIT_BUTTON_TYPE = "ExitButtonType";
         public const string KEY_STYLE = "Style";
         public const string KEY_OPEN_TYPE = "OpenType";// 启动后打开
         public const string KEY_URL_OPEN = "UrlOpen";
@@ -45,6 +45,7 @@
         public const string KEY_ORIENTATION = "Orientation";// 排列方式，横排或竖排
         public const string KEY_HIDE_TITLE = "HideTitle";// 隐藏标题
         public const string KEY_ONE_LINE_MULTI = "OneLineMulti";// 一行多个
+        public const string KEY_SHOW_IN_TASKBAR = "ShowInTaskbar";// 显示任务栏图标
         public const string KEY_CLOSE_BORDER_HIDE = "CloseBorderHide";// 靠边自动隐藏
         public const string KEY_TEXT_EDITOR = "TextEditor";// 文本编辑器
         public const string KEY_DEL_COUNT = "DelCount";// 删除次数
