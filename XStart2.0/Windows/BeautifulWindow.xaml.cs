@@ -47,6 +47,14 @@ namespace XStart2._0.Windows {
             }
         }
 
+        private void GradientBackground_Click(object sender, RoutedEventArgs e) {
+            // 渐变色框
+            GradientColorWindow gradientColorWindow = new GradientColorWindow(Bg) { Owner = this};
+            if (true == gradientColorWindow.ShowDialog()) {
+                vm.Background = gradientColorWindow.GradientColor;
+            }
+        }
+
         private void ImageBackground_Click(object sender, RoutedEventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog { Filter = "图片文件|*.jpg;*.jpeg;*.bmp;*.png" };
             if (System.Windows.Forms.DialogResult.OK == openFileDialog.ShowDialog()) {

@@ -10,6 +10,7 @@
         <Style x:Key="RichTextBox_Style" TargetType="RichTextBox">
             <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
             <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="Padding" Value="10"/>
         </Style>
         <Style x:Key="Paragraph_Header_Style" TargetType="{x:Type Paragraph}">
             <Setter Property="FontSize" Value="16"/>
@@ -29,7 +30,7 @@
         </Style>
     </Window.Resources>
     <TabControl>
-        <TabItem Header="功能介绍">
+        <TabItem Style="{StaticResource TabItem_Style}" Header="功能介绍">
             <RichTextBox Style="{StaticResource RichTextBox_Style}">
                 <FlowDocument>
                     <Paragraph Style="{StaticResource Paragraph_Header_Style}">X启动</Paragraph>
@@ -63,7 +64,7 @@
                 </FlowDocument>
             </RichTextBox>
         </TabItem>
-        <TabItem Header="用户服务条款">
+        <TabItem Style="{StaticResource TabItem_Style}" Header="用户服务条款">
             <RichTextBox Style="{StaticResource RichTextBox_Style}">
                 <FlowDocument>
                     <Paragraph Style="{StaticResource Paragraph_Header_Style}">任何个人和团体可免费使用该软件</Paragraph>
@@ -78,7 +79,7 @@
                 </FlowDocument>
             </RichTextBox>
         </TabItem>
-        <TabItem Header="隐私政策">
+        <TabItem Style="{StaticResource TabItem_Style}" Header="隐私政策">
             <RichTextBox Style="{StaticResource RichTextBox_Style}">
                 <FlowDocument>
                     <Paragraph Style="{StaticResource Paragraph_Header_Style}">

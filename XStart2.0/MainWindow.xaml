@@ -224,7 +224,7 @@
                 <Image Source="pack://application:,,,/Files/xstart2.ico" Width="22" Height="22" Margin="3"/>
                 <Label Content="X启动" Margin="2 0 0 0" FontSize="15"/>
 
-                <!-- 最关闭按钮 -->
+                <!-- 关闭按钮 -->
                 <Button Style="{StaticResource CloseButton_Style}" DockPanel.Dock="Right" Click="Close_Click">
                     <Button.Content>
                         <Path Stroke="{Binding Foreground,RelativeSource={RelativeSource AncestorLevel=1, AncestorType={x:Type Button}}}" Data="M0,0 L0,0 10,10 M0,10 L0,10 10,0"/>
@@ -248,10 +248,11 @@
                         <Path Stroke="{Binding Foreground,RelativeSource={RelativeSource AncestorLevel=1, AncestorType={x:Type Button}}}" Data="M0,0 L0,0 10,0"/>
                     </Button.Content>
                 </Button>
+                <!-- 皮肤菜单 -->
                 <Menu DockPanel.Dock="Right" Width="25" Background="Transparent">
-                    <MenuItem>
+                    <MenuItem ToolTip="个性装扮">
                         <MenuItem.Icon>
-                            <Image Source="/Files/Icons/App/theme.ico"/>
+                            <Image Source="/Files/Icons/App/Skin.ico"/>
                         </MenuItem.Icon>
                         <MenuItem Header="主题">
                             <MenuItem.Icon>
@@ -697,13 +698,13 @@
                                         <Image Source="/Files/Icons/App/security_add.ico"/>
                                     </MenuItem.Icon>
                                 </MenuItem>
-                                <MenuItem Header="移除口令" Click="RemoveAdminSecurity_Click">
+                                <MenuItem Header="移除口令" Click="RemoveAdminSecurity_Click" IsEnabled="{Binding Security,Converter={StaticResource IsNull2BoolConverter}, ConverterParameter='negative'}">
                                     <MenuItem.Icon>
                                         <Image Source="/Files/Icons/App/security_del.ico"/>
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <Separator/>
-                                <MenuItem Header="窗口锁定" Click="LockApp_Click">
+                                <MenuItem Header="窗口锁定" Click="LockApp_Click" IsEnabled="{Binding Security, Converter={StaticResource IsNull2BoolConverter},ConverterParameter='negative'}">
                                     <MenuItem.Icon>
                                         <Image Source="/Files/Icons/App/lock.ico"/>
                                     </MenuItem.Icon>

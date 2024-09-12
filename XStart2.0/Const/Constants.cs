@@ -210,6 +210,8 @@
         public const string WINDOW_THEME_BLACK = "black";
         public const string WINDOW_THEME_CUSTOM = "custom";
 
+        public const string DEFAULT_GRADIENT_COLOR = "#FF0000:0;#00FF00:0.5;#0000FF:1;0";
+
         public const int ANCHOR_STYLE_NONE = 0;
         public const int ANCHOR_STYLE_TOP = 1;
         public const int ANCHOR_STYLE_LEFT = 2;

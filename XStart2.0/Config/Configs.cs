@@ -18,10 +18,11 @@ namespace XStart2._0.Config {
         public static System.IntPtr CalendarHandler = System.IntPtr.Zero;// 日历窗口句柄
         public static System.IntPtr WeatherHandler = System.IntPtr.Zero;// 天气窗口句柄
         public static System.IntPtr AboutHandler = System.IntPtr.Zero;// 关于窗口句柄
+        public static System.IntPtr LockHandler = System.IntPtr.Zero;// 锁定窗口句柄
 
         public static bool inited = false;// 是否初始化
         public static bool mainHeadShow;// 主页面头是否显示
-        public static bool typeTabExpand;// 类别标签头是否展开
+        public static bool? typeTabExpand;// 类别标签头是否展开
 
         public static Admin admin;// 管理员信息，头像，昵称，口令
 

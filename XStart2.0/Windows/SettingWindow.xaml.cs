@@ -33,8 +33,7 @@ namespace XStart2._0.Windows {
             settingVM.Orientation = mainVm.Orientation;
             settingVM.HideTitle = mainVm.HideTitle;
             settingVM.OneLineMulti = mainVm.OneLineMulti;
-            // 设置页面置顶
-            settingVM.TopMost = true;
+
             #region 天气配置
             settingVM.WeatherApi = mainVm.WeatherApi;
             settingVM.WeatherImgTheme = mainVm.WeatherImgTheme;
@@ -100,7 +99,7 @@ namespace XStart2._0.Windows {
         /// <param name="e"></param>
         private void BackUp_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
-            BackUpCommand.ShowBackUpWindow();
+            BackUpCommand.ShowBackUpWindow(this);
             OpenNewWindowUtils.RecoverTopmost(this, settingVM);
         }
         /// <summary>
@@ -110,7 +109,7 @@ namespace XStart2._0.Windows {
         /// <param name="e"></param>
         private void Recover_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
-            ResumeCommand.ShowResumeWindow();
+            ResumeCommand.ShowResumeWindow(this);
             OpenNewWindowUtils.RecoverTopmost(this, settingVM);
         }
 
@@ -149,7 +148,6 @@ namespace XStart2._0.Windows {
             OpenRegisterWeb(Constants.WEATHER_VC_REGISTER_URL);
         }
         private void OpenRegisterWeb(string registerUrl) {
-            OpenNewWindowUtils.SetTopmost(this);
             ProjectUtils.ExecuteApp(new Bean.Project() { Kind = Bean.Project.KIND_URL, Path = registerUrl });
         }
         #endregion

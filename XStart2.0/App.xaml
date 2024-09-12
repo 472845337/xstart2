@@ -39,6 +39,8 @@
             <con:WeatherAirConverter x:Key="WeatherAirConverter" />
             <con:WeatherAirColorConverter x:Key="WeatherAirColorConverter" />
             <con:AvatarSizeConverter x:Key="AvatarSizeConverter"/>
+            <con:GradientColorConverter x:Key="GradientColorConverter"/>
+            <con:IsNull2BoolConverter x:Key="IsNull2BoolConverter"/>
             <!-- 鼠标指针-手样式 -->
             <Style x:Key="CursorHand_Style" TargetType="FrameworkElement">
                 <Style.Triggers>
@@ -117,7 +119,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Border>
                         </ControlTemplate>
@@ -191,7 +193,7 @@
                 <Setter Property="Margin" Value="5" />
             </Style>
             <Style x:Key="TabItem_Style" TargetType="TabItem">
-                <Setter Property="Width" Value="60" />
+                <Setter Property="MinWidth" Value="60" />
                 <Setter Property="Height" Value="26" />
             </Style>
             <Style x:Key="BottomButtonPanel_RowDefinition_Style" TargetType="RowDefinition">

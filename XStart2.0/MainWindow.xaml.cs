@@ -38,6 +38,7 @@ namespace XStart2._0 {
         // 模型
         readonly MainViewModel mainViewModel = new MainViewModel();
         private static bool IsAllShow = true;
+        private static bool IsLock = false;
         System.Windows.Forms.NotifyIcon notifyIcon = null;
         public MainWindow() {
             InitializeComponent();
@@ -151,7 +152,7 @@ namespace XStart2._0 {
             string opacityStr = iniData[Constants.SECTION_THEME][Constants.KEY_OPACITY];
             string themeName = iniData[Constants.SECTION_THEME][Constants.KEY_THEME_NAME];
             string themeCustom = iniData[Constants.SECTION_THEME][Constants.KEY_THEME_CUSTOM];
-            string mainBackgroundPath = iniData[Constants.SECTION_THEME][Constants.KEY_MAIN_BACKGROUND];
+            string mainBackground = iniData[Constants.SECTION_THEME][Constants.KEY_MAIN_BACKGROUND];
             string projectForeground = iniData[Constants.SECTION_THEME][Constants.KEY_PROJECT_FOREGROUND];
             string mainFontFamily = iniData[Constants.SECTION_THEME][Constants.KEY_MAIN_FONTFAMILY];
             string mainFontSizeStr = iniData[Constants.SECTION_THEME][Constants.KEY_MAIN_FONTSIZE];
@@ -164,7 +165,7 @@ namespace XStart2._0 {
             Configs.opacity = NumberUtils.IsNumeric(opacityStr, out double opacity) ? opacity : 1D;
             Configs.themeName = string.IsNullOrEmpty(themeName) ? Constants.WINDOW_THEME_BLUE : themeName;
             Configs.themeCustom = themeCustom;
-            Configs.mainBackground = mainBackgroundPath;
+            Configs.mainBackground = mainBackground;
             Configs.projectForeground = string.IsNullOrEmpty(projectForeground) ? "#000000" : projectForeground;
             Configs.mainFontFamily = string.IsNullOrEmpty(mainFontFamily) || !FontUtils.IsSystemFont(mainFontFamily) ? "微软雅黑" : mainFontFamily;
             Configs.mainFontSize = NumberUtils.IsInt(mainFontSizeStr, out int mainFontSize) ? mainFontSize : 14;
@@ -235,7 +236,6 @@ namespace XStart2._0 {
 
             mainViewModel.MainHeadShow = Configs.mainHeadShow;
             mainViewModel.TypeTabExpanded = Configs.typeTabExpand;
-            mainViewModel.ChangeTypeTab();// 初始化时要先触发一次
             mainViewModel.TopMost = Configs.topMost;
             mainViewModel.OpenType = Configs.openType;
             mainViewModel.ClickType = Configs.clickType;
@@ -289,7 +289,6 @@ namespace XStart2._0 {
             Configs.lineInMuted = AudioUtils.GetDeviceMute(Constants.DEVICE_NAME_LINE_IN);
             Configs.cdPlayerMuted = AudioUtils.GetDeviceMute(Constants.DEVICE_NAME_CD_PLAYER, NAudio.CoreAudioApi.DataFlow.Render);
             #endregion
-
             #region 天气参数配置
             string weatherApi = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_API];
             string weatherImgTheme = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_IMG_THEME];
@@ -447,19 +446,8 @@ namespace XStart2._0 {
             int openTypeIndex = mainViewModel.Types.IndexOf(openType);
             mainViewModel.SelectedIndex = openTypeIndex < 0 ? 0 : openTypeIndex;
             #endregion
-            OpenCheckSecurityWindow(true);
             if (mainViewModel.Audio) {
                 AudioUtils.PlayWav(AudioUtils.START);
-            }
-            // 自启动
-            if (autoRunProjects.Count > 0 && !Configs.dpiChange) {
-                if (mainViewModel.RunDirectly) {
-                    RunProjects(autoRunProjects);
-                } else {
-                    AutoRunProjectWindow(autoRunProjects);
-                }
-            } else {
-                autoRunProjects.Clear();
             }
             #region 任务栏图标
             notifyIcon = new System.Windows.Forms.NotifyIcon();
@@ -479,6 +467,17 @@ namespace XStart2._0 {
             notifyIcon.ContextMenu.MenuItems.Add(6, new System.Windows.Forms.MenuItem("天气", Weather_Click));
             notifyIcon.ContextMenu.MenuItems.Add(7, new System.Windows.Forms.MenuItem("-"));
             notifyIcon.ContextMenu.MenuItems.Add(8, new System.Windows.Forms.MenuItem("退出", WindowCloseMenu_Click));
+            OpenCheckSecurityWindow(true);
+            // 自启动
+            if (autoRunProjects.Count > 0 && !Configs.dpiChange) {
+                if (mainViewModel.RunDirectly) {
+                    RunProjects(autoRunProjects);
+                } else {
+                    AutoRunProjectWindow(autoRunProjects);
+                }
+            } else {
+                autoRunProjects.Clear();
+            }
             #endregion
             Configs.Handler = new WindowInteropHelper(this).Handle;
             Configs.inited = true;
@@ -501,38 +500,43 @@ namespace XStart2._0 {
             if (!isInit) {
                 Hide();
             }
-            CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入管理员口令", Configs.admin.Password, "关闭该窗口将退出程序！");
+            // 图标上的按钮失效处理
+            SetNotifyIconEnable(false);
+            CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入管理员口令", Configs.admin.Password, "关闭该窗口将退出程序！") { Owner = this};
             if (Configs.inited) {
-                // 图标上的按钮失效处理
-                SetNotifyIconEnable(false);
+                IsLock = true;
             }
             if (true == checkSecurityWindow.ShowDialog()) {
                 if (!isInit) {
+                    IsLock = false;
                     Show();
                     IsAllShow = true;
-                    SetNotifyIconEnable(true);
                 }
             } else {
                 Configs.forceExit = true;
                 Configs.inited = true;
                 Close();
             }
+            // 恢复图标上的按钮可用
+            SetNotifyIconEnable(true);
             checkSecurityWindow.Close();
             OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
         }
 
         private void SetNotifyIconEnable(bool enable) {
-            notifyIcon.ContextMenu.MenuItems[0].Enabled = enable;
-            notifyIcon.ContextMenu.MenuItems[1].Enabled = enable;
-            notifyIcon.ContextMenu.MenuItems[2].Enabled = enable;
-            notifyIcon.ContextMenu.MenuItems[4].Enabled = enable;
-            notifyIcon.ContextMenu.MenuItems[5].Enabled = enable;
-            notifyIcon.ContextMenu.MenuItems[6].Enabled = enable;
+            if(notifyIcon != null && notifyIcon.ContextMenu != null && notifyIcon.ContextMenu.MenuItems != null) {
+                notifyIcon.ContextMenu.MenuItems[0].Enabled = enable;
+                notifyIcon.ContextMenu.MenuItems[1].Enabled = enable;
+                notifyIcon.ContextMenu.MenuItems[2].Enabled = enable;
+                notifyIcon.ContextMenu.MenuItems[4].Enabled = enable;
+                notifyIcon.ContextMenu.MenuItems[5].Enabled = enable;
+                notifyIcon.ContextMenu.MenuItems[6].Enabled = enable;
+            }
         }
 
         private void AutoRunProjectWindow(List<Project> autoRunProjects, bool isStart = true) {
             OpenNewWindowUtils.SetTopmost(this);
-            AutoRunWindow autoRunWindow = new AutoRunWindow { AutoRunProjects = autoRunProjects, Topmost = true, IsStart = isStart };
+            AutoRunWindow autoRunWindow = new AutoRunWindow { AutoRunProjects = autoRunProjects, IsStart = isStart, Owner = this };
             if (true == autoRunWindow.ShowDialog()) {
                 RunProjects(autoRunWindow.Projects);
             }
@@ -569,11 +573,16 @@ namespace XStart2._0 {
 
         private void MainWindow_Show(object sender, EventArgs e) {
             IsAllShow = true;
-            // 将窗口置为当前并显示
-            IntPtr handle = new WindowInteropHelper(this).Handle;
-            DllUtils.ShowWindow(handle, WinApi.SW_NORMAL);
-            DllUtils.SwitchToThisWindow(handle, true);
-            this.Visibility = Visibility.Visible;
+            if (!IsLock) {
+                // 将窗口置为当前并显示
+                DllUtils.ShowWindow(Configs.Handler, WinApi.SW_SHOW);
+                DllUtils.SwitchToThisWindow(Configs.Handler, true);
+                this.Visibility = Visibility.Visible;
+            } else if(Configs.LockHandler.ToInt32() > 0){
+                // 锁定窗口显示
+                DllUtils.ShowWindow(Configs.LockHandler, WinApi.SW_SHOW);
+                DllUtils.SwitchToThisWindow(Configs.LockHandler, true);
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
@@ -832,7 +841,7 @@ namespace XStart2._0 {
 
         private void OpenSettingWindow(int openTab = 0) {
             OpenNewWindowUtils.SetTopmost(this);
-            SettingWindow settingWindow = new SettingWindow(mainViewModel) { WindowStartupLocation = WindowStartupLocation.CenterScreen, OpenTab = openTab };
+            SettingWindow settingWindow = new SettingWindow(mainViewModel) { WindowStartupLocation = WindowStartupLocation.CenterScreen, OpenTab = openTab, Owner = this };
             bool changeOneLineMulti = false;
             if (true == settingWindow.ShowDialog()) {
                 SettingViewModel settingVM = settingWindow.settingVM;
@@ -916,9 +925,11 @@ namespace XStart2._0 {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Open_Query(object sender, EventArgs e) {
-            QueryWindow queryWindow = new QueryWindow(mainViewModel.RdpModel);
+        private void Open_Query(object sender, RoutedEventArgs e) {
+            OpenNewWindowUtils.SetTopmost(this);
+            QueryWindow queryWindow = new QueryWindow(mainViewModel.RdpModel) { Owner = this };
             queryWindow.ShowDialog();
+            OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
         }
         /// <summary>
         /// 添加类别
@@ -929,7 +940,7 @@ namespace XStart2._0 {
             ProjectTypeVM typeVm = new ProjectTypeVM {
                 Title = "添加类别"
             };
-            ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow { VM = typeVm, WindowStartupLocation = WindowStartupLocation.CenterScreen };
+            ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow { VM = typeVm, WindowStartupLocation = WindowStartupLocation.CenterScreen, Owner = this };
             OperateType(projectTypeWindow);
         }
 
@@ -977,7 +988,7 @@ namespace XStart2._0 {
                 , SelectedFa = type.FaIcon, SelectedIconColor = type.FaIconColor,
                 SelectedFf = type.FaIconFontFamily
             };
-            ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow { VM = typeVm, WindowStartupLocation = WindowStartupLocation.CenterScreen, Topmost = true };
+            ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow { VM = typeVm, WindowStartupLocation = WindowStartupLocation.CenterScreen, Owner = this };
             OperateType(projectTypeWindow);
         }
 
@@ -1113,7 +1124,7 @@ namespace XStart2._0 {
                 Title = "添加栏目",
                 TypeSection = typeSection
             };
-            ColumnWindow window = new ColumnWindow(vm) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
+            ColumnWindow window = new ColumnWindow(vm) { WindowStartupLocation = WindowStartupLocation.CenterScreen, Owner = this };
             OperateColumn(window);
             CalculateWidthHeight(typeSection);
         }
@@ -1132,7 +1143,7 @@ namespace XStart2._0 {
                 OneLineMulti = column.OneLineMulti,
                 TopMost = true
             };
-            ColumnWindow window = new ColumnWindow(vm) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
+            ColumnWindow window = new ColumnWindow(vm) { WindowStartupLocation = WindowStartupLocation.CenterScreen ,Owner = this };
             OperateColumn(window);
             if (!vm.PriTypeSection.Equals(vm.TypeSection)) {
                 CalculateWidthHeight(vm.PriTypeSection);
@@ -1280,6 +1291,7 @@ namespace XStart2._0 {
             AddSecurityWindow addSecurityWindow = new AddSecurityWindow() {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 VM = new SecurityVM() { Title = "添加口令", Section = t.Section, Kind = Constants.TYPE, Operate = Constants.OPERATE_CREATE }
+                , Owner = this
             };
             if (true == addSecurityWindow.ShowDialog()) {
                 // 保存口令
@@ -1302,6 +1314,7 @@ namespace XStart2._0 {
             UpdateSecurityWindow updateSecurityWindow = new UpdateSecurityWindow() {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 VM = new SecurityVM() { Title = "修改口令", Section = t.Section, CurSecurity = t.Password, Kind = Constants.TYPE, Operate = Constants.OPERATE_UPDATE }
+                , Owner = this
             };
             if (true == updateSecurityWindow.ShowDialog()) {
                 T newT = Activator.CreateInstance<T>();
@@ -1324,6 +1337,7 @@ namespace XStart2._0 {
             RemoveSecurityWindow removeSecurityWindow = new RemoveSecurityWindow() {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 VM = new SecurityVM() { Title = "移除口令", Section = t.Section, CurSecurity = t.Password, Kind = Constants.TYPE, Operate = Constants.OPERATE_REMOVE }
+                , Owner = this
             };
             if (true == removeSecurityWindow.ShowDialog()) {
                 T newT = Activator.CreateInstance<T>();
@@ -1412,7 +1426,7 @@ namespace XStart2._0 {
                 typeSection = project.TypeSection;
                 columnSection = project.ColumnSection;
             }
-            ProjectWindow projectWindow = new ProjectWindow("添加项目", typeSection, columnSection) { Topmost = true };
+            ProjectWindow projectWindow = new ProjectWindow("添加项目", typeSection, columnSection) { Owner = this };
             if (true == projectWindow.ShowDialog()) {
                 if (string.IsNullOrEmpty(projectWindow.Project.Kind)) {
                     projectWindow.Project.Kind = XStartService.KindOfPath(projectWindow.Project.Path);
@@ -1467,7 +1481,7 @@ namespace XStart2._0 {
             OpenNewWindowUtils.SetTopmost(this);
             Project project = GetProjectByMenu(sender);
             if (null != project) {
-                ProjectWindow projectWindow = new ProjectWindow("修改项目", project.TypeSection, project.ColumnSection) { Project = project, Topmost = true };
+                ProjectWindow projectWindow = new ProjectWindow("修改项目", project.TypeSection, project.ColumnSection) { Project = project, Owner = this };
                 if (true == projectWindow.ShowDialog()) {
                     //projectWindow.Project.Icon = XStartService.GetIconImage(projectWindow.Project.Kind, projectWindow.Project.Path, projectWindow.Project.IconPath, projectWindow.Project.IconSize);
                     if (string.IsNullOrEmpty(projectWindow.Project.Kind)) {
@@ -1582,10 +1596,12 @@ namespace XStart2._0 {
                         isConfirm = true;
                     }
                 } else {
-                    CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入密理员口令", mainViewModel.Security);
+                    OpenNewWindowUtils.SetTopmost(this);
+                    CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("取消自启动，请输入管理员口令", mainViewModel.Security) { Owner = this };
                     if (true == checkSecurityWindow.ShowDialog()) {
                         isConfirm = true;
                     }
+                    OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
                 }
                 if (isConfirm) {
                     foreach (Project project in autoRunProjects) {
@@ -1681,8 +1697,10 @@ namespace XStart2._0 {
                 DllUtils.SwitchToThisWindow(Configs.AboutHandler, true);
                 DllUtils.ShowWindow(Configs.AboutHandler, WinApi.SW_NORMAL);
             } else {
-                AboutWindow aboutWindow = new AboutWindow();
-                aboutWindow.Show();
+                OpenNewWindowUtils.SetTopmost(this);
+                AboutWindow aboutWindow = new AboutWindow() { Owner = this};
+                aboutWindow.ShowDialog();
+                OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
             }
         }
 
@@ -1722,10 +1740,12 @@ namespace XStart2._0 {
             Tuple<int, int> dpiTuple = GetDpi();
             if (null == Configs.dpiTurple) {
                 Configs.dpiTurple = dpiTuple;
-                // 清除DpiChange
-                IniParser.Model.IniData iniData = new IniParser.Model.IniData();
-                iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE] = string.Empty;
-                IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
+                if (Configs.dpiChange) {
+                    // 清除DpiChange
+                    IniParser.Model.IniData iniData = new IniParser.Model.IniData();
+                    iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE] = string.Empty;
+                    IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
+                }
             } else {
                 // 判断是否变更
                 if (!dpiTuple.Equals(Configs.dpiTurple)) {
@@ -1910,6 +1930,11 @@ namespace XStart2._0 {
                 }
                 if (isMouseEnter) {
                     IsAllShow = false;
+                    if (!IsLock) {
+                        // 打开当前窗口
+                        DllUtils.SwitchToThisWindow(Configs.Handler, true);
+                        DllUtils.ShowWindow(Configs.Handler, WinApi.SW_SHOW);
+                    }
                 }
                 Animate2Location(this, toPoint);
             } catch {
@@ -2025,7 +2050,7 @@ namespace XStart2._0 {
         /// <param name="e"></param>
         private void BackUp_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
-            BackUpCommand.ShowBackUpWindow();
+            BackUpCommand.ShowBackUpWindow(this);
             OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
         }
         /// <summary>
@@ -2035,7 +2060,7 @@ namespace XStart2._0 {
         /// <param name="e"></param>
         private void Recover_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
-            bool? resumeResult = ResumeCommand.ShowResumeWindow();
+            bool? resumeResult = ResumeCommand.ShowResumeWindow(this);
             OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
             if (null != resumeResult && (bool)resumeResult) {
                 CalculateWidthHeight();
@@ -2127,7 +2152,7 @@ namespace XStart2._0 {
         #region 用户头像和昵称修改
         private void User_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
-            UserWindow userWindow = new UserWindow(mainViewModel.AvatarPath, mainViewModel.GifSpeedRatio, mainViewModel.NickName, mainViewModel.AvatarSize) { WindowStartupLocation = WindowStartupLocation.CenterScreen };
+            UserWindow userWindow = new UserWindow(mainViewModel.AvatarPath, mainViewModel.GifSpeedRatio, mainViewModel.NickName, mainViewModel.AvatarSize) { WindowStartupLocation = WindowStartupLocation.CenterScreen , Owner = this };
             if (true == userWindow.ShowDialog()) {
                 bool isChange = false;
                 // 保存配置项
@@ -2252,11 +2277,13 @@ namespace XStart2._0 {
             if (Configs.CalendarHandler.ToInt32() > 0) {
                 // 打开当前窗口
                 DllUtils.SwitchToThisWindow(Configs.CalendarHandler, true);
-                DllUtils.ShowWindow(Configs.CalendarHandler, WinApi.SW_NORMAL);
+                DllUtils.ShowWindow(Configs.CalendarHandler, WinApi.SW_SHOW);
             } else {
-                CalendarWindow cal = new CalendarWindow();
+                OpenNewWindowUtils.SetTopmost(this);
+                CalendarWindow cal = new CalendarWindow() { Owner = this};
                 cal.vm.MyDateTime = mainViewModel.MyDateTime;
-                cal.Show();
+                cal.ShowDialog();
+                OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
             }
 
         }
@@ -2300,8 +2327,10 @@ namespace XStart2._0 {
                     DllUtils.SwitchToThisWindow(Configs.WeatherHandler, true);
                     DllUtils.ShowWindow(Configs.WeatherHandler, WinApi.SW_NORMAL);
                 } else {
-                    WeatherWindow weather = new WeatherWindow();
-                    weather.Show();
+                    OpenNewWindowUtils.SetTopmost(this);
+                    WeatherWindow weather = new WeatherWindow() { Owner = this };
+                    weather.ShowDialog();
+                    OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
                 }
             }
         }
@@ -2331,7 +2360,7 @@ namespace XStart2._0 {
 
         private void OpenThemeWindow() {
             OpenNewWindowUtils.SetTopmost(this);
-            ThemeWindow themeWindow = new ThemeWindow();
+            ThemeWindow themeWindow = new ThemeWindow() { Owner = this };
             if (true == themeWindow.ShowDialog()) {
                 StringBuilder themeCustomSb = new StringBuilder()
                     .Append(GetColorString(themeWindow.vm.ConfirmButtonBackGroundColor, 1)).Append(Constants.SPLIT_CHAR)
@@ -2358,7 +2387,7 @@ namespace XStart2._0 {
         /// <param name="e"></param>
         private void Beautiful_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
-            BeautifulWindow window = new BeautifulWindow(mainViewModel.MainBackground, WindowTheme.Instance.ProjectForeground, WindowTheme.Instance.MainFontFamily, WindowTheme.Instance.MainFontSize, mainViewModel.Opacity);
+            BeautifulWindow window = new BeautifulWindow(mainViewModel.MainBackground, WindowTheme.Instance.ProjectForeground, WindowTheme.Instance.MainFontFamily, WindowTheme.Instance.MainFontSize, mainViewModel.Opacity) { Owner = this};
             if (true == window.ShowDialog()) {
                 mainViewModel.MainBackground = window.Bg;
                 WindowTheme.Instance.ProjectForeground = window.Fg;
@@ -2392,6 +2421,7 @@ namespace XStart2._0 {
                 AddSecurityWindow addSecurityWindow = new AddSecurityWindow() {
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     VM = new SecurityVM() { Title = "添加管理员口令", Kind = Constants.ADMIN, Operate = Constants.OPERATE_CREATE }
+                    , Owner = this
                 };
                 if (true == addSecurityWindow.ShowDialog()) {
                     update = true;
@@ -2402,6 +2432,7 @@ namespace XStart2._0 {
                 UpdateSecurityWindow updateSecurityWindow = new UpdateSecurityWindow() {
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     VM = new SecurityVM() { Title = "修改管理员口令", CurSecurity = mainViewModel.Security, Kind = Constants.ADMIN, Operate = Constants.OPERATE_UPDATE }
+                    , Owner = this
                 };
                 if (true == updateSecurityWindow.ShowDialog()) {
                     update = true;
@@ -2423,6 +2454,7 @@ namespace XStart2._0 {
                 RemoveSecurityWindow removeSecurityWindow = new RemoveSecurityWindow() {
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     VM = new SecurityVM() { Title = "移除管理员口令", CurSecurity = mainViewModel.Security, Kind = Constants.ADMIN, Operate = Constants.OPERATE_REMOVE }
+                    , Owner = this
                 };
                 if (true == removeSecurityWindow.ShowDialog()) {
                     mainViewModel.Security = string.Empty;

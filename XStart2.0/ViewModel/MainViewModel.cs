@@ -1,4 +1,5 @@
 ﻿using PropertyChanged;
+using System;
 using System.Windows.Media;
 using XStart2._0.Bean;
 using XStart2._0.Const;
@@ -19,7 +20,7 @@ namespace XStart2._0.ViewModel {
         // 头像
         public System.Windows.Media.Imaging.BitmapImage Avatar { get; set; }
         // gif动画速率
-        public double GifSpeedRatio {  get; set; }
+        public double GifSpeedRatio { get; set; }
         // 头像尺寸
         public int AvatarSize { get; set; }
         // 昵称
@@ -32,7 +33,7 @@ namespace XStart2._0.ViewModel {
         public MyDateTime MyDateTime { get; set; } = new MyDateTime();
         #endregion
         #region 应用数据
-        public ObservableDictionary<string, Type> Types { get; set; }
+        public ObservableDictionary<string, Bean.Type> Types { get; set; }
         #endregion
 
         #region 窗口相关
@@ -45,7 +46,7 @@ namespace XStart2._0.ViewModel {
         // 根据MainBackground和Opacity生成背景画刷
         public Brush BackgroundBrush { get; set; }
         // 是否最大化
-        public bool IsMaximum {  get; set; }
+        public bool IsMaximum { get; set; }
         // 主窗口高度
         public double MainHeight { get; set; }
         // 主窗口宽度
@@ -56,16 +57,16 @@ namespace XStart2._0.ViewModel {
         public double MainTop { get; set; }
         // 主窗口头部显示
         public bool MainHeadShow { get; set; }
-        // 类别名称是否展开
+        // 类别名称是否展开,启动的时候就需要执行一次，所以类型为nullable
         [OnChangedMethod(nameof(ChangeTypeTab))]
-        public bool TypeTabExpanded { get; set; }
+        public bool? TypeTabExpanded { get; set; }
         // 类别宽度（TabControl的TabItem的宽度）
         public double TypeWidth { get; set; }
         // 类别名称开关图标
         public string TypeTabToggleIcon { get; set; }
 
         public void ChangeTypeTab() {
-            if (TypeTabExpanded) {
+            if (null == TypeTabExpanded || (bool)TypeTabExpanded) {
                 TypeWidth = Constants.TYPE_EXPAND_WIDTH;
                 TypeTabToggleIcon = FontAwesome6.Outdent;
             } else {
@@ -86,7 +87,7 @@ namespace XStart2._0.ViewModel {
         public bool RunDirectly { get; set; }
         public bool ExitWarn { get; set; }
         public bool ExitButtonType { get; set; }// 关闭按钮类型，true:表示退出，false:表示最小化
-        public bool ShowInTaskbar {  get; set; }
+        public bool ShowInTaskbar { get; set; }
         [OnChangedMethod(nameof(AutoHideToggle))]
         public bool CloseBorderHide { get; set; }
         [DoNotNotify]
@@ -199,20 +200,7 @@ namespace XStart2._0.ViewModel {
         }
 
         public void ConvertBrush() {
-            Brush backgrounBrush;
-            if (string.IsNullOrEmpty(MainBackground)) {
-                backgrounBrush = ColorUtils.GetBrush(Colors.Transparent);
-            } else if (MainBackground.StartsWith("#")) {
-                backgrounBrush = ColorUtils.GetBrush(MainBackground);
-            } else {
-                // 读取图片文件
-                backgrounBrush = new ImageBrush {
-                    ImageSource = ImageUtils.File2BitmapImage(MainBackground)
-                };
-            }
-            backgrounBrush.Opacity = Opacity;
-            backgrounBrush.Freeze();
-            BackgroundBrush = backgrounBrush;
+            BackgroundBrush = BackgroundUtils.GetBrush(MainBackground, Opacity);
         }
     }
 }

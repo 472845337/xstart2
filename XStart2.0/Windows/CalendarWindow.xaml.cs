@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using XStart2._0.Bean.Holiday;
 using XStart2._0.Utils;
 using XStart2._0.ViewModel;
@@ -33,9 +34,7 @@ namespace XStart2._0.Windows {
             currentMinuteTimer.Interval = TimeSpan.FromHours(1);
             currentMinuteTimer.Start();
             // 赋值句柄
-            var formDependency = PresentationSource.FromDependencyObject(this);
-            System.Windows.Interop.HwndSource winformWindow = formDependency as System.Windows.Interop.HwndSource;
-            Config.Configs.CalendarHandler = winformWindow.Handle;
+            Config.Configs.CalendarHandler = new WindowInteropHelper(this).Handle;
         }
 
         private void Window_Closing(object sender, EventArgs e) {

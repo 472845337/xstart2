@@ -24,19 +24,7 @@ namespace XStart2._0.ViewModel {
         }
 
         public void ConvertBrush() {
-            Brush backgrounBrush = null;
-            if (string.IsNullOrEmpty(Background)) {
-                backgrounBrush = new SolidColorBrush(Colors.White);
-            } else if (Background.StartsWith("#")) {
-                backgrounBrush = ColorUtils.GetBrush(Background);
-            } else {
-                // 读取图片文件
-                backgrounBrush = new ImageBrush {
-                    ImageSource = ImageUtils.File2BitmapImage(Background)
-                };
-            }
-            backgrounBrush.Freeze();
-            BackgroundBrush = backgrounBrush;
+            BackgroundBrush = BackgroundUtils.GetBrush(Background);
         }
     }
 }

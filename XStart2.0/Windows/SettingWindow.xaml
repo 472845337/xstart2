@@ -6,7 +6,7 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:view="clr-namespace:XStart2._0.View"
         mc:Ignorable="d"
-        Title="选项" Height="480" Width="500" Icon="pack://application:,,,/Files/Icons/App/setting.ico" Topmost="{Binding TopMost}" ResizeMode="NoResize">
+        Title="选项" Height="480" Width="500" Icon="pack://application:,,,/Files/Icons/App/setting.ico" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

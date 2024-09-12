@@ -154,7 +154,7 @@ namespace XStart2._0.Windows {
         // 选择系统功能
         private void SystemBtn_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
-            SystemProjectWindow spw = new SystemProjectWindow(vm.TypeSection, vm.ColumnSection, Configs.systemAppAddMulti, Configs.systemAppOpenPage) { };
+            SystemProjectWindow spw = new SystemProjectWindow(vm.TypeSection, vm.ColumnSection, Configs.systemAppAddMulti, Configs.systemAppOpenPage) { Owner = this};
             if (true == spw.ShowDialog()) {
                 vm.PathReadonly = true;
                 vm.ArgumentsReadonly = true;
@@ -206,7 +206,7 @@ namespace XStart2._0.Windows {
             OpenNewWindowUtils.SetTopmost(this);
             string[] argumentArray = vm.Arguments.Split(Constants.SPLIT_CHAR);
 
-            MstscWindow mstsc = new MstscWindow { Topmost = true };
+            MstscWindow mstsc = new MstscWindow { Owner = this };
             mstsc.vm.Address = argumentArray[0];
             mstsc.vm.Port = argumentArray[1];
             mstsc.vm.Account = argumentArray[2];
@@ -221,7 +221,7 @@ namespace XStart2._0.Windows {
         private void ControlAppMemoryProject_ArgumentsTextBoxMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
             string[] argumentArray = vm.Arguments.Split(Constants.SPLIT_CHAR);
-            ControlAppMemoryWindow cam = new ControlAppMemoryWindow { Topmost = true };
+            ControlAppMemoryWindow cam = new ControlAppMemoryWindow { Owner = this };
             cam.vm.AppName = argumentArray[0];
             cam.vm.MinMemory = argumentArray[1];
             cam.vm.MaxMemory = argumentArray[2];

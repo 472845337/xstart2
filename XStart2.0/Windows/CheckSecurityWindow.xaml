@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:XStart2._0.Windows"
         xmlns:helper="clr-namespace:XStart2._0.Helper"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="116" Width="320" WindowStartupLocation="CenterScreen" Topmost="True" ResizeMode="NoResize">
+        Title="{Binding Title}" Height="116" Width="320" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

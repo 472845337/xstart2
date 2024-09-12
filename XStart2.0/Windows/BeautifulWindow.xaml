@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:XStart2._0.Windows"
         xmlns:bean="clr-namespace:XStart2._0.Bean"
         mc:Ignorable="d"
-        Title="美化" Icon="pack://application:,,,/Files/Icons/App/font_icon.ico" Height="400" Width="300" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
+        Title="美化" 
+        Height="400" MinWidth="360" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip"
+        Icon="pack://application:,,,/Files/Icons/App/font_icon.ico">
     <Window.Resources>
         <Style x:Key="OpacityButton" TargetType="{x:Type Button}">
             <Setter Property="Width" Value="240" />
@@ -22,6 +24,14 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!-- 渐变色背景 -->
+        <LinearGradientBrush x:Key="GradientBackground">
+            <GradientStopCollection>
+                <GradientStop Color="Red" Offset="0"/>
+                <GradientStop Color="Yellow" Offset="0.5"/>
+                <GradientStop Color="Blue" Offset="1"/>
+            </GradientStopCollection>
+        </LinearGradientBrush>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -63,11 +73,17 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Style="{StaticResource Btn_Style}" Content="透明" ToolTip="透明背景，该选项将非常消耗性能" Click="CancelBackground_Click"/>
-            <Button Grid.Column="1" Style="{StaticResource BtnConfirm_Style}" Content="纯色" ToolTip="指定颜色做为主窗口背景" Click="ColorBackground_Click"/>
-            <Button Grid.Column="2" Style="{StaticResource BtnConfirm_Style}" Content="本地图片" ToolTip="指定本地图片做为主窗口背景" Click="ImageBackground_Click"/>
-            <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Text="透明背景，将会占用大量内存！" Foreground="Red"/>
+            <Button Grid.Column="0" Style="{StaticResource Btn_Style}" Background="Transparent" BorderBrush="Gray" Margin="2 5 2 3" Content="透明" ToolTip="透明背景，该选项将非常消耗性能" Click="CancelBackground_Click"/>
+            <Button Grid.Column="1" Style="{StaticResource BtnConfirm_Style}" Margin="2 5 2 3" Content="纯色" ToolTip="指定颜色背景" Click="ColorBackground_Click"/>
+            <Button Grid.Column="2" Style="{StaticResource Btn_Style}" Margin="2 5 2 3" Background="{StaticResource GradientBackground}" Content="渐变色" ToolTip="线性渐变色背景" Click="GradientBackground_Click"/>
+            <Button Grid.Column="3" Style="{StaticResource Btn_Style}" Margin="2 5 2 3" Content="图片" ToolTip="指定本地图片背景" Click="ImageBackground_Click">
+                <Button.Background>
+                    <ImageBrush ImageSource="pack://application:,,,/Files/Images/Image.png"/>
+                </Button.Background>
+            </Button>
+            <TextBlock Grid.Row="1" Grid.ColumnSpan="4" Text="透明背景，将会占用大量内存！" Foreground="Red"/>
         </Grid>
         <Border Grid.Row="5" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1">
             <Grid Background="{Binding BackgroundBrush}">

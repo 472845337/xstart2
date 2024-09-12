@@ -1,6 +1,5 @@
-﻿
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Interop;
 using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Utils;
@@ -26,6 +25,7 @@ namespace XStart2._0.Windows {
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             DataContext = vm;
+            Configs.LockHandler = new WindowInteropHelper(this).Handle;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
@@ -34,6 +34,8 @@ namespace XStart2._0.Windows {
                 // 取消或退出时进行提醒
                 if (MessageBoxResult.Cancel == MessageBox.Show(vm.ExitMsg, Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.No, MessageBoxOptions.DefaultDesktopOnly)) {
                     e.Cancel = true;
+                } else {
+                    Configs.LockHandler = System.IntPtr.Zero;
                 }
             }
         }

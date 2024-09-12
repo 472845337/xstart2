@@ -209,8 +209,7 @@ namespace XStart2._0.Windows {
             string buttonName = systemAppButton.GetValue(ElementParamHelper.ButtonNameProperty) as string;
             string path = Constants.SYSTEM_PROJECT_CHAR + buttonName.Replace("Button", string.Empty);
             string arguments = string.Empty;
-            if (SystemProjectParam.CLEAR_SOME_DIRECTORY.Equals(path)) {
-                Topmost = false;
+            if (CLEAR_SOME_DIRECTORY.Equals(path)) {
                 // 清空某目录打开目录窗口选择目录
                 using System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
                 if (System.Windows.Forms.DialogResult.OK == fbd.ShowDialog()) {
@@ -221,11 +220,9 @@ namespace XStart2._0.Windows {
                     MessageBox.Show("未选择目录!", Constants.MESSAGE_BOX_TITLE_ERROR);
                     isAdd = false;
                 }
-                Topmost = true;
-            } else if (SystemProjectParam.CONTROL_APP_MEMORY.Equals(path)) {
-                Topmost = false;
+            } else if (CONTROL_APP_MEMORY.Equals(path)) {
                 // 控制程序内存
-                ControlAppMemoryWindow cam = new ControlAppMemoryWindow() { Topmost = true };
+                ControlAppMemoryWindow cam = new ControlAppMemoryWindow() { Owner = this };
                 if (true == cam.ShowDialog()) {
                     name = $"控制{cam.vm.AppName}内存";
                     arguments = $"{cam.vm.AppName}{Constants.SPLIT_CHAR}{cam.vm.MinMemory}{Constants.SPLIT_CHAR}{cam.vm.MaxMemory}";
@@ -233,11 +230,9 @@ namespace XStart2._0.Windows {
                     isAdd = false;
                 }
                 cam.Close();
-                Topmost = true;
-            } else if (SystemProjectParam.MSTSC.Equals(path)) {
+            } else if (MSTSC.Equals(path)) {
                 // 远程桌面
-                Topmost = false;
-                MstscWindow mstsc = new MstscWindow() { Topmost = true };
+                MstscWindow mstsc = new MstscWindow() {Owner = this };
                 if (true == mstsc.ShowDialog()) {
                     name = $"{mstsc.vm.Address}远程";
                     arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}";
@@ -245,7 +240,6 @@ namespace XStart2._0.Windows {
                     isAdd = false;
                 }
                 mstsc.Close();
-                Topmost = true;
             }
 
             if (isAdd) {

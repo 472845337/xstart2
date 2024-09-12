@@ -107,9 +107,9 @@ namespace XStart2._0.Windows {
         private Tuple<SolidColorBrush, SolidColorBrush> GetRanColor() {
             // 使用随机种子，否则短时间内调用的随机数是一样的
             Random ran = new Random(Guid.NewGuid().ToString().GetHashCode());
-            int r = ran.Next(0, 255);
-            int g = ran.Next(0, 255);
-            int b = ran.Next(0, 255);
+            int r = ran.Next(0, 256);
+            int g = ran.Next(0, 256);
+            int b = ran.Next(0, 256);
             return new Tuple<SolidColorBrush, SolidColorBrush>(ColorUtils.GetBrush(r, g, b), ColorUtils.GetBrush(255 - r, 255 - g, 255 - b));
         }
     }

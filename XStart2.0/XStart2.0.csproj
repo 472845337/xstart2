@@ -118,6 +118,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bean\Admin.cs" />
+    <Compile Include="Bean\GradientColor.cs" />
     <Compile Include="Bean\Holiday\HcaRequest.cs" />
     <Compile Include="Bean\Holiday\HcaResponse.cs" />
     <Compile Include="Bean\Holiday\IsHolidayRequest.cs" />
@@ -158,6 +159,8 @@
     <Compile Include="Converters\BaseValueConverter.cs" />
     <Compile Include="Converters\Boolean2MainHeadShowConverter.cs" />
     <Compile Include="Converters\Boolean2CollapsedConverter.cs" />
+    <Compile Include="Converters\GradientColorConverter.cs" />
+    <Compile Include="Converters\IsNull2BoolConverter.cs" />
     <Compile Include="Converters\RdpModelConverter.cs" />
     <Compile Include="Converters\ProjectKind2EnabledConverter.cs" />
     <Compile Include="Converters\Boolean2IsCheckedConverter.cs" />
@@ -178,11 +181,13 @@
     <Compile Include="Converters\WeaImgConverter.cs" />
     <Compile Include="Helper\DragDop\DragAdorner.cs" />
     <Compile Include="Services\AdminService.cs" />
+    <Compile Include="Utils\BackgroundUtils.cs" />
     <Compile Include="Utils\ColorUtils.cs" />
     <Compile Include="Utils\DateUtil.cs" />
     <Compile Include="Utils\ElementUtils.cs" />
     <Compile Include="Utils\EventUtils.cs" />
     <Compile Include="Utils\FontUtils.cs" />
+    <Compile Include="Utils\GradientColorUtils.cs" />
     <Compile Include="Utils\GZipUtil.cs" />
     <Compile Include="Utils\HttpUtils.cs" />
     <Compile Include="Utils\IniParserUtils.cs" />
@@ -192,6 +197,7 @@
     <Compile Include="Utils\TimeUtils.cs" />
     <Compile Include="Utils\WindUtil.cs" />
     <Compile Include="ViewModel\BeautifulViewModel.cs" />
+    <Compile Include="ViewModel\GradientColorViewModel.cs" />
     <Compile Include="ViewModel\ThemeViewModel.cs" />
     <Compile Include="ViewModel\WeatherViewModel.cs" />
     <Compile Include="ViewModel\QueryViewModel.cs" />
@@ -272,6 +278,9 @@
     </Compile>
     <Compile Include="Windows\BeautifulWindow.xaml.cs">
       <DependentUpon>BeautifulWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\GradientColorWindow.xaml.cs">
+      <DependentUpon>GradientColorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MstscManagerWindow.xaml.cs">
       <DependentUpon>MstscManagerWindow.xaml</DependentUpon>
@@ -386,6 +395,10 @@
     <Page Include="Windows\BeautifulWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\GradientColorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\MstscManagerWindow.xaml">
       <SubType>Designer</SubType>
