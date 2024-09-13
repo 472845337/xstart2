@@ -40,6 +40,12 @@
             <Setter Property="Height" Value="25"/>
             <Setter Property="Margin" Value="2"/>
         </Style>
+        <!-- 自定义边框样式 -->
+        <Style x:Key="WindowBorder_Style" TargetType="Rectangle">
+            <Setter Property="Fill" Value="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}"/>
+            <EventSetter Event="MouseDown" Handler="ResizePressed"/>
+            <EventSetter Event="MouseMove" Handler="ResizePressed"/>
+        </Style>
         <Style x:Key="MenuStyleKey" TargetType="MenuItem">
             <Setter Property="Background" Value="Transparent" />
         </Style>
@@ -194,14 +200,20 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="4"/>
         </Grid.ColumnDefinitions>
-        <Rectangle Name="ResizeTopLeft" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="0" Grid.Column="0" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeNWSE"/>
-        <Rectangle Name="ResizeTop" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="0" Grid.Column="1" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeNS"/>
-        <Rectangle Name="ResizeTopRight" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="0" Grid.Column="2" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeNESW"/>
-        <Rectangle Name="ResizeLeft" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="1" Grid.Column="0" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeWE"/>
-        <Rectangle Name="ResizeRight" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="1" Grid.Column="2" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeWE"/>
-        <Rectangle Name="ResizeBottomLeft" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="3" Grid.Column="0" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeNESW"/>
-        <Rectangle Name="ResizeBottom" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="3" Grid.Column="1" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeNS"/>
-        <Rectangle Name="ResizeBottomRight" Fill="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" Grid.Row="3" Grid.Column="2" MouseMove="ResizePressed" MouseDown="ResizePressed" Cursor="SizeNWSE"/>
+        
+        <!--#region 边框-->
+        <Rectangle Tag="TopLeft" Style="{StaticResource WindowBorder_Style}" Grid.Row="0" Grid.Column="0" Cursor="SizeNWSE"/>
+        <Rectangle Tag="Top" Style="{StaticResource WindowBorder_Style}" Grid.Row="0" Grid.Column="1" Cursor="SizeNS"/>
+        <Rectangle Tag="TopRight" Style="{StaticResource WindowBorder_Style}" Grid.Row="0" Grid.Column="2" Cursor="SizeNESW"/>
+        
+        <Rectangle Tag="Left" Style="{StaticResource WindowBorder_Style}" Grid.Row="1" Grid.Column="0" Cursor="SizeWE"/>
+        <Rectangle Tag="Right" Style="{StaticResource WindowBorder_Style}" Grid.Row="1" Grid.Column="2" Cursor="SizeWE"/>
+
+        <Rectangle Tag="BottomLeft" Style="{StaticResource WindowBorder_Style}" Grid.Row="2" Grid.Column="0" Cursor="SizeNESW"/>
+        <Rectangle Tag="Bottom" Style="{StaticResource WindowBorder_Style}" Grid.Row="2" Grid.Column="1" Cursor="SizeNS"/>
+        <Rectangle Tag="BottomRight" Style="{StaticResource WindowBorder_Style}" Grid.Row="2" Grid.Column="2" Cursor="SizeNWSE"/>
+        <!--#endregion-->
+        <!-- 内容 -->
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="28"/>

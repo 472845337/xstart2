@@ -71,7 +71,8 @@ namespace XStart2._0 {
 
         private void ResizePressed(object sender, MouseEventArgs e) {
             FrameworkElement element = sender as FrameworkElement;
-            WinApi.ResizeDirection direction = (WinApi.ResizeDirection)Enum.Parse(typeof(WinApi.ResizeDirection), element.Name.Replace("Resize", string.Empty));
+            string tag = element.Tag as string;
+            WinApi.ResizeDirection direction = (WinApi.ResizeDirection)Enum.Parse(typeof(WinApi.ResizeDirection), tag);
             if (e.LeftButton == MouseButtonState.Pressed) {
                 ResizeWindow(direction);
             }
@@ -1220,6 +1221,8 @@ namespace XStart2._0 {
                         foreach (var projectKV in column.ProjectDic) {
                             var projectUpdateModel = new Project() { Section = projectKV.Value.Section, TypeSection = column.TypeSection };
                             projectService.Update(projectUpdateModel);
+                            // 缓存数据更新
+                            projectKV.Value.TypeSection = column.TypeSection;
                         }
                         if (column.IsExpanded) {
                             // 原类别中栏目展开第一个

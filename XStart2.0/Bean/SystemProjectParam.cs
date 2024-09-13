@@ -124,7 +124,7 @@ namespace XStart2._0.Bean {
             OperateParam.Add(EXPLORER, new SystemProject("explorer.exe", string.Empty));
             OperateParam.Add(PRINT_FAX, new SystemProject("explorer.exe", "::{2227A280-3AEA-1069-A2DE-08002B30309D}"));
             OperateParam.Add(REGEDIT, new SystemProject("regedit.exe", string.Empty));
-            OperateParam.Add(CMD, new SystemProject("cmd.exe", string.Empty));
+            OperateParam.Add(CMD, new SystemProject("cmd.exe", string.Empty) { WorkingDirectory = "C:\\Users\\Administrator\\" });
             OperateParam.Add(FOLDER_OPTIONS, new SystemProject("rundll32.exe", "shell32.dll,Options_RunDLL"));
             OperateParam.Add(CLOSE_PC, new SystemProject("shutdown.exe", "/s /t 5", "确认关闭计算机吗?"));
             OperateParam.Add(RESTART_PC, new SystemProject("shutdown.exe", "/r /t 5", "确认重启计算机吗?"));
@@ -192,6 +192,7 @@ namespace XStart2._0.Bean {
         public string Execute { get; set; }
 
         public string Param { get; set; }
+        public string WorkingDirectory { get; set; }
 
         public string ConfirmMsg { get; set; }
     }

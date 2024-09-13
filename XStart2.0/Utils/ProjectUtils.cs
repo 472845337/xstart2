@@ -31,7 +31,7 @@ namespace XStart2._0.Utils {
                     }
                 }
                 #region 应用是否需要生成相关文件
-                if (MSTSC.Equals(project.Path)) {
+                if (MSTSC.Equals(project.Path) && Constants.RDP_MODEL_SYSTEM.Equals(rdpModel)) {
                     // 远程桌面
                     string rdpFilePath = Configs.AppStartPath + @$"rdp\{project.Section}.rdp";
                     if (!File.Exists(rdpFilePath)) {
@@ -123,7 +123,7 @@ namespace XStart2._0.Utils {
                                     try {
                                         DllUtils.SetProcessWorkingSetSize(process.MainWindowHandle, minMemory * 1024 * 1024, maxMemory * 1024 * 1024);
                                     } catch (Exception ex) {
-                                        System.Windows.MessageBox.Show(ex.Message, Constants.MESSAGE_BOX_TITLE_ERROR);
+                                        MessageBox.Show(ex.Message, Constants.MESSAGE_BOX_TITLE_ERROR);
                                     }
                                 }
                             }
@@ -134,7 +134,7 @@ namespace XStart2._0.Utils {
                                     try {
                                         process.Kill();
                                     } catch (Exception ex) {
-                                        System.Windows.MessageBox.Show(ex.Message, Constants.MESSAGE_BOX_TITLE_ERROR);
+                                        MessageBox.Show(ex.Message, Constants.MESSAGE_BOX_TITLE_ERROR);
                                     }
                                 }
                             }
@@ -206,7 +206,11 @@ namespace XStart2._0.Utils {
                         default:
                             // 调用exe执行的功能
                             if (OperateParam.TryGetValue(project.Path, out SystemProject appOperateParam) && !string.IsNullOrEmpty(appOperateParam.Execute)) {
-                                Process.Start(appOperateParam.Execute, appOperateParam.Param);
+                                ProcessStartInfo startInfo = new ProcessStartInfo();
+                                startInfo.FileName = appOperateParam.Execute;
+                                startInfo.Arguments = appOperateParam.Param;
+                                startInfo.WorkingDirectory = appOperateParam.WorkingDirectory;
+                                Process.Start(startInfo);
                                 break;
                             } else {
                                 throw new Exception("功能失效！");
