@@ -42,7 +42,7 @@ namespace XStart2._0.ViewModel {
         public string MainBackground { get; set; }
         // 背景不透明度
         [OnChangedMethod(nameof(ConvertBrush))]
-        public double Opacity { get; set; }
+        public double MainOpacity { get; set; }
         // 根据MainBackground和Opacity生成背景画刷
         public Brush BackgroundBrush { get; set; }
         // 是否最大化
@@ -200,7 +200,7 @@ namespace XStart2._0.ViewModel {
         }
 
         public void ConvertBrush() {
-            BackgroundBrush = BackgroundUtils.GetBrush(MainBackground, Opacity);
+            BackgroundBrush = BackgroundUtils.GetBrush(MainBackground, MainOpacity);
         }
     }
 }

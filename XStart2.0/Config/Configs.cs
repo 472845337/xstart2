@@ -27,15 +27,16 @@ namespace XStart2._0.Config {
         public static Admin admin;// 管理员信息，头像，昵称，口令
 
         public static string mainBackground;// 主窗口背景
+        public static double mainOpacity;// 主窗口透明度
         public static string projectForeground;// 项目文本背景
-        public static string mainFontFamily;// 主窗口字体
-        public static int mainFontSize;// 主窗口字体大小
+        public static string fontFamily;// 主窗口字体
+        public static int fontSize;// 主窗口字体大小
+        public static double opacity;// 不透明度
         public static bool isMaximum;// 是否最大化
         public static double mainHeight;// 主窗口高
         public static double mainWidth;// 主窗口宽
         public static double mainTop;// 主窗口顶部位置
         public static double mainLeft;// 主窗口左边位置
-        public static double opacity;// 不透明度
         public static string themeName;// 主题
         public static string themeCustom;// 自定义主题
         public static bool topMost;// 是否置顶

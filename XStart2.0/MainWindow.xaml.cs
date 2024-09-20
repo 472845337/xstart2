@@ -150,26 +150,32 @@ namespace XStart2._0 {
             string topStr = iniData[Constants.SECTION_LOCATION][Constants.KEY_TOP];
             string heightStr = iniData[Constants.SECTION_SIZE][Constants.KEY_HEIGHT];
             string widthStr = iniData[Constants.SECTION_SIZE][Constants.KEY_WIDTH];
-            string opacityStr = iniData[Constants.SECTION_THEME][Constants.KEY_OPACITY];
+            
             string themeName = iniData[Constants.SECTION_THEME][Constants.KEY_THEME_NAME];
             string themeCustom = iniData[Constants.SECTION_THEME][Constants.KEY_THEME_CUSTOM];
             string mainBackground = iniData[Constants.SECTION_THEME][Constants.KEY_MAIN_BACKGROUND];
+            string mainOpacityStr = iniData[Constants.SECTION_THEME][Constants.KEY_MAIN_OPACITY];
+
             string projectForeground = iniData[Constants.SECTION_THEME][Constants.KEY_PROJECT_FOREGROUND];
-            string mainFontFamily = iniData[Constants.SECTION_THEME][Constants.KEY_MAIN_FONTFAMILY];
-            string mainFontSizeStr = iniData[Constants.SECTION_THEME][Constants.KEY_MAIN_FONTSIZE];
+            string fontFamily = iniData[Constants.SECTION_THEME][Constants.KEY_FONTFAMILY];
+            string fontSizeStr = iniData[Constants.SECTION_THEME][Constants.KEY_FONTSIZE];
+            string opacityStr = iniData[Constants.SECTION_THEME][Constants.KEY_OPACITY];
+
 
             Configs.isMaximum = string.IsNullOrEmpty(isMaximum) ? false : Convert.ToBoolean(isMaximum);
-            Configs.mainHeight = string.IsNullOrEmpty(heightStr) ? Constants.MAIN_HEIGHT : Convert.ToDouble(heightStr);
-            Configs.mainWidth = string.IsNullOrEmpty(widthStr) ? Constants.MAIN_WIDTH : Convert.ToDouble(widthStr);
             Configs.mainLeft = string.IsNullOrEmpty(leftStr) ? Constants.MAIN_LEFT : Convert.ToDouble(leftStr);
             Configs.mainTop = string.IsNullOrEmpty(topStr) ? Constants.MAIN_TOP : Convert.ToDouble(topStr);
-            Configs.opacity = NumberUtils.IsNumeric(opacityStr, out double opacity) ? opacity : 1D;
+            Configs.mainHeight = string.IsNullOrEmpty(heightStr) ? Constants.MAIN_HEIGHT : Convert.ToDouble(heightStr);
+            Configs.mainWidth = string.IsNullOrEmpty(widthStr) ? Constants.MAIN_WIDTH : Convert.ToDouble(widthStr);
+            
             Configs.themeName = string.IsNullOrEmpty(themeName) ? Constants.WINDOW_THEME_BLUE : themeName;
             Configs.themeCustom = themeCustom;
             Configs.mainBackground = mainBackground;
+            Configs.mainOpacity = NumberUtils.IsNumeric(mainOpacityStr, out double mainOpacity) ? mainOpacity : 1D;
             Configs.projectForeground = string.IsNullOrEmpty(projectForeground) ? "#000000" : projectForeground;
-            Configs.mainFontFamily = string.IsNullOrEmpty(mainFontFamily) || !FontUtils.IsSystemFont(mainFontFamily) ? "微软雅黑" : mainFontFamily;
-            Configs.mainFontSize = NumberUtils.IsInt(mainFontSizeStr, out int mainFontSize) ? mainFontSize : 14;
+            Configs.fontFamily = string.IsNullOrEmpty(fontFamily) || !FontUtils.IsSystemFont(fontFamily) ? "微软雅黑" : fontFamily;
+            Configs.fontSize = NumberUtils.IsInt(fontSizeStr, out int fontSize) ? fontSize : 14;
+            Configs.opacity = NumberUtils.IsNumeric(opacityStr, out double opacity) ? opacity : 1D;
             // 是否最大化
             mainViewModel.IsMaximum = Configs.isMaximum;
             // 尺寸
@@ -182,13 +188,14 @@ namespace XStart2._0 {
                 Maximum_Click(sender, e);
             }
             // 主题
-            mainViewModel.Opacity = Configs.opacity;// 不透明度
+            mainViewModel.MainOpacity = Configs.mainOpacity;// 不透明度
             WindowTheme.Instance.ThemeName = Configs.themeName;// 主题名
             WindowTheme.Instance.ThemeCustom = Configs.themeCustom;// 自定义主题
             mainViewModel.MainBackground = Configs.mainBackground; // 背景
             WindowTheme.Instance.ProjectForeground = Configs.projectForeground;// 项目字体颜色
-            WindowTheme.Instance.MainFontFamily = Configs.mainFontFamily;// 项目字体
-            WindowTheme.Instance.MainFontSize = Configs.mainFontSize;// 项目字体
+            WindowTheme.Instance.FontFamily = Configs.fontFamily;// 项目字体
+            WindowTheme.Instance.FontSize = Configs.fontSize;// 项目字体
+            WindowTheme.Instance.Opacity = Configs.opacity;// 控件不透明度
             #endregion
             string dpiChangeStr = iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE];
             Configs.dpiChange = string.IsNullOrEmpty(dpiChangeStr) ? false : Convert.ToBoolean(dpiChangeStr);
@@ -1649,6 +1656,7 @@ namespace XStart2._0 {
         private void RestoreDefault_Click(object sender, RoutedEventArgs e) {
             if (MessageBoxResult.OK == MessageBox.Show("确认恢复默认配置？", Constants.MESSAGE_BOX_TITLE_WARN)) {
                 mainViewModel.MainBackground = string.Empty;
+                mainViewModel.MainOpacity = 1D;
                 mainViewModel.MainHeight = Constants.MAIN_HEIGHT;
                 mainViewModel.MainWidth = Constants.MAIN_WIDTH;
                 mainViewModel.MainLeft = Constants.MAIN_LEFT;
@@ -1679,9 +1687,9 @@ namespace XStart2._0 {
                 mainViewModel.WeatherAccuApiUrl = Constants.WEATHER_ACCU_API_URL;
                 mainViewModel.WeatherVcApiUrl = Constants.WEATHER_VC_API_URL;
                 WindowTheme.Instance.ProjectForeground = "#000000";
-                WindowTheme.Instance.MainFontFamily = Constants.DEFAULT_FONT_FAMILY;
-                WindowTheme.Instance.MainFontSize = 14;
-                mainViewModel.Opacity = 1D;
+                WindowTheme.Instance.FontFamily = Constants.DEFAULT_FONT_FAMILY;
+                WindowTheme.Instance.FontSize = 14;
+                WindowTheme.Instance.Opacity = 1D;
                 WindowTheme.Instance.ThemeName = Constants.WINDOW_THEME_BLUE;
 
             }
@@ -1792,9 +1800,11 @@ namespace XStart2._0 {
 
             #region 窗口位置和尺寸保存
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_MAIN_BACKGROUND, ref Configs.mainBackground, mainViewModel.MainBackground);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_MAIN_OPACITY, ref Configs.mainOpacity, mainViewModel.MainOpacity);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_PROJECT_FOREGROUND, ref Configs.projectForeground, WindowTheme.Instance.ProjectForeground);
-            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_MAIN_FONTFAMILY, ref Configs.mainFontFamily, WindowTheme.Instance.MainFontFamily);
-            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_MAIN_FONTSIZE, ref Configs.mainFontSize, WindowTheme.Instance.MainFontSize);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_FONTFAMILY, ref Configs.fontFamily, WindowTheme.Instance.FontFamily);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_FONTSIZE, ref Configs.fontSize, WindowTheme.Instance.FontSize);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_OPACITY, ref Configs.opacity, WindowTheme.Instance.Opacity);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_IS_MAXIMUM, ref Configs.isMaximum, mainViewModel.IsMaximum);
             if (!mainViewModel.IsMaximum) {
                 IniParserUtils.ConfigIniData(iniData, Constants.SECTION_SIZE, Constants.KEY_HEIGHT, ref Configs.mainHeight, mainViewModel.MainHeight);
@@ -1802,7 +1812,6 @@ namespace XStart2._0 {
                 IniParserUtils.ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_LEFT, ref Configs.mainLeft, mainViewModel.MainLeft);
                 IniParserUtils.ConfigIniData(iniData, Constants.SECTION_LOCATION, Constants.KEY_TOP, ref Configs.mainTop, mainViewModel.MainTop);
             }
-            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_OPACITY, ref Configs.opacity, mainViewModel.Opacity);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_THEME_NAME, ref Configs.themeName, WindowTheme.Instance.ThemeName);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_THEME_CUSTOM, ref Configs.themeCustom, WindowTheme.Instance.ThemeCustom);
             #endregion
@@ -2390,13 +2399,14 @@ namespace XStart2._0 {
         /// <param name="e"></param>
         private void Beautiful_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
-            BeautifulWindow window = new BeautifulWindow(mainViewModel.MainBackground, WindowTheme.Instance.ProjectForeground, WindowTheme.Instance.MainFontFamily, WindowTheme.Instance.MainFontSize, mainViewModel.Opacity) { Owner = this};
+            BeautifulWindow window = new BeautifulWindow(mainViewModel.MainBackground, mainViewModel.MainOpacity, WindowTheme.Instance.ProjectForeground, WindowTheme.Instance.FontFamily, WindowTheme.Instance.FontSize, WindowTheme.Instance.Opacity) { Owner = this};
             if (true == window.ShowDialog()) {
                 mainViewModel.MainBackground = window.Bg;
+                mainViewModel.MainOpacity = window.Mo;
                 WindowTheme.Instance.ProjectForeground = window.Fg;
-                WindowTheme.Instance.MainFontFamily = window.Ff;
-                WindowTheme.Instance.MainFontSize = window.Fs;
-                mainViewModel.Opacity = window.Op;
+                WindowTheme.Instance.FontFamily = window.Ff;
+                WindowTheme.Instance.FontSize = window.Fs;
+                WindowTheme.Instance.Opacity = window.Op;
             }
             window.Close();
             OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);

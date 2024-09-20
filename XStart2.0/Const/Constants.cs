@@ -19,7 +19,6 @@
 
         public const string SET_FILE = "Config/Ini/Set.ini";
 
-        public const string SECTION_MAIN = "main";
         public const string SECTION_LOCATION = "Location";
         public const string SECTION_SIZE = "Size";
         public const string SECTION_CONFIG = "Config";
@@ -53,15 +52,17 @@
         public const string KEY_ADD_MULTI = "AddMulti";
 
         public const string KEY_MAIN_BACKGROUND = "Background";
+        public const string KEY_MAIN_OPACITY = "MainOpacity";
         public const string KEY_PROJECT_FOREGROUND = "ProjectForeground";
-        public const string KEY_MAIN_FONTFAMILY = "FontFaimly";
-        public const string KEY_MAIN_FONTSIZE = "FontSize";
+        public const string KEY_FONTFAMILY = "FontFaimly";
+        public const string KEY_FONTSIZE = "FontSize";
+        public const string KEY_OPACITY = "Opacity";
         public const string KEY_IS_MAXIMUM = "IsMaximum";
         public const string KEY_LEFT = "Left";
         public const string KEY_TOP = "Top";
         public const string KEY_HEIGHT = "Height";
         public const string KEY_WIDTH = "Width";
-        public const string KEY_OPACITY = "Opacity";
+        
         public const string KEY_THEME_NAME = "Name";
         public const string KEY_THEME_CUSTOM = "Custom";
 

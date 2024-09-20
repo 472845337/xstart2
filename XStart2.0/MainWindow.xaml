@@ -54,7 +54,7 @@
             <Setter Property="Background">
                 <Setter.Value>
                     <SolidColorBrush Color="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}"
-                     Opacity="{Binding DataContext.Opacity,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                     Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
                 </Setter.Value>
             </Setter>
             <Setter Property="BorderBrush" Value="Gray"/>
@@ -79,7 +79,7 @@
                                 <Setter TargetName="Border" Property="Background">
                                     <Setter.Value>
                                         <SolidColorBrush Color="{Binding ToggleButtonIsCheckedBackGround,Source={x:Static bean:WindowTheme.Instance}}"
-                                                Opacity="{Binding DataContext.Opacity,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                                Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
                                     </Setter.Value>
                                 </Setter>
                                 <Setter Property="Padding" Value="7,3,7,3"/>
@@ -94,7 +94,7 @@
                                     <Setter Property="Background">
                                         <Setter.Value>
                                             <SolidColorBrush Color="{Binding ButtonCancelIsMouseOverBackGround,Source={x:Static bean:WindowTheme.Instance}}"
-                                                            Opacity="{Binding DataContext.Opacity,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                                            Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
                                         </Setter.Value>
                                     </Setter>
                                 </MultiTrigger.Setters>
@@ -110,7 +110,7 @@
             <Setter Property="Background">
                 <Setter.Value>
                     <SolidColorBrush Color="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}"
-                                     Opacity="{Binding DataContext.Opacity,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                     Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
                 </Setter.Value>
             </Setter>
             <Setter Property="FontFamily" Value="{Binding MainFontFamily,Source={x:Static bean:WindowTheme.Instance}}"/>
@@ -130,7 +130,7 @@
                     <Setter Property="Background">
                         <Setter.Value>
                             <SolidColorBrush Color="{Binding ToggleButtonIsCheckedBackGround,Source={x:Static bean:WindowTheme.Instance}}"
-                                             Opacity="{Binding DataContext.Opacity,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                             Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
                         </Setter.Value>
                     </Setter>
                     <Setter Property="Foreground" Value="{Binding ToggleButtonIsCheckedForeGround,Source={x:Static bean:WindowTheme.Instance}}"/>
@@ -139,7 +139,7 @@
                     <Setter Property="Background">
                         <Setter.Value>
                             <SolidColorBrush Color="{Binding ButtonConfirmIsMouseOverBackGround,Source={x:Static bean:WindowTheme.Instance}}"
-                                            Opacity="{Binding DataContext.Opacity,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                            Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
                         </Setter.Value>
                     </Setter>
                     <Setter Property="Foreground" Value="{Binding ButtonConfirmIsMouseOverForeGround,Source={x:Static bean:WindowTheme.Instance}}"/>
@@ -228,7 +228,7 @@
                         <Setter Property="Background">
                             <Setter.Value>
                                 <SolidColorBrush Color="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}"
-                                         Opacity="{Binding Opacity}"/>
+                                         Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
                             </Setter.Value>
                         </Setter>
                     </Style>
@@ -257,7 +257,7 @@
                 <!-- 最小化按钮 -->
                 <Button Style="{StaticResource MinimumButton_Style}" DockPanel.Dock="Right" Click="Minimum_Click">
                     <Button.Content>
-                        <Path Stroke="{Binding Foreground,RelativeSource={RelativeSource AncestorLevel=1, AncestorType={x:Type Button}}}" Data="M0,0 L0,0 10,0"/>
+                        <Path Stroke="{Binding Foreground,RelativeSource={RelativeSource AncestorLevel=1, AncestorType={x:Type Button}}}" Data="M0,8 L0,8 10,8"/>
                     </Button.Content>
                 </Button>
                 <!-- 皮肤菜单 -->
@@ -408,7 +408,7 @@
                                     </MenuItem>
                                 </ContextMenu>
                             </DockPanel.ContextMenu>
-                            <TextBlock DockPanel.Dock="Left" Width="28" Text="{Binding Value.FaIcon}" FontFamily="{Binding Value.FaIconFontFamily}" Foreground="{Binding Value.FaIconColor}" FontSize="18" Padding="5"/>
+                            <TextBlock DockPanel.Dock="Left" Width="28" Text="{Binding Value.FaIcon}" FontFamily="{Binding Value.FaIconFontFamily}" Foreground="{Binding Value.FaIconColor}" FontSize="18" Padding="5" ToolTip="{Binding Value.Name}"/>
                             <TextBlock Style="{StaticResource TextBlock_ThemeStyle}" DockPanel.Dock="Right" VerticalAlignment="Center" Text="{Binding Value.Name}" FontSize="18" Padding="5"/>
                         </DockPanel>
                     </DataTemplate>
@@ -450,7 +450,8 @@
                                         <DataTemplate>
                                             <Expander helper:ElementParamHelper.TypeSection="{Binding Value.TypeSection}" 
                                                       helper:ElementParamHelper.ColumnSection="{Binding Value.Section}"
-                                                      Header="{Binding Value.Name}" IsExpanded="{Binding Value.IsExpanded}" Style="{StaticResource ExpandablePanelStyle}" BorderBrush="Transparent"
+                                                      Header="{Binding Value.Name}" IsExpanded="{Binding Value.IsExpanded}" Style="{StaticResource ExpandablePanelStyle}" 
+                                                      BorderBrush="Transparent"
                                                       AllowDrop="True" DragDrop.Drop="Project_DragDrop">
                                                 <Expander.ContextMenu>
                                                     <ContextMenu>

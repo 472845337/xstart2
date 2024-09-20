@@ -104,13 +104,28 @@ namespace XStart2._0.Windows {
             DialogResult = false;
         }
 
+        // 使用随机种子，否则短时间内调用的随机数是一样的
+        Random ran = new Random(Guid.NewGuid().ToString().GetHashCode());
         private Tuple<SolidColorBrush, SolidColorBrush> GetRanColor() {
-            // 使用随机种子，否则短时间内调用的随机数是一样的
-            Random ran = new Random(Guid.NewGuid().ToString().GetHashCode());
-            int r = ran.Next(0, 256);
-            int g = ran.Next(0, 256);
-            int b = ran.Next(0, 256);
-            return new Tuple<SolidColorBrush, SolidColorBrush>(ColorUtils.GetBrush(r, g, b), ColorUtils.GetBrush(255 - r, 255 - g, 255 - b));
+            int br = GetRanRgb();
+            int bg = GetRanRgb();
+            int bb = GetRanRgb();
+
+            int fr = GetInvertRgb(br);
+            int fg = GetInvertRgb(bg);
+            int fb = GetInvertRgb(bb);
+            return new Tuple<SolidColorBrush, SolidColorBrush>(ColorUtils.GetBrush(br, bg, bb), ColorUtils.GetBrush(fr, fg, fb));
+        }
+        private int GetRanRgb() {
+            return ran.Next(0, 256);
+        }
+
+        private int GetInvertRgb(int rgb) {
+            if(rgb >= 103 && rgb <= 152) {
+                return 0 == ran.Next(0, 2) ? ran.Next(0, 56) : ran.Next(200, 256);
+            } else {
+                return 255 - rgb;
+            }
         }
     }
 }

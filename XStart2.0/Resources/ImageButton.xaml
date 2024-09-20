@@ -28,7 +28,7 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background">
                                 <Setter.Value>
-                                    <SolidColorBrush Color="AliceBlue" Opacity="{Binding DataContext.Opacity,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+                                    <SolidColorBrush Color="AliceBlue" Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
                                 </Setter.Value>
                             </Setter>
                             <Setter Property="Cursor" Value="Hand"/>
