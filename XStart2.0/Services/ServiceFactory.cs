@@ -6,6 +6,7 @@ namespace XStart2._0.Services {
         private static TableService<Column> columnService;
         private static TableService<Project> projectService;
         private static TableService<Admin> adminService;
+        private static TableService<CustomTheme> customThemeService;
 
         public static TableService<Type> GetTypeService() {
             if (null == typeService) {
@@ -33,6 +34,13 @@ namespace XStart2._0.Services {
                 adminService = AdminService.Instance;
             }
             return adminService;
+        }
+
+        public static TableService<CustomTheme> GetCustomThemeService() {
+            if (null == customThemeService) {
+                customThemeService = CustomThemeService.Instance;
+            }
+            return customThemeService;
         }
 
         public static S GetService<T, S>() where T : TableData where S : TableService<T> {

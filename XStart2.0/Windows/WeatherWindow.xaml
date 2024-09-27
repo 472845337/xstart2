@@ -20,12 +20,6 @@
             <Setter Property="Width" Value="18"/>
             <Setter Property="Height" Value="22"/>
         </Style>
-        <Style x:Key="Popup_Style" TargetType="Popup">
-            <Setter Property="StaysOpen" Value="False"/>
-            <Setter Property="Margin" Value="0 10 0 0"/>
-            <Setter Property="MinHeight" Value="30"/>
-            <Setter Property="Placement" Value="Bottom"/>
-        </Style>
         <LinearGradientBrush  x:Key="AirSliderLinearGradient_Style">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Offset="0" Color="Green" />
@@ -97,24 +91,17 @@
                         <StackPanel>
                             <StackPanel Orientation="Horizontal" Background="White">
                                 <TextBlock Margin="5" Text="清空所有记录" Width="Auto" VerticalAlignment="Center"/>
-                                <TextBlock Margin="5" Text="&#xf057;" Background="Transparent"
-                                           FontFamily="{StaticResource FontAwesomeSolid}"
+                                <TextBlock Style="{StaticResource FontAwesome_Style}" Margin="5" Text="&#xf057;"
                                            Foreground="OrangeRed"
-                                           FontSize="16"
-                                           VerticalAlignment="Center"
-                                           MouseLeftButtonUp="RemoveAllLastCity_Click" Cursor="Hand"/>
+                                           MouseLeftButtonUp="RemoveAllLastCity_Click"/>
                             </StackPanel>
                             <ListBox x:Name="LastCountries_ListBox" ItemsSource="{Binding LastCountries}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Margin="2" Orientation="Horizontal">
                                             <TextBlock Text="{Binding FullName}" Width="Auto" VerticalAlignment="Center" MouseLeftButtonUp="SelectCity" Tag="{Binding}"/>
-                                            <TextBlock Margin="10 0 0 0" Text="&#xf057;" Background="Transparent"
-                                           FontFamily="{StaticResource FontAwesomeSolid}"
-                                           Foreground="DeepSkyBlue"
-                                           FontSize="16"
-                                           VerticalAlignment="Center"
-                                           MouseLeftButtonUp="RemoveLastCity_Click" Tag="{Binding Id}" Cursor="Hand"/>
+                                            <TextBlock Style="{StaticResource FontAwesome_Style}" Margin="10 0 0 0" Text="&#xf057;"
+                                                       MouseLeftButtonUp="RemoveLastCity_Click" Tag="{Binding Id}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>

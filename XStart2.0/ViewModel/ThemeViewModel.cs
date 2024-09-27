@@ -1,20 +1,27 @@
-﻿using System.Windows.Media;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Media;
+using XStart2._0.Bean;
 
 namespace XStart2._0.ViewModel {
     public class ThemeViewModel : BaseViewModel {
 
-        public SolidColorBrush ConfirmButtonBackGroundColor { get; set; }
-        public SolidColorBrush ConfirmButtonForeGroundColor { get; set; }
-        public SolidColorBrush ConfirmButtonMouseOverBackGroundColor { get; set; }
-        public SolidColorBrush ConfirmButtonMouseOverForeGroundColor { get; set; }
+        public string ConfirmButtonBackGround { get; set; }
+        public string ConfirmButtonForeGround { get; set; }
+        public string ConfirmButtonMouseOverBackGround { get; set; }
+        public string ConfirmButtonMouseOverForeGround { get; set; }
 
-        public SolidColorBrush CancelButtonBackGroundColor { get; set; }
-        public SolidColorBrush CancelButtonForeGroundColor { get; set; }
-        public SolidColorBrush CancelButtonMouseOverBackGroundColor { get; set; }
-        public SolidColorBrush CancelButtonMouseOverForeGroundColor { get; set; }
+        public string CancelButtonBackGround { get; set; }
+        public string CancelButtonForeGround { get; set; }
+        public string CancelButtonMouseOverBackGround { get; set; }
+        public string CancelButtonMouseOverForeGround { get; set; }
 
-        public SolidColorBrush ToggleButtonCheckedBackGroundColor { get; set; }
-        public SolidColorBrush ToggleButtonCheckedForeGroundColor { get; set; }
+        public string ToggleButtonCheckedBackGround { get; set; }
+        public string ToggleButtonCheckedForeGround { get; set; }
+
+        public ObservableCollection<CustomTheme> CustomThemes { get; set; }
+
+        public CustomTheme LoadCustomTheme { get; set; }
+        public string LoadCustomName { get; set; }
     }
 
 

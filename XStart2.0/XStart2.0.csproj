@@ -118,6 +118,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bean\Admin.cs" />
+    <Compile Include="Bean\CustomTheme.cs" />
     <Compile Include="Bean\GradientColor.cs" />
     <Compile Include="Bean\Holiday\HcaRequest.cs" />
     <Compile Include="Bean\Holiday\HcaResponse.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="Converters\WeatherAirConverter.cs" />
     <Compile Include="Converters\WeaImgConverter.cs" />
     <Compile Include="Helper\DragDop\DragAdorner.cs" />
+    <Compile Include="Services\CustomThemeService.cs" />
     <Compile Include="Services\AdminService.cs" />
     <Compile Include="Utils\BackgroundUtils.cs" />
     <Compile Include="Utils\ColorUtils.cs" />

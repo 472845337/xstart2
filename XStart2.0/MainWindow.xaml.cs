@@ -2375,16 +2375,16 @@ namespace XStart2._0 {
             ThemeWindow themeWindow = new ThemeWindow() { Owner = this };
             if (true == themeWindow.ShowDialog()) {
                 StringBuilder themeCustomSb = new StringBuilder()
-                    .Append(GetColorString(themeWindow.vm.ConfirmButtonBackGroundColor, 1)).Append(Constants.SPLIT_CHAR)
-                    .Append(GetColorString(themeWindow.vm.ConfirmButtonForeGroundColor, 0)).Append(Constants.SPLIT_CHAR)
-                    .Append(GetColorString(themeWindow.vm.ConfirmButtonMouseOverBackGroundColor, 1)).Append(Constants.SPLIT_CHAR)
-                    .Append(GetColorString(themeWindow.vm.ConfirmButtonMouseOverForeGroundColor, 0)).Append(Constants.SPLIT_CHAR)
-                    .Append(GetColorString(themeWindow.vm.CancelButtonBackGroundColor, 1)).Append(Constants.SPLIT_CHAR)
-                    .Append(GetColorString(themeWindow.vm.CancelButtonForeGroundColor, 0)).Append(Constants.SPLIT_CHAR)
-                    .Append(GetColorString(themeWindow.vm.CancelButtonMouseOverBackGroundColor, 1)).Append(Constants.SPLIT_CHAR)
-                    .Append(GetColorString(themeWindow.vm.CancelButtonMouseOverForeGroundColor, 0)).Append(Constants.SPLIT_CHAR)
-                    .Append(GetColorString(themeWindow.vm.ToggleButtonCheckedBackGroundColor, 1)).Append(Constants.SPLIT_CHAR)
-                    .Append(GetColorString(themeWindow.vm.ToggleButtonCheckedForeGroundColor, 0));
+                    .Append(themeWindow.vm.ConfirmButtonBackGround).Append(Constants.SPLIT_CHAR)
+                    .Append(themeWindow.vm.ConfirmButtonForeGround).Append(Constants.SPLIT_CHAR)
+                    .Append(themeWindow.vm.ConfirmButtonMouseOverBackGround).Append(Constants.SPLIT_CHAR)
+                    .Append(themeWindow.vm.ConfirmButtonMouseOverForeGround).Append(Constants.SPLIT_CHAR)
+                    .Append(themeWindow.vm.CancelButtonBackGround).Append(Constants.SPLIT_CHAR)
+                    .Append(themeWindow.vm.CancelButtonForeGround).Append(Constants.SPLIT_CHAR)
+                    .Append(themeWindow.vm.CancelButtonMouseOverBackGround).Append(Constants.SPLIT_CHAR)
+                    .Append(themeWindow.vm.CancelButtonMouseOverForeGround).Append(Constants.SPLIT_CHAR)
+                    .Append(themeWindow.vm.ToggleButtonCheckedBackGround).Append(Constants.SPLIT_CHAR)
+                    .Append(themeWindow.vm.ToggleButtonCheckedForeGround);
                 WindowTheme.Instance.ThemeCustom = themeCustomSb.ToString();
                 WindowTheme.Instance.ThemeName = Constants.WINDOW_THEME_CUSTOM;
             }
@@ -2410,19 +2410,6 @@ namespace XStart2._0 {
             }
             window.Close();
             OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
-        }
-        /// <summary>
-        /// 获取画刷的颜色，如果brush为null,type==1表示背景色，type!=1 表示文字色
-        /// </summary>
-        /// <param name="brush"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        private string GetColorString(SolidColorBrush brush, int type) {
-            if (null == brush) {
-                return type == 1 ? "#FFFFFF" : "#000000";
-            } else {
-                return ColorUtils.GetHtml(brush.Color);
-            }
         }
 
         private void SetAdminSecurity_Click(object sender, RoutedEventArgs e) {
