@@ -39,6 +39,7 @@ namespace XStart2._0 {
         readonly MainViewModel mainViewModel = new MainViewModel();
         private static bool IsAllShow = true;
         private static bool IsLock = false;
+        private static int appExit = 0;// 应用关闭，用来标识是系统关机还是用户关闭软件
         System.Windows.Forms.NotifyIcon notifyIcon = null;
         public MainWindow() {
             InitializeComponent();
@@ -101,6 +102,7 @@ namespace XStart2._0 {
 
         private void Close_Click(object sender, RoutedEventArgs e) {
             if (mainViewModel.ExitButtonType) {
+                appExit = 1;
                 Close();
             } else {
                 NotifyUtils.ShowNotification("关闭按钮配置了最小化，调整请在配置面板中修改！");
@@ -601,7 +603,10 @@ namespace XStart2._0 {
 
             // 配置以及窗口数据保存
             SaveSetting();
-            if (!Configs.forceExit && mainViewModel.ExitWarn && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.None, MessageBoxOptions.DefaultDesktopOnly)) {
+            if (appExit == 1 
+                && !Configs.forceExit 
+                && mainViewModel.ExitWarn 
+                && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.None, MessageBoxOptions.DefaultDesktopOnly)) {
                 // 取消退出
                 e.Cancel = true;
             } else {
@@ -687,10 +692,12 @@ namespace XStart2._0 {
             if (mainViewModel.ExitWarn) {
                 if (MessageBoxResult.OK == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.None, MessageBoxOptions.DefaultDesktopOnly)) {
                     Configs.forceExit = true;
+                    appExit = 1;
                     Application.Current.Shutdown();
                 }
             } else {
                 Configs.forceExit = true;
+                appExit = 1;
                 Application.Current.Shutdown();
             }
         }
