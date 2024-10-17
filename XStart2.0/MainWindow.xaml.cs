@@ -608,6 +608,7 @@ namespace XStart2._0 {
                 && mainViewModel.ExitWarn 
                 && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.None, MessageBoxOptions.DefaultDesktopOnly)) {
                 // 取消退出
+                appExit = 0;
                 e.Cancel = true;
             } else {
                 #region 子窗口退出
@@ -617,6 +618,7 @@ namespace XStart2._0 {
                     DllUtils.SendMessage(Configs.MstscHandler, WinApi.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
                     // 如果远程窗口取消关闭，则主窗口取消关闭
                     if (Configs.MstscHandler.ToInt32() > 0) {
+                        appExit = 0;
                         e.Cancel = true;
                         return;
                     }
