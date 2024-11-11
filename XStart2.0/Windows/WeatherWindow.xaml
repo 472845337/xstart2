@@ -118,10 +118,10 @@
                 <!-- 获取天气信息 -->
                 <Button DockPanel.Dock="Right" VerticalAlignment="Top" Style="{StaticResource BtnConfirm_Style}" Margin="0 0 10 0" Content="查询天气" Click="GetWeather_Click" ToolTip="获取所选区县的天气"/>
                 <ComboBox DockPanel.Dock="Left" Style="{StaticResource FormValue_Style}" Margin="10 0 0 0" SelectedValuePath="Content" SelectedValue="{Binding WeatherApi}" Width="120" SelectionChanged="ComboBox_SelectionChanged">
-                    <ComboBoxItem Content="易客云"/>
                     <ComboBoxItem Content="高德"/>
                     <ComboBoxItem Content="心知"/>
                     <ComboBoxItem Content="和风"/>
+                    <ComboBoxItem Content="易客云"/>
                     <ComboBoxItem Content="OpenWeather"/>
                     <ComboBoxItem Content="AccuWeather"/>
                     <ComboBoxItem Content="VisualCrossing"/>

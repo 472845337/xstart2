@@ -24,7 +24,7 @@
         LocationChanged="MainWindow_LocationChanged"
         Topmost="{Binding TopMost}" Icon="pack://application:,,,/Files/xstart2.ico"
         Background="{Binding BackgroundBrush}"
-        FontSize="{Binding MainFontSize,Source={x:Static bean:WindowTheme.Instance}}" ShowInTaskbar="{Binding ShowInTaskbar}">
+        FontSize="{Binding FontSize,Source={x:Static bean:WindowTheme.Instance}}" ShowInTaskbar="{Binding ShowInTaskbar}">
 
     <!--<b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
@@ -113,7 +113,7 @@
                                      Opacity="{Binding Opacity,Source={x:Static bean:WindowTheme.Instance}}"/>
                 </Setter.Value>
             </Setter>
-            <Setter Property="FontFamily" Value="{Binding MainFontFamily,Source={x:Static bean:WindowTheme.Instance}}"/>
+            <Setter Property="FontFamily" Value="{Binding FontFamily,Source={x:Static bean:WindowTheme.Instance}}"/>
             <Setter Property="Foreground" Value="{Binding ButtonConfirmForeGround,Source={x:Static bean:WindowTheme.Instance}}"/>
             <!-- 添加模板，用于置Background,否则无效 -->
             <Setter Property="Template">
@@ -568,7 +568,7 @@
                                                                         </Grid.ColumnDefinitions>
                                                                         <view:ImageButton Grid.Column="0" Content="{Binding Value.Name}" Style="{StaticResource ProjectButton}"
                                                                               Foreground="{Binding ProjectForeground,Source={x:Static bean:WindowTheme.Instance}}"
-                                                                              FontFamily="{Binding MainFontFamily,Source={x:Static bean:WindowTheme.Instance}}"
+                                                                              FontFamily="{Binding FontFamily,Source={x:Static bean:WindowTheme.Instance}}"
                                                                               ToolTip="{Binding Value.ToolTipContent}" Tag="{Binding Value}"
                                                                               Click="ProjectButton_Click" MouseDoubleClick="ProjectButton_DoubleClick"
                                                                               ButtonIcon="{Binding Value.Icon}" IconSize="{Binding Value.IconSize}"

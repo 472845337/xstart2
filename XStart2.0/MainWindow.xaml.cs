@@ -2300,11 +2300,9 @@ namespace XStart2._0 {
                 DllUtils.SwitchToThisWindow(Configs.CalendarHandler, true);
                 DllUtils.ShowWindow(Configs.CalendarHandler, WinApi.SW_SHOW);
             } else {
-                OpenNewWindowUtils.SetTopmost(this);
-                CalendarWindow cal = new CalendarWindow() { Owner = this};
+                CalendarWindow cal = new CalendarWindow();
                 cal.vm.MyDateTime = mainViewModel.MyDateTime;
-                cal.ShowDialog();
-                OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
+                cal.Show();
             }
 
         }
@@ -2348,10 +2346,8 @@ namespace XStart2._0 {
                     DllUtils.SwitchToThisWindow(Configs.WeatherHandler, true);
                     DllUtils.ShowWindow(Configs.WeatherHandler, WinApi.SW_NORMAL);
                 } else {
-                    OpenNewWindowUtils.SetTopmost(this);
-                    WeatherWindow weather = new WeatherWindow() { Owner = this };
-                    weather.ShowDialog();
-                    OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
+                    WeatherWindow weather = new WeatherWindow();
+                    weather.Show();
                 }
             }
         }

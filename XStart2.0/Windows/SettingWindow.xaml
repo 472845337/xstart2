@@ -205,30 +205,6 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <TabControl Grid.Row="0">
-                                <TabItem Header="易客云">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="60"/>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition Width="70"/>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition Width="50"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="34"/>
-                                            <RowDefinition Height="34"/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="AppId" Style="{StaticResource FormLabel_Style}"/>
-                                        <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding WeatherYkyApiAppId}" Style="{StaticResource FormValue_Style}"/>
-                                        <TextBlock Grid.Row="0" Grid.Column="3" Text="AppSecret" Style="{StaticResource FormLabel_Style}"/>
-                                        <TextBox Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding WeatherYkyApiAppSecret}" Style="{StaticResource FormValue_Style}"/>
-                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Url" Style="{StaticResource FormLabel_Style}" Foreground="Red"/>
-                                        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding WeatherYkyApiUrl}" Style="{StaticResource FormValue_Style}"/>
-                                        <TextBlock Grid.Row="1" Grid.Column="5" Text="去注册" Style="{StaticResource WeatherRegister_Style}" MouseLeftButtonUp="GoRegesitYky_MouseLeftButtonUp"/>
-                                    </Grid>
-                                </TabItem>
                                 <TabItem Header="高德">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
@@ -284,6 +260,30 @@
                                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Url" Style="{StaticResource FormLabel_Style}" Foreground="Red"/>
                                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding WeatherQApiUrl}" Style="{StaticResource FormValue_Style}"/>
                                         <TextBlock Grid.Row="1" Grid.Column="2" Text="去注册" Style="{StaticResource WeatherRegister_Style}" MouseLeftButtonUp="GoRegesitQ_MouseLeftButtonUp"/>
+                                    </Grid>
+                                </TabItem>
+                                <TabItem Header="易客云">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="60"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="50"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="34"/>
+                                            <RowDefinition Height="34"/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="AppId" Style="{StaticResource FormLabel_Style}"/>
+                                        <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding WeatherYkyApiAppId}" Style="{StaticResource FormValue_Style}"/>
+                                        <TextBlock Grid.Row="0" Grid.Column="3" Text="AppSecret" Style="{StaticResource FormLabel_Style}"/>
+                                        <TextBox Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" Text="{Binding WeatherYkyApiAppSecret}" Style="{StaticResource FormValue_Style}"/>
+                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Url" Style="{StaticResource FormLabel_Style}" Foreground="Red"/>
+                                        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding WeatherYkyApiUrl}" Style="{StaticResource FormValue_Style}"/>
+                                        <TextBlock Grid.Row="1" Grid.Column="5" Text="去注册" Style="{StaticResource WeatherRegister_Style}" MouseLeftButtonUp="GoRegesitYky_MouseLeftButtonUp"/>
                                     </Grid>
                                 </TabItem>
                                 <TabItem Header="OpenWeather">
