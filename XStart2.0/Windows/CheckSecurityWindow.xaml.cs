@@ -11,20 +11,29 @@ namespace XStart2._0.Windows {
     /// Interaction logic for CheckSecurityWindow.xaml
     /// </summary>
     public partial class CheckSecurityWindow : Window {
-        SecurityVM vm;
-        public CheckSecurityWindow(string title, string priSecurity, string ExitMsg = "") {
+        private string title;
+        private string priSecurity;
+        private string exitMsg;
+        private bool runTypeShow;
+        SecurityVM vm = new SecurityVM();
+
+        public string AutoRunType {  get; set; }
+        public CheckSecurityWindow(string title, string priSecurity, string exitMsg = "", bool isInit = false, bool runDirectly = false) {
             InitializeComponent();
-            vm = new SecurityVM {
-                Title = title,
-                PriSecurity = priSecurity,
-                ExitMsg = ExitMsg
-            };
+            this.title = title;
+            this.priSecurity = priSecurity;
+            this.exitMsg = exitMsg;
+            this.runTypeShow = isInit && runDirectly;
             Loaded += Window_Loaded;
             Closing += Window_Closing;
+            DataContext = vm;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            DataContext = vm;
+            vm.Title = title;
+            vm.PriSecurity = priSecurity;
+            vm.ExitMsg = exitMsg;
+            vm.RunTypeShow = runTypeShow;
             Configs.LockHandler = new WindowInteropHelper(this).Handle;
         }
 
@@ -59,6 +68,7 @@ namespace XStart2._0.Windows {
                 MessageBox.Show("口令不一致！", Constants.MESSAGE_BOX_TITLE_ERROR);
                 return;
             }
+            AutoRunType = vm.AutoRunType;
             DialogResult = true;
         }
 

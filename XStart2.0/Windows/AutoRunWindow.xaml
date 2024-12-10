@@ -14,7 +14,7 @@
             <ItemsControl ItemsSource="{Binding AutoRunProjects}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <VirtualizingStackPanel Orientation="Vertical"></VirtualizingStackPanel>
+                        <VirtualizingStackPanel></VirtualizingStackPanel>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -23,8 +23,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="20"/>
                                 <ColumnDefinition Width="36"/>
-                                <ColumnDefinition Width="*"/>
-
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <CheckBox Grid.Column="0" IsChecked="{Binding AutoRun}" VerticalAlignment="Center" Margin="3 0 0 0"/>
                             <Border Grid.Column="1" Padding="3">

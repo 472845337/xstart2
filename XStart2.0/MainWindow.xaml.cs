@@ -41,6 +41,7 @@ namespace XStart2._0 {
         private static bool IsLock = false;
         private static int appExit = 0;// 应用关闭，用来标识是系统关机还是用户关闭软件
         System.Windows.Forms.NotifyIcon notifyIcon = null;
+        private string autoRunType;
         public MainWindow() {
             InitializeComponent();
             // 时钟定时任务
@@ -479,8 +480,8 @@ namespace XStart2._0 {
             notifyIcon.ContextMenu.MenuItems.Add(8, new System.Windows.Forms.MenuItem("退出", WindowCloseMenu_Click));
             OpenCheckSecurityWindow(true);
             // 自启动
-            if (autoRunProjects.Count > 0 && !Configs.dpiChange) {
-                if (mainViewModel.RunDirectly) {
+            if (autoRunProjects.Count > 0 && !Configs.dpiChange && !Constants.RUN_TYPE_NOT.Equals(autoRunType)) {
+                if (mainViewModel.RunDirectly && Constants.RUN_TYPE_AUTO.Equals(autoRunType)) {
                     RunProjects(autoRunProjects);
                 } else {
                     AutoRunProjectWindow(autoRunProjects);
@@ -512,7 +513,7 @@ namespace XStart2._0 {
             }
             // 图标上的按钮失效处理
             SetNotifyIconEnable(false);
-            CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入管理员口令", Configs.admin.Password, "关闭该窗口将退出程序！") { Owner = this};
+            CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入管理员口令", Configs.admin.Password, "关闭该窗口将退出程序！", isInit, mainViewModel.RunDirectly) { Owner = this};
             if (Configs.inited) {
                 IsLock = true;
             }
@@ -521,6 +522,8 @@ namespace XStart2._0 {
                     IsLock = false;
                     Show();
                     IsAllShow = true;
+                } else {
+                    autoRunType = checkSecurityWindow.AutoRunType;
                 }
             } else {
                 Configs.forceExit = true;

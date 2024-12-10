@@ -219,5 +219,9 @@
         public const int ANCHOR_STYLE_RIGHT = 3;
         public const int ANCHOR_STYLE_BOTTOM = 4;
 
+        public const string RUN_TYPE_AUTO = "自启动";
+        public const string RUN_TYPE_MANUAL = "手工启动";
+        public const string RUN_TYPE_NOT = "不启动";
+
     }
 }

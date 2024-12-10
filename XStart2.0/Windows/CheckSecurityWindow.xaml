@@ -19,6 +19,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="口令"/>
         <PasswordBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" helper:PasswordBoxHelper.Attach="True" helper:PasswordBoxHelper.Password="{Binding Security,Mode=TwoWay}" KeyUp="EnterKey"/>
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource FormButtonPanel_Style}">
+            <ComboBox Margin="5" VerticalContentAlignment="Center" Visibility="{Binding RunTypeShow, Converter={StaticResource Boolean2VisibilityConverter}}" ItemsSource="{Binding AutoRunTypes}" SelectedValue="{Binding AutoRunType}" Width="80" IsEditable="False"/>
             <Button Style="{StaticResource BtnConfirm_Style}" Click="CheckSecurity"/>
             <Button Style="{StaticResource BtnCancel_Style}" Click="CancelSecurity"/>
         </StackPanel>
