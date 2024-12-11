@@ -1,8 +1,8 @@
-﻿using XStart2._0.Bean;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Windows.Media;
 using System.Windows;
+using System.Windows.Media;
+using XStart2._0.Bean;
 
 namespace XStart2._0.Utils {
     class GradientColorUtils {
@@ -78,8 +78,8 @@ namespace XStart2._0.Utils {
                             // 渐变色
                             // 根据角度计算start point和end point
                             Point startPoint, endPoint;
-                            if ((angle >= 0 && angle < 45) || (angle>=315 && angle <=360)) {
-                                double arcAngle = angle * Math.PI/ 180;
+                            if ((angle >= 0 && angle < 45) || (angle >= 315 && angle <= 360)) {
+                                double arcAngle = angle * Math.PI / 180;
                                 double offset = Math.Tan(arcAngle) * 0.5;
                                 startPoint = new Point(0, 0.5 - offset);
                                 endPoint = new Point(1, 0.5 + offset);

@@ -11,7 +11,7 @@ namespace XStart2._0.Windows {
     public partial class BeautifulWindow : Window {
         readonly BeautifulViewModel vm = new BeautifulViewModel();
         public string Bg { get; private set; }
-        public double Mo {  get; private set; }
+        public double Mo { get; private set; }
         public string Ff { get; private set; }
         public string Fg { get; private set; }
         public int Fs { get; private set; }
@@ -52,7 +52,7 @@ namespace XStart2._0.Windows {
 
         private void GradientBackground_Click(object sender, RoutedEventArgs e) {
             // 渐变色框
-            GradientColorWindow gradientColorWindow = new GradientColorWindow(vm.Background) { Owner = this};
+            GradientColorWindow gradientColorWindow = new GradientColorWindow(vm.Background) { Owner = this };
             if (true == gradientColorWindow.ShowDialog()) {
                 vm.Background = gradientColorWindow.GradientColor;
             }

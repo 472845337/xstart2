@@ -8,7 +8,7 @@ namespace XStart2._0.Bean {
             Color = color;
             Point = point;
         }
-        
+
         public string Color { get; set; }
         public float Point { get; set; }
     }

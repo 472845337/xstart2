@@ -41,84 +41,10 @@ namespace XStart2._0 {
         private static bool IsLock = false;
         private static int appExit = 0;// 应用关闭，用来标识是系统关机还是用户关闭软件
         System.Windows.Forms.NotifyIcon notifyIcon = null;
-        private string autoRunType;
+
+        public List<Project> AutoRunProjectList { get; set; } = new List<Project>();
         public MainWindow() {
             InitializeComponent();
-            // 时钟定时任务
-            currentTimer.Tick += new EventHandler(CurrentTimer_Tick);
-            currentTimer.Start();
-            // 日期定时任务(配置的是1秒，但是执行后，计算下一天的时间差)
-            currentDateTimer.Tick += new EventHandler(CurrentDate_Tick);
-            currentDateTimer.Start();
-            // 自动GC
-            AutoGcTimer.Tick += new EventHandler(AutoGcTimer_Tick);
-            AutoGcTimer.Start();
-            // 操作消息（在设置消息的时候启动，计时完成后停止）
-            OperateMessageTimer.Tick += new EventHandler(OperateMessageTimer_Tick);
-            // 监控DPI变化
-            DpiWatchTimer.Tick += DpiWatchTimer_Tick;
-            DpiWatchTimer.Start();
-            // 将模型赋值上下文
-            DataContext = mainViewModel;
-        }
-
-        /// <summary>
-        /// 窗口左键拖动，取消鼠标靠近边缘最大化
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            DragMove();
-        }
-
-        private void ResizePressed(object sender, MouseEventArgs e) {
-            FrameworkElement element = sender as FrameworkElement;
-            string tag = element.Tag as string;
-            WinApi.ResizeDirection direction = (WinApi.ResizeDirection)Enum.Parse(typeof(WinApi.ResizeDirection), tag);
-            if (e.LeftButton == MouseButtonState.Pressed) {
-                ResizeWindow(direction);
-            }
-        }
-
-        private void ResizeWindow(WinApi.ResizeDirection direction) {
-            DllUtils.SendMessage(Configs.Handler, WinApi.WM_SYSCOMMAND, (IntPtr)(61440 + direction), IntPtr.Zero);
-        }
-
-        private void Maximum_Click(object sender, RoutedEventArgs e) {
-            if (WindowState == WindowState.Normal) {
-                // 避免最大化后，遮盖任务栏
-                MaxHeight = SystemParameters.WorkArea.Height;
-                MaxWidth = SystemParameters.WorkArea.Width;
-                WindowState = WindowState.Maximized;
-                mainViewModel.IsMaximum = true;
-            } else {
-                WindowState = WindowState.Normal;
-                mainViewModel.IsMaximum = false;
-            }
-        }
-
-        private void Minimum_Click(object sender, RoutedEventArgs e) {
-            this.Visibility = Visibility.Collapsed;
-        }
-
-        private void Close_Click(object sender, RoutedEventArgs e) {
-            if (mainViewModel.ExitButtonType) {
-                appExit = 1;
-                Close();
-            } else {
-                NotifyUtils.ShowNotification("关闭按钮配置了最小化，调整请在配置面板中修改！");
-                Minimum_Click(sender, e);
-            }
-        }
-
-        /// <summary>
-        /// 主窗口加载
-        /// </summary>
-        /// <param name="param"></param>
-        private void Window_Loaded(object sender, RoutedEventArgs e) {
-            #region 读取配置文件
-            var iniData = IniParserUtils.GetIniData(Constants.SET_FILE);
-            #endregion
             #region 管理员信息
             Admin admin = adminService.SelectFirst(null);
             if (null == admin) {
@@ -129,7 +55,7 @@ namespace XStart2._0 {
 
             string avatarPath = admin.Avator;
             int avatarSize = null == admin.AvatorSize ? Constants.AVATAR_SIZE : (int)admin.AvatorSize;
-            double gifSpeedRatio = null == admin.GifSpeedRatio? 1D : Math.Round((double)admin.GifSpeedRatio, 2);// 要对double的精度进行处理
+            double gifSpeedRatio = null == admin.GifSpeedRatio ? 1D : Math.Round((double)admin.GifSpeedRatio, 2);// 要对double的精度进行处理
             string nickName = admin.Name;
             string security = admin.Password;
             if (!string.IsNullOrEmpty(avatarPath)) {
@@ -146,14 +72,16 @@ namespace XStart2._0 {
             // admin口令
             mainViewModel.Security = security;
             #endregion
-
+            #region 读取配置文件
+            var iniData = IniParserUtils.GetIniData(Constants.SET_FILE);
+            #endregion
             #region 窗口相关加载，尺寸，位置，置顶
             string isMaximum = iniData[Constants.SECTION_LOCATION][Constants.KEY_IS_MAXIMUM];
             string leftStr = iniData[Constants.SECTION_LOCATION][Constants.KEY_LEFT];
             string topStr = iniData[Constants.SECTION_LOCATION][Constants.KEY_TOP];
             string heightStr = iniData[Constants.SECTION_SIZE][Constants.KEY_HEIGHT];
             string widthStr = iniData[Constants.SECTION_SIZE][Constants.KEY_WIDTH];
-            
+
             string themeName = iniData[Constants.SECTION_THEME][Constants.KEY_THEME_NAME];
             string themeCustom = iniData[Constants.SECTION_THEME][Constants.KEY_THEME_CUSTOM];
             string mainBackground = iniData[Constants.SECTION_THEME][Constants.KEY_MAIN_BACKGROUND];
@@ -170,7 +98,7 @@ namespace XStart2._0 {
             Configs.mainTop = string.IsNullOrEmpty(topStr) ? Constants.MAIN_TOP : Convert.ToDouble(topStr);
             Configs.mainHeight = string.IsNullOrEmpty(heightStr) ? Constants.MAIN_HEIGHT : Convert.ToDouble(heightStr);
             Configs.mainWidth = string.IsNullOrEmpty(widthStr) ? Constants.MAIN_WIDTH : Convert.ToDouble(widthStr);
-            
+
             Configs.themeName = string.IsNullOrEmpty(themeName) ? Constants.WINDOW_THEME_BLUE : themeName;
             Configs.themeCustom = themeCustom;
             Configs.mainBackground = mainBackground;
@@ -187,9 +115,7 @@ namespace XStart2._0 {
             // 位置
             mainViewModel.MainLeft = Configs.mainLeft;
             mainViewModel.MainTop = Configs.mainTop;
-            if (mainViewModel.IsMaximum) {
-                Maximum_Click(sender, e);
-            }
+
             // 主题
             mainViewModel.MainOpacity = Configs.mainOpacity;// 不透明度
             WindowTheme.Instance.ThemeName = Configs.themeName;// 主题名
@@ -300,6 +226,7 @@ namespace XStart2._0 {
             Configs.lineInMuted = AudioUtils.GetDeviceMute(Constants.DEVICE_NAME_LINE_IN);
             Configs.cdPlayerMuted = AudioUtils.GetDeviceMute(Constants.DEVICE_NAME_CD_PLAYER, NAudio.CoreAudioApi.DataFlow.Render);
             #endregion
+
             #region 天气参数配置
             string weatherApi = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_API];
             string weatherImgTheme = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_IMG_THEME];
@@ -318,6 +245,7 @@ namespace XStart2._0 {
             mainViewModel.WeatherYkyApiAppSecret = Configs.weatherYkyApiAppSecret;
             mainViewModel.WeatherYkyApiUrl = Configs.weatherYkyApiUrl;
             #endregion
+
             #region 高德
             string gaodeApiUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_GAODE_URL];
             string gaodeAppKey = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_GAODE_APP_KEY];
@@ -326,6 +254,7 @@ namespace XStart2._0 {
             mainViewModel.WeatherGaodeApiUrl = Configs.weatherGaodeApiUrl;
             mainViewModel.WeatherGaodeAppKey = Configs.weatherGaodeAppKey;
             #endregion
+
             #region 心知
             string seniverseApiUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_SENIVERSE_URL];
             string seniverseAppKey = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_SENIVERSE_APP_KEY];
@@ -334,6 +263,7 @@ namespace XStart2._0 {
             mainViewModel.WeatherSeniverseApiUrl = Configs.weatherSeniverseApiUrl;
             mainViewModel.WeatherSeniverseAppKey = Configs.weatherSeniverseAppKey;
             #endregion
+
             #region 和风
             string qApiUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_Q_URL];
             string qAppKey = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_Q_APP_KEY];
@@ -342,6 +272,7 @@ namespace XStart2._0 {
             mainViewModel.WeatherQApiUrl = Configs.weatherQApiUrl;
             mainViewModel.WeatherQAppKey = Configs.weatherQAppKey;
             #endregion
+
             #region OpenWeather
             string openApiUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_OPEN_URL];
             string openAppKey = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_OPEN_APP_KEY];
@@ -350,6 +281,7 @@ namespace XStart2._0 {
             mainViewModel.WeatherOpenApiUrl = Configs.weatherOpenApiUrl;
             mainViewModel.WeatherOpenAppKey = Configs.weatherOpenAppKey;
             #endregion
+
             #region AccuWeather
             string accuApiUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_ACCU_URL];
             string accuAppKey = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_ACCU_APP_KEY];
@@ -358,6 +290,7 @@ namespace XStart2._0 {
             mainViewModel.WeatherAccuApiUrl = Configs.weatherAccuApiUrl;
             mainViewModel.WeatherAccuAppKey = Configs.weatherAccuAppKey;
             #endregion
+
             #region Visual Crossing
             string vcApiUrl = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_VC_URL];
             string vcAppKey = iniData[Constants.SECTION_WEATHER][Constants.KEY_WEATHER_VC_APP_KEY];
@@ -367,6 +300,10 @@ namespace XStart2._0 {
             mainViewModel.WeatherVcAppKey = Configs.weatherVcAppKey;
             #endregion
             #endregion
+            mainViewModel.Types = XStartService.TypeDic;
+            int openTypeIndex = mainViewModel.Types.IndexOf(openType);
+            mainViewModel.SelectedIndex = openTypeIndex < 0 ? 0 : openTypeIndex;
+
             #region 加载数据
             // 加载类别配置
             List<Bean.Type> types = typeService.SelectList(new Bean.Type { OrderBy = "sort" });
@@ -413,11 +350,91 @@ namespace XStart2._0 {
                     project.TypeName = XStartService.TypeDic[project.TypeSection].Name;
                     project.ColumnName = XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].Name;
                     XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic.Add(project.Section, project);
+                    // 自启动应用
+                    if (project.AutoRun != null && (bool)project.AutoRun) {
+                        Project autoProject = ProjectUtils.Copy(project, false);
+                        autoProject.IconSize = Constants.ICON_SIZE_32;// 自启动的应用默认使用32的图标
+                        AutoRunProjectList.Add(autoProject);
+                    }
                 }
             }
             #endregion
+            // 时钟定时任务
+            currentTimer.Tick += new EventHandler(CurrentTimer_Tick);
+            currentTimer.Start();
+            // 日期定时任务(配置的是1秒，但是执行后，计算下一天的时间差)
+            currentDateTimer.Tick += new EventHandler(CurrentDate_Tick);
+            currentDateTimer.Start();
+            // 自动GC
+            AutoGcTimer.Tick += new EventHandler(AutoGcTimer_Tick);
+            AutoGcTimer.Start();
+            // 操作消息（在设置消息的时候启动，计时完成后停止）
+            OperateMessageTimer.Tick += new EventHandler(OperateMessageTimer_Tick);
+            // 监控DPI变化
+            DpiWatchTimer.Tick += DpiWatchTimer_Tick;
+            DpiWatchTimer.Start();
+            // 将模型赋值上下文
+            DataContext = mainViewModel;
+        }
+
+        /// <summary>
+        /// 窗口左键拖动，取消鼠标靠近边缘最大化
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            DragMove();
+        }
+
+        private void ResizePressed(object sender, MouseEventArgs e) {
+            FrameworkElement element = sender as FrameworkElement;
+            string tag = element.Tag as string;
+            WinApi.ResizeDirection direction = (WinApi.ResizeDirection)Enum.Parse(typeof(WinApi.ResizeDirection), tag);
+            if (e.LeftButton == MouseButtonState.Pressed) {
+                ResizeWindow(direction);
+            }
+        }
+
+        private void ResizeWindow(WinApi.ResizeDirection direction) {
+            DllUtils.SendMessage(Configs.Handler, WinApi.WM_SYSCOMMAND, (IntPtr)(61440 + direction), IntPtr.Zero);
+        }
+
+        private void Maximum_Click(object sender, RoutedEventArgs e) {
+            if (WindowState == WindowState.Normal) {
+                // 避免最大化后，遮盖任务栏
+                MaxHeight = SystemParameters.WorkArea.Height;
+                MaxWidth = SystemParameters.WorkArea.Width;
+                WindowState = WindowState.Maximized;
+                mainViewModel.IsMaximum = true;
+            } else {
+                WindowState = WindowState.Normal;
+                mainViewModel.IsMaximum = false;
+            }
+        }
+
+        private void Minimum_Click(object sender, RoutedEventArgs e) {
+            this.Visibility = Visibility.Collapsed;
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e) {
+            if (mainViewModel.ExitButtonType) {
+                appExit = 1;
+                Close();
+            } else {
+                NotifyUtils.ShowNotification("关闭按钮配置了最小化，调整请在配置面板中修改！");
+                Minimum_Click(sender, e);
+            }
+        }
+
+        /// <summary>
+        /// 主窗口加载
+        /// </summary>
+        /// <param name="param"></param>
+        private void Window_Loaded(object sender, RoutedEventArgs e) {
+            if (mainViewModel.IsMaximum) {
+                Maximum_Click(sender, e);
+            }
             #region 窗口相关数据初始化
-            List<Project> autoRunProjects = new List<Project>();
             CalculateWidthHeight();
             // 面板初始化
             foreach (KeyValuePair<string, Bean.Type> type in XStartService.TypeDic) {
@@ -441,21 +458,10 @@ namespace XStart2._0 {
                         column.IsExpanded = false;
                         column.ColumnHeight = 0;
                     }
-                    // 加载应用
-                    foreach (KeyValuePair<string, Project> project in column.ProjectDic) {
-                        Project projectValue = project.Value;
-                        // 自启动应用
-                        if (projectValue.AutoRun != null && (bool)projectValue.AutoRun) {
-                            Project autoProject = ProjectUtils.Copy(projectValue, false);
-                            autoProject.IconSize = Constants.ICON_SIZE_32;// 自启动的应用默认使用32的图标
-                            autoRunProjects.Add(autoProject);
-                        }
-                    }
+
                 }
             }
-            mainViewModel.Types = XStartService.TypeDic;
-            int openTypeIndex = mainViewModel.Types.IndexOf(openType);
-            mainViewModel.SelectedIndex = openTypeIndex < 0 ? 0 : openTypeIndex;
+
             #endregion
             if (mainViewModel.Audio) {
                 AudioUtils.PlayWav(AudioUtils.START);
@@ -478,33 +484,25 @@ namespace XStart2._0 {
             notifyIcon.ContextMenu.MenuItems.Add(6, new System.Windows.Forms.MenuItem("天气", Weather_Click));
             notifyIcon.ContextMenu.MenuItems.Add(7, new System.Windows.Forms.MenuItem("-"));
             notifyIcon.ContextMenu.MenuItems.Add(8, new System.Windows.Forms.MenuItem("退出", WindowCloseMenu_Click));
-            OpenCheckSecurityWindow(true);
-            // 自启动
-            if (autoRunProjects.Count > 0 && !Configs.dpiChange && !Constants.RUN_TYPE_NOT.Equals(autoRunType)) {
-                if (mainViewModel.RunDirectly && Constants.RUN_TYPE_AUTO.Equals(autoRunType)) {
-                    RunProjects(autoRunProjects);
-                } else {
-                    AutoRunProjectWindow(autoRunProjects);
-                }
-            } else {
-                autoRunProjects.Clear();
-            }
+
             #endregion
             Configs.Handler = new WindowInteropHelper(this).Handle;
             Configs.inited = true;
             IsAllShow = true;
+            mainViewModel.AutoHideToggle();
             SetOperateMsg(Colors.Green, "加载完成");
         }
 
-        private void OpenCheckSecurityWindow(bool isInit = false) {
+        private bool OpenCheckSecurityWindow(bool isInit = false, int autoRunProjectsCount = 0) {
+
             if (string.IsNullOrEmpty(Configs.admin.Password)) {
                 if (!isInit) {
                     if (MessageBoxResult.OK == MessageBox.Show("请先配置管理员口令！", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
                         SetAdminSecurity_Click(null, null);
                     }
-                    return;
+                    return false;
                 } else {
-                    return;
+                    return true;
                 }
             }
             OpenNewWindowUtils.SetTopmost(this);
@@ -513,7 +511,7 @@ namespace XStart2._0 {
             }
             // 图标上的按钮失效处理
             SetNotifyIconEnable(false);
-            CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入管理员口令", Configs.admin.Password, "关闭该窗口将退出程序！", isInit, mainViewModel.RunDirectly) { Owner = this};
+            CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入管理员口令", Configs.admin.Password, "关闭该窗口将退出程序！", isInit, mainViewModel.RunDirectly, autoRunProjectsCount > 0) { Owner = this };
             if (Configs.inited) {
                 IsLock = true;
             }
@@ -522,22 +520,22 @@ namespace XStart2._0 {
                     IsLock = false;
                     Show();
                     IsAllShow = true;
-                } else {
-                    autoRunType = checkSecurityWindow.AutoRunType;
                 }
+                // 恢复图标上的按钮可用
+                SetNotifyIconEnable(true);
+                checkSecurityWindow.Close();
+                OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
+                return true;
             } else {
                 Configs.forceExit = true;
                 Configs.inited = true;
                 Close();
+                return false;
             }
-            // 恢复图标上的按钮可用
-            SetNotifyIconEnable(true);
-            checkSecurityWindow.Close();
-            OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
         }
 
         private void SetNotifyIconEnable(bool enable) {
-            if(notifyIcon != null && notifyIcon.ContextMenu != null && notifyIcon.ContextMenu.MenuItems != null) {
+            if (notifyIcon != null && notifyIcon.ContextMenu != null && notifyIcon.ContextMenu.MenuItems != null) {
                 notifyIcon.ContextMenu.MenuItems[0].Enabled = enable;
                 notifyIcon.ContextMenu.MenuItems[1].Enabled = enable;
                 notifyIcon.ContextMenu.MenuItems[2].Enabled = enable;
@@ -547,20 +545,25 @@ namespace XStart2._0 {
             }
         }
 
-        private void AutoRunProjectWindow(List<Project> autoRunProjects, bool isStart = true) {
+        public bool AutoRunProjectWindow(List<Project> autoRunProjects, Window owner, bool isStart = true) {
             OpenNewWindowUtils.SetTopmost(this);
-            AutoRunWindow autoRunWindow = new AutoRunWindow { AutoRunProjects = autoRunProjects, IsStart = isStart, Owner = this };
+            AutoRunWindow autoRunWindow = new AutoRunWindow { AutoRunProjects = autoRunProjects, IsStart = isStart };
+            if (null != owner) {
+                autoRunWindow.Owner = owner;
+            }
             if (true == autoRunWindow.ShowDialog()) {
                 RunProjects(autoRunWindow.Projects);
             }
             if (autoRunWindow.IsExit) {
                 Close();
+                return false;
             }
             autoRunWindow.Close();
             OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
+            return true;
         }
 
-        private void RunProjects(List<Project> projects) {
+        public void RunProjects(List<Project> projects) {
             Dispatcher.BeginInvoke(new Action(delegate {
                 int existProjectCount = 0;
                 int runProjectCount = 0;
@@ -591,7 +594,7 @@ namespace XStart2._0 {
                 DllUtils.ShowWindow(Configs.Handler, WinApi.SW_SHOW);
                 DllUtils.SwitchToThisWindow(Configs.Handler, true);
                 this.Visibility = Visibility.Visible;
-            } else if(Configs.LockHandler.ToInt32() > 0){
+            } else if (Configs.LockHandler.ToInt32() > 0) {
                 // 锁定窗口显示
                 DllUtils.ShowWindow(Configs.LockHandler, WinApi.SW_SHOW);
                 DllUtils.SwitchToThisWindow(Configs.LockHandler, true);
@@ -606,9 +609,9 @@ namespace XStart2._0 {
 
             // 配置以及窗口数据保存
             SaveSetting();
-            if (appExit == 1 
-                && !Configs.forceExit 
-                && mainViewModel.ExitWarn 
+            if (appExit == 1
+                && !Configs.forceExit
+                && mainViewModel.ExitWarn
                 && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.None, MessageBoxOptions.DefaultDesktopOnly)) {
                 // 取消退出
                 appExit = 0;
@@ -635,7 +638,7 @@ namespace XStart2._0 {
                     DllUtils.SendMessage(Configs.CalendarHandler, WinApi.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
                 }
                 // 关于窗口关闭
-                if(Configs.AboutHandler.ToInt32() > 0) {
+                if (Configs.AboutHandler.ToInt32() > 0) {
                     DllUtils.SendMessage(Configs.AboutHandler, WinApi.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
                 }
                 #endregion
@@ -1163,7 +1166,7 @@ namespace XStart2._0 {
                 OneLineMulti = column.OneLineMulti,
                 TopMost = true
             };
-            ColumnWindow window = new ColumnWindow(vm) { WindowStartupLocation = WindowStartupLocation.CenterScreen ,Owner = this };
+            ColumnWindow window = new ColumnWindow(vm) { WindowStartupLocation = WindowStartupLocation.CenterScreen, Owner = this };
             OperateColumn(window);
             if (!vm.PriTypeSection.Equals(vm.TypeSection)) {
                 CalculateWidthHeight(vm.PriTypeSection);
@@ -1590,7 +1593,7 @@ namespace XStart2._0 {
             if (autoRunProjects.Count > 0) {
                 // 新线程
                 Dispatcher.Invoke(new Action(delegate {
-                    AutoRunProjectWindow(autoRunProjects, false);
+                    AutoRunProjectWindow(autoRunProjects, this, false);
                 }));
             } else {
                 MessageBox.Show("当前无自启动应用！", Constants.MESSAGE_BOX_TITLE_ERROR);
@@ -1721,7 +1724,7 @@ namespace XStart2._0 {
                 DllUtils.ShowWindow(Configs.AboutHandler, WinApi.SW_NORMAL);
             } else {
                 OpenNewWindowUtils.SetTopmost(this);
-                AboutWindow aboutWindow = new AboutWindow() { Owner = this};
+                AboutWindow aboutWindow = new AboutWindow() { Owner = this };
                 aboutWindow.ShowDialog();
                 OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
             }
@@ -2176,7 +2179,7 @@ namespace XStart2._0 {
         #region 用户头像和昵称修改
         private void User_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
-            UserWindow userWindow = new UserWindow(mainViewModel.AvatarPath, mainViewModel.GifSpeedRatio, mainViewModel.NickName, mainViewModel.AvatarSize) { WindowStartupLocation = WindowStartupLocation.CenterScreen , Owner = this };
+            UserWindow userWindow = new UserWindow(mainViewModel.AvatarPath, mainViewModel.GifSpeedRatio, mainViewModel.NickName, mainViewModel.AvatarSize) { WindowStartupLocation = WindowStartupLocation.CenterScreen, Owner = this };
             if (true == userWindow.ShowDialog()) {
                 bool isChange = false;
                 // 保存配置项
@@ -2195,7 +2198,7 @@ namespace XStart2._0 {
                     mainViewModel.NickName = userWindow.NickName;
                     isChange = true;
                 }
-                if(mainViewModel.AvatarSize != userWindow.AvatarSize) {
+                if (mainViewModel.AvatarSize != userWindow.AvatarSize) {
                     Configs.admin.AvatorSize = userWindow.AvatarSize;
                     mainViewModel.AvatarSize = userWindow.AvatarSize;
                     isChange = true;
@@ -2207,7 +2210,7 @@ namespace XStart2._0 {
             userWindow.Close();
             OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
         }
-        
+
         #endregion
 
         #region 项目拖拽
@@ -2407,7 +2410,7 @@ namespace XStart2._0 {
         /// <param name="e"></param>
         private void Beautiful_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
-            BeautifulWindow window = new BeautifulWindow(mainViewModel.MainBackground, mainViewModel.MainOpacity, WindowTheme.Instance.ProjectForeground, WindowTheme.Instance.FontFamily, WindowTheme.Instance.FontSize, WindowTheme.Instance.Opacity) { Owner = this};
+            BeautifulWindow window = new BeautifulWindow(mainViewModel.MainBackground, mainViewModel.MainOpacity, WindowTheme.Instance.ProjectForeground, WindowTheme.Instance.FontFamily, WindowTheme.Instance.FontSize, WindowTheme.Instance.Opacity) { Owner = this };
             if (true == window.ShowDialog()) {
                 mainViewModel.MainBackground = window.Bg;
                 mainViewModel.MainOpacity = window.Mo;
@@ -2485,9 +2488,8 @@ namespace XStart2._0 {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void HeaderSite_PreviewKeyDown(object sender, KeyEventArgs e) {
-            ToggleButton toggleButton = sender as ToggleButton;
-            if (toggleButton != null && null != toggleButton.IsChecked && (bool)toggleButton.IsChecked) {
-                if(EventUtils.InputKey(sender, e, Key.Enter)) {
+            if (sender is ToggleButton toggleButton && null != toggleButton.IsChecked && (bool)toggleButton.IsChecked) {
+                if (EventUtils.InputKey(sender, e, Key.Enter)) {
                     // 当前togglebutton是选中状态时，回车不执行事件传递
                     e.Handled = true;
                 }
@@ -2500,13 +2502,13 @@ namespace XStart2._0 {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void PasswordBox_KeyUp(object sender, KeyEventArgs e) {
-            if(EventUtils.InputKey(sender, e, Key.Enter)) {
+            if (EventUtils.InputKey(sender, e, Key.Enter)) {
                 UnlockType_Click(sender, e);
             }
         }
 
         private void ColumnPasswordBox_KeyUp(object sender, KeyEventArgs e) {
-            if(EventUtils.InputKey(sender, e, Key.Enter)) {
+            if (EventUtils.InputKey(sender, e, Key.Enter)) {
                 UnlockColumn_Click(sender, e);
             }
         }

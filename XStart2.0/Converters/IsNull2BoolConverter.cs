@@ -14,7 +14,7 @@ namespace XStart2._0.Converters {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             bool isNull = false; ;
             if (null != value) {
-                if(value is string) {
+                if (value is string) {
                     string str = value as string;
                     if (string.IsNullOrEmpty(str)) {
                         isNull = true;

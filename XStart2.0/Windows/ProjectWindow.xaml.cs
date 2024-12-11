@@ -154,7 +154,7 @@ namespace XStart2._0.Windows {
         // 选择系统功能
         private void SystemBtn_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
-            SystemProjectWindow spw = new SystemProjectWindow(vm.TypeSection, vm.ColumnSection, Configs.systemAppAddMulti, Configs.systemAppOpenPage) { Owner = this};
+            SystemProjectWindow spw = new SystemProjectWindow(vm.TypeSection, vm.ColumnSection, Configs.systemAppAddMulti, Configs.systemAppOpenPage) { Owner = this };
             if (true == spw.ShowDialog()) {
                 vm.PathReadonly = true;
                 vm.ArgumentsReadonly = true;

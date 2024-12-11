@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace XStart2._0.Bean {
+﻿namespace XStart2._0.Bean {
     [Table("t_custom_theme")]
-    public class CustomTheme :TableData{
+    public class CustomTheme : TableData {
         [TableParam("bg", "VARCHAR")]
         public string Bg { get; set; }
         [TableParam("fg", "VARCHAR")]

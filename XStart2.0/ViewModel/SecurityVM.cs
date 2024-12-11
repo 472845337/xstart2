@@ -1,7 +1,5 @@
 ﻿using PropertyChanged;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows.Documents;
 
 namespace XStart2._0.ViewModel {
     public class SecurityVM : BaseViewModel {

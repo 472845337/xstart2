@@ -1,7 +1,7 @@
 ﻿using PropertyChanged;
-using System;
 using System.Windows.Media;
 using XStart2._0.Bean;
+using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Services;
 using XStart2._0.Utils;
@@ -192,7 +192,7 @@ namespace XStart2._0.ViewModel {
         #endregion
 
         public void AutoHideToggle() {
-            if (CloseBorderHide) {
+            if (CloseBorderHide && Configs.inited) {
                 AutoHideTimer.IsEnabled = true;
             } else {
                 AutoHideTimer.IsEnabled = false;

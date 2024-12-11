@@ -56,7 +56,7 @@ namespace XStart2._0.Windows {
         }
 
         private void ConfirmPasswordBox_KeyUp(object sender, System.Windows.Input.KeyEventArgs e) {
-            if(EventUtils.InputKey(sender, e, System.Windows.Input.Key.Enter)) {
+            if (EventUtils.InputKey(sender, e, System.Windows.Input.Key.Enter)) {
                 SaveSecurity(sender, e);
             }
         }

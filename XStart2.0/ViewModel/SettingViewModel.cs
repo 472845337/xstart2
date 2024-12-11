@@ -15,7 +15,7 @@ namespace XStart2._0.ViewModel {
         public bool AutoRun { get; set; }
         public bool ExitWarn { get; set; }
         public bool ExitButtonType { get; set; }// 关闭按钮类型，是表示退出，否表示最小化
-        public bool ShowInTaskbar {  get; set; }
+        public bool ShowInTaskbar { get; set; }
         public bool CloseBorderHide { get; set; }
         public string ClickType { get; set; }
         public string RdpModel { get; set; }

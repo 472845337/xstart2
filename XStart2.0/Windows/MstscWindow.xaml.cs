@@ -45,7 +45,7 @@ namespace XStart2._0.Windows {
 
         private void SeePassowrd_Click(object sender, RoutedEventArgs e) {
             if (!vm.ShowPassword && !string.IsNullOrEmpty(Configs.admin.Password)) {
-                CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入管理员口令", Configs.admin.Password) { Owner = this};
+                CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入管理员口令", Configs.admin.Password) { Owner = this };
                 Topmost = false;
                 if (true != checkSecurityWindow.ShowDialog()) {
                     Topmost = true;

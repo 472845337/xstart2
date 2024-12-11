@@ -17,13 +17,13 @@ namespace XStart2._0.Windows {
         private bool runTypeShow;
         SecurityVM vm = new SecurityVM();
 
-        public string AutoRunType {  get; set; }
-        public CheckSecurityWindow(string title, string priSecurity, string exitMsg = "", bool isInit = false, bool runDirectly = false) {
+        public string AutoRunType { get; set; }
+        public CheckSecurityWindow(string title, string priSecurity, string exitMsg = "", bool isInit = false, bool runDirectly = false, bool hasAutoRunProject = false) {
             InitializeComponent();
             this.title = title;
             this.priSecurity = priSecurity;
             this.exitMsg = exitMsg;
-            this.runTypeShow = isInit && runDirectly;
+            runTypeShow = isInit && runDirectly && hasAutoRunProject;
             Loaded += Window_Loaded;
             Closing += Window_Closing;
             DataContext = vm;
@@ -55,7 +55,7 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void EnterKey(object sender, System.Windows.Input.KeyEventArgs e) {
-            if(EventUtils.InputKey(sender, e, System.Windows.Input.Key.Enter)) {
+            if (EventUtils.InputKey(sender, e, System.Windows.Input.Key.Enter)) {
                 CheckSecurity(sender, e);
             }
         }

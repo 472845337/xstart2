@@ -232,7 +232,7 @@ namespace XStart2._0.Windows {
                 cam.Close();
             } else if (MSTSC.Equals(path)) {
                 // 远程桌面
-                MstscWindow mstsc = new MstscWindow() {Owner = this };
+                MstscWindow mstsc = new MstscWindow() { Owner = this };
                 if (true == mstsc.ShowDialog()) {
                     name = $"{mstsc.vm.Address}远程";
                     arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}";

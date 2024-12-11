@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows.Media;
 using XStart2._0.Bean;
 
 namespace XStart2._0.ViewModel {

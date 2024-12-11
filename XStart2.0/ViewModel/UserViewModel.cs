@@ -8,7 +8,7 @@ namespace XStart2._0.ViewModel {
         public string AvatarPath { get; set; }
         public BitmapImage Avatar { get; set; }
         public int AvatarSize { get; set; }
-        public double GifSpeedRatio {  get; set; }
+        public double GifSpeedRatio { get; set; }
         public string NickName { get; set; }
 
         private void SetAvatar() {

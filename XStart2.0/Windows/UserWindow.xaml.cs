@@ -7,10 +7,10 @@ namespace XStart2._0.Windows {
     /// </summary>
     public partial class UserWindow : Window {
         private UserViewModel vm = new UserViewModel();
-        public string AvatarPath {  get; set; }
+        public string AvatarPath { get; set; }
         public double GifSpeedRatio { get; set; }
-        public string NickName {  get; set; }
-        public int AvatarSize {  get; set; }
+        public string NickName { get; set; }
+        public int AvatarSize { get; set; }
         public UserWindow(string avatarPath, double gifSpeedRadio, string nickName, int avatarSize) {
             InitializeComponent();
             Loaded += Window_Loaded;

@@ -2,7 +2,7 @@
 using XStart2._0.Bean;
 
 namespace XStart2._0.ViewModel {
-    class GradientColorViewModel :BaseViewModel{
+    class GradientColorViewModel : BaseViewModel {
 
         public string GradientBackground { get; set; }// 渐变色字符串
 

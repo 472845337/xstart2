@@ -32,7 +32,7 @@ namespace XStart2._0.Windows {
                 string[] gradientColorArray = gradientColor.Split(';');
                 int colorCount = 0;
                 foreach (string singleColor in gradientColorArray) {
-                    if (singleColor.StartsWith("#") && singleColor.Contains(":")) { 
+                    if (singleColor.StartsWith("#") && singleColor.Contains(":")) {
                         colorCount++;
                     }
                 }

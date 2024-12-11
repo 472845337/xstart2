@@ -50,7 +50,7 @@ namespace XStart2._0.Windows {
         private void Ground_MouseLeftButtonUp(object sender, MouseEventArgs e) {
             TextBlock Ground = sender as TextBlock;
             string type = Ground.Tag as string;
-            System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog() {};
+            System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog() { };
             if (System.Windows.Forms.DialogResult.OK == colorDialog.ShowDialog()) {
                 string color = ColorUtils.GetHtml(colorDialog.Color);
                 if ("ConfirmButtonBg".Equals(type)) {
