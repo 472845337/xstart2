@@ -1,5 +1,6 @@
 ﻿using MSTSCLib;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Interop;
 using XStart2._0.Bean;
@@ -40,9 +41,13 @@ namespace XStart2._0.Windows {
             }
         }
 
-        Rdp newRdp;
+        List<Rdp> newRdpList = new List<Rdp>();
         public void AddRdp(string id, string title, string server, int port, string account, string password) {
-            newRdp = new Rdp() { Id = id, Title = title, Server = server, Port = port, Account = account, Password = password };
+            newRdpList.Add(new Rdp() { Id = id, Title = title, Server = server, Port = port, Account = account, Password = password });
+        }
+
+        public void AddRdp(Rdp rdp) {
+            newRdpList.Add(rdp);
         }
 
         public void Window_ContentRendered(object sender, EventArgs e) {
@@ -87,7 +92,8 @@ namespace XStart2._0.Windows {
         }
 
         private void RdpConnectTick(object sender, EventArgs e) {
-            if (newRdp != null) {
+            if (newRdpList.Count > 0) {
+                Rdp newRdp = newRdpList[0];
                 System.Windows.Forms.TabPage tabPage = new System.Windows.Forms.TabPage {
                     Text = newRdp.Title + "    "// 标题要加长，用于放置自定义的关闭按钮
                 };
@@ -106,8 +112,8 @@ namespace XStart2._0.Windows {
                 } catch (Exception Ex) {
                     MessageBox.Show("远程连接异常： " + newRdp.Server + " 错误:  " + Ex.Message, Const.Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OKCancel);
                 } finally {
-                    // 将rdp置为空
-                    newRdp = null;
+                    // 将rdp置删除
+                    newRdpList.Remove(newRdp);
                 }
             }
         }

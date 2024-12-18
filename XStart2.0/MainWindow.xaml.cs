@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -567,19 +568,28 @@ namespace XStart2._0 {
             Dispatcher.BeginInvoke(new Action(delegate {
                 int existProjectCount = 0;
                 int runProjectCount = 0;
-                // 启动项目
-                foreach (Project project in projects) {
-                    // 判断是否启动过
-                    List<Process> existList = ProcessUtils.GetProcessByName(ProcessUtils.GetProcessName(project.Path), project.Path);
-                    if (null == existList || existList.Count == 0) {
-                        try {
-                            ProjectUtils.ExecuteProject(project, mainViewModel.RdpModel);
-                            runProjectCount++;
-                        } catch (Exception ex) {
-                            MessageBox.Show(ex.Message);
-                        }
+                // 分离远程的自启动
+                Dictionary<bool, List<Project>> mstscDic = projects.GroupBy(p => p.IsMstsc).ToDictionary(g => g.Key, g => g.ToList());
+                foreach(bool isMstsc in mstscDic.Keys) {
+                    if (isMstsc) {
+                        // 远程的自启动
+                        ProjectUtils.ExecuteMstsc(mstscDic[isMstsc], mainViewModel.RdpModel);
                     } else {
-                        existProjectCount++;
+                        // 其他的自启动
+                        mstscDic[isMstsc].ForEach(p => {
+                            // 判断是否启动过
+                            List<Process> existList = ProcessUtils.GetProcessByName(ProcessUtils.GetProcessName(p.Path), p.Path);
+                            if (null == existList || existList.Count == 0) {
+                                try {
+                                    ProjectUtils.ExecuteProject(p, mainViewModel.RdpModel);
+                                    runProjectCount++;
+                                } catch (Exception ex) {
+                                    MessageBox.Show(ex.Message);
+                                }
+                            } else {
+                                existProjectCount++;
+                            }
+                        });
                     }
                 }
                 SetOperateMsg(Colors.Green, $"{existProjectCount}个正在运行，执行{runProjectCount}个");

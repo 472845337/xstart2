@@ -26,7 +26,7 @@ namespace XStart2._0.Bean {
         public const string KIND_DIRECTORY = "directory";// 目录
         public const string KIND_URL = "url";// 链接
         public const string KIND_SYSTEM = "system";// 系统
-        public const string KIND_REMOTE = "remote";// 远程
+
 
         // 归属类-对应Type中的section
         [DoNotNotify]
@@ -47,7 +47,7 @@ namespace XStart2._0.Bean {
             get => kind; set {
                 kind = value;
                 if (KIND_FILE.Equals(value) || KIND_DIRECTORY.Equals(value)) {
-                    PropertyEnabled = true;
+                    if (KIND_FILE.Equals(value) || KIND_DIRECTORY.Equals(value)) { PropertyEnabled = true; }
                     CanAutoRun = true;
                 } else {
                     if (KIND_SYSTEM.Equals(value)) {
@@ -109,6 +109,9 @@ namespace XStart2._0.Bean {
 
         private void SetIsMstsc() {
             IsMstsc = SystemProjectParam.MSTSC.Equals(Path);
+            if (IsMstsc) {
+                CanAutoRun = true;
+            }
         }
     }
 }

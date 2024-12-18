@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using NAudio.CoreAudioApi;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -51,6 +52,31 @@ namespace XStart2._0.Utils {
 
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message, Constants.MESSAGE_BOX_TITLE_ERROR);
+            }
+        }
+
+        public static void ExecuteMstsc(List<Project> projects, string rdpModel = null) {
+            projects.ForEach(project => {
+                #region 应用是否需要生成相关文件
+                if (MSTSC.Equals(project.Path) && Constants.RDP_MODEL_SYSTEM.Equals(rdpModel)) {
+                    // 远程桌面
+                    string rdpFilePath = Configs.AppStartPath + @$"rdp\{project.Section}.rdp";
+                    if (!File.Exists(rdpFilePath)) {
+                        RdpUtils.FreshRdp(project, Constants.OPERATE_CREATE);
+                    }
+                }
+                #endregion
+            });
+            if (Constants.RDP_MODEL_CUSTOM.Equals(rdpModel)) {
+                // 一次执行多个远程
+                OpenNewMstsc(projects);
+            } else {
+                projects.ForEach(project => {
+                    string result = ExecuteApp(project);
+                    if (!string.IsNullOrEmpty(result)) {
+                        NotifyUtils.ShowNotification(result);
+                    }
+                });
             }
         }
 
@@ -322,6 +348,39 @@ namespace XStart2._0.Utils {
                 DllUtils.ShowWindow(Configs.MstscHandler, WinApi.SW_MAXIMIZE);
             }
             mstscWindow.AddRdp(project.Section, project.Name, argumentArray[0], string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]), argumentArray[2], argumentArray[3]);
+        }
+
+        private static void OpenNewMstsc(List<Project> projects) {
+            foreach (var project in projects)
+            {
+                string arguments = project.Arguments;
+                if (string.IsNullOrEmpty(arguments)) {
+                    MessageBox.Show("远程参数不能为空！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                    return;
+                }
+                string[] argumentArray = arguments.Split(Constants.SPLIT_CHAR);
+                if (argumentArray.Length != 4) {
+                    MessageBox.Show("远程参数不匹配！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                    return;
+                }
+            }
+            if (Configs.MstscHandler.ToInt32() == 0) {
+                // 新建窗口
+                mstscWindow = new MstscManagerWindow();
+                //分离任务栏图标主要代码。
+                new WindowInteropHelper(mstscWindow);
+                DllUtils.SetCurrentProcessExplicitAppUserModelID("Gx3OptimisationWindow");
+                mstscWindow.Show();
+            } else {
+                mstscWindow.Show();
+                DllUtils.ShowWindow(Configs.MstscHandler, WinApi.SW_MAXIMIZE);
+            }
+            projects.ForEach(project => {
+                string arguments = project.Arguments;
+                string[] argumentArray = arguments.Split(Constants.SPLIT_CHAR);
+                mstscWindow.AddRdp(project.Section, project.Name, argumentArray[0], string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]), argumentArray[2], argumentArray[3]);
+            });
+            
         }
     }
 }

@@ -248,6 +248,9 @@ namespace XStart2._0.Windows {
                     TypeSection = vm.TypeSection, ColumnSection = vm.ColumnSection,
                     Kind = Project.KIND_SYSTEM, Name = name, Path = path, IconPath = path, Arguments = arguments, CanAutoRun = false
                 };
+                if (MSTSC.Equals(path)) {
+                    app.CanAutoRun = true;
+                }
                 if (vm.MultiAdd) {
                     // 直接添加应用
                     XStartService.AddNewData(app);
