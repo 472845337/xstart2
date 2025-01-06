@@ -41,7 +41,7 @@ namespace XStart2._0.Windows {
             // 口令校验窗口关闭前，退出提醒
             if (!Configs.forceExit && (null == DialogResult || false == DialogResult) && !string.IsNullOrEmpty(vm.ExitMsg)) {
                 // 取消或退出时进行提醒
-                if (MessageBoxResult.Cancel == MessageBox.Show(vm.ExitMsg, Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.No, MessageBoxOptions.DefaultDesktopOnly)) {
+                if (MessageBoxResult.No == MsgBoxUtils.ShowAsk(vm.ExitMsg)) {
                     e.Cancel = true;
                 } else {
                     Configs.LockHandler = System.IntPtr.Zero;
@@ -62,10 +62,10 @@ namespace XStart2._0.Windows {
 
         private void CheckSecurity(object sender, RoutedEventArgs e) {
             if (string.IsNullOrEmpty(vm.Security)) {
-                MessageBox.Show("口令不能为空！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("口令不能为空！", Constants.MESSAGE_BOX_TITLE_ERROR);
                 return;
             } else if (!vm.Security.Equals(vm.PriSecurity)) {
-                MessageBox.Show("口令不一致！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("口令不一致！", Constants.MESSAGE_BOX_TITLE_ERROR);
                 return;
             }
             AutoRunType = vm.AutoRunType;

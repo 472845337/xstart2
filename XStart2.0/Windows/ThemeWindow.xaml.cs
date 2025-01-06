@@ -102,7 +102,7 @@ namespace XStart2._0.Windows {
                || string.IsNullOrEmpty(vm.CancelButtonBackGround) || string.IsNullOrEmpty(vm.CancelButtonForeGround)
                || string.IsNullOrEmpty(vm.CancelButtonMouseOverBackGround) || string.IsNullOrEmpty(vm.CancelButtonMouseOverForeGround)
                || string.IsNullOrEmpty(vm.ToggleButtonCheckedBackGround) || string.IsNullOrEmpty(vm.ToggleButtonCheckedForeGround)) {
-                MessageBox.Show("未配置的颜色，背景色默认为白色，文字默认为黑色", Constants.MESSAGE_BOX_TITLE_INFO, MessageBoxButton.OK);
+                MsgBoxUtils.ShowInfo("未配置的颜色，背景色默认为白色，文字默认为黑色");
             }
             DialogResult = true;
         }
@@ -143,7 +143,7 @@ namespace XStart2._0.Windows {
 
         private void SaveCustomTheme_Click(object sender, RoutedEventArgs e) {
             if (string.IsNullOrEmpty(vm.LoadCustomName)) {
-                MessageBox.Show("请先输入自定义主题名！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("请先输入自定义主题名！");
                 CustomName_TextBox.Focus();
             } else {
                 if (null != vm.LoadCustomTheme && vm.LoadCustomTheme.Name.Equals(vm.LoadCustomName)) {
@@ -184,12 +184,12 @@ namespace XStart2._0.Windows {
 
         private void RemoveAllCustomThemes_MouseLeftButtonUp(object sender, MouseEventArgs e) {
             if (vm.CustomThemes.Count > 0) {
-                if (MessageBoxResult.OK == MessageBox.Show("确认清空所有的自定义？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认清空所有的自定义？")) {
                     ServiceFactory.GetCustomThemeService().Clear();
                     vm.CustomThemes.Clear();
                 }
             } else {
-                MessageBox.Show("无自定义主题！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("无自定义主题！", Constants.MESSAGE_BOX_TITLE_ERROR);
             }
             e.Handled = true;
         }
@@ -197,7 +197,7 @@ namespace XStart2._0.Windows {
         private void RemoveCustomTheme_MouseLeftButtonUp(object sender, MouseEventArgs e) {
             FrameworkElement ele = sender as FrameworkElement;
             string section = ele.Tag as string;
-            if (section != null && MessageBoxResult.OK == MessageBox.Show("确认删除该自定义？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+            if (section != null && MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认删除该自定义？")) {
                 ServiceFactory.GetCustomThemeService().Delete(section);
                 int index = -1;
                 foreach (CustomTheme single in vm.CustomThemes) {

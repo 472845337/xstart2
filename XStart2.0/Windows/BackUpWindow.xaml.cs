@@ -94,7 +94,7 @@ namespace XStart2._0.Windows {
                 }
             }
             if (backData.Types.Count == 0) {
-                System.Windows.MessageBox.Show("未选择任何备份数据！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("未选择任何备份数据！", Constants.MESSAGE_BOX_TITLE_ERROR);
             } else {
                 // 将数据转成Json串
 

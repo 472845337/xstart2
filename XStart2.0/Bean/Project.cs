@@ -1,5 +1,4 @@
-﻿
-using PropertyChanged;
+﻿using PropertyChanged;
 using System;
 using XStart2._0.Const;
 using XStart2._0.Services;

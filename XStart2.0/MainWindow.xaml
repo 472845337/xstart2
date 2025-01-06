@@ -10,8 +10,7 @@
         xmlns:bean="clr-namespace:XStart2._0.Bean"
         xmlns:assist="clr-namespace:DragDropAssist"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
-        mc:Ignorable="d"
-        Title="X启动" 
+        mc:Ignorable="d" 
         MinHeight="500" MinWidth="300" 
         Height="{Binding MainHeight, Mode=TwoWay}" 
         Width="{Binding MainWidth, Mode=TwoWay}"
@@ -26,11 +25,6 @@
         Background="{Binding BackgroundBrush}"
         FontSize="{Binding FontSize,Source={x:Static bean:WindowTheme.Instance}}" ShowInTaskbar="{Binding ShowInTaskbar}">
 
-    <!--<b:Interaction.Triggers>
-        <b:EventTrigger EventName="Loaded">
-            <b:InvokeCommandAction Command="{Binding MainWindowLoadedCommand}"/>
-        </b:EventTrigger>
-    </b:Interaction.Triggers>-->
     <!-- WindowChrome使用自定义的标题栏，以及设置客户自定义覆盖系统定义的标题 -->
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="0" GlassFrameThickness="-1"/>

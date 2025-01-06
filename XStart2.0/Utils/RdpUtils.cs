@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows;
 using XStart2._0.Bean;
 using XStart2._0.Config;
 using XStart2._0.Const;
@@ -90,8 +91,8 @@ namespace XStart2._0.Utils {
                     streamWriter.WriteLine("bitmapcachepersistenable:i:1");
                     streamWriter.WriteLine("compression:i:1");
                     streamWriter.WriteLine("connection type:i:7");
-                    streamWriter.WriteLine("desktopheight:i:900");
-                    streamWriter.WriteLine("desktopwidth:i:1440");
+                    streamWriter.WriteLine($"desktopheight:i:{SystemParameters.PrimaryScreenHeight}");
+                    streamWriter.WriteLine($"desktopwidth:i:{SystemParameters.PrimaryScreenWidth}");
                     streamWriter.WriteLine("disable cursor setting:i:0");
                     streamWriter.WriteLine("disable full window drag:i:1");
                     streamWriter.WriteLine("disable menu anims:i:1");

@@ -1,9 +1,11 @@
 ﻿using MSTSCLib;
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Windows;
 using System.Windows.Interop;
 using XStart2._0.Bean;
+using XStart2._0.Config;
+using XStart2._0.Utils;
 
 namespace XStart2._0.Windows {
     /// <summary>
@@ -24,7 +26,7 @@ namespace XStart2._0.Windows {
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
             var rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
             if (rdpTabControl.TabPages.Count > 0) {
-                if (MessageBoxResult.OK == MessageBox.Show("当前存在远程连接，确认关闭吗？", Const.Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("当前存在远程连接，确认关闭吗？")) {
                     // 关闭所有连接
                     CloseAllRdp();
                 } else {
@@ -32,22 +34,16 @@ namespace XStart2._0.Windows {
                     return;
                 }
             }
-            if (Config.Configs.mstscRealClose) {
-                Config.Configs.MstscHandler = IntPtr.Zero;
-                e.Cancel = false;
-            } else {
-                Hide();
-                e.Cancel = true;
-            }
+            Configs.MstscHandler = IntPtr.Zero;
         }
 
-        List<Rdp> newRdpList = new List<Rdp>();
+        ConcurrentQueue<Rdp> newRdpQueue = new ConcurrentQueue<Rdp>();
         public void AddRdp(string id, string title, string server, int port, string account, string password) {
-            newRdpList.Add(new Rdp() { Id = id, Title = title, Server = server, Port = port, Account = account, Password = password });
+            newRdpQueue.Enqueue(new Rdp() { Id = id, Title = title, Server = server, Port = port, Account = account, Password = password });
         }
 
         public void AddRdp(Rdp rdp) {
-            newRdpList.Add(rdp);
+            newRdpQueue.Enqueue(rdp);
         }
 
         public void Window_ContentRendered(object sender, EventArgs e) {
@@ -64,14 +60,17 @@ namespace XStart2._0.Windows {
             rdpTabControl.MouseDown += AppRunTabControl_MouseDown;
             var rightMenu = new System.Windows.Forms.ContextMenuStrip();
             var reconnectMenu = new System.Windows.Forms.ToolStripMenuItem { Name = "Reconnect", Text = "重新连接" };
-            var disconnectMenu = new System.Windows.Forms.ToolStripMenuItem { Name = "Reconnect", Text = "关闭连接" };
-            var closeAllMenu = new System.Windows.Forms.ToolStripMenuItem { Name = "Reconnect", Text = "全部关闭" };
+            var newConnectMenu = new System.Windows.Forms.ToolStripMenuItem { Name = "NewReconnect", Text = "打开新连接" };
+            var disconnectMenu = new System.Windows.Forms.ToolStripMenuItem { Name = "Disconnect", Text = "关闭连接" };
+            var closeAllMenu = new System.Windows.Forms.ToolStripMenuItem { Name = "CloseAllConnect", Text = "全部关闭" };
             // 右键按钮事件
             reconnectMenu.Click += Reconnect_Click;
+            newConnectMenu.Click += NewConnect_Click;
             disconnectMenu.Click += Disconnect_Click;
             closeAllMenu.Click += CloseAll_Click;
             // 添加右键菜单
             rightMenu.Items.Add(reconnectMenu);
+            rightMenu.Items.Add(newConnectMenu);
             rightMenu.Items.Add(disconnectMenu);
             rightMenu.Items.Add(closeAllMenu);
             rdpTabControl.ContextMenuStrip = rightMenu;
@@ -88,16 +87,15 @@ namespace XStart2._0.Windows {
             // 赋值句柄
             var formDependency = PresentationSource.FromDependencyObject(this);
             HwndSource winformWindow = formDependency as HwndSource;
-            Config.Configs.MstscHandler = winformWindow.Handle;
+            Configs.MstscHandler = winformWindow.Handle;
         }
 
         private void RdpConnectTick(object sender, EventArgs e) {
-            if (newRdpList.Count > 0) {
-                Rdp newRdp = newRdpList[0];
+            if (newRdpQueue.TryDequeue(out Rdp newRdp)) {
                 System.Windows.Forms.TabPage tabPage = new System.Windows.Forms.TabPage {
                     Text = newRdp.Title + "    "// 标题要加长，用于放置自定义的关闭按钮
                 };
-                var rdpScript = new AxMSTSCLib.AxMsTscAxNotSafeForScripting {
+                var rdpScript = new AxMSTSCLib.AxMsRdpClient11NotSafeForScripting {
                     Height = rdpHeight,
                     Width = rdpWidth
                 };
@@ -110,10 +108,7 @@ namespace XStart2._0.Windows {
                     // 连接RDP
                     ConnectRdp(rdpScript, newRdp);
                 } catch (Exception Ex) {
-                    MessageBox.Show("远程连接异常： " + newRdp.Server + " 错误:  " + Ex.Message, Const.Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OKCancel);
-                } finally {
-                    // 将rdp置删除
-                    newRdpList.Remove(newRdp);
+                    MsgBoxUtils.ShowError("远程连接异常： " + newRdp.Server + " 错误:  " + Ex.Message);
                 }
             }
         }
@@ -123,31 +118,48 @@ namespace XStart2._0.Windows {
             if (rdpTabControl.SelectedIndex >= 0) {
                 System.Windows.Forms.TabPage tabPage = rdpTabControl.SelectedTab;
                 Rdp rdp = (Rdp)tabPage.Tag;
-                var rdpScript = (AxMSTSCLib.AxMsTscAxNotSafeForScripting)tabPage.Controls[0];
+                var rdpScript = (AxMSTSCLib.AxMsRdpClient11NotSafeForScripting)tabPage.Controls[0];
+                //var rdpScript = (AxMSTSCLib.AxMsTscAxNotSafeForScripting)tabPage.Controls[0];
                 // 关闭原连接
                 DisconnectRdp(rdpScript);
                 tabPage.Controls.Clear();
                 // 启用新连接
-                rdpScript = new AxMSTSCLib.AxMsTscAxNotSafeForScripting {
+                rdpScript = new AxMSTSCLib.AxMsRdpClient11NotSafeForScripting {
                     Height = rdpHeight,
-                    Width = rdpWidth
+                    Width = rdpWidth,
+                    //DesktopHeight = rdpHeight,
+                    //DesktopWidth = rdpWidth
                 };
                 tabPage.Controls.Add(rdpScript);
                 try {
                     // 连接RDP
                     ConnectRdp(rdpScript, rdp);
                 } catch (Exception Ex) {
-                    MessageBox.Show("远程连接异常： " + rdp.Server + " 错误:  " + Ex.Message, Const.Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OKCancel);
+                    MsgBoxUtils.ShowError("远程连接异常： " + rdp.Server + " 错误:  " + Ex.Message);
                 }
             }
         }
 
-        private void ConnectRdp(AxMSTSCLib.AxMsTscAxNotSafeForScripting rdpScript, Rdp rdp) {
+        /// <summary>
+        /// 新窗口连接
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NewConnect_Click(object sender, EventArgs e) {
+            System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
+            if (rdpTabControl.SelectedIndex >= 0) {
+                System.Windows.Forms.TabPage tabPage = rdpTabControl.SelectedTab;
+                Rdp rdp = (Rdp)tabPage.Tag;
+                newRdpQueue.Enqueue(rdp);
+            }
+        }
+
+        private void ConnectRdp(AxMSTSCLib.AxMsRdpClient11NotSafeForScripting rdpScript, Rdp rdp) {
             rdpScript.Server = rdp.Server;
             rdpScript.UserName = rdp.Account;
             rdpScript.ConnectingText = $"正在连接{rdp.Title}...";
             // 设置端口和密码
-            IMsRdpClientAdvancedSettings7 iClientSetting = (IMsRdpClientAdvancedSettings7)rdpScript.AdvancedSettings;
+            IMsRdpClientAdvancedSettings8 iClientSetting = (IMsRdpClientAdvancedSettings8)rdpScript.AdvancedSettings;
             if (rdp.Port > 0) {
                 iClientSetting.RDPPort = rdp.Port;
             }
@@ -157,7 +169,7 @@ namespace XStart2._0.Windows {
             // 0：仅在客户端计算机上本地应用组合键。
             // 1：在远程服务器上应用组合键。
             // 2：仅当客户端以全屏模式运行时，才将组合键应用于远程服务器。 这是默认值。
-            IMsRdpClientSecuredSettings securedSetting = (IMsRdpClientSecuredSettings)rdpScript.SecuredSettings;
+            IMsRdpClientSecuredSettings2 securedSetting = (IMsRdpClientSecuredSettings2)rdpScript.SecuredSettings;
             securedSetting.KeyboardHookMode = 1;
             rdpScript.Connect();
         }
@@ -170,12 +182,12 @@ namespace XStart2._0.Windows {
         }
 
         private void CloseAll_Click(object sender, EventArgs e) {
-            if (MessageBoxResult.OK == MessageBox.Show("确认关闭所有连接吗?", Const.Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+            if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认关闭所有连接吗?")) {
                 CloseAllRdp();
             }
         }
 
-        private void DisconnectRdp(AxMSTSCLib.AxMsTscAxNotSafeForScripting rdpScript) {
+        private void DisconnectRdp(AxMSTSCLib.AxMsRdpClient11NotSafeForScripting rdpScript) {
             if (null != rdpScript) {
                 if (rdpScript.Connected.ToString() == "1") {
                     try {
@@ -188,7 +200,7 @@ namespace XStart2._0.Windows {
             }
         }
 
-        readonly int tabPageCloseSize = 15;
+        readonly int tabPageCloseSize = (int)(15 * Configs.scale.Item1);
         //重绘关闭按钮
         public void AppRunTabControl_DrawItem(object sender, System.Windows.Forms.DrawItemEventArgs e) {
             try {
@@ -277,7 +289,7 @@ namespace XStart2._0.Windows {
         private void CloseAllRdp() {
             System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
             foreach (System.Windows.Forms.TabPage tabPage in rdpTabControl.TabPages) {
-                var rdpScript = (AxMSTSCLib.AxMsTscAxNotSafeForScripting)tabPage.Controls[0];
+                var rdpScript = (AxMSTSCLib.AxMsRdpClient11NotSafeForScripting)tabPage.Controls[0];
                 DisconnectRdp(rdpScript);
             }
             rdpTabControl.TabPages.Clear();
@@ -285,9 +297,9 @@ namespace XStart2._0.Windows {
 
         private void CloseRdpAndPage(System.Windows.Forms.TabControl tabControl, int index) {
             System.Windows.Forms.TabPage tabPage = tabControl.TabPages[index];
-            var rdpScript = (AxMSTSCLib.AxMsTscAxNotSafeForScripting)tabPage.Controls[0];
+            var rdpScript = (AxMSTSCLib.AxMsRdpClient11NotSafeForScripting)tabPage.Controls[0];
             if (null != rdpScript && rdpScript.Connected.ToString() == "1") {
-                if (MessageBoxResult.OK == MessageBox.Show($"确认退出{tabPage.Text.Trim()}远程", Const.Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk($"确认退出{tabPage.Text.Trim()}远程")) {
                     DisconnectRdp(rdpScript);
                     tabControl.TabPages.Remove(tabPage);
                 }

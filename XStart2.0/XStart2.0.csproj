@@ -55,6 +55,9 @@
   <PropertyGroup>
     <ApplicationIcon>Files\Icons\xstart2.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AxInterop.MSTSCLib">
       <HintPath>.\AxInterop.MSTSCLib.dll</HintPath>
@@ -181,6 +184,7 @@
     <Compile Include="Converters\WeatherAirConverter.cs" />
     <Compile Include="Converters\WeaImgConverter.cs" />
     <Compile Include="Helper\DragDop\DragAdorner.cs" />
+    <Compile Include="Helper\HideWindowHelper.cs" />
     <Compile Include="Services\CustomThemeService.cs" />
     <Compile Include="Services\AdminService.cs" />
     <Compile Include="Utils\BackgroundUtils.cs" />
@@ -193,6 +197,7 @@
     <Compile Include="Utils\GZipUtil.cs" />
     <Compile Include="Utils\HttpUtils.cs" />
     <Compile Include="Utils\IniParserUtils.cs" />
+    <Compile Include="Utils\MsgBoxUtils.cs" />
     <Compile Include="Utils\NumberUtils.cs" />
     <Compile Include="Utils\OpenNewWindowUtils.cs" />
     <Compile Include="Utils\TempUtil.cs" />
@@ -200,6 +205,7 @@
     <Compile Include="Utils\WindUtil.cs" />
     <Compile Include="ViewModel\BeautifulViewModel.cs" />
     <Compile Include="ViewModel\GradientColorViewModel.cs" />
+    <Compile Include="ViewModel\MessageBoxViewModel.cs" />
     <Compile Include="ViewModel\ThemeViewModel.cs" />
     <Compile Include="ViewModel\WeatherViewModel.cs" />
     <Compile Include="ViewModel\QueryViewModel.cs" />
@@ -283,6 +289,9 @@
     </Compile>
     <Compile Include="Windows\GradientColorWindow.xaml.cs">
       <DependentUpon>GradientColorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MessageBoxWindow.xaml.cs">
+      <DependentUpon>MessageBoxWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MstscManagerWindow.xaml.cs">
       <DependentUpon>MstscManagerWindow.xaml</DependentUpon>
@@ -402,6 +411,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\MessageBoxWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\MstscManagerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -504,6 +517,7 @@
     <EmbeddedResource Include="Files\Citys\city.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <None Include="app.manifest" />
     <None Include="Files\Citys\city.json.bak">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -3,6 +3,7 @@ using System.Windows.Media;
 using XStart2._0.Bean;
 using XStart2._0.Config;
 using XStart2._0.Const;
+using XStart2._0.Helper;
 using XStart2._0.Services;
 using XStart2._0.Utils;
 
@@ -92,6 +93,8 @@ namespace XStart2._0.ViewModel {
         public bool CloseBorderHide { get; set; }
         [DoNotNotify]
         public System.Windows.Threading.DispatcherTimer AutoHideTimer { get; set; }
+        [DoNotNotify]
+        public HideWindowHelper HideWindowHelper { get; set; }
         public string ClickType { get; set; }
         public string RdpModel { get; set; }
         public string TextEditor { get; set; }
@@ -194,8 +197,11 @@ namespace XStart2._0.ViewModel {
         public void AutoHideToggle() {
             if (CloseBorderHide && Configs.inited) {
                 AutoHideTimer.IsEnabled = true;
+                // HideWindowHelper?.Start();
             } else {
                 AutoHideTimer.IsEnabled = false;
+                //HideWindowHelper?.Stop();
+                //HideWindowHelper.TryShow();
             }
         }
 

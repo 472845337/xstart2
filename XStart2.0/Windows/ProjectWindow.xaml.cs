@@ -21,6 +21,7 @@ namespace XStart2._0.Windows {
             vm.Title = title;
             vm.TypeSection = typeSection;
             vm.ColumnSection = columnSection;
+            vm.TopMost = true;
             Loaded += Window_Loaded;
             Closing += Window_Closing;
         }
@@ -96,7 +97,7 @@ namespace XStart2._0.Windows {
                 Project.Remark = vm.Remark;
                 DialogResult = true;
             } else {
-                MessageBox.Show(errMsg, Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError(errMsg);
             }
             e.Handled = true;
         }

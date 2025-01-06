@@ -15,7 +15,7 @@ namespace XStart2._0.ViewModel {
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public QueryViewModel() {
-            QueryCommand = new RelayCommand(() => {
+            QueryCommand = new RelayCommand((obj) => {
                 QueryProjects.Clear();
                 // ²éÑ¯ÏîÄ¿
                 foreach (KeyValuePair<string, Type> type in XStartService.TypeDic) {

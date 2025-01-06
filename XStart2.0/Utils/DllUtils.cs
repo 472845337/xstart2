@@ -29,15 +29,7 @@ namespace XStart2._0.Utils {
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
             public string szTypeName;
         }
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public struct SHSTOCKICONINFO {
-            public uint cbSize;
-            public IntPtr hIcon;
-            public int iSysIconIndex;
-            public int iIcon;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
-            public string szPath;
-        }
+
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct SHELLEXECUTEINFO {
             public int cbSize;
@@ -90,24 +82,20 @@ namespace XStart2._0.Utils {
                 this.Y = y;
             }
 
-            public override string ToString() {
+            public override readonly string ToString() {
                 return $"X:{X},Y:{Y}";
             }
         }
 
         public delegate int HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-        //键盘Hook结构函数 
         [StructLayout(LayoutKind.Sequential)]
-        public class KeyBoardHookStruct {
-            public int vkCode;
-            public int scanCode;
-            public int flags;
-            public int time;
-            public int dwExtraInfo;
-            public readonly IntPtr Extra;
+        public struct COPYDATA_STRUCT {
+            public IntPtr dwData;
+            public int cbData;
+            [MarshalAs(UnmanagedType.LPStr)]
+            public string lpData;
         }
-
 
         /** 强制GC API函数**/
         [DllImport(Kernel32)]
@@ -121,26 +109,9 @@ namespace XStart2._0.Utils {
         /// <returns></returns>
         [DllImport(User32, EntryPoint = "ShowWindow", SetLastError = true)]
         public static extern bool ShowWindow(IntPtr hWnd, ushort nCmdShow);
-        /// <summary>
-        /// 重新绘制窗口
-        /// </summary>
-        /// <param name="hwnd"></param>
-        /// <param name="r"></param>
-        /// <param name="hrgnUpdate"></param>
-        /// <param name="flags"></param>
-        /// <returns></returns>
-        [DllImport(User32, CharSet = CharSet.Auto, ExactSpelling = true)]
-        public static extern bool RedrawWindow(IntPtr hwnd, IntPtr r, IntPtr hrgnUpdate, int flags);
+
         [DllImport(User32, EntryPoint = "FindWindow")]
         public extern static IntPtr FindWindow(string lpClassName, string lpWindowName);
-        [DllImport(User32)]
-        public static extern int GetWindowLong(int hWnd, int nIndex);
-        /// <summary>
-        /// 获取桌面窗口的句柄
-        /// </summary>
-        /// <returns></returns>
-        [DllImport(User32)]
-        public static extern IntPtr GetDesktopWindow();
 
         /// <summary>
         /// 窗口置最前，最小化也会置
@@ -160,19 +131,6 @@ namespace XStart2._0.Utils {
         [DllImport(User32, CharSet = CharSet.Auto)]
         public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
-        /// <summary>
-        /// 抽取exe的图标
-        /// </summary>
-        /// <param name="lpszFile"></param>
-        /// <param name="niconIndex"></param>
-        /// <param name="phiconLarge"></param>
-        /// <param name="phiconSmall"></param>
-        /// <param name="nIcons"></param>
-        /// <returns></returns>
-        [DllImport(Shell32)]
-        public static extern int ExtractIconEx(string lpszFile, int niconIndex, IntPtr[] phiconLarge, IntPtr[] phiconSmall, int nIcons);
-        [DllImport(Shell32)]
-        public static extern int ExtractIconExW(string lpszFile, int niconIndex, ref IntPtr phiconLarge, ref IntPtr phiconSmall, int nIcons);
         [DllImport(User32)]
         public static extern uint PrivateExtractIcons(string szFileName, int nIconIndex, int cxIcon, int cyIcon, IntPtr[] phicon, uint[] piconid, uint nIcons, uint flags);
 
@@ -190,50 +148,12 @@ namespace XStart2._0.Utils {
         [DllImport(User32)]
         public static extern IntPtr SendMessage(IntPtr handle, uint wMsg, IntPtr wParam, IntPtr lParam);
 
-        //typedef struct _MINIDUMP_EXCEPTION_INFORMATION {
-        //    DWORD ThreadId;
-        //    PEXCEPTION_POINTERS ExceptionPointers;
-        //    BOOL ClientPointers;
-        //} MINIDUMP_EXCEPTION_INFORMATION, *PMINIDUMP_EXCEPTION_INFORMATION;
-        [StructLayout(LayoutKind.Sequential, Pack = 4)]  // Pack=4 is important! So it works also for x64!
-        public struct MiniDumpExceptionInformation {
-            public uint ThreadId;
-            public IntPtr ExceptionPointers;
-            [MarshalAs(UnmanagedType.Bool)]
-            public bool ClientPointers;
-        }
-        //BOOL
-        //WINAPI
-        //MiniDumpWriteDump(
-        //    __in HANDLE hProcess,
-        //    __in DWORD ProcessId,
-        //    __in HANDLE hFile,
-        //    __in MINIDUMP_TYPE DumpType,
-        //    __in_opt PMINIDUMP_EXCEPTION_INFORMATION ExceptionParam,
-        //    __in_opt PMINIDUMP_USER_STREAM_INFORMATION UserStreamParam,
-        //    __in_opt PMINIDUMP_CALLBACK_INFORMATION CallbackParam
-        //    );
-        // Overload requiring MiniDumpExceptionInformation
-        [DllImport(DbghHelp, EntryPoint = "MiniDumpWriteDump", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
-        public static extern bool MiniDumpWriteDump(IntPtr hProcess, uint processId, SafeHandle hFile, uint dumpType, ref MiniDumpExceptionInformation expParam, IntPtr userStreamParam, IntPtr callbackParam);
-
-        // Overload supporting MiniDumpExceptionInformation == NULL
-        [DllImport(DbghHelp, EntryPoint = "MiniDumpWriteDump", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
-        public static extern bool MiniDumpWriteDump(IntPtr hProcess, uint processId, SafeHandle hFile, uint dumpType, IntPtr expParam, IntPtr userStreamParam, IntPtr callbackParam);
-
-        [DllImport(Kernel32, EntryPoint = "GetCurrentThreadId", ExactSpelling = true)]
-        public static extern uint GetCurrentThreadId();
-
         [DllImport(Shell32, EntryPoint = "SHGetFileInfo", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbFileInfo, uint uFlags);
         [DllImport(Shell32, EntryPoint = "#727")]
         public extern static int SHGetImageList(int iImageList, ref Guid riid, out IImageList ppv);
-        [DllImport(Shell32)]
-        public static extern IntPtr SHGetStockIconInfo(uint siid, uint uFlags, ref SHSTOCKICONINFO psii);
 
         // 执行exe文件
-        [DllImport(Shell32)]
-        public static extern IntPtr ShellExecute(IntPtr hwnd, string lpOperation, string lpFile, string lpParameters, string lpDirectory, ushort nShowCmd);
         [DllImport(Shell32, CharSet = CharSet.Auto)]
         public static extern bool ShellExecuteEx(ref SHELLEXECUTEINFO lpExecInfo);
 
@@ -283,21 +203,6 @@ namespace XStart2._0.Utils {
         [DllImport(User32, CharSet = CharSet.Auto)]
         public static extern bool GetCursorPos(ref Point pt);
 
-        [DllImport(User32, EntryPoint = "ScreenToClient")]
-        public static extern int ScreenToClient(IntPtr hwnd, ref Point lpPoint);
-
-        //设置钩子 
-        [DllImport(User32)]
-        public static extern int SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hInstance, int threadId);
-        //抽掉钩子
-        [DllImport(User32, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern bool UnhookWindowsHookEx(int idHook);
-        //调用下一个钩子
-        [DllImport(User32)]
-        public static extern int CallNextHookEx(int idHook, int nCode, IntPtr wParam, IntPtr lParam);
-        // 获取异步的按键
-        [DllImport(User32)]
-        public static extern short GetAsyncKeyState(System.Windows.Forms.Keys vKey);
         // 导入 Windows API 中的设置任务栏应用程序 ID 的方法
         [DllImport(Shell32, SetLastError = true)]
         public static extern void SetCurrentProcessExplicitAppUserModelID([MarshalAs(UnmanagedType.LPWStr)] string AppID);

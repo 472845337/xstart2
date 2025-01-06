@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,7 +31,6 @@ namespace XStart2._0 {
         private readonly System.Windows.Threading.DispatcherTimer currentDateTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
         private readonly System.Windows.Threading.DispatcherTimer AutoGcTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMinutes(5) };
         private readonly System.Windows.Threading.DispatcherTimer OperateMessageTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromSeconds(5) };
-        private readonly System.Windows.Threading.DispatcherTimer DpiWatchTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromSeconds(2) };
         // 数据服务
         public TableService<Bean.Type> typeService = ServiceFactory.GetTypeService();
         public TableService<Column> columnService = ServiceFactory.GetColumnService();
@@ -46,6 +46,7 @@ namespace XStart2._0 {
         public List<Project> AutoRunProjectList { get; set; } = new List<Project>();
         public MainWindow() {
             InitializeComponent();
+            Title = Constants.APP_TITLE;
             #region 管理员信息
             Admin admin = adminService.SelectFirst(null);
             if (null == admin) {
@@ -93,12 +94,11 @@ namespace XStart2._0 {
             string fontSizeStr = iniData[Constants.SECTION_THEME][Constants.KEY_FONTSIZE];
             string opacityStr = iniData[Constants.SECTION_THEME][Constants.KEY_OPACITY];
 
-
-            Configs.isMaximum = string.IsNullOrEmpty(isMaximum) ? false : Convert.ToBoolean(isMaximum);
-            Configs.mainLeft = string.IsNullOrEmpty(leftStr) ? Constants.MAIN_LEFT : Convert.ToDouble(leftStr);
-            Configs.mainTop = string.IsNullOrEmpty(topStr) ? Constants.MAIN_TOP : Convert.ToDouble(topStr);
-            Configs.mainHeight = string.IsNullOrEmpty(heightStr) ? Constants.MAIN_HEIGHT : Convert.ToDouble(heightStr);
-            Configs.mainWidth = string.IsNullOrEmpty(widthStr) ? Constants.MAIN_WIDTH : Convert.ToDouble(widthStr);
+            Configs.isMaximum = !string.IsNullOrEmpty(isMaximum) && Convert.ToBoolean(isMaximum);
+            Configs.mainLeft = NumberUtils.IsNumeric(leftStr, out double left) ? left : Constants.MAIN_LEFT;
+            Configs.mainTop = NumberUtils.IsNumeric(topStr, out double top) ? top : Constants.MAIN_TOP;
+            Configs.mainHeight = NumberUtils.IsNumeric(heightStr, out double height) ? height : Constants.MAIN_HEIGHT;
+            Configs.mainWidth = NumberUtils.IsNumeric(widthStr, out double width) ? width : Constants.MAIN_WIDTH;
 
             Configs.themeName = string.IsNullOrEmpty(themeName) ? Constants.WINDOW_THEME_BLUE : themeName;
             Configs.themeCustom = themeCustom;
@@ -127,8 +127,6 @@ namespace XStart2._0 {
             WindowTheme.Instance.FontSize = Configs.fontSize;// 项目字体
             WindowTheme.Instance.Opacity = Configs.opacity;// 控件不透明度
             #endregion
-            string dpiChangeStr = iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE];
-            Configs.dpiChange = string.IsNullOrEmpty(dpiChangeStr) ? false : Convert.ToBoolean(dpiChangeStr);
             #region 加载设置项
             string mainHeadShowStr = iniData[Constants.SECTION_CONFIG][Constants.KEY_MAIN_HEAD_SHOW];
             string typeTabExpandStr = iniData[Constants.SECTION_CONFIG][Constants.KEY_TYPE_TAB_EXPAND];
@@ -159,7 +157,7 @@ namespace XStart2._0 {
             Configs.rdpModel = string.IsNullOrEmpty(rdpModel) ? Constants.RDP_MODEL_CUSTOM : rdpModel;
             Configs.audio = !string.IsNullOrEmpty(audio) && Convert.ToBoolean(audio);
             Configs.autoRun = !string.IsNullOrEmpty(autoRun) && Convert.ToBoolean(autoRun);
-            Configs.runDirectly = string.IsNullOrEmpty(runDirectly) ? false : Convert.ToBoolean(runDirectly);
+            Configs.runDirectly = !string.IsNullOrEmpty(runDirectly) && Convert.ToBoolean(runDirectly);
             Configs.exitWarn = string.IsNullOrEmpty(exitWarn) || Convert.ToBoolean(exitWarn);
             Configs.exitButtonType = !string.IsNullOrEmpty(exitButtonType) && Convert.ToBoolean(exitButtonType);
             Configs.showInTaskbar = string.IsNullOrEmpty(showInTaskbar) || Convert.ToBoolean(showInTaskbar);
@@ -185,6 +183,11 @@ namespace XStart2._0 {
             mainViewModel.ExitButtonType = Configs.exitButtonType;
 
             #region 自动隐藏
+            //mainViewModel.HideWindowHelper = HideWindowHelper
+            //    .CreateFor(this)
+            //    .AddHider<HideOnLeft>()
+            //    .AddHider<HideOnRight>()
+            //    .AddHider<HideOnTop>();
             mainViewModel.AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
             mainViewModel.AutoHideTimer.Tick += AutoHideTimer_Tick;
             mainViewModel.ShowInTaskbar = Configs.showInTaskbar;
@@ -371,11 +374,35 @@ namespace XStart2._0 {
             AutoGcTimer.Start();
             // 操作消息（在设置消息的时候启动，计时完成后停止）
             OperateMessageTimer.Tick += new EventHandler(OperateMessageTimer_Tick);
-            // 监控DPI变化
-            DpiWatchTimer.Tick += DpiWatchTimer_Tick;
-            DpiWatchTimer.Start();
             // 将模型赋值上下文
             DataContext = mainViewModel;
+        }
+
+        protected override void OnSourceInitialized(EventArgs e) {
+            base.OnSourceInitialized(e);
+            if (PresentationSource.FromVisual(this) is HwndSource hwndSource) {
+                hwndSource.AddHook(new HwndSourceHook(WndProc));
+            }
+        }
+
+        IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
+            if (msg == WinApi.WM_COPYDATA) {
+                DllUtils.COPYDATA_STRUCT data = (DllUtils.COPYDATA_STRUCT)Marshal.PtrToStructure(lParam, typeof(DllUtils.COPYDATA_STRUCT));
+                string lpData = data.lpData;
+                if (Constants.APP_SHOW.Equals(lpData)) {
+                    // mainViewModel.HideWindowHelper.TryShow();
+                    IsAllShow = true;
+                }
+            } else if (WinApi.WM_DISPLAYCHANGE == msg) {
+                // 缩放发生变化
+                IniParser.Model.IniData iniData = new IniParser.Model.IniData();
+                iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE] = Convert.ToString(true);
+                IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
+                Configs.forceExit = true;
+                //MessageBox.Show("屏幕DPI发生变化，将重启", Constants.MESSAGE_BOX_TITLE_WARN);
+                App.Restart();
+            }
+            return hwnd;
         }
 
         /// <summary>
@@ -489,8 +516,11 @@ namespace XStart2._0 {
             #endregion
             Configs.Handler = new WindowInteropHelper(this).Handle;
             Configs.inited = true;
+            // mainViewModel.HideWindowHelper.TryShow();
             IsAllShow = true;
             mainViewModel.AutoHideToggle();
+            // 加载缩放
+            Configs.scale = WinUtils.GetScale(this);
             SetOperateMsg(Colors.Green, "加载完成");
         }
 
@@ -498,7 +528,7 @@ namespace XStart2._0 {
 
             if (string.IsNullOrEmpty(Configs.admin.Password)) {
                 if (!isInit) {
-                    if (MessageBoxResult.OK == MessageBox.Show("请先配置管理员口令！", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                    if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("请先配置管理员口令！")) {
                         SetAdminSecurity_Click(null, null);
                     }
                     return false;
@@ -520,6 +550,7 @@ namespace XStart2._0 {
                 if (!isInit) {
                     IsLock = false;
                     Show();
+                    // mainViewModel.HideWindowHelper.TryShow();
                     IsAllShow = true;
                 }
                 // 恢复图标上的按钮可用
@@ -570,7 +601,7 @@ namespace XStart2._0 {
                 int runProjectCount = 0;
                 // 分离远程的自启动
                 Dictionary<bool, List<Project>> mstscDic = projects.GroupBy(p => p.IsMstsc).ToDictionary(g => g.Key, g => g.ToList());
-                foreach(bool isMstsc in mstscDic.Keys) {
+                foreach (bool isMstsc in mstscDic.Keys) {
                     if (isMstsc) {
                         // 远程的自启动
                         ProjectUtils.ExecuteMstsc(mstscDic[isMstsc], mainViewModel.RdpModel);
@@ -584,7 +615,7 @@ namespace XStart2._0 {
                                     ProjectUtils.ExecuteProject(p, mainViewModel.RdpModel);
                                     runProjectCount++;
                                 } catch (Exception ex) {
-                                    MessageBox.Show(ex.Message);
+                                    MsgBoxUtils.ShowError(ex.Message);
                                 }
                             } else {
                                 existProjectCount++;
@@ -598,6 +629,7 @@ namespace XStart2._0 {
         }
 
         private void MainWindow_Show(object sender, EventArgs e) {
+            //mainViewModel.HideWindowHelper.TryShow();
             IsAllShow = true;
             if (!IsLock) {
                 // 将窗口置为当前并显示
@@ -622,7 +654,7 @@ namespace XStart2._0 {
             if (appExit == 1
                 && !Configs.forceExit
                 && mainViewModel.ExitWarn
-                && MessageBoxResult.Cancel == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.None, MessageBoxOptions.DefaultDesktopOnly)) {
+                && MessageBoxResult.No == MsgBoxUtils.ShowAsk("确认退出?")) {
                 // 取消退出
                 appExit = 0;
                 e.Cancel = true;
@@ -708,7 +740,7 @@ namespace XStart2._0 {
 
         private void WindowCloseMenu_Click(object sender, EventArgs e) {
             if (mainViewModel.ExitWarn) {
-                if (MessageBoxResult.OK == MessageBox.Show("确认退出?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.None, MessageBoxOptions.DefaultDesktopOnly)) {
+                if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认退出?")) {
                     Configs.forceExit = true;
                     appExit = 1;
                     Application.Current.Shutdown();
@@ -979,15 +1011,15 @@ namespace XStart2._0 {
 
         private void ClearType_Click(object sender, RoutedEventArgs e) {
             if (XStartService.TypeDic.Count > 0) {
-                if (MessageBoxResult.OK == MessageBox.Show("确认清空所有类别？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认清空所有类别？")) {
                     foreach (KeyValuePair<string, Bean.Type> type in mainViewModel.Types) {
                         if (type.Value.Locked) {
-                            MessageBox.Show($"[{type.Value.Name}]类别已锁，不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                            MsgBoxUtils.ShowError($"[{type.Value.Name}]类别已锁，不可删除！");
                             return;
                         }
                         foreach (KeyValuePair<string, Column> k in type.Value.ColumnDic) {
                             if (k.Value.Locked) {
-                                MessageBox.Show($"类别[{type.Value.Name}]下栏目[{k.Value.Name}]已锁，不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                                MsgBoxUtils.ShowError($"类别[{type.Value.Name}]下栏目[{k.Value.Name}]已锁，不可删除！");
                                 return;
                             }
                         }
@@ -996,7 +1028,7 @@ namespace XStart2._0 {
                     NotifyUtils.ShowNotification("清空完成！");
                 }
             } else {
-                MessageBox.Show("当前无需清空！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowInfo("当前无需清空！");
             }
         }
 
@@ -1028,15 +1060,15 @@ namespace XStart2._0 {
         private void DeleteType_Click(object sender, RoutedEventArgs e) {
             Bean.Type type = GetMenuOfType(sender);
             if (type.Locked) {
-                MessageBox.Show("当前类别已锁，不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("当前类别已锁，不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
                 e.Handled = true;
                 return;
             }
-            if (MessageBoxResult.OK == MessageBox.Show("确认删除该类别？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+            if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认删除该类别？")) {
 
                 foreach (KeyValuePair<string, Column> k in type.ColumnDic) {
                     if (k.Value.Locked) {
-                        MessageBox.Show($"当前类别栏目[{k.Value.Name}]已锁，不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                        MsgBoxUtils.ShowError($"当前类别栏目[{k.Value.Name}]已锁，不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
                         return;
                     }
                 }
@@ -1110,7 +1142,7 @@ namespace XStart2._0 {
                 type.Locked = false;
                 type.UnlockSecurity = string.Empty;
             } else {
-                MessageBox.Show("口令不匹配", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("口令不匹配");
                 type.UnlockSecurity = string.Empty;
             }
             e.Handled = true;
@@ -1120,10 +1152,10 @@ namespace XStart2._0 {
         private void ClearColumn_Click(object sender, RoutedEventArgs e) {
             Bean.Type type = GetMenuOfType(sender);
             if (type.ColumnDic.Count > 0) {
-                if (MessageBoxResult.OK == MessageBox.Show($"确认清空【{type.Name}】类别下的所有栏目?", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk($"确认清空【{type.Name}】类别下的所有栏目?")) {
                     foreach (KeyValuePair<string, Column> column in type.ColumnDic) {
                         if (column.Value.Locked) {
-                            MessageBox.Show($"该类别下的栏目【{column.Value.Name}】已锁定不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                            MsgBoxUtils.ShowError($"该类别下的栏目【{column.Value.Name}】已锁定不可删除！");
                             e.Handled = true;
                             return;
                         }
@@ -1131,7 +1163,7 @@ namespace XStart2._0 {
                     RemoveTypeColumns(type);
                 }
             } else {
-                MessageBox.Show("当前类别下没有栏目！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowInfo("当前类别下没有栏目！");
             }
             e.Handled = true;
         }
@@ -1150,7 +1182,7 @@ namespace XStart2._0 {
                 typeSection = element.Tag as string;
             }
             if (string.Empty.Equals(typeSection)) {
-                MessageBox.Show("无法获取当前类别", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("无法获取当前类别");
                 return;
             }
             ColumnVM vm = new ColumnVM {
@@ -1186,7 +1218,7 @@ namespace XStart2._0 {
         private void DeleteColumn_Click(object sender, RoutedEventArgs e) {
             Column column = GetMenuOfColumn(sender);
             if (column.Locked) {
-                MessageBox.Show($"当前栏目已锁，不可删除！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError($"当前栏目已锁，不可删除！");
                 e.Handled = true;
                 return;
             }
@@ -1194,7 +1226,7 @@ namespace XStart2._0 {
             if (XStartService.TypeDic[column.TypeSection].ColumnDic[column.Section].ProjectDic.Count > 0) {
                 confirmMsg += "，包含项目也将会删除";
             }
-            if (MessageBoxResult.OK == MessageBox.Show(confirmMsg + "？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+            if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk(confirmMsg + "？")) {
                 // 删除项目
                 RemoveColumnProjects(column);
                 // 删除栏目
@@ -1315,7 +1347,7 @@ namespace XStart2._0 {
                 column.Locked = false;
                 column.UnlockSecurity = string.Empty;
             } else {
-                MessageBox.Show("口令不匹配", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("口令不匹配");
                 column.UnlockSecurity = string.Empty;
             }
         }
@@ -1496,12 +1528,12 @@ namespace XStart2._0 {
             }
 
             if (mainViewModel.Types[typeSection].ColumnDic[columnSection].ProjectDic.Count > 0) {
-                if (MessageBoxResult.OK == MessageBox.Show("确认清空栏目所有项目？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认清空栏目所有项目？")) {
                     RemoveColumnProjects(typeSection, columnSection);
                     NotifyUtils.ShowNotification("项目清空成功！");
                 }
             } else {
-                MessageBox.Show("当前栏目无项目！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("当前栏目无项目！");
             }
             e.Handled = true;
         }
@@ -1527,14 +1559,14 @@ namespace XStart2._0 {
                 }
                 projectWindow.Close();
             } else {
-                MessageBox.Show("系统错误！");
+                MsgBoxUtils.ShowError("系统错误！");
             }
             OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);
         }
         // 删除项目
         private void DeleteProject_Click(object sender, RoutedEventArgs e) {
             Project project = GetProjectByMenu(sender);
-            if (MessageBoxResult.OK == MessageBox.Show("确认删除该项目？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+            if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认删除该项目？")) {
                 if (null != project) {
                     int result = projectService.Delete(project.Section);
                     if (result > 0) {
@@ -1546,7 +1578,7 @@ namespace XStart2._0 {
                         XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic.Remove(project.Section);
                         NotifyUtils.ShowNotification($"{project.Name}项目删除成功！");
                     } else {
-                        MessageBox.Show($"{project.Name}项目删除失败！");
+                        MsgBoxUtils.ShowError($"{project.Name}项目删除失败！");
                     }
                 }
             }
@@ -1606,7 +1638,7 @@ namespace XStart2._0 {
                     AutoRunProjectWindow(autoRunProjects, this, false);
                 }));
             } else {
-                MessageBox.Show("当前无自启动应用！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowInfo("当前无自启动应用！");
             }
             autoRunProjects.Clear();
         }
@@ -1627,7 +1659,7 @@ namespace XStart2._0 {
             if (autoRunProjects.Count > 0) {
                 bool isConfirm = false;
                 if (string.IsNullOrEmpty(mainViewModel.Security)) {
-                    if (MessageBoxResult.OK == MessageBox.Show("确认取消当前所有自启动项目？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                    if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认取消当前所有自启动项目？")) {
                         isConfirm = true;
                     }
                 } else {
@@ -1646,7 +1678,7 @@ namespace XStart2._0 {
                     NotifyUtils.ShowNotification("已取消所有项目自启动！");
                 }
             } else {
-                MessageBox.Show("当前无自启动项目！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowInfo("当前无自启动项目！");
             }
             e.Handled = true;
         }
@@ -1657,7 +1689,7 @@ namespace XStart2._0 {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void CancelAllCustomStyle_Click(object sender, EventArgs e) {
-            if (MessageBoxResult.OK == MessageBox.Show("确认取消所有栏目自定义样式？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+            if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认取消所有栏目自定义样式？")) {
                 foreach (KeyValuePair<string, Bean.Type> typeDic in mainViewModel.Types) {
                     foreach (KeyValuePair<string, Column> columnDic in typeDic.Value.ColumnDic) {
                         if (null != columnDic.Value.HideTitle || !string.IsNullOrEmpty(columnDic.Value.Orientation) || null != columnDic.Value.IconSize || null != columnDic.Value.OneLineMulti) {
@@ -1679,7 +1711,7 @@ namespace XStart2._0 {
 
         // 恢复默认配置
         private void RestoreDefault_Click(object sender, RoutedEventArgs e) {
-            if (MessageBoxResult.OK == MessageBox.Show("确认恢复默认配置？", Constants.MESSAGE_BOX_TITLE_WARN)) {
+            if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认恢复默认配置？")) {
                 mainViewModel.MainBackground = string.Empty;
                 mainViewModel.MainOpacity = 1D;
                 mainViewModel.MainHeight = Constants.MAIN_HEIGHT;
@@ -1759,49 +1791,6 @@ namespace XStart2._0 {
                 //  配置工作使用空间
                 DllUtils.SetProcessWorkingSetSize(Configs.Handler, -1, -1);
             }
-        }
-
-        bool dpiTick = false;
-        /// <summary>
-        /// DPI变化监控
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DpiWatchTimer_Tick(object sender, EventArgs e) {
-            if (dpiTick) {
-                return;
-            } else {
-                dpiTick = true;
-            }
-            Tuple<int, int> dpiTuple = GetDpi();
-            if (null == Configs.dpiTurple) {
-                Configs.dpiTurple = dpiTuple;
-                if (Configs.dpiChange) {
-                    // 清除DpiChange
-                    IniParser.Model.IniData iniData = new IniParser.Model.IniData();
-                    iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE] = string.Empty;
-                    IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
-                }
-            } else {
-                // 判断是否变更
-                if (!dpiTuple.Equals(Configs.dpiTurple)) {
-                    Configs.dpiChange = true;
-                    IniParser.Model.IniData iniData = new IniParser.Model.IniData();
-                    iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE] = Convert.ToString(true);
-                    IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
-                    Configs.forceExit = true;
-                    // MessageBox.Show("屏幕DPI发生变化，将重启",Constants.MESSAGE_BOX_TITLE_WARN);
-                    Application.Current.Shutdown();
-                    System.Windows.Forms.Application.Restart();
-                }
-            }
-            dpiTick = false;
-        }
-
-        public static Tuple<int, int> GetDpi() {
-            double width = SystemParameters.PrimaryScreenWidth;
-            double height = SystemParameters.PrimaryScreenHeight;
-            return new Tuple<int, int>((int)width, (int)height);
         }
 
         private void OperateMessageTimer_Tick(object sender, EventArgs e) {
@@ -1931,12 +1920,9 @@ namespace XStart2._0 {
                 DllUtils.Point curPoint = new DllUtils.Point();
                 DllUtils.GetCursorPos(ref curPoint); //获取鼠标相对桌面的位置
 
-                // 获取屏幕的显示比例
-                System.Drawing.Size dsize = WinUtils.GetScreenByDevice();
-                double scaleX = dsize.Width / screenWidth;
-                double scaleY = dsize.Height / screenHeight;
-                double curPointX = curPoint.X / scaleX;
-                double curPointY = curPoint.Y / scaleY;
+                // 获取缩放比例
+                double curPointX = curPoint.X / Configs.scale.Item1;
+                double curPointY = curPoint.Y / Configs.scale.Item2;
                 bool isMouseEnter = curPointX >= Left - mouseDistance
                                    && curPointX <= Left + Width + mouseDistance
                                    && curPointY >= Top - mouseDistance
@@ -1950,7 +1936,7 @@ namespace XStart2._0 {
                         if (anchorStyle == Constants.ANCHOR_STYLE_TOP) {
                             toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - resumeSize));
                         } else {
-                            toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, SystemParameters.PrimaryScreenHeight - Height) : new Point(Left, SystemParameters.PrimaryScreenHeight - resumeSize);
+                            toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, screenHeight - Height) : new Point(Left, screenHeight - resumeSize);
                         }
                         break;
                     case Constants.ANCHOR_STYLE_LEFT:
@@ -1961,17 +1947,17 @@ namespace XStart2._0 {
                         if (anchorStyle == Constants.ANCHOR_STYLE_LEFT) {
                             toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - resumeSize), Top);
                         } else {
-                            toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(SystemParameters.PrimaryScreenWidth - Width, Top) : new Point(SystemParameters.PrimaryScreenWidth - resumeSize, Top);
+                            toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(screenWidth - Width, Top) : new Point(screenWidth - resumeSize, Top);
                         }
                         break;
                 }
                 if (isMouseEnter) {
                     IsAllShow = false;
-                    if (!IsLock) {
-                        // 打开当前窗口
-                        DllUtils.SwitchToThisWindow(Configs.Handler, true);
-                        DllUtils.ShowWindow(Configs.Handler, WinApi.SW_SHOW);
-                    }
+                    //if (!IsLock) {
+                    //    // 打开当前窗口
+                    //    DllUtils.SwitchToThisWindow(Configs.Handler, true);
+                    //    DllUtils.ShowWindow(Configs.Handler, WinApi.SW_SHOW);
+                    //}
                 }
                 Animate2Location(this, toPoint);
             } catch {
@@ -2075,7 +2061,7 @@ namespace XStart2._0 {
                 if (File.Exists(project.Path)) {
                     Process.Start("explorer.exe", $"/select,{project.Path}");
                 } else {
-                    MessageBox.Show($"文件不存在！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                    MsgBoxUtils.ShowWarning($"文件不存在！");
                 }
             }
         }
@@ -2109,7 +2095,7 @@ namespace XStart2._0 {
                 if (Project.KIND_FILE.Equals(project.Kind) || Project.KIND_DIRECTORY.Equals(project.Kind)) {
                     WinUtils.ShowFileProperties(project.Path);
                 } else {
-                    MessageBox.Show("该项目不可查看属性！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                    MsgBoxUtils.ShowWarning("该项目不可查看属性！");
                 }
             }
         }
@@ -2121,7 +2107,7 @@ namespace XStart2._0 {
                 FileUtils.CreateShortCutOnDesktop(project.Name, project.Path);
                 NotifyUtils.ShowNotification("已发送快捷方式到桌面！");
             } else {
-                MessageBox.Show("该项目不可发送到桌面快捷方式！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowWarning("该项目不可发送到桌面快捷方式！");
             }
         }
 
@@ -2176,7 +2162,7 @@ namespace XStart2._0 {
                     projectService.Delete(primarySection);
                 }
             } else {
-                MessageBox.Show("当前剪切板无应用数据！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowWarning("当前剪切板无应用数据！");
             }
             e.Handled = true;
         }
@@ -2244,7 +2230,7 @@ namespace XStart2._0 {
                 return;
             }
             if (array.Length > 5) {
-                MessageBox.Show("最多拖拽5个项目！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("最多拖拽5个项目！");
                 e.Effects = DragDropEffects.None;
                 return;
             }
@@ -2259,7 +2245,7 @@ namespace XStart2._0 {
                 typeSection = column.TypeSection;
                 columnSection = column.Section;
             } else {
-                MessageBox.Show("不支持的拖拽！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("不支持的拖拽！");
                 return;
             }
             int dragCount = 0;
@@ -2345,7 +2331,7 @@ namespace XStart2._0 {
                 && string.IsNullOrEmpty(Configs.weatherOpenAppKey)
                 && string.IsNullOrEmpty(Configs.weatherAccuAppKey)
                 && string.IsNullOrEmpty(Configs.weatherVcAppKey)) {
-                MessageBoxResult result = MessageBox.Show("天气API参数未配置，是否立即配置？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.YesNoCancel);
+                MessageBoxResult result = MsgBoxUtils.ShowAskWithCancel("天气API参数未配置，是否立即配置？");
                 if (MessageBoxResult.Yes == result) {
                     // 打开设置
                     OpenSettingWindow(2);
@@ -2377,7 +2363,7 @@ namespace XStart2._0 {
             string themeName = (sender as MenuItem).Tag as string;
             if (!themeName.Equals(WindowTheme.Instance.ThemeName)) {
                 if (Constants.WINDOW_THEME_CUSTOM.Equals(themeName) && string.IsNullOrEmpty(WindowTheme.Instance.ThemeCustom)) {
-                    if (MessageBoxResult.OK == MessageBox.Show("未配置自定义主题，是否立即配置？", Constants.MESSAGE_BOX_TITLE_INFO, MessageBoxButton.OKCancel)) {
+                    if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("未配置自定义主题，是否立即配置？")) {
                         // 打开自定义主题页
                         OpenThemeWindow();
                     }
@@ -2484,7 +2470,7 @@ namespace XStart2._0 {
                     NotifyUtils.ShowNotification("口令已移除！");
                 }
             } else {
-                MessageBox.Show("当前无管理员口令", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowWarning("当前无管理员口令");
             }
         }
 

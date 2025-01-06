@@ -1,6 +1,8 @@
 ﻿namespace XStart2._0.Const {
-    class Constants {
+    public class Constants {
         public const string APP_NAME = "XStart2_APP";
+        public const string APP_TITLE = "X启动";
+        public const string APP_SHOW = "Show";
 
         public const string URL_OPEN_DEFAULT = "UrlDefault";// 系统默认浏览器打开
         public const string URL_OPEN_EDGE = "UrlEdge";// 微软浏览器打开

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 using XStart2._0.Bean;
 using XStart2._0.Bean.Weather;
@@ -11,18 +12,19 @@ namespace XStart2._0.Config {
     /// 系统缓存参数
     /// </summary>
     class Configs {
-        public static string AppStartPath = System.AppDomain.CurrentDomain.BaseDirectory;// 当前程序的启动目录
-        public static System.IntPtr Handler = System.IntPtr.Zero;// 当前窗口句柄
-        public static System.IntPtr MstscHandler = System.IntPtr.Zero;// 远程窗口句柄
+        public static string AppStartPath = AppDomain.CurrentDomain.BaseDirectory;// 当前程序的启动目录
+        public static IntPtr Handler = IntPtr.Zero;// 当前窗口句柄
+        public static IntPtr MstscHandler = IntPtr.Zero;// 远程窗口句柄
         public static bool mstscRealClose = false;// 远程真实关闭
-        public static System.IntPtr CalendarHandler = System.IntPtr.Zero;// 日历窗口句柄
-        public static System.IntPtr WeatherHandler = System.IntPtr.Zero;// 天气窗口句柄
-        public static System.IntPtr AboutHandler = System.IntPtr.Zero;// 关于窗口句柄
-        public static System.IntPtr LockHandler = System.IntPtr.Zero;// 锁定窗口句柄
+        public static IntPtr CalendarHandler = IntPtr.Zero;// 日历窗口句柄
+        public static IntPtr WeatherHandler = IntPtr.Zero;// 天气窗口句柄
+        public static IntPtr AboutHandler = IntPtr.Zero;// 关于窗口句柄
+        public static IntPtr LockHandler = IntPtr.Zero;// 锁定窗口句柄
 
         public static bool inited = false;// 是否初始化
         public static bool mainHeadShow;// 主页面头是否显示
         public static bool? typeTabExpand;// 类别标签头是否展开
+        public static Tuple<double, double> scale;// 缩放
 
         public static Admin admin;// 管理员信息，头像，昵称，口令
 
@@ -59,10 +61,9 @@ namespace XStart2._0.Config {
         public static bool exitButtonType;// 退出按钮类型，true:退出，false:最小化
         public static bool forceExit = false;// 直接退出
         public static int delCount;
-        public static System.Tuple<int, int> dpiTurple;
         public static bool dpiChange = false;
 
-        public static System.IntPtr taskbarHandler = System.IntPtr.Zero;
+        public static IntPtr taskbarHandler = IntPtr.Zero;
 
         public static bool taskbarIsShow = true;
         public static uint volume;

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using XStart2._0.Bean;
+using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 
 namespace XStart2._0.Windows {
@@ -43,7 +44,7 @@ namespace XStart2._0.Windows {
                 // 启动选中的自启项
                 DialogResult = true;
             } else {
-                MessageBox.Show("未选择启动项目", Const.Constants.MESSAGE_BOX_TITLE_WARN);
+                MsgBoxUtils.ShowWarning("未选择启动项目", Const.Constants.MESSAGE_BOX_TITLE_WARN);
             }
 
         }

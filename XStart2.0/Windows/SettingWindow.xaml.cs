@@ -83,7 +83,7 @@ namespace XStart2._0.Windows {
         private void SaveSetting_Click(object sender, RoutedEventArgs e) {
             // 如果配置了自定义浏览器，则校验是否选中了浏览器地址
             if (Constants.URL_OPEN_CUSTOM.Equals(settingVM.UrlOpen) && string.IsNullOrEmpty(settingVM.UrlOpenCustomBrowser)) {
-                MessageBox.Show("自定义浏览器未配置路径", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("自定义浏览器未配置路径");
                 return;
             }
             DialogResult = true;

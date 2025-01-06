@@ -26,7 +26,7 @@ namespace XStart2._0.Utils {
                 // 获取该类别的应用是否配置确认信息，有确认信息，则弹出确认窗口
                 if (OperateParam.TryGetValue(project.Path, out SystemProject appOperateParam)) {
                     if (null != appOperateParam && !string.IsNullOrEmpty(appOperateParam.ConfirmMsg)) {
-                        if (MessageBoxResult.Cancel == MessageBox.Show(appOperateParam.ConfirmMsg, Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                        if (MessageBoxResult.Cancel == MsgBoxUtils.ShowAsk(appOperateParam.ConfirmMsg)) {
                             return;
                         }
                     }
@@ -51,7 +51,7 @@ namespace XStart2._0.Utils {
                 }
 
             } catch (Exception ex) {
-                MessageBox.Show(ex.Message, Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError(ex.Message);
             }
         }
 
@@ -92,14 +92,14 @@ namespace XStart2._0.Utils {
                             Process.Start(project.Path);
                         }
                     } else {
-                        MessageBox.Show("可执行文件不存在", Constants.MESSAGE_BOX_TITLE_ERROR);
+                        MsgBoxUtils.ShowError("可执行文件不存在");
                     }
                     break;
                 case Project.KIND_DIRECTORY:
                     if (Directory.Exists(project.Path)) {
                         Process.Start(project.Path);
                     } else {
-                        MessageBox.Show("当前目录不存在", Constants.MESSAGE_BOX_TITLE_ERROR);
+                        MsgBoxUtils.ShowError("当前目录不存在");
                     }
                     break;
                 case Project.KIND_SYSTEM:
@@ -149,7 +149,7 @@ namespace XStart2._0.Utils {
                                     try {
                                         DllUtils.SetProcessWorkingSetSize(process.MainWindowHandle, minMemory * 1024 * 1024, maxMemory * 1024 * 1024);
                                     } catch (Exception ex) {
-                                        MessageBox.Show(ex.Message, Constants.MESSAGE_BOX_TITLE_ERROR);
+                                        MsgBoxUtils.ShowError(ex.Message);
                                     }
                                 }
                             }
@@ -160,7 +160,7 @@ namespace XStart2._0.Utils {
                                     try {
                                         process.Kill();
                                     } catch (Exception ex) {
-                                        MessageBox.Show(ex.Message, Constants.MESSAGE_BOX_TITLE_ERROR);
+                                        MsgBoxUtils.ShowError(ex.Message);
                                     }
                                 }
                             }
@@ -328,12 +328,12 @@ namespace XStart2._0.Utils {
         private static void OpenNewMstsc(Project project) {
             string arguments = project.Arguments;
             if (string.IsNullOrEmpty(arguments)) {
-                MessageBox.Show("远程参数不能为空！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("远程参数不能为空！");
                 return;
             }
             string[] argumentArray = arguments.Split(Constants.SPLIT_CHAR);
             if (argumentArray.Length != 4) {
-                MessageBox.Show("远程参数不匹配！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("远程参数不匹配！");
                 return;
             }
             if (Configs.MstscHandler.ToInt32() == 0) {
@@ -351,16 +351,15 @@ namespace XStart2._0.Utils {
         }
 
         private static void OpenNewMstsc(List<Project> projects) {
-            foreach (var project in projects)
-            {
+            foreach (var project in projects) {
                 string arguments = project.Arguments;
                 if (string.IsNullOrEmpty(arguments)) {
-                    MessageBox.Show("远程参数不能为空！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                    MsgBoxUtils.ShowError("远程参数不能为空！");
                     return;
                 }
                 string[] argumentArray = arguments.Split(Constants.SPLIT_CHAR);
                 if (argumentArray.Length != 4) {
-                    MessageBox.Show("远程参数不匹配！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                    MsgBoxUtils.ShowError("远程参数不匹配！");
                     return;
                 }
             }
@@ -380,7 +379,7 @@ namespace XStart2._0.Utils {
                 string[] argumentArray = arguments.Split(Constants.SPLIT_CHAR);
                 mstscWindow.AddRdp(project.Section, project.Name, argumentArray[0], string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]), argumentArray[2], argumentArray[3]);
             });
-            
+
         }
     }
 }

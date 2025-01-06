@@ -4,9 +4,9 @@ using System.Windows.Input;
 namespace XStart2._0.Commands {
     public class RelayCommand : ICommand {
         public event EventHandler CanExecuteChanged;
-        private readonly Action _action;
+        private readonly Action<object> _action;
         private readonly Func<bool> _canExecute;
-        public RelayCommand(Action action, Func<bool> canExecute = null) {
+        public RelayCommand(Action<object> action, Func<bool> canExecute = null) {
             _action = action;
             _canExecute = canExecute;
         }
@@ -19,7 +19,7 @@ namespace XStart2._0.Commands {
         }
 
         public void Execute(object parameter) {
-            _action?.Invoke();
+            _action?.Invoke(parameter);
         }
     }
 }

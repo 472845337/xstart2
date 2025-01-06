@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Windows;
 using System.Windows.Media.Imaging;
 using XStart2._0.Bean;
 using XStart2._0.Config;
@@ -45,7 +44,7 @@ namespace XStart2._0.Services {
                 }
                 return image;
             } catch (Exception ex) {
-                MessageBox.Show(ex.StackTrace);
+                MsgBoxUtils.ShowError(ex.StackTrace);
                 return null;
             }
         }

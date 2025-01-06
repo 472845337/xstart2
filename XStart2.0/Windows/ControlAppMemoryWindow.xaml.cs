@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using XStart2._0.Const;
+using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 
 namespace XStart2._0.Windows {
@@ -41,7 +42,7 @@ namespace XStart2._0.Windows {
             if (string.IsNullOrEmpty(errMsg)) {
                 DialogResult = true;
             } else {
-                MessageBox.Show(errMsg, Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError(errMsg, Constants.MESSAGE_BOX_TITLE_ERROR);
             }
 
         }

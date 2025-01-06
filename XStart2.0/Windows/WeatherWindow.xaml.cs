@@ -113,7 +113,7 @@ namespace XStart2._0.Windows {
         /// <param name="e"></param>
         private void GetWeather_Click(object sender, RoutedEventArgs e) {
             if (string.IsNullOrEmpty(vm.Country)) {
-                MessageBox.Show("未选择区县", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("未选择区县");
             } else {
                 GetWeather(vm.Country);
             }
@@ -137,7 +137,7 @@ namespace XStart2._0.Windows {
                     } else if (Constants.WEATHER_API_GAODE.Equals(vm.WeatherApi)) {
                         string areaCode = country.AreaCode;
                         if (string.IsNullOrEmpty(areaCode)) {
-                            MessageBox.Show("当前接口不支持查询该城市！", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OK);
+                            MsgBoxUtils.ShowWarning("当前接口不支持查询该城市！");
                         } else {
                             // 高德天气
                             GetGaoDeWeather(areaCode);
@@ -172,7 +172,7 @@ namespace XStart2._0.Windows {
             string curWeatherJson = HttpUtils.GetRequest(curUrl, HttpUtils.ContentTypeJson);
             CurWeather curWeather = JsonConvert.DeserializeObject<CurWeather>(curWeatherJson);
             if (null != curWeather.ErrCode) {
-                MessageBox.Show($"获取天气数据异常：{curWeather.ErrMsg}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+                MsgBoxUtils.ShowError($"获取天气数据异常：{curWeather.ErrMsg}");
                 return;
             }
             vm.CurWeather = curWeather;
@@ -181,7 +181,7 @@ namespace XStart2._0.Windows {
             string dayWeatherJson = HttpUtils.GetRequest(weekUrl, HttpUtils.ContentTypeJson);
             DayWeather dayWeather = JsonConvert.DeserializeObject<DayWeather>(dayWeatherJson);
             if (null != dayWeather.ErrCode) {
-                MessageBox.Show($"获取天气数据异常：{dayWeather.ErrMsg}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+                MsgBoxUtils.ShowError($"获取天气数据异常：{dayWeather.ErrMsg}");
                 return;
             }
             vm.DayWeather = dayWeather;
@@ -196,7 +196,7 @@ namespace XStart2._0.Windows {
             string curWeatherJson = HttpUtils.GetRequest(curUrl, HttpUtils.ContentTypeJson);
             GaodeWeather curWeather = JsonConvert.DeserializeObject<GaodeWeather>(curWeatherJson);
             if (GaodeWeather.STATUS_FAIL == curWeather.Status) {
-                MessageBox.Show($"获取天气数据异常：{curWeather.Info}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+                MsgBoxUtils.ShowError($"获取天气数据异常：{curWeather.Info}");
                 return;
             }
             vm.CurWeather = new CurWeather {
@@ -210,7 +210,7 @@ namespace XStart2._0.Windows {
             string dayWeatherJson = HttpUtils.GetRequest(weekUrl, HttpUtils.ContentTypeJson);
             GaodeWeather dayWeather = JsonConvert.DeserializeObject<GaodeWeather>(dayWeatherJson);
             if (GaodeWeather.STATUS_FAIL == curWeather.Status) {
-                MessageBox.Show($"获取天气数据异常：{dayWeather.Info}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+                MsgBoxUtils.ShowError($"获取天气数据异常：{dayWeather.Info}");
                 return;
             }
             DayWeather vmDayWeather = new DayWeather {
@@ -246,7 +246,7 @@ namespace XStart2._0.Windows {
                     WinSpeed = curWeather.Results[0].Now.WindScale + "级", Pressure = curWeather.Results[0].Now.Pressure
                 };
             } catch (Exception e) {
-                MessageBox.Show($"获取天气数据异常：{e.Message}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+                MsgBoxUtils.ShowError($"获取天气数据异常：{e.Message}");
                 return;
             }
 
@@ -270,7 +270,7 @@ namespace XStart2._0.Windows {
                 vmDayWeather.Data = datas;
                 vm.DayWeather = vmDayWeather;
             } catch (Exception e) {
-                MessageBox.Show($"获取天气数据异常：{e.Message}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+                MsgBoxUtils.ShowError($"获取天气数据异常：{e.Message}");
                 return;
             }
         }
@@ -288,12 +288,12 @@ namespace XStart2._0.Windows {
 
             QNowWeather curWeather = JsonConvert.DeserializeObject<QNowWeather>(curJson);
             if (!QBaseWeather.CODE_SUCCESS.Equals(curWeather.Code)) {
-                MessageBox.Show($"获取天气数据异常：{curWeather.Msg}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+                MsgBoxUtils.ShowError($"获取天气数据异常：{curWeather.Msg}");
                 return;
             }
             QAir air = JsonConvert.DeserializeObject<QAir>(airJson);
             if (!QBaseWeather.CODE_SUCCESS.Equals(air.Code)) {
-                MessageBox.Show($"获取天气数据异常：{air.Msg}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+                MsgBoxUtils.ShowError($"获取天气数据异常：{air.Msg}");
                 return;
             }
             vm.CurWeather = new CurWeather {
@@ -310,7 +310,7 @@ namespace XStart2._0.Windows {
             // GZIP解压
             QDailyWeather daliyWeather = JsonConvert.DeserializeObject<QDailyWeather>(daliyJson);
             if (!QBaseWeather.CODE_SUCCESS.Equals(daliyWeather.Code)) {
-                MessageBox.Show($"获取天气数据异常：{daliyWeather.Msg}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+                MsgBoxUtils.ShowError($"获取天气数据异常：{daliyWeather.Msg}");
                 return;
             }
             DayWeather vmDayWeather = new DayWeather {
@@ -351,7 +351,7 @@ namespace XStart2._0.Windows {
                     Pressure = curWeather.Main.Pressure.ToString(), Air = Convert.ToInt32(WeatherUtil.GetAirFromOpenAir(air)).ToString()
                 };
             } catch (Exception e) {
-                MessageBox.Show($"获取天气数据异常：{e.Message}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+                MsgBoxUtils.ShowError($"获取天气数据异常：{e.Message}");
                 return;
             }
 
@@ -366,7 +366,7 @@ namespace XStart2._0.Windows {
                 string forecastJson = HttpUtils.GetRequest(weekUrl, HttpUtils.ContentTypeJson);
                 OpenForecastWeather forecastWeather = JsonConvert.DeserializeObject<OpenForecastWeather>(forecastJson);
                 if (OpenWeather.COD_SUCCESS != forecastWeather.Cod) {
-                    MessageBox.Show($"获取天气数据异常：{forecastWeather.Msg}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+                    MsgBoxUtils.ShowError($"获取天气数据异常：{forecastWeather.Msg}");
                     return;
                 }
                 foreach (OpenForecastWeather.Forecast forecast in forecastWeather.Casts) {
@@ -402,7 +402,7 @@ namespace XStart2._0.Windows {
                 AccuGeoPositionSearch geoPositionSearch = JsonConvert.DeserializeObject<AccuGeoPositionSearch>(getKeyJson);
                 key = geoPositionSearch.Key;
             } catch (Exception e) {
-                MessageBox.Show($"获取天气数据异常：{e.Message}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+                MsgBoxUtils.ShowError($"获取天气数据异常：{e.Message}");
                 return;
             }
             try {
@@ -430,7 +430,7 @@ namespace XStart2._0.Windows {
                     }
                 }
             } catch (Exception e) {
-                MessageBox.Show($"获取天气数据异常：{e.Message}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+                MsgBoxUtils.ShowError($"获取天气数据异常：{e.Message}");
                 return;
             }
 
@@ -507,7 +507,7 @@ namespace XStart2._0.Windows {
                 vm.DayWeather = vmDayWeather;
 
             } catch (Exception e) {
-                MessageBox.Show($"获取天气数据异常：{e.Message}", Constants.MESSAGE_BOX_TITLE_ERROR, MessageBoxButton.OK);
+                MsgBoxUtils.ShowError($"获取天气数据异常：{e.Message}");
             }
         }
 
@@ -537,11 +537,11 @@ namespace XStart2._0.Windows {
 
         private void RemoveAllLastCity_Click(object sender, RoutedEventArgs e) {
             if (vm.LastCountries.Count > 0) {
-                if (MessageBoxResult.OK == MessageBox.Show("确认清除所有历史记录？", Constants.MESSAGE_BOX_TITLE_WARN, MessageBoxButton.OKCancel)) {
+                if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认清除所有历史记录？")) {
                     vm.LastCountries.Clear();
                 }
             } else {
-                MessageBox.Show("无历史记录！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("无历史记录！");
             }
             e.Handled = true;
         }
@@ -634,7 +634,7 @@ namespace XStart2._0.Windows {
                 }
             }
             if (!result) {
-                MessageBox.Show(errMsg, Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError(errMsg);
             }
             return result;
         }
