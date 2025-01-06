@@ -32,6 +32,11 @@ namespace XStart2._0.ViewModel {
 
         public string Message { get; set; }
 
+        public string BtnYesCon { get; set; } = "是";
+        public string BtnNoCon { get; set; } = "否";
+        public string BtnConfirmCon { get; set; } = "确认";
+        public string BtnCancelCon { get; set; } = "取消";
+
         public BitmapSource ImageSource { get; set; }
         #endregion
 

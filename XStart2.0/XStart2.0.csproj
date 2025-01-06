@@ -189,6 +189,7 @@
     <Compile Include="Services\AdminService.cs" />
     <Compile Include="Utils\BackgroundUtils.cs" />
     <Compile Include="Utils\ColorUtils.cs" />
+    <Compile Include="Utils\ConvertUtils.cs" />
     <Compile Include="Utils\DateUtil.cs" />
     <Compile Include="Utils\ElementUtils.cs" />
     <Compile Include="Utils\EventUtils.cs" />

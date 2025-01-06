@@ -57,6 +57,7 @@ namespace XStart2._0.Config {
         public static string orientation;
         public static bool hideTitle;
         public static bool oneLineMulti;
+        public static bool closeMiniWarn;// 关闭最小化提醒
         public static bool exitWarn;// 退出提醒
         public static bool exitButtonType;// 退出按钮类型，true:退出，false:最小化
         public static bool forceExit = false;// 直接退出

@@ -23,10 +23,10 @@
             <TextBlock Text="{Binding Message}" VerticalAlignment="Center" Grid.Column="1" TextWrapping="WrapWithOverflow" />
         </Grid>
         <StackPanel Grid.Row="1" FlowDirection="RightToLeft" Orientation="Horizontal">
-            <Button Style="{StaticResource BtnCancel_Style}" Content="取消" Command="{Binding HitCancel}" Visibility="{Binding RelativeSource={RelativeSource Self},Path=IsEnabled,Converter={StaticResource Boolean2VisibilityConverter}}"/>
-            <Button Style="{StaticResource BtnConfirm_Style}" Content="确定" Command="{Binding HitOK}" Visibility="{Binding RelativeSource={RelativeSource Self},Path=IsEnabled,Converter={StaticResource Boolean2VisibilityConverter}}"/>
-            <Button Style="{StaticResource BtnCancel_Style}" Content="否" Command="{Binding HitNo}" Visibility="{Binding RelativeSource={RelativeSource Self},Path=IsEnabled,Converter={StaticResource Boolean2VisibilityConverter}}"/>
-            <Button Style="{StaticResource BtnConfirm_Style}" Content="是" Command="{Binding HitYes}" Visibility="{Binding RelativeSource={RelativeSource Self},Path=IsEnabled,Converter={StaticResource Boolean2VisibilityConverter}}"/>
+            <Button Style="{StaticResource BtnCancel_Style}" Content="{Binding BtnCancelCon}" Command="{Binding HitCancel}" Visibility="{Binding RelativeSource={RelativeSource Self},Path=IsEnabled,Converter={StaticResource Boolean2VisibilityConverter}}"/>
+            <Button Style="{StaticResource BtnConfirm_Style}" Content="{Binding BtnConfirmCon}" Command="{Binding HitOK}" Visibility="{Binding RelativeSource={RelativeSource Self},Path=IsEnabled,Converter={StaticResource Boolean2VisibilityConverter}}"/>
+            <Button Style="{StaticResource BtnCancel_Style}" Content="{Binding BtnNoCon}" Command="{Binding HitNo}" Visibility="{Binding RelativeSource={RelativeSource Self},Path=IsEnabled,Converter={StaticResource Boolean2VisibilityConverter}}"/>
+            <Button Style="{StaticResource BtnConfirm_Style}" Content="{Binding BtnYesCon}" Command="{Binding HitYes}" Visibility="{Binding RelativeSource={RelativeSource Self},Path=IsEnabled,Converter={StaticResource Boolean2VisibilityConverter}}"/>
         </StackPanel>
     </Grid>
 </Window>

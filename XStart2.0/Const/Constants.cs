@@ -69,6 +69,7 @@
         public const string KEY_THEME_CUSTOM = "Custom";
 
         public const string KEY_DPI_CHANGE = "DpiChange";
+        public const string KEY_CLOSE_MINI_WARN = "CloseMiniWarn";
 
         public const int DEL_COUNT_LIMIT = 100;
 

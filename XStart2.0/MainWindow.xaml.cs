@@ -94,20 +94,20 @@ namespace XStart2._0 {
             string fontSizeStr = iniData[Constants.SECTION_THEME][Constants.KEY_FONTSIZE];
             string opacityStr = iniData[Constants.SECTION_THEME][Constants.KEY_OPACITY];
 
-            Configs.isMaximum = !string.IsNullOrEmpty(isMaximum) && Convert.ToBoolean(isMaximum);
-            Configs.mainLeft = NumberUtils.IsNumeric(leftStr, out double left) ? left : Constants.MAIN_LEFT;
-            Configs.mainTop = NumberUtils.IsNumeric(topStr, out double top) ? top : Constants.MAIN_TOP;
-            Configs.mainHeight = NumberUtils.IsNumeric(heightStr, out double height) ? height : Constants.MAIN_HEIGHT;
-            Configs.mainWidth = NumberUtils.IsNumeric(widthStr, out double width) ? width : Constants.MAIN_WIDTH;
+            Configs.isMaximum = ConvertUtils.ToBool(isMaximum);
+            Configs.mainLeft = ConvertUtils.ToNum(leftStr, Constants.MAIN_LEFT);
+            Configs.mainTop = ConvertUtils.ToNum(topStr, Constants.MAIN_TOP);
+            Configs.mainHeight = ConvertUtils.ToNum(heightStr, Constants.MAIN_HEIGHT);
+            Configs.mainWidth = ConvertUtils.ToNum(widthStr, Constants.MAIN_WIDTH);
 
             Configs.themeName = string.IsNullOrEmpty(themeName) ? Constants.WINDOW_THEME_BLUE : themeName;
             Configs.themeCustom = themeCustom;
             Configs.mainBackground = mainBackground;
-            Configs.mainOpacity = NumberUtils.IsNumeric(mainOpacityStr, out double mainOpacity) ? mainOpacity : 1D;
+            Configs.mainOpacity = ConvertUtils.ToNum(mainOpacityStr, 1D);
             Configs.projectForeground = string.IsNullOrEmpty(projectForeground) ? "#000000" : projectForeground;
             Configs.fontFamily = string.IsNullOrEmpty(fontFamily) || !FontUtils.IsSystemFont(fontFamily) ? "微软雅黑" : fontFamily;
-            Configs.fontSize = NumberUtils.IsInt(fontSizeStr, out int fontSize) ? fontSize : 14;
-            Configs.opacity = NumberUtils.IsNumeric(opacityStr, out double opacity) ? opacity : 1D;
+            Configs.fontSize = ConvertUtils.ToInt(fontSizeStr, 14);
+            Configs.opacity = ConvertUtils.ToNum(opacityStr, 1D);
             // 是否最大化
             mainViewModel.IsMaximum = Configs.isMaximum;
             // 尺寸
@@ -148,27 +148,29 @@ namespace XStart2._0 {
             string orientation = iniData[Constants.SECTION_CONFIG][Constants.KEY_ORIENTATION];// 排列方式
             string hideTitle = iniData[Constants.SECTION_CONFIG][Constants.KEY_HIDE_TITLE];// 标题隐藏
             string oneLineMulti = iniData[Constants.SECTION_CONFIG][Constants.KEY_ONE_LINE_MULTI];// 一行多个
+            string closeMiniWarn = iniData[ Constants.SECTION_CONFIG][ Constants.KEY_CLOSE_MINI_WARN];
 
-            Configs.mainHeadShow = string.IsNullOrEmpty(mainHeadShowStr) || Convert.ToBoolean(mainHeadShowStr);
-            Configs.typeTabExpand = string.IsNullOrEmpty(typeTabExpandStr) || Convert.ToBoolean(typeTabExpandStr);
-            Configs.topMost = !string.IsNullOrEmpty(topMostStr) && Convert.ToBoolean(topMostStr);
+            Configs.mainHeadShow = ConvertUtils.ToBool(mainHeadShowStr, true);
+            Configs.typeTabExpand = ConvertUtils.ToBool(typeTabExpandStr, true);
+            Configs.topMost = ConvertUtils.ToBool(topMostStr);
             Configs.openType = openType;
             Configs.clickType = string.IsNullOrEmpty(clickType) ? Constants.CLICK_TYPE_SINGLE : clickType;
             Configs.rdpModel = string.IsNullOrEmpty(rdpModel) ? Constants.RDP_MODEL_CUSTOM : rdpModel;
-            Configs.audio = !string.IsNullOrEmpty(audio) && Convert.ToBoolean(audio);
-            Configs.autoRun = !string.IsNullOrEmpty(autoRun) && Convert.ToBoolean(autoRun);
-            Configs.runDirectly = !string.IsNullOrEmpty(runDirectly) && Convert.ToBoolean(runDirectly);
-            Configs.exitWarn = string.IsNullOrEmpty(exitWarn) || Convert.ToBoolean(exitWarn);
-            Configs.exitButtonType = !string.IsNullOrEmpty(exitButtonType) && Convert.ToBoolean(exitButtonType);
-            Configs.showInTaskbar = string.IsNullOrEmpty(showInTaskbar) || Convert.ToBoolean(showInTaskbar);
-            Configs.closeBorderHide = string.IsNullOrEmpty(closeBorderHide) || Convert.ToBoolean(closeBorderHide);
+            Configs.audio = ConvertUtils.ToBool(audio);
+            Configs.autoRun = ConvertUtils.ToBool(autoRun);
+            Configs.runDirectly = ConvertUtils.ToBool(runDirectly);
+            Configs.exitWarn = ConvertUtils.ToBool(exitWarn, true);
+            Configs.exitButtonType = ConvertUtils.ToBool(exitButtonType);
+            Configs.showInTaskbar = ConvertUtils.ToBool(showInTaskbar, true);
+            Configs.closeBorderHide = ConvertUtils.ToBool(closeBorderHide, true);
             Configs.textEditor = textEditor;
             Configs.urlOpen = string.IsNullOrEmpty(urlOpen) ? Constants.URL_OPEN_DEFAULT : urlOpen;
             Configs.urlOpenCustomBrowser = urlOpenCustomBrowser;
             Configs.iconSize = string.IsNullOrEmpty(iconSize) ? Constants.ICON_SIZE_32 : Convert.ToInt32(iconSize);
             Configs.orientation = string.IsNullOrEmpty(orientation) ? Constants.ORIENTATION_HORIZONTAL : orientation;
-            Configs.hideTitle = !string.IsNullOrEmpty(hideTitle) && Convert.ToBoolean(hideTitle);
-            Configs.oneLineMulti = !string.IsNullOrEmpty(oneLineMulti) && Convert.ToBoolean(oneLineMulti);
+            Configs.hideTitle = ConvertUtils.ToBool(hideTitle);
+            Configs.oneLineMulti = ConvertUtils.ToBool(oneLineMulti);
+            Configs.closeMiniWarn = ConvertUtils.ToBool(closeMiniWarn);
 
             mainViewModel.MainHeadShow = Configs.mainHeadShow;
             mainViewModel.TypeTabExpanded = Configs.typeTabExpand;
@@ -211,7 +213,7 @@ namespace XStart2._0 {
             string addMulti = iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_ADD_MULTI];// 是否添加多个
 
             Configs.systemAppOpenPage = string.IsNullOrEmpty(systemProjectOpenPage) ? 0 : Convert.ToInt32(systemProjectOpenPage);
-            Configs.systemAppAddMulti = !string.IsNullOrEmpty(addMulti) && Convert.ToBoolean(addMulti);
+            Configs.systemAppAddMulti = ConvertUtils.ToBool(addMulti);
             // 系统功能图标初始化
             Configs.InitIconDic();
             SystemProjectParam.InitOperate();
@@ -449,8 +451,19 @@ namespace XStart2._0 {
                 appExit = 1;
                 Close();
             } else {
-                NotifyUtils.ShowNotification("关闭按钮配置了最小化，调整请在配置面板中修改！");
-                Minimum_Click(sender, e);
+                if (!Configs.closeMiniWarn) {
+                    MessageBoxResult result = MsgBoxUtils.ShowAskWithCancel("关闭按钮配置了最小化，是否关闭提醒！", "最小化提醒", "去配置", "不再提醒", "知道了");
+                    if (MessageBoxResult.Yes == result) {
+                        OpenSettingWindow();
+                    } else {
+                        if (MessageBoxResult.No == result) {
+                            IniParserUtils.SaveIniData(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_MINI_WARN, "True");
+                        }
+                        Minimum_Click(sender, e);
+                    }
+                } else {
+                    Minimum_Click(sender, e);
+                }
             }
         }
 
