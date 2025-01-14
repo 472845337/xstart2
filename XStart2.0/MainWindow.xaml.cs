@@ -76,7 +76,7 @@ namespace XStart2._0 {
             mainViewModel.Security = security;
             #endregion
             #region 读取配置文件
-            var iniData = IniParserUtils.GetIniData(Constants.SET_FILE);
+            var iniData = IniParserUtils.GetIniData(Configs.AppStartPath + Constants.SET_FILE);
             #endregion
             #region 窗口相关加载，尺寸，位置，置顶
             string isMaximum = iniData[Constants.SECTION_LOCATION][Constants.KEY_IS_MAXIMUM];
@@ -400,7 +400,7 @@ namespace XStart2._0 {
                 // 缩放发生变化
                 IniParser.Model.IniData iniData = new IniParser.Model.IniData();
                 iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE] = Convert.ToString(true);
-                IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
+                IniParserUtils.SaveIniData(Configs.AppStartPath + Constants.SET_FILE, iniData);
                 Configs.forceExit = true;
                 //MessageBox.Show("屏幕DPI发生变化，将重启", Constants.MESSAGE_BOX_TITLE_WARN);
                 App.Restart();
@@ -458,7 +458,7 @@ namespace XStart2._0 {
                         OpenSettingWindow();
                     } else {
                         if (MessageBoxResult.No == result) {
-                            IniParserUtils.SaveIniData(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_MINI_WARN, "True");
+                            IniParserUtils.SaveIniData(Configs.AppStartPath + Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_CLOSE_MINI_WARN, "True");
                         }
                         Minimum_Click(sender, e);
                     }
@@ -1607,7 +1607,7 @@ namespace XStart2._0 {
             } else {
                 Configs.delCount += 1;
             }
-            IniParserUtils.SaveIniData(Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_DEL_COUNT, Convert.ToString(Configs.delCount));
+            IniParserUtils.SaveIniData(Configs.AppStartPath + Constants.SET_FILE, Constants.SECTION_CONFIG, Constants.KEY_DEL_COUNT, Convert.ToString(Configs.delCount));
 
         }
 
@@ -1902,7 +1902,7 @@ namespace XStart2._0 {
             #endregion
             #endregion
 
-            IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
+            IniParserUtils.SaveIniData(Configs.AppStartPath + Constants.SET_FILE, iniData);
         }
         #endregion
 

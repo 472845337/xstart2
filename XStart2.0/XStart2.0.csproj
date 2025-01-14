@@ -62,9 +62,6 @@
     <Reference Include="AxInterop.MSTSCLib">
       <HintPath>.\AxInterop.MSTSCLib.dll</HintPath>
     </Reference>
-    <Reference Include="CliWrap, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CliWrap.2.5.0\lib\net45\CliWrap.dll</HintPath>
-    </Reference>
     <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net45\CommonServiceLocator.dll</HintPath>
     </Reference>
@@ -346,7 +343,6 @@
     <Compile Include="Bean\Project.cs" />
     <Compile Include="Bean\BackData.cs" />
     <Compile Include="Bean\Column.cs" />
-    <Compile Include="Bean\LinkedHashMap.cs" />
     <Compile Include="Bean\SystemProjectParam.cs" />
     <Compile Include="Bean\Table.cs" />
     <Compile Include="Bean\TableData.cs" />

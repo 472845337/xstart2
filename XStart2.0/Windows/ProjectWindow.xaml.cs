@@ -181,7 +181,7 @@ namespace XStart2._0.Windows {
                 iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_SYSTEM_PROJECT_OPEN_PAGE] = Convert.ToString(spw.OpenPage);
             }
             if (iniData.Sections.Count > 0) {
-                IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
+                IniParserUtils.SaveIniData(Configs.AppStartPath + Constants.SET_FILE, iniData);
             }
             spw.Close();
             OpenNewWindowUtils.RecoverTopmost(this, vm);

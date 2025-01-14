@@ -25,7 +25,7 @@ namespace XStart2._0 {
             FrameworkCompatibilityPreferences.KeepTextBoxDisplaySynchronizedWithTextProperty = false;
             base.OnStartup(e);
             // 判断dpi change,dpi change不启动口令和自启动窗口
-            var iniData = IniParserUtils.GetIniData(Constants.SET_FILE);
+            var iniData = IniParserUtils.GetIniData(Configs.AppStartPath + Constants.SET_FILE);
             string dpiChangeStr = iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE];
             bool dpiChange = !string.IsNullOrEmpty(dpiChangeStr) && Convert.ToBoolean(dpiChangeStr);
             // 定义主窗口对象（构造器中就加载配置和数据库）
@@ -60,7 +60,7 @@ namespace XStart2._0 {
                 }
             } else {
                 iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE] = Convert.ToString(false);
-                IniParserUtils.SaveIniData(Constants.SET_FILE, iniData);
+                IniParserUtils.SaveIniData(Configs.AppStartPath + Constants.SET_FILE, iniData);
             }
             // 显示主窗口
             mainWindow.Show();
