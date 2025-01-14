@@ -5,7 +5,7 @@ using System.Threading;
 using System.Windows;
 using XStart2._0.Config;
 using XStart2._0.Const;
-using XStart2._0.Utils;
+using Utils;
 using XStart2._0.Windows;
 
 namespace XStart2._0 {

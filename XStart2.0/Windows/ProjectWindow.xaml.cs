@@ -5,6 +5,7 @@ using System.Windows.Input;
 using XStart2._0.Bean;
 using XStart2._0.Config;
 using XStart2._0.Const;
+using Utils;
 using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 
@@ -139,7 +140,7 @@ namespace XStart2._0.Windows {
                 if (string.IsNullOrEmpty(vm.Name)) {
                     if (string.IsNullOrEmpty(dirName)) {
                         // 选择的磁盘
-                        DriveInfo driveInfo = WinUtils.GetDriveInfoByName(folderPath);
+                        DriveInfo driveInfo = XStartWinUtils.GetDriveInfoByName(folderPath);
                         vm.Name = $"{driveInfo.VolumeLabel}({folderPath.Substring(0, folderPath.IndexOf(":"))})";
                     } else {
                         // 选择的普通目录

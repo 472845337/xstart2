@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using XStart2._0.Bean;
 using XStart2._0.Const;
 using XStart2._0.Services;
+using Utils;
 using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 
@@ -99,7 +100,7 @@ namespace XStart2._0.Windows {
                 // 将数据转成Json串
 
                 string backupJson = JsonConvert.SerializeObject(backData, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                string encryptBackupJson = AesUtils.EntryptContent(backupJson);
+                string encryptBackupJson = AesUtils.Encrypt(backupJson);
                 // 写入文件
                 using SaveFileDialog fileDialog = new SaveFileDialog() { Filter = "X启动备份文件 | *.xsb", FileName = "XStart.xsb", DefaultExt = ".xsb" };
                 if (System.Windows.Forms.DialogResult.OK == fileDialog.ShowDialog()) {

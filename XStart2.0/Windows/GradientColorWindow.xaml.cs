@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using XStart2._0.Bean;
 using XStart2._0.Const;
+using Utils;
 using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 

@@ -7,6 +7,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using Utils;
 using XStart2._0.Utils;
 using XStart2._0.View;
 

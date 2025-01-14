@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using XStart2._0.Bean;
+using Utils;
 
 namespace XStart2._0.Utils {
     class GradientColorUtils {

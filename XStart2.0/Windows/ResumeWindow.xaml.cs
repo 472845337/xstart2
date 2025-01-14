@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows;
 using XStart2._0.Bean;
 using XStart2._0.Services;
+using Utils;
 using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 

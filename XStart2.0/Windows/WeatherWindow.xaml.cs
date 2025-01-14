@@ -19,6 +19,7 @@ using XStart2._0.Bean.Weather.Seniverse;
 using XStart2._0.Bean.Weather.VisualCrossing;
 using XStart2._0.Config;
 using XStart2._0.Const;
+using Utils;
 using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 

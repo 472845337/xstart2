@@ -18,6 +18,7 @@ using XStart2._0.Const;
 using XStart2._0.Helper;
 using XStart2._0.Services;
 using XStart2._0.Utils;
+using Utils;
 using XStart2._0.ViewModel;
 using XStart2._0.Windows;
 
@@ -533,7 +534,7 @@ namespace XStart2._0 {
             IsAllShow = true;
             mainViewModel.AutoHideToggle();
             // 加载缩放
-            Configs.scale = WinUtils.GetScale(this);
+            Configs.scale = XStartWinUtils.GetScale(this);
             SetOperateMsg(Colors.Green, "加载完成");
         }
 
@@ -2063,7 +2064,7 @@ namespace XStart2._0 {
 
         private void FreshRdp_Click(object sender, RoutedEventArgs e) {
             Project project = GetProjectByMenu(sender);
-            RdpUtils.FreshRdp(project, Constants.OPERATE_UPDATE);
+            XStartRdpUtils.FreshRdp(project, Constants.OPERATE_UPDATE);
             NotifyUtils.ShowNotification("RDP文件刷新成功！");
         }
 

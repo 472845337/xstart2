@@ -11,6 +11,7 @@ using XStart2._0.Bean;
 using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Windows;
+using Utils;
 using static XStart2._0.Bean.SystemProjectParam;
 
 namespace XStart2._0.Utils {
@@ -36,7 +37,7 @@ namespace XStart2._0.Utils {
                     // 远程桌面
                     string rdpFilePath = Configs.AppStartPath + @$"rdp\{project.Section}.rdp";
                     if (!File.Exists(rdpFilePath)) {
-                        RdpUtils.FreshRdp(project, Constants.OPERATE_CREATE);
+                        XStartRdpUtils.FreshRdp(project, Constants.OPERATE_CREATE);
                     }
                 }
                 #endregion
@@ -62,7 +63,7 @@ namespace XStart2._0.Utils {
                     // 远程桌面
                     string rdpFilePath = Configs.AppStartPath + @$"rdp\{project.Section}.rdp";
                     if (!File.Exists(rdpFilePath)) {
-                        RdpUtils.FreshRdp(project, Constants.OPERATE_CREATE);
+                        XStartRdpUtils.FreshRdp(project, Constants.OPERATE_CREATE);
                     }
                 }
                 #endregion

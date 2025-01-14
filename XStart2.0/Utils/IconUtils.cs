@@ -6,7 +6,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
 using XStart2._0.Const;
-using XStart2._0.Interfaces;
+using Utils;
+using Utils.Interfaces;
 
 namespace XStart2._0.Utils {
     class IconUtils {

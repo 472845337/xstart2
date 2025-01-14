@@ -189,17 +189,11 @@
     <Compile Include="Services\AdminService.cs" />
     <Compile Include="Utils\BackgroundUtils.cs" />
     <Compile Include="Utils\ColorUtils.cs" />
-    <Compile Include="Utils\ConvertUtils.cs" />
-    <Compile Include="Utils\DateUtil.cs" />
     <Compile Include="Utils\ElementUtils.cs" />
     <Compile Include="Utils\EventUtils.cs" />
     <Compile Include="Utils\FontUtils.cs" />
     <Compile Include="Utils\GradientColorUtils.cs" />
-    <Compile Include="Utils\GZipUtil.cs" />
-    <Compile Include="Utils\HttpUtils.cs" />
-    <Compile Include="Utils\IniParserUtils.cs" />
     <Compile Include="Utils\MsgBoxUtils.cs" />
-    <Compile Include="Utils\NumberUtils.cs" />
     <Compile Include="Utils\OpenNewWindowUtils.cs" />
     <Compile Include="Utils\TempUtil.cs" />
     <Compile Include="Utils\TimeUtils.cs" />
@@ -224,27 +218,15 @@
     <Compile Include="DataBase\SQLiteFactory.cs" />
     <Compile Include="DataBase\SQLiteHelper.cs" />
     <Compile Include="Helper\PasswordBoxHelper.cs" />
-    <Compile Include="Interfaces\IImageList.cs" />
-    <Compile Include="Interfaces\IMAGEINFO.cs" />
-    <Compile Include="Interfaces\IMAGELISTDRAWPARAMS.cs" />
-    <Compile Include="Interfaces\POINT.cs" />
-    <Compile Include="Interfaces\RECT.cs" />
     <Compile Include="Services\ProjectService.cs" />
     <Compile Include="Services\ColumnService.cs" />
     <Compile Include="Services\ServiceFactory.cs" />
     <Compile Include="Services\TableService.cs" />
     <Compile Include="Services\TypeService.cs" />
     <Compile Include="Services\XStartService.cs" />
-    <Compile Include="Utils\AesUtils.cs" />
-    <Compile Include="Utils\AsdlUtils.cs" />
-    <Compile Include="Utils\CdRomUtils.cs" />
-    <Compile Include="Utils\CliWrapUtils.cs" />
-    <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\ImageUtils.cs" />
-    <Compile Include="Utils\ProcessUtils.cs" />
     <Compile Include="Utils\ProjectUtils.cs" />
     <Compile Include="Utils\AudioUtils.cs" />
-    <Compile Include="Utils\DllUtils.cs" />
     <Compile Include="Utils\FontAwesome4.cs" />
     <Compile Include="Utils\FontAwesomeRegular.cs" />
     <Compile Include="Utils\FontAwesome6.cs" />
@@ -252,9 +234,8 @@
     <Compile Include="Utils\IconUtils.cs" />
     <Compile Include="Utils\LunarCalendar.cs" />
     <Compile Include="Utils\NotifyUtils.cs" />
-    <Compile Include="Utils\RdpUtils.cs" />
-    <Compile Include="Utils\WinApi.cs" />
-    <Compile Include="Utils\WinUtils.cs" />
+    <Compile Include="Utils\XStartRdpUtils.cs" />
+    <Compile Include="Utils\XStartWinUtils.cs" />
     <Compile Include="ViewModel\AutoRunViewModel.cs" />
     <Compile Include="ViewModel\ControlAppMemoryViewModel.cs" />
     <Compile Include="ViewModel\MstscViewModel.cs" />
@@ -595,7 +576,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Utils\Utils.csproj">
+      <Project>{B812F1A1-5B85-438B-97D2-19D8061FA1D0}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

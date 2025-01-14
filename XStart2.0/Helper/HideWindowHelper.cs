@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media.Animation;
 using XStart2._0.Config;
-using XStart2._0.Utils;
+using Utils;
 
 namespace XStart2._0.Helper {
     public class HideWindowHelper {
