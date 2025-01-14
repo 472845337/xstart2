@@ -940,10 +940,11 @@ namespace XStart2._0 {
                 mainViewModel.UrlOpenCustomBrowser = settingVM.UrlOpenCustomBrowser;
                 mainViewModel.IconSize = settingVM.IconSize;
                 mainViewModel.HideTitle = settingVM.HideTitle;
-                mainViewModel.Orientation = settingVM.Orientation;
-                if (mainViewModel.OneLineMulti != settingVM.OneLineMulti) {
+                // 切换多行和竖列需要重新记录项目宽度
+                if (mainViewModel.OneLineMulti != settingVM.OneLineMulti || mainViewModel.Orientation != settingVM.Orientation) {
                     changeOneLineMulti = true;
                     mainViewModel.OneLineMulti = settingVM.OneLineMulti;
+                    mainViewModel.Orientation = settingVM.Orientation;
                 }
                 mainViewModel.WeatherApi = settingVM.WeatherApi;
                 mainViewModel.WeatherImgTheme = settingVM.WeatherImgTheme;

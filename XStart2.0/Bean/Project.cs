@@ -92,7 +92,7 @@ namespace XStart2._0.Bean {
             get {
                 if (SystemProjectParam.MSTSC.Equals(Path)) {
                     string[] argumentArray = Arguments.Split(Constants.SPLIT_CHAR);
-                    return $"远程->{argumentArray[0]}:{argumentArray[1]}";
+                    return $"{Name}\r\n远程->{argumentArray[0]}:{argumentArray[1]}";
                 } else {
                     return Path;
                 }
