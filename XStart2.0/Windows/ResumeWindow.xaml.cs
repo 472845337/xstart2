@@ -1,12 +1,9 @@
-﻿using Newtonsoft.Json;
-using System.IO;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using XStart2._0.Bean;
 using XStart2._0.Services;
-using Utils;
 using XStart2._0.Utils;
 using XStart2._0.ViewModel;
+using static XStart2._0.Bean.BackData;
 
 namespace XStart2._0.Windows {
     /// <summary>
@@ -38,21 +35,9 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void SelectBackupFile_Click(object sender, RoutedEventArgs e) {
-            using System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "X启动备份文件|*.xsb" };
+            using System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog() { Filter = "X启动导入文件 | *.xsb" };
             if (System.Windows.Forms.DialogResult.OK == openFileDialog.ShowDialog()) {
-                string encryptBackupJson = File.ReadAllText(openFileDialog.FileName, Encoding.UTF8);
-                string backupJson = AesUtils.DecryptContent(encryptBackupJson);
-                if (string.IsNullOrEmpty(backupJson)) {
-                    MsgBoxUtils.ShowError("不支持的备份文件！");
-                } else {
-                    BackData backData = JsonConvert.DeserializeObject<BackData>(backupJson);
-                    if (null == backData.Types || backData.Types.Count == 0) {
-                        MsgBoxUtils.ShowError("可导入数据为空！");
-                    } else {
-                        vm.SelectBackUpFilePath = openFileDialog.FileName;
-                        vm.InitVmData(backData.Types);
-                    }
-                }
+                vm.SelectBackUpFilePath = openFileDialog.FileName;
             }
         }
 
@@ -63,18 +48,52 @@ namespace XStart2._0.Windows {
         /// <param name="e"></param>
         private void ResumeConfirm_Click(object sender, RoutedEventArgs e) {
             bool isOverride = vm.IsOverride;
+            if (string.IsNullOrEmpty(vm.SelectBackUpFilePath)) {
+                MsgBoxUtils.ShowWarning("未选择导入文件!");
+                return;
+            }
             if (null == vm.Items || vm.Items.Count == 0) {
-                MsgBoxUtils.ShowWarning("请先选择备份文件!");
+                MsgBoxUtils.ShowWarning("不支持的导入文件或导入数据为空!");
+                return;
+            }
+            // 校验数据勾选情况
+            bool hasSelected = false;
+            foreach (CheckBoxTreeViewModel backTypeVM in vm.Items) {
+                BackType backType = backTypeVM.Data as BackType;
+
+                foreach (CheckBoxTreeViewModel backColumnVM in backTypeVM.Children) {
+                    BackColumn backColumn = backColumnVM.Data as BackColumn;
+
+                    foreach (CheckBoxTreeViewModel backProjectVM in backColumnVM.Children) {
+                        BackProject backProject = backProjectVM.Data as BackProject;
+
+                        if (true == backProjectVM.IsChecked) {
+                            hasSelected = true;
+                            break;
+                        }
+                    }
+                    if (!hasSelected && true == backColumnVM.IsChecked) {
+                        hasSelected = true;
+                        break;
+                    }
+                }
+                if (!hasSelected && true == backTypeVM.IsChecked) {
+                    hasSelected = true;
+                    break;
+                }
+            }
+            if (!hasSelected) {
+                MsgBoxUtils.ShowError("未指定导入数据！");
                 return;
             }
             foreach (CheckBoxTreeViewModel backTypeVM in vm.Items) {
-                BackData.BackType backType = backTypeVM.Data as BackData.BackType;
+                BackType backType = backTypeVM.Data as BackType;
 
                 foreach (CheckBoxTreeViewModel backColumnVM in backTypeVM.Children) {
-                    BackData.BackColumn backColumn = backColumnVM.Data as BackData.BackColumn;
+                    BackColumn backColumn = backColumnVM.Data as BackColumn;
 
                     foreach (CheckBoxTreeViewModel backProjectVM in backColumnVM.Children) {
-                        BackData.BackProject backProject = backProjectVM.Data as BackData.BackProject;
+                        BackProject backProject = backProjectVM.Data as BackProject;
 
                         if (true == backProjectVM.IsChecked) {
                             Project project = GetByBackProject(backProject);
@@ -161,7 +180,7 @@ namespace XStart2._0.Windows {
                 }
 
             }
-            NotifyUtils.ShowNotification("恢复文件写入成功");
+            NotifyUtils.ShowNotification("导入文件成功");
             DialogResult = true;
         }
 

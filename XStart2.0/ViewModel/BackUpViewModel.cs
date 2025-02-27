@@ -2,16 +2,14 @@
 using System.Collections.ObjectModel;
 using XStart2._0.Bean;
 using XStart2._0.Services;
+using XStart2._0.Utils;
 
 namespace XStart2._0.ViewModel {
     class BackUpViewModel : BaseViewModel {
 
-        public ObservableCollection<CheckBoxTreeViewModel> Items {
-            get; set;
-        }
+        public ObservableCollection<CheckBoxTreeViewModel> Items { get; set; } = new ObservableCollection<CheckBoxTreeViewModel>();
 
         public void InitData() {
-            Items = new ObservableCollection<CheckBoxTreeViewModel>();
             // 加载项目树
             foreach (KeyValuePair<string, Type> typeKV in XStartService.TypeDic) {
                 CheckBoxTreeViewModel typeTreeNode = new CheckBoxTreeViewModel { Section = typeKV.Value.Section, Header = typeKV.Value.Name, Children = new List<CheckBoxTreeViewModel>(), IsChecked = true };
@@ -24,6 +22,9 @@ namespace XStart2._0.ViewModel {
                     }
                 }
                 Items.Add(typeTreeNode);
+            }
+            if(Items.Count == 0) {
+                MsgBoxUtils.ShowWarning("当前无可导出项目！");
             }
         }
     }

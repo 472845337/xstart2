@@ -17,7 +17,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="72"/>
             </Grid.ColumnDefinitions>
-            <TextBox IsReadOnly="True" Text="{Binding SelectBackUpFilePath}" VerticalContentAlignment="Center" Margin="5 5 0 5"/>
+            <TextBox Text="{Binding SelectBackUpFilePath, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" Margin="5 5 0 5"/>
             <Button Grid.Column="1" Style="{StaticResource BtnConfirm_Style}" Content="选择" Click="SelectBackupFile_Click"/>
         </Grid>
         <TreeView Grid.Row="1" ItemsSource="{Binding Items}" Margin="5 0 5 5">

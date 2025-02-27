@@ -1,15 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using PropertyChanged;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Text;
+using Utils;
 using XStart2._0.Bean;
+using XStart2._0.Utils;
 
 namespace XStart2._0.ViewModel {
     class ResumeViewModel : BaseViewModel {
 
+        [OnChangedMethod(nameof(InitBackupFile))]
         public string SelectBackUpFilePath { get; set; }
 
         public bool IsOverride { get; set; } = true;
 
-        public ObservableCollection<CheckBoxTreeViewModel> Items { get; set; }
+        public ObservableCollection<CheckBoxTreeViewModel> Items { get; set; } = new ObservableCollection<CheckBoxTreeViewModel>();
 
         public void InitVmData(IEnumerable<Bean.Type> types) {
             Items = new ObservableCollection<CheckBoxTreeViewModel>();
@@ -29,11 +36,7 @@ namespace XStart2._0.ViewModel {
         }
 
         public void InitVmData(List<BackData.BackType> types) {
-            if (null == Items) {
-                Items = new ObservableCollection<CheckBoxTreeViewModel>();
-            } else {
-                Items.Clear();
-            }
+            Items.Clear();
             // 加载项目树
             foreach (BackData.BackType type in types) {
                 CheckBoxTreeViewModel typeTreeNode = new CheckBoxTreeViewModel { Section = type.Section, Header = type.Name, Children = new List<CheckBoxTreeViewModel>(), IsChecked = true, Data = type };
@@ -46,6 +49,29 @@ namespace XStart2._0.ViewModel {
                     }
                 }
                 Items.Add(typeTreeNode);
+            }
+        }
+
+        private void InitBackupFile() {
+            try {
+                if (string.IsNullOrEmpty(SelectBackUpFilePath) || !SelectBackUpFilePath.EndsWith(".xsb")) {
+                    Items.Clear();
+                } else {
+                    string encryptBackupJson = File.ReadAllText(SelectBackUpFilePath, Encoding.UTF8);
+                    string backupJson = AesUtils.DecryptContent(encryptBackupJson);
+                    if (string.IsNullOrEmpty(backupJson)) {
+                        MsgBoxUtils.ShowError("不支持的导入文件！");
+                    } else {
+                        BackData backData = JsonConvert.DeserializeObject<BackData>(backupJson);
+                        if (null == backData.Types || backData.Types.Count == 0) {
+                            MsgBoxUtils.ShowError("可导入数据为空！");
+                        } else {
+                            InitVmData(backData.Types);
+                        }
+                    }
+                }
+            } catch (System.Exception e) {
+                
             }
         }
     }

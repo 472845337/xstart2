@@ -33,6 +33,10 @@ namespace XStart2._0.Windows {
 
         private void BackUpConfirm_Click(object sender, RoutedEventArgs e) {
             BackData backData = new BackData();
+            if(null == vm.Items || vm.Items.Count == 0) {
+                MsgBoxUtils.ShowError("无可导出项目！");
+                return;
+            }
             // 将选择备份的数据写入对象
             foreach (CheckBoxTreeViewModel typeNode in vm.Items) {
                 string typeSection = typeNode.Section;
@@ -95,17 +99,17 @@ namespace XStart2._0.Windows {
                 }
             }
             if (backData.Types.Count == 0) {
-                MsgBoxUtils.ShowError("未选择任何备份数据！", Constants.MESSAGE_BOX_TITLE_ERROR);
+                MsgBoxUtils.ShowError("未选择任何导出数据！", Constants.MESSAGE_BOX_TITLE_ERROR);
             } else {
                 // 将数据转成Json串
 
                 string backupJson = JsonConvert.SerializeObject(backData, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                 string encryptBackupJson = AesUtils.Encrypt(backupJson);
                 // 写入文件
-                using SaveFileDialog fileDialog = new SaveFileDialog() { Filter = "X启动备份文件 | *.xsb", FileName = "XStart.xsb", DefaultExt = ".xsb" };
+                using SaveFileDialog fileDialog = new SaveFileDialog() { Filter = "X启动导出文件 | *.xsb", FileName = "XStart.xsb", DefaultExt = ".xsb" };
                 if (System.Windows.Forms.DialogResult.OK == fileDialog.ShowDialog()) {
                     File.WriteAllText(fileDialog.FileName, encryptBackupJson, Encoding.UTF8);
-                    NotifyUtils.ShowNotification("备份成功！");
+                    NotifyUtils.ShowNotification("导出成功！");
                     DialogResult = true;
                 }
             }
