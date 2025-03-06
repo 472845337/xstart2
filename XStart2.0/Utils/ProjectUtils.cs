@@ -87,7 +87,18 @@ namespace XStart2._0.Utils {
             switch (project.Kind) {
                 case Project.KIND_FILE:
                     if (File.Exists(project.Path)) {
-                        if (project.Path.EndsWith(".exe", true, CultureInfo.CurrentCulture) || project.Path.EndsWith(".bat", true, CultureInfo.CurrentCulture) || project.Path.EndsWith(".cmd", true, CultureInfo.CurrentCulture)) {
+                        if (project.Path.EndsWith("cmd.exe")) {
+                            Process cmd = new Process();
+                            ProcessStartInfo startInfo = new ProcessStartInfo() { FileName=project.Path };
+                            if (!string.IsNullOrEmpty(project.Arguments)) {
+                                startInfo.Arguments = project.Arguments;
+                            }
+                            if (!string.IsNullOrEmpty(project.RunStartPath)) {
+                                startInfo.WorkingDirectory = project.RunStartPath;
+                            }
+                            cmd.StartInfo = startInfo;
+                            cmd.Start();
+                        } else if (project.Path.EndsWith(".exe", true, CultureInfo.CurrentCulture) || project.Path.EndsWith(".bat", true, CultureInfo.CurrentCulture) || project.Path.EndsWith(".cmd", true, CultureInfo.CurrentCulture)) {
                             CliWrapUtils.ExecuteApp(project.Path, string.IsNullOrEmpty(project.RunStartPath) ? Path.GetDirectoryName(project.Path) : project.RunStartPath, project.Arguments);
                         } else {
                             Process.Start(project.Path);

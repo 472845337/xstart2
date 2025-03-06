@@ -2283,6 +2283,7 @@ namespace XStart2._0 {
                         project.IconPath = iconArray[0];
                         project.IconIndex = Convert.ToInt32(iconArray[1]);
                     }
+                    project.Arguments = shortCut.Arguments;
                     project.Name = Path.GetFileName(shortCut.FullName).Replace(".lnk", string.Empty).Replace(".LNK", string.Empty);
                     project.RunStartPath = shortCut.WorkingDirectory;
                     project.Remark = shortCut.Description;
