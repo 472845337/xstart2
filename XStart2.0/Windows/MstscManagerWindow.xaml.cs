@@ -165,12 +165,15 @@ namespace XStart2._0.Windows {
             }
             iClientSetting.ClearTextPassword = rdp.Password;
             iClientSetting.EnableSuperPan = false;
+            // 启用凭据安全支持提供程序协议
+            iClientSetting.EnableCredSspSupport = true;
             // 非全屏时也可执行win+*快捷键，对应于mstsc.exe里的本地资源-键盘-应用windows组合键
             // 0：仅在客户端计算机上本地应用组合键。
             // 1：在远程服务器上应用组合键。
             // 2：仅当客户端以全屏模式运行时，才将组合键应用于远程服务器。 这是默认值。
             IMsRdpClientSecuredSettings2 securedSetting = (IMsRdpClientSecuredSettings2)rdpScript.SecuredSettings;
             securedSetting.KeyboardHookMode = 1;
+            
             rdpScript.Connect();
         }
 
