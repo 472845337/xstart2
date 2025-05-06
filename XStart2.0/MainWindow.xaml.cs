@@ -396,15 +396,16 @@ namespace XStart2._0 {
                     // mainViewModel.HideWindowHelper.TryShow();
                     IsAllShow = true;
                 }
-            } else if (WinApi.WM_DISPLAYCHANGE == msg) {
-                // 缩放发生变化
-                IniParser.Model.IniData iniData = new IniParser.Model.IniData();
-                iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE] = Convert.ToString(true);
-                IniParserUtils.SaveIniData(Configs.AppStartPath + Constants.SET_FILE, iniData);
-                Configs.forceExit = true;
-                //MessageBox.Show("屏幕DPI发生变化，将重启", Constants.MESSAGE_BOX_TITLE_WARN);
-                App.Restart();
-            }
+            } 
+            //else if (WinApi.WM_DISPLAYCHANGE == msg) {
+            //    // 缩放发生变化
+            //    IniParser.Model.IniData iniData = new IniParser.Model.IniData();
+            //    iniData[Constants.SECTION_SYSTEM_APP][Constants.KEY_DPI_CHANGE] = Convert.ToString(true);
+            //    IniParserUtils.SaveIniData(Configs.AppStartPath + Constants.SET_FILE, iniData);
+            //    Configs.forceExit = true;
+            //    //MessageBox.Show("屏幕DPI发生变化，将重启", Constants.MESSAGE_BOX_TITLE_WARN);
+            //    App.Restart();
+            //}
             return hwnd;
         }
 
@@ -463,6 +464,7 @@ namespace XStart2._0 {
                         Minimum_Click(sender, e);
                     }
                 } else {
+                    NotifyUtils.ShowNotification("您已最小化X启动！");
                     Minimum_Click(sender, e);
                 }
             }
@@ -1949,9 +1951,9 @@ namespace XStart2._0 {
                             Left = screenWidth - Width;
                         }
                         if (anchorStyle == Constants.ANCHOR_STYLE_TOP) {
-                            toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - resumeSize));
+                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - resumeSize));
                         } else {
-                            toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, screenHeight - Height) : new Point(Left, screenHeight - resumeSize);
+                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, screenHeight - Height) : new Point(Left, screenHeight - resumeSize);
                         }
                         break;
                     case Constants.ANCHOR_STYLE_LEFT:
@@ -1960,9 +1962,9 @@ namespace XStart2._0 {
                             Top = screenHeight - Height;
                         }
                         if (anchorStyle == Constants.ANCHOR_STYLE_LEFT) {
-                            toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - resumeSize), Top);
+                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - resumeSize), Top);
                         } else {
-                            toPoint = IsAllShow || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(screenWidth - Width, Top) : new Point(screenWidth - resumeSize, Top);
+                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(screenWidth - Width, Top) : new Point(screenWidth - resumeSize, Top);
                         }
                         break;
                 }
@@ -1974,11 +1976,17 @@ namespace XStart2._0 {
                     //    DllUtils.ShowWindow(Configs.Handler, WinApi.SW_SHOW);
                     //}
                 }
-                Animate2Location(this, toPoint);
+                
+                HideWindowHelper.Animate2Location(this, toPoint);
             } catch {
 
             } finally {
                 isTick = false;
+                if (mainViewModel.CancelHide) {
+                    // 取消隐藏了,执行完成后再置定时器为false
+                    mainViewModel.CancelHide = false;
+                    mainViewModel.AutoHideTimer.IsEnabled = false;
+                }
             }
         }
         private void GetAnchorStyle() {
@@ -1994,70 +2002,6 @@ namespace XStart2._0 {
                 anchorStyle = Constants.ANCHOR_STYLE_BOTTOM;
             } else {
                 anchorStyle = Constants.ANCHOR_STYLE_NONE;
-            }
-        }
-
-        readonly int step = 1;
-        private void Animate2Location(Window window, Point destination) {
-            double curLeft = NumberUtils.Accuracy(window.Left, 2);
-            double curTop = NumberUtils.Accuracy(window.Top, 2);
-            double indexX = NumberUtils.Accuracy((destination.X - curLeft) / 200, 2);
-            double indexY = NumberUtils.Accuracy((destination.Y - curTop) / 200, 2);
-            if (indexX == 0) {
-                indexX = destination.X > curLeft ? step : -step;
-            }
-            if (indexY == 0) {
-                indexY = destination.Y > curTop ? step : -step;
-            }
-            int index = 1;
-            bool xStop = false;
-            bool yStop = false;
-            double aniLocationX = curLeft;
-            double aniLocationY = curTop;
-            if (indexX == 0) {
-                xStop = true;
-            }
-            if (indexY == 0) {
-                yStop = true;
-            }
-            while (!xStop || !yStop) {
-                if (!xStop) {
-                    if (indexX < 0) {
-                        if (NumberUtils.Accuracy(aniLocationX + indexX, 2) <= destination.X) {
-                            aniLocationX = destination.X;
-                            xStop = true;
-                        } else {
-                            aniLocationX = NumberUtils.Accuracy(aniLocationX + indexX, 2);
-                        }
-                    } else {
-                        if (NumberUtils.Accuracy(aniLocationX + indexX, 2) >= destination.X) {
-                            aniLocationX = destination.X;
-                            xStop = true;
-                        } else {
-                            aniLocationX = NumberUtils.Accuracy(aniLocationX + indexX, 2);
-                        }
-                    }
-                }
-                if (!yStop) {
-                    if (indexY < 0) {
-                        if (NumberUtils.Accuracy(aniLocationY + indexY, 2) <= destination.Y) {
-                            aniLocationY = destination.Y;
-                            yStop = true;
-                        } else {
-                            aniLocationY = NumberUtils.Accuracy(aniLocationY + indexY, 2);
-                        }
-                    } else {
-                        if (NumberUtils.Accuracy(aniLocationY + indexY, 2) >= destination.Y) {
-                            aniLocationY = destination.Y;
-                            yStop = true;
-                        } else {
-                            aniLocationY = NumberUtils.Accuracy(aniLocationY, 2) + indexY;
-                        }
-                    }
-                }
-                window.Left = aniLocationX;
-                window.Top = aniLocationY;
-                index++;
             }
         }
         #endregion

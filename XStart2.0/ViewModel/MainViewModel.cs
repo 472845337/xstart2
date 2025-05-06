@@ -93,8 +93,7 @@ namespace XStart2._0.ViewModel {
         public bool CloseBorderHide { get; set; }
         [DoNotNotify]
         public System.Windows.Threading.DispatcherTimer AutoHideTimer { get; set; }
-        [DoNotNotify]
-        public HideWindowHelper HideWindowHelper { get; set; }
+        public bool CancelHide { get; set; } = false;
         public string ClickType { get; set; }
         public string RdpModel { get; set; }
         public string TextEditor { get; set; }
@@ -199,7 +198,11 @@ namespace XStart2._0.ViewModel {
                 AutoHideTimer.IsEnabled = true;
                 // HideWindowHelper?.Start();
             } else {
-                AutoHideTimer.IsEnabled = false;
+                if (!CloseBorderHide && Configs.inited) {
+                    CancelHide = true;
+                } else {
+                    AutoHideTimer.IsEnabled = false;
+                }
                 //HideWindowHelper?.Stop();
                 //HideWindowHelper.TryShow();
             }
