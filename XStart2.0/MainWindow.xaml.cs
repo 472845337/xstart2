@@ -307,10 +307,6 @@ namespace XStart2._0 {
             mainViewModel.WeatherVcAppKey = Configs.weatherVcAppKey;
             #endregion
             #endregion
-            mainViewModel.Types = XStartService.TypeDic;
-            int openTypeIndex = mainViewModel.Types.IndexOf(openType);
-            mainViewModel.SelectedIndex = openTypeIndex < 0 ? 0 : openTypeIndex;
-
             #region 加载数据
             // 加载类别配置
             List<Bean.Type> types = typeService.SelectList(new Bean.Type { OrderBy = "sort" });
@@ -326,6 +322,9 @@ namespace XStart2._0 {
                 }
                 XStartService.TypeDic.Add(type.Section, type);
             }
+            mainViewModel.Types = XStartService.TypeDic;
+            int openTypeIndex = mainViewModel.Types.IndexOf(openType);
+            mainViewModel.SelectedIndex = openTypeIndex < 0 ? 0 : openTypeIndex;
             // 加载栏目配置
             List<Column> columns = columnService.SelectList(new Column { OrderBy = "sort" });
             foreach (Column column in columns) {
@@ -701,10 +700,10 @@ namespace XStart2._0 {
                 }
                 #endregion
                 // 保存数据的调整（当前打开的类别，类别中打开的栏目，排序）
-                int typeIndex = 0;
+                int typeSort = 0;
                 foreach (KeyValuePair<string, Bean.Type> type in mainViewModel.Types) {
-                    if (typeIndex != type.Value.Sort) {
-                        typeService.UpdateSort(type.Value.Section, typeIndex);
+                    if (typeSort != type.Value.Sort) {
+                        typeService.UpdateSort(type.Value.Section, typeSort);
                     }
                     int columnIndex = 0;
                     foreach (KeyValuePair<string, Column> column in type.Value.ColumnDic) {
@@ -725,7 +724,7 @@ namespace XStart2._0 {
                         }
                         columnIndex++;
                     }
-                    typeIndex++;
+                    typeSort++;
                 }
 
                 // 自启动
