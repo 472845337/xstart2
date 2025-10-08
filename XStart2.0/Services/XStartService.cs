@@ -65,7 +65,7 @@ namespace XStart2._0.Services {
         /// <returns></returns>
         public static string KindOfPath(string path) {
             string kind;
-            if (path.ToLower().StartsWith("https://") || path.ToLower().StartsWith("http://") || path.ToLower().StartsWith("www.")) {
+            if (path.ToLower().StartsWith("https://") || path.ToLower().StartsWith("http://") || path.ToLower().StartsWith("www.") || path.ToLower().StartsWith("steam://")) {
                 kind = Project.KIND_URL;
             } else if (path.StartsWith(Constants.SYSTEM_PROJECT_CHAR)) {
                 kind = Project.KIND_SYSTEM;

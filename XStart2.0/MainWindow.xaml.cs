@@ -2231,6 +2231,11 @@ namespace XStart2._0 {
                     project.RunStartPath = shortCut.WorkingDirectory;
                     project.Remark = shortCut.Description;
                     project.HotKey = shortCut.Hotkey;
+                } else if (ext.ToLower().Equals(".url")) {
+                    FileUtils.UrlShortCut shortCut = FileUtils.ReadUrlShortCut(path);
+                    project.Kind = XStartService.KindOfPath(shortCut.Url);
+                    project.Path = shortCut.Url;
+                    project.Name = Path.GetFileName(shortCut.FullName).Replace(".url", string.Empty).Replace(".URL", string.Empty);
                 } else {
                     project.Kind = XStartService.KindOfPath(path);
                     project.Path = path;
