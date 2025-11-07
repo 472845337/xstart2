@@ -1,11 +1,5 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Windows;
+﻿using System.Windows;
 using XStart2._0.Config;
-using XStart2._0.Const;
-using Utils;
 using XStart2._0.Windows;
 
 namespace XStart2._0 {

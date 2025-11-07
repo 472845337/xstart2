@@ -7,11 +7,11 @@ using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Interop;
+using Utils;
 using XStart2._0.Bean;
 using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Windows;
-using Utils;
 using static XStart2._0.Bean.SystemProjectParam;
 
 namespace XStart2._0.Utils {
@@ -89,7 +89,7 @@ namespace XStart2._0.Utils {
                     if (File.Exists(project.Path)) {
                         if (project.Path.EndsWith("cmd.exe")) {
                             Process cmd = new Process();
-                            ProcessStartInfo startInfo = new ProcessStartInfo() { FileName=project.Path };
+                            ProcessStartInfo startInfo = new ProcessStartInfo() { FileName = project.Path };
                             if (!string.IsNullOrEmpty(project.Arguments)) {
                                 startInfo.Arguments = project.Arguments;
                             }

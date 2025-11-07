@@ -4,10 +4,10 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms;
+using Utils;
 using XStart2._0.Bean;
 using XStart2._0.Const;
 using XStart2._0.Services;
-using Utils;
 using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 
@@ -33,7 +33,7 @@ namespace XStart2._0.Windows {
 
         private void BackUpConfirm_Click(object sender, RoutedEventArgs e) {
             BackData backData = new BackData();
-            if(null == vm.Items || vm.Items.Count == 0) {
+            if (null == vm.Items || vm.Items.Count == 0) {
                 MsgBoxUtils.ShowError("无可导出项目！");
                 return;
             }

@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using Utils;
 using XStart2._0.Bean.Weather;
 using XStart2._0.Bean.Weather.Accu;
 using XStart2._0.Bean.Weather.Gaode;
@@ -19,7 +20,6 @@ using XStart2._0.Bean.Weather.Seniverse;
 using XStart2._0.Bean.Weather.VisualCrossing;
 using XStart2._0.Config;
 using XStart2._0.Const;
-using Utils;
 using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 

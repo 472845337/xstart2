@@ -53,7 +53,7 @@ namespace XStart2._0.Utils {
         }
 
         public static MessageBoxResult ShowAskWithCancel(string messageBoxText, string caption = null, string btnYesCon = null, string btnNoCon = null, string btnCancelCon = null) {
-            return Show(messageBoxText, caption, MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.Cancel,btnYesCon, btnNoCon, null, btnCancelCon);
+            return Show(messageBoxText, caption, MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.Cancel, btnYesCon, btnNoCon, null, btnCancelCon);
         }
 
         public static MessageBoxResult ShowError(string messageBoxText, string caption = null, string btnConfirmCon = null) {

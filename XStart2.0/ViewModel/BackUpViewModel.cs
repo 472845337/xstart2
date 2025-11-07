@@ -23,7 +23,7 @@ namespace XStart2._0.ViewModel {
                 }
                 Items.Add(typeTreeNode);
             }
-            if(Items.Count == 0) {
+            if (Items.Count == 0) {
                 MsgBoxUtils.ShowWarning("当前无可导出项目！");
             }
         }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using Utils;
 using XStart2._0.Bean;
 using XStart2._0.Const;
-using Utils;
 using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 

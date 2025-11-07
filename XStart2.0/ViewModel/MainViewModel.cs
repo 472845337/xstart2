@@ -3,7 +3,6 @@ using System.Windows.Media;
 using XStart2._0.Bean;
 using XStart2._0.Config;
 using XStart2._0.Const;
-using XStart2._0.Helper;
 using XStart2._0.Services;
 using XStart2._0.Utils;
 
@@ -195,16 +194,12 @@ namespace XStart2._0.ViewModel {
 
         public void AutoHideToggle() {
             if (CloseBorderHide && Configs.inited) {
-                AutoHideTimer.IsEnabled = true;
-                // HideWindowHelper?.Start();
+                AutoHideTimer.Start();
             } else {
                 if (!CloseBorderHide && Configs.inited) {
+                    // 将取消隐藏置为真，定时器执行完成后，会将该状态复位，位置复位后，timer 停止
                     CancelHide = true;
-                } else {
-                    AutoHideTimer.IsEnabled = false;
                 }
-                //HideWindowHelper?.Stop();
-                //HideWindowHelper.TryShow();
             }
         }
 

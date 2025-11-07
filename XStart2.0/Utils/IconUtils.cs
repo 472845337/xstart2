@@ -5,9 +5,9 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
-using XStart2._0.Const;
 using Utils;
 using Utils.Interfaces;
+using XStart2._0.Const;
 
 namespace XStart2._0.Utils {
     class IconUtils {

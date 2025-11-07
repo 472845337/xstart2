@@ -173,7 +173,7 @@ namespace XStart2._0.Windows {
             // 2：仅当客户端以全屏模式运行时，才将组合键应用于远程服务器。 这是默认值。
             IMsRdpClientSecuredSettings2 securedSetting = (IMsRdpClientSecuredSettings2)rdpScript.SecuredSettings;
             securedSetting.KeyboardHookMode = 1;
-            
+
             rdpScript.Connect();
         }
 

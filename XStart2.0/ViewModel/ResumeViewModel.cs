@@ -70,8 +70,8 @@ namespace XStart2._0.ViewModel {
                         }
                     }
                 }
-            } catch (System.Exception e) {
-                
+            } catch {
+
             }
         }
     }

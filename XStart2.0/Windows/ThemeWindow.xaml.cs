@@ -112,7 +112,7 @@ namespace XStart2._0.Windows {
         }
 
         // 使用随机种子，否则短时间内调用的随机数是一样的
-        Random ran = new Random(Guid.NewGuid().ToString().GetHashCode());
+        readonly Random ran = new Random(Guid.NewGuid().ToString().GetHashCode());
         private Tuple<string, string> GetRanColor() {
             int br = GetRanRgb();
             int bg = GetRanRgb();
@@ -196,8 +196,7 @@ namespace XStart2._0.Windows {
 
         private void RemoveCustomTheme_MouseLeftButtonUp(object sender, MouseEventArgs e) {
             FrameworkElement ele = sender as FrameworkElement;
-            string section = ele.Tag as string;
-            if (section != null && MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认删除该自定义？")) {
+            if (ele.Tag is string section && MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认删除该自定义？")) {
                 ServiceFactory.GetCustomThemeService().Delete(section);
                 int index = -1;
                 foreach (CustomTheme single in vm.CustomThemes) {
@@ -214,8 +213,7 @@ namespace XStart2._0.Windows {
 
         private void SelectCustomTheme_MouseLeftButtonUp(object sender, MouseEventArgs e) {
             FrameworkElement ele = sender as FrameworkElement;
-            CustomTheme customTheme = ele.Tag as CustomTheme;
-            if (customTheme != null) {
+            if (ele.Tag is CustomTheme customTheme) {
                 vm.ConfirmButtonBackGround = customTheme.Bg;
                 vm.ConfirmButtonForeGround = customTheme.Fg;
                 vm.ConfirmButtonMouseOverBackGround = customTheme.MouseOverBg;

@@ -11,6 +11,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using Utils;
 using XStart2._0.Bean;
 using XStart2._0.Commands;
 using XStart2._0.Config;
@@ -18,7 +19,6 @@ using XStart2._0.Const;
 using XStart2._0.Helper;
 using XStart2._0.Services;
 using XStart2._0.Utils;
-using Utils;
 using XStart2._0.ViewModel;
 using XStart2._0.Windows;
 
@@ -100,6 +100,17 @@ namespace XStart2._0 {
             Configs.mainTop = ConvertUtils.ToNum(topStr, Constants.MAIN_TOP);
             Configs.mainHeight = ConvertUtils.ToNum(heightStr, Constants.MAIN_HEIGHT);
             Configs.mainWidth = ConvertUtils.ToNum(widthStr, Constants.MAIN_WIDTH);
+            // 当位置超出屏幕时，调整位置
+            if (Configs.mainLeft + Configs.mainWidth > SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft) {
+                Configs.mainLeft = SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft - Configs.mainWidth - Constants.ANCHOR_BORDER_SIZE;
+            } else if (Configs.mainLeft + Configs.mainWidth < SystemParameters.VirtualScreenLeft) {
+                Configs.mainLeft = SystemParameters.VirtualScreenLeft + Constants.ANCHOR_BORDER_SIZE;
+            }
+            if (Configs.mainTop + Configs.mainHeight > SystemParameters.VirtualScreenHeight + SystemParameters.VirtualScreenTop) {
+                Configs.mainTop = SystemParameters.VirtualScreenHeight + SystemParameters.VirtualScreenTop - Configs.mainHeight - Constants.ANCHOR_BORDER_SIZE;
+            } else if (Configs.mainTop + Configs.mainHeight < SystemParameters.VirtualScreenTop) {
+                Configs.mainTop = SystemParameters.VirtualScreenTop + Constants.ANCHOR_BORDER_SIZE;
+            }
 
             Configs.themeName = string.IsNullOrEmpty(themeName) ? Constants.WINDOW_THEME_BLUE : themeName;
             Configs.themeCustom = themeCustom;
@@ -149,7 +160,7 @@ namespace XStart2._0 {
             string orientation = iniData[Constants.SECTION_CONFIG][Constants.KEY_ORIENTATION];// 排列方式
             string hideTitle = iniData[Constants.SECTION_CONFIG][Constants.KEY_HIDE_TITLE];// 标题隐藏
             string oneLineMulti = iniData[Constants.SECTION_CONFIG][Constants.KEY_ONE_LINE_MULTI];// 一行多个
-            string closeMiniWarn = iniData[ Constants.SECTION_CONFIG][ Constants.KEY_CLOSE_MINI_WARN];
+            string closeMiniWarn = iniData[Constants.SECTION_CONFIG][Constants.KEY_CLOSE_MINI_WARN];
 
             Configs.mainHeadShow = ConvertUtils.ToBool(mainHeadShowStr, true);
             Configs.typeTabExpand = ConvertUtils.ToBool(typeTabExpandStr, true);
@@ -193,6 +204,7 @@ namespace XStart2._0 {
             //    .AddHider<HideOnTop>();
             mainViewModel.AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
             mainViewModel.AutoHideTimer.Tick += AutoHideTimer_Tick;
+            mainViewModel.AutoHideTimer.Start();
             mainViewModel.ShowInTaskbar = Configs.showInTaskbar;
             mainViewModel.CloseBorderHide = Configs.closeBorderHide;
             #endregion
@@ -380,6 +392,7 @@ namespace XStart2._0 {
             DataContext = mainViewModel;
         }
 
+
         protected override void OnSourceInitialized(EventArgs e) {
             base.OnSourceInitialized(e);
             if (PresentationSource.FromVisual(this) is HwndSource hwndSource) {
@@ -395,7 +408,7 @@ namespace XStart2._0 {
                     // mainViewModel.HideWindowHelper.TryShow();
                     IsAllShow = true;
                 }
-            } 
+            }
             //else if (WinApi.WM_DISPLAYCHANGE == msg) {
             //    // 缩放发生变化
             //    IniParser.Model.IniData iniData = new IniParser.Model.IniData();
@@ -407,14 +420,19 @@ namespace XStart2._0 {
             //}
             return hwnd;
         }
-
+        // 拖拽标识，用于解决鼠标移动到窗口边界时触发自动隐藏，窗口抖动问题
+        bool isDrag = false;
         /// <summary>
         /// 窗口左键拖动，取消鼠标靠近边缘最大化
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            // 标识开始拖拽
+            isDrag = true;
             DragMove();
+            // 标识拖拽结束
+            isDrag = false;
         }
 
         private void ResizePressed(object sender, MouseEventArgs e) {
@@ -1910,7 +1928,7 @@ namespace XStart2._0 {
         #region 窗口靠边隐藏
         private void MainWindow_LocationChanged(object sender, EventArgs e) {
             if (!mainViewModel.IsMaximum) {
-                GetAnchorStyle();
+                anchorStyle = HideWindowHelper.GetAnchorStyle(this);
             }
         }
 
@@ -1928,21 +1946,19 @@ namespace XStart2._0 {
                 isTick = true;
             }
             try {
-                double screenWidth = SystemParameters.PrimaryScreenWidth;
-                double screenHeight = SystemParameters.PrimaryScreenHeight;
+                double screenWidth = SystemParameters.VirtualScreenWidth;
+                double screenHeight = SystemParameters.VirtualScreenHeight;
                 Point toPoint = new Point(Left, Top);
-                double mouseDistance = 1;// 鼠标在边界距离多远范围
-                double resumeSize = 1;// 隐藏后剩余出来的边界大小
                 DllUtils.Point curPoint = new DllUtils.Point();
                 DllUtils.GetCursorPos(ref curPoint); //获取鼠标相对桌面的位置
 
                 // 获取缩放比例
                 double curPointX = curPoint.X / Configs.scale.Item1;
                 double curPointY = curPoint.Y / Configs.scale.Item2;
-                bool isMouseEnter = curPointX >= Left - mouseDistance
-                                   && curPointX <= Left + Width + mouseDistance
-                                   && curPointY >= Top - mouseDistance
-                                   && curPointY <= Top + Height + mouseDistance;
+                bool isMouseEnter = curPointX >= Left - Constants.ANCHOR_BORDER_SIZE
+                                   && curPointX <= Left + Width + Constants.ANCHOR_BORDER_SIZE
+                                   && curPointY >= Top - Constants.ANCHOR_BORDER_SIZE
+                                   && curPointY <= Top + Height + Constants.ANCHOR_BORDER_SIZE;
                 switch (anchorStyle) {
                     case Constants.ANCHOR_STYLE_TOP:
                     case Constants.ANCHOR_STYLE_BOTTOM:
@@ -1950,9 +1966,9 @@ namespace XStart2._0 {
                             Left = screenWidth - Width;
                         }
                         if (anchorStyle == Constants.ANCHOR_STYLE_TOP) {
-                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - resumeSize));
+                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - Constants.ANCHOR_BORDER_SIZE));
                         } else {
-                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, screenHeight - Height) : new Point(Left, screenHeight - resumeSize);
+                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, screenHeight - Height) : new Point(Left, screenHeight - Constants.ANCHOR_BORDER_SIZE);
                         }
                         break;
                     case Constants.ANCHOR_STYLE_LEFT:
@@ -1961,9 +1977,9 @@ namespace XStart2._0 {
                             Top = screenHeight - Height;
                         }
                         if (anchorStyle == Constants.ANCHOR_STYLE_LEFT) {
-                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - resumeSize), Top);
+                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - Constants.ANCHOR_BORDER_SIZE), Top);
                         } else {
-                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(screenWidth - Width, Top) : new Point(screenWidth - resumeSize, Top);
+                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(screenWidth - Width, Top) : new Point(screenWidth - Constants.ANCHOR_BORDER_SIZE, Top);
                         }
                         break;
                 }
@@ -1975,8 +1991,10 @@ namespace XStart2._0 {
                     //    DllUtils.ShowWindow(Configs.Handler, WinApi.SW_SHOW);
                     //}
                 }
-                
-                HideWindowHelper.Animate2Location(this, toPoint);
+                if (!isDrag) {
+                    HideWindowHelper.Animate2Location(this, toPoint);
+                }
+
             } catch {
 
             } finally {
@@ -1984,23 +2002,8 @@ namespace XStart2._0 {
                 if (mainViewModel.CancelHide) {
                     // 取消隐藏了,执行完成后再置定时器为false
                     mainViewModel.CancelHide = false;
-                    mainViewModel.AutoHideTimer.IsEnabled = false;
+                    mainViewModel.AutoHideTimer.Stop();
                 }
-            }
-        }
-        private void GetAnchorStyle() {
-            if (Top <= 0 && Left <= 0) {
-                anchorStyle = Constants.ANCHOR_STYLE_NONE;
-            } else if (Top <= 0) {
-                anchorStyle = Constants.ANCHOR_STYLE_TOP;
-            } else if (Left <= 0) {
-                anchorStyle = Constants.ANCHOR_STYLE_LEFT;
-            } else if (Left >= SystemParameters.PrimaryScreenWidth - Width) {
-                anchorStyle = Constants.ANCHOR_STYLE_RIGHT;
-            } else if (Top >= SystemParameters.PrimaryScreenHeight - Height) {
-                anchorStyle = Constants.ANCHOR_STYLE_BOTTOM;
-            } else {
-                anchorStyle = Constants.ANCHOR_STYLE_NONE;
             }
         }
         #endregion
