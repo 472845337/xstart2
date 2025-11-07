@@ -406,7 +406,7 @@ namespace XStart2._0 {
                 string lpData = data.lpData;
                 if (Constants.APP_SHOW.Equals(lpData)) {
                     // mainViewModel.HideWindowHelper.TryShow();
-                    IsAllShow = true;
+                    MainWindow_Show(null, null);
                 }
             }
             //else if (WinApi.WM_DISPLAYCHANGE == msg) {
@@ -760,7 +760,7 @@ namespace XStart2._0 {
                 Configs.Dispose();
                 AudioUtils.Dispose();
                 DataBase.SqLiteFactory.CloseAllSqLite();
-                mainViewModel.AutoHideTimer.Stop();
+                mainViewModel.AutoHideTimer.IsEnabled = false;
                 currentDateTimer.Stop();
                 currentTimer.Stop();
                 AutoGcTimer.Stop();
@@ -1985,13 +1985,9 @@ namespace XStart2._0 {
                 }
                 if (isMouseEnter) {
                     IsAllShow = false;
-                    //if (!IsLock) {
-                    //    // 打开当前窗口
-                    //    DllUtils.SwitchToThisWindow(Configs.Handler, true);
-                    //    DllUtils.ShowWindow(Configs.Handler, WinApi.SW_SHOW);
-                    //}
                 }
                 if (!isDrag) {
+                    // 拖拽的时候不执行移动
                     HideWindowHelper.Animate2Location(this, toPoint);
                 }
 
@@ -2000,7 +1996,7 @@ namespace XStart2._0 {
             } finally {
                 isTick = false;
                 if (mainViewModel.CancelHide) {
-                    // 取消隐藏了,执行完成后再置定时器为false
+                    // 取消隐藏了,执行完成后再置定时器停止
                     mainViewModel.CancelHide = false;
                     mainViewModel.AutoHideTimer.Stop();
                 }

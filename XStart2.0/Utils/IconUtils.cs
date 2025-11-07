@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -37,6 +38,35 @@ namespace XStart2._0.Utils {
             }
             return imageList;
         }
+        public static BitmapImage GetBitmapImage(string fileName, int iconSize) {
+            if (fileName.EndsWith(".ico", true, CultureInfo.CurrentCulture)
+                || fileName.EndsWith(".icon", true, CultureInfo.CurrentCulture)) {
+                // ICO文件类型获取图标内容
+                List<Bitmap> icos = GetIconImage(fileName, iconSize);
+                return ImageUtils.BitmapToBitmapImage(icos[icos.Count - 1]);
+            } else {
+                // 获取文件类型匹配的系统图标，比如.mp3用千千静听打开的，那么就是获取千千静听软体图标
+                return ImageUtils.BitmapToBitmapImage(GetIcon(fileName, iconSize));
+            }
+
+        }
+        /// <summary>
+        /// 绘制方块图
+        /// </summary>
+        /// <param name="color"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public static Image DrawImage(Color color, int width, int height) {
+            Bitmap bmp = new Bitmap(width, height);
+            Graphics g = Graphics.FromImage(bmp);
+            Rectangle rect = new Rectangle(0, 0, width, height);//定义矩形,参数为起点横纵坐标以及其长和宽
+            SolidBrush b1 = new SolidBrush(color);//定义单色画刷         
+            g.FillRectangle(b1, rect);//填充这个矩形
+            b1.Dispose();
+            g.Dispose();
+            return bmp;
+        }
 
         /// <summary>
         /// 获取文件类型或目录的关联图标
@@ -47,6 +77,8 @@ namespace XStart2._0.Utils {
         /// 32*32->SHGFI_LARGEICON
         /// 48*48->SHGFI_OPENICON
         /// 72*72/128*128/256*256->SHGFI_SHELLICONSIZE
+        /// 如果iconSize超过48，但是文件中没有iconSize的图标，
+        /// icon其实是一个256*256的，实际图标在左上角位置，需要对有效图片根据iconSize缩放
         /// </remarks>
         /// <param name="fileName">文件类型的扩展名或文件的绝对路径</param>
         /// <param name="type">类型 file/dir</param>
@@ -89,37 +121,93 @@ namespace XStart2._0.Utils {
             Bitmap bs = icon.ToBitmap();
             icon.Dispose();
             DllUtils.DestroyIcon(shfi.hIcon); //释放资源
-            DllUtils.SendMessage(shfi.hIcon, WinApi.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-            return bs;
+            // 检测实际的图标内容区域并缩放
+            Bitmap result = ScaleIconContentToSize(bs, iconSize);
+            bs.Dispose();
+
+            return result;
         }
 
-        public static BitmapImage GetBitmapImage(string fileName, int iconSize) {
-            if (fileName.EndsWith(".ico", true, CultureInfo.CurrentCulture) || fileName.EndsWith(".icon", true, CultureInfo.CurrentCulture)) {
-                // ICO文件类型获取图标内容
-                List<Bitmap> icos = GetIconImage(fileName, iconSize);
-                return ImageUtils.BitmapToBitmapImage(icos[icos.Count - 1]);
-            } else {
-                // 获取文件类型匹配的系统图标，比如.mp3用千千静听打开的，那么就是获取千千静听软体图标
-                return ImageUtils.BitmapToBitmapImage(GetIcon(fileName, iconSize));
+
+        private static Bitmap ScaleIconContentToSize(Bitmap original, int targetSize) {
+            // 1. 找到实际的图标内容边界
+            Rectangle contentBounds = FindContentBounds(original);
+
+            // 2. 如果没有找到有效内容，直接缩放整个图像
+            if (contentBounds.Width == 0 || contentBounds.Height == 0) {
+                return ScaleBitmap(original, targetSize, targetSize);
             }
 
+            // 3. 提取内容区域
+            Bitmap content = new Bitmap(contentBounds.Width, contentBounds.Height);
+            using (Graphics g = Graphics.FromImage(content)) {
+                g.DrawImage(original, new Rectangle(0, 0, contentBounds.Width, contentBounds.Height),
+                           contentBounds, GraphicsUnit.Pixel);
+            }
+
+            // 4. 将内容区域缩放到目标尺寸
+            Bitmap scaledContent = ScaleBitmap(content, targetSize, targetSize);
+            content.Dispose();
+
+            return scaledContent;
         }
-        /// <summary>
-        /// 绘制方块图
-        /// </summary>
-        /// <param name="color"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <returns></returns>
-        public static System.Drawing.Image DrawImage(Color color, int width, int height) {
-            Bitmap bmp = new Bitmap(width, height);
-            Graphics g = Graphics.FromImage(bmp);
-            Rectangle rect = new Rectangle(0, 0, width, height);//定义矩形,参数为起点横纵坐标以及其长和宽
-            SolidBrush b1 = new SolidBrush(color);//定义单色画刷         
-            g.FillRectangle(b1, rect);//填充这个矩形
-            b1.Dispose();
-            g.Dispose();
-            return bmp;
+
+
+        private static Rectangle FindContentBounds(Bitmap bitmap) {
+            int left = bitmap.Width, right = 0, top = bitmap.Height, bottom = 0;
+            bool foundContent = false;
+
+            // 使用LockBits提高性能
+            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                                             ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+
+            unsafe {
+                byte* ptr = (byte*)data.Scan0;
+
+                for (int y = 0; y < data.Height; y++) {
+                    for (int x = 0; x < data.Width; x++) {
+                        int index = y * data.Stride + x * 4;
+                        byte alpha = ptr[index + 3]; // Alpha通道
+
+                        if (alpha > 10) { // 非完全透明
+                            foundContent = true;
+                            if (x < left) left = x;
+                            if (x > right) right = x;
+                            if (y < top) top = y;
+                            if (y > bottom) bottom = y;
+                        }
+                    }
+                }
+            }
+
+            bitmap.UnlockBits(data);
+
+            if (!foundContent)
+                return Rectangle.Empty;
+
+            // 添加一些边距，避免裁剪太紧
+            int margin = 1;
+            left = Math.Max(0, left - margin);
+            top = Math.Max(0, top - margin);
+            right = Math.Min(bitmap.Width - 1, right + margin);
+            bottom = Math.Min(bitmap.Height - 1, bottom + margin);
+
+            return new Rectangle(left, top, right - left + 1, bottom - top + 1);
+        }
+
+        private static Bitmap ScaleBitmap(Bitmap original, int width, int height) {
+            Bitmap scaled = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+            using (Graphics g = Graphics.FromImage(scaled)) {
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+
+                // 清除背景为透明
+                g.Clear(Color.Transparent);
+                g.DrawImage(original, 0, 0, width, height);
+            }
+            return scaled;
         }
     }
 }

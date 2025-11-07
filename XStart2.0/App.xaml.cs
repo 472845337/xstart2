@@ -1,6 +1,13 @@
-﻿using System.Windows;
+﻿using System.Runtime.InteropServices;
+using System.Text;
+using System;
+using System.Threading;
+using System.Windows;
+using Utils;
 using XStart2._0.Config;
 using XStart2._0.Windows;
+using XStart2._0.Const;
+using System.Security.Principal;
 
 namespace XStart2._0 {
     /// <summary>
@@ -69,40 +76,25 @@ namespace XStart2._0 {
     //        Current.Shutdown();
     //    }
 
-    //    private void SendShow() {
-    //        IntPtr hWnd = DllUtils.FindWindow(null, Constants.APP_TITLE);
-    //        // 发送显示消息
-    //        string msg = Constants.APP_SHOW;
-    //        DllUtils.COPYDATA_STRUCT data = new DllUtils.COPYDATA_STRUCT { dwData = IntPtr.Zero, cbData = Encoding.Default.GetBytes(msg).Length + 1, lpData = msg };
-    //        int sizeOfData = Marshal.SizeOf(data);
-    //        IntPtr lParam = Marshal.AllocHGlobal(sizeOfData);
-    //        Marshal.StructureToPtr(data, lParam, false);
-    //        try {
-    //            // 发送显示消息
-    //            DllUtils.SendMessage(hWnd, WinApi.WM_COPYDATA, IntPtr.Zero, lParam);
-    //            // 切换到当前窗口
-    //            DllUtils.SwitchToThisWindow(hWnd, false);
-    //            // 按正常模式显示
-    //            DllUtils.ShowWindow(hWnd, WinApi.SW_NORMAL);
-    //            // 该次启动程序直接退出
-    //            Environment.Exit(0);
-    //        } catch (Exception) {
-    //            throw;
-    //        } finally {
-    //            Marshal.FreeHGlobal(lParam);
-    //        }
-    //    }
-    //}
 
     /// <summary>
     /// App.xaml 的交互逻辑
     /// </summary>
     public partial class App : Application {
+        bool createdNew;
+        private static Mutex _mutex = null;
         protected override void OnStartup(StartupEventArgs e) {
+            WindowsIdentity currentIdentity = WindowsIdentity.GetCurrent();
+            _mutex = new Mutex(true, Constants.APP_NAME + currentIdentity.User, out createdNew);
+            if (!createdNew) {
+                SendShow();
+                //应用程序已经在运行！当前的执行退出。
+                Current.Shutdown();
+            }
             FrameworkCompatibilityPreferences.KeepTextBoxDisplaySynchronizedWithTextProperty = false;
             base.OnStartup(e);
             MainWindow mainWindow = new MainWindow();
-            string autoRunType = Configs.runDirectly ? Const.Constants.RUN_TYPE_AUTO : Const.Constants.RUN_TYPE_MANUAL;
+            string autoRunType = Configs.runDirectly ? Constants.RUN_TYPE_AUTO : Constants.RUN_TYPE_MANUAL;
             if (!string.IsNullOrEmpty(Configs.admin.Password)) {
                 CheckSecurityWindow checkSecurityWindow = new CheckSecurityWindow("请输入管理员口令", Configs.admin.Password, "关闭该窗口将退出程序！", true, Configs.runDirectly, mainWindow.AutoRunProjectList.Count > 0) { Topmost = true };
                 if (true == checkSecurityWindow.ShowDialog()) {
@@ -115,9 +107,9 @@ namespace XStart2._0 {
                 }
             }
             if (mainWindow.AutoRunProjectList.Count > 0) {
-                if (Const.Constants.RUN_TYPE_AUTO.Equals(autoRunType)) {
+                if (Constants.RUN_TYPE_AUTO.Equals(autoRunType)) {
                     mainWindow.RunProjects(mainWindow.AutoRunProjectList);
-                } else if (Const.Constants.RUN_TYPE_MANUAL.Equals(autoRunType)) {
+                } else if (Constants.RUN_TYPE_MANUAL.Equals(autoRunType)) {
                     if (!mainWindow.AutoRunProjectWindow(mainWindow.AutoRunProjectList, null, true)) {
                         Shutdown();
                         return;
@@ -125,6 +117,27 @@ namespace XStart2._0 {
                 }
             }
             mainWindow.Show();
+        }
+
+        private void SendShow() {
+            IntPtr hWnd = DllUtils.FindWindow(null, Constants.APP_TITLE);
+            // 发送显示消息
+            string msg = Constants.APP_SHOW;
+            DllUtils.COPYDATA_STRUCT data = new DllUtils.COPYDATA_STRUCT { dwData = IntPtr.Zero, cbData = Encoding.Default.GetBytes(msg).Length + 1, lpData = msg };
+            int sizeOfData = Marshal.SizeOf(data);
+            IntPtr lParam = Marshal.AllocHGlobal(sizeOfData);
+            Marshal.StructureToPtr(data, lParam, false);
+            try {
+                // 发送显示消息
+                DllUtils.SendMessage(hWnd, WinApi.WM_COPYDATA, IntPtr.Zero, lParam);
+                // 该次启动程序直接退出
+                Environment.Exit(0);
+            } catch (Exception ex) {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            } finally {
+                Marshal.FreeHGlobal(lParam);
+            }
         }
     }
 }

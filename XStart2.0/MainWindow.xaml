@@ -648,7 +648,7 @@
                     </DataTemplate>
                 </TabControl.ContentTemplate>
             </TabControl>
-            <StatusBar Grid.Row="3" Height="30" HorizontalAlignment="Stretch" Background="Transparent">
+            <StatusBar Grid.Row="3" Height="Auto" HorizontalAlignment="Stretch" Background="Transparent">
                 <StatusBarItem Background="Transparent">
                     <Menu DockPanel.Dock="Left" Background="Transparent">
                         <MenuItem>
@@ -656,7 +656,7 @@
                                 <TextBlock Text="{Binding TypeTabToggleIcon}" Foreground="{Binding ButtonConfirmBackGround,Source={x:Static bean:WindowTheme.Instance}}" FontFamily="{StaticResource FontAwesomeSolid}" FontSize="18" ToolTip="类别名称显示切换" MouseLeftButtonUp="ToggleTabItem"/>
                             </MenuItem.Header>
                         </MenuItem>
-                        <MenuItem Header="菜单" Width="42" Height="24">
+                        <MenuItem Header="菜单" Width="Auto" Height="Auto">
                             <MenuItem IsCheckable="True" IsChecked="{Binding TopMost}" Header="置顶" Style="{StaticResource MenuStyleKey}"/>
                             <MenuItem IsCheckable="True" IsChecked="{Binding Audio}" Header="音效" Style="{StaticResource MenuStyleKey}"/>
                             <MenuItem IsCheckable="True" IsChecked="{Binding CloseBorderHide}" Header="靠边隐藏" Style="{StaticResource MenuStyleKey}"/>
