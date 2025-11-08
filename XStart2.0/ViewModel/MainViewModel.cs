@@ -25,6 +25,11 @@ namespace XStart2._0.ViewModel {
         public int AvatarSize { get; set; }
         // 昵称
         public string NickName { get; set; }
+        public string DateFormat { get; set; }
+        public string YearFormat { get; set; }
+        public string MonthFormat { get; set; }
+        public string DayFormat { get; set; }
+        public string WeekFormat { get; set; }
         // 管理员口令
         public string Security { get; set; }
         #endregion
