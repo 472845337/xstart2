@@ -113,17 +113,17 @@ namespace XStart2._0.Windows {
                                 if (isOverride) {
                                     // 覆盖
                                     projectService.Update(project);
-                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.Section].ProjectDic[project.Section].Name = project.Name;
-                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.Section].ProjectDic[project.Section].Sort = project.Sort;
-                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.Section].ProjectDic[project.Section].IconPath = project.IconPath;
-                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.Section].ProjectDic[project.Section].IconIndex = project.IconIndex;
-                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.Section].ProjectDic[project.Section].Kind = project.Kind;
-                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.Section].ProjectDic[project.Section].Path = project.Path;
-                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.Section].ProjectDic[project.Section].FontColor = project.FontColor;
-                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.Section].ProjectDic[project.Section].Arguments = project.Arguments;
-                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.Section].ProjectDic[project.Section].RunStartPath = project.RunStartPath;
-                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.Section].ProjectDic[project.Section].HotKey = project.HotKey;
-                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.Section].ProjectDic[project.Section].Remark = project.Remark;
+                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic[project.Section].Name = project.Name;
+                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic[project.Section].Sort = project.Sort;
+                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic[project.Section].IconPath = project.IconPath;
+                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic[project.Section].IconIndex = project.IconIndex;
+                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic[project.Section].Kind = project.Kind;
+                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic[project.Section].Path = project.Path;
+                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic[project.Section].FontColor = project.FontColor;
+                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic[project.Section].Arguments = project.Arguments;
+                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic[project.Section].RunStartPath = project.RunStartPath;
+                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic[project.Section].HotKey = project.HotKey;
+                                    XStartService.TypeDic[project.TypeSection].ColumnDic[project.ColumnSection].ProjectDic[project.Section].Remark = project.Remark;
                                 }
                             } else {
                                 // 新增
