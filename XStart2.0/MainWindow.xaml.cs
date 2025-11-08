@@ -114,9 +114,9 @@ namespace XStart2._0 {
 
             Configs.themeName = string.IsNullOrEmpty(themeName) ? Constants.WINDOW_THEME_BLUE : themeName;
             Configs.themeCustom = themeCustom;
-            Configs.mainBackground = mainBackground;
+            Configs.mainBackground = !string.IsNullOrEmpty(mainBackground) && StringUtils.IsHtmlColor(mainBackground)? mainBackground:"#FFFFFF";
             Configs.mainOpacity = ConvertUtils.ToNum(mainOpacityStr, 1D);
-            Configs.projectForeground = string.IsNullOrEmpty(projectForeground) ? "#000000" : projectForeground;
+            Configs.projectForeground =!string.IsNullOrEmpty(projectForeground) && StringUtils.IsHtmlColor(projectForeground) ? projectForeground: "#000000";
             Configs.fontFamily = string.IsNullOrEmpty(fontFamily) || !FontUtils.IsSystemFont(fontFamily) ? "微软雅黑" : fontFamily;
             Configs.fontSize = ConvertUtils.ToInt(fontSizeStr, 14);
             Configs.opacity = ConvertUtils.ToNum(opacityStr, 1D);
@@ -1746,7 +1746,7 @@ namespace XStart2._0 {
         // 恢复默认配置
         private void RestoreDefault_Click(object sender, RoutedEventArgs e) {
             if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("确认恢复默认配置？")) {
-                mainViewModel.MainBackground = string.Empty;
+                mainViewModel.MainBackground = "#FFFFFF";
                 mainViewModel.MainOpacity = 1D;
                 mainViewModel.MainHeight = Constants.MAIN_HEIGHT;
                 mainViewModel.MainWidth = Constants.MAIN_WIDTH;
