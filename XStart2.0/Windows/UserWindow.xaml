@@ -44,7 +44,7 @@
                 <Slider Style="{StaticResource FormValue_Style}" Grid.Column="0" Minimum="0.1" Maximum="2.0" TickFrequency="0.1" IsMoveToPointEnabled="True" IsSnapToTickEnabled="True"  Value="{Binding GifSpeedRatio}"/>
                 <TextBlock Style="{StaticResource FormLabel_Style}" Margin="0 0 5 0" Grid.Column="1" Text="{Binding GifSpeedRatio}"/>
             </Grid>
-            <GroupBox Grid.Row="3" Grid.ColumnSpan="2" Header="日期格式">
+            <GroupBox Grid.Row="3" Grid.ColumnSpan="2" Header="日期时间格式">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -55,39 +55,46 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="日期"/>
-                    <ComboBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" SelectedValue="{Binding DateFormat}">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="时间"/>
+                    <ComboBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" SelectedValue="{Binding TimeFormat}" SelectedValuePath="Content">
+                        <ComboBoxItem Content="HH:mm:ss"/>
+                        <ComboBoxItem Content="HH:mm"/>
+                        <ComboBoxItem Content="H:m:s"/>
+                        <ComboBoxItem Content="H:m"/>
+                    </ComboBox>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="日期"/>
+                    <ComboBox Grid.Row="1" Grid.Column="1" Style="{StaticResource FormValue_Style}" SelectedValue="{Binding DateFormat}" IsEditable="True" SelectedValuePath="Content">
                         <ComboBoxItem Content="Y年M月D日"/>
                         <ComboBoxItem Content="Y-M-D"/>
                         <ComboBoxItem Content="M/D/Y"/>
                         <ComboBoxItem Content="D/M/Y"/>
                     </ComboBox>
-                    <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="年"/>
-                    <ComboBox Grid.Row="1" Grid.Column="1" Style="{StaticResource FormValue_Style}" SelectedValue="{Binding YearFormat}">
-                        <ComboBoxItem Content="YYYY"/>
-                        <ComboBoxItem Content="YY"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="年"/>
+                    <ComboBox Grid.Row="2" Grid.Column="1" Style="{StaticResource FormValue_Style}" SelectedValue="{Binding YearFormat}" SelectedValuePath="Content">
+                        <ComboBoxItem Content="yyyy"/>
+                        <ComboBoxItem Content="yy"/>
                     </ComboBox>
-                    <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="月"/>
-                    <ComboBox Grid.Row="2" Grid.Column="1" Style="{StaticResource FormValue_Style}" SelectedValue="{Binding MonthFormat}">
+                    <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="月"/>
+                    <ComboBox Grid.Row="3" Grid.Column="1" Style="{StaticResource FormValue_Style}" SelectedValue="{Binding MonthFormat}" SelectedValuePath="Content">
                         <ComboBoxItem Content="MM"/>
                         <ComboBoxItem Content="M"/>
                         <ComboBoxItem Content="MMM" ToolTip="Mar"/>
                         <ComboBoxItem Content="MMMM" ToolTip="March"/>
                     </ComboBox>
-                    <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="日"/>
-                    <ComboBox Grid.Row="3" Grid.Column="1" Style="{StaticResource FormValue_Style}" SelectedValue="{Binding DayFormat}">
-                        <ComboBoxItem Content="DD"/>
-                        <ComboBoxItem Content="D"/>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="日"/>
+                    <ComboBox Grid.Row="4" Grid.Column="1" Style="{StaticResource FormValue_Style}" SelectedValue="{Binding DayFormat}" SelectedValuePath="Content">
+                        <ComboBoxItem Content="dd"/>
+                        <ComboBoxItem Content="d"/>
                     </ComboBox>
-                    <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="星期"/>
-                    <ComboBox Grid.Row="4" Grid.Column="1" Style="{StaticResource FormValue_Style}" SelectedValue="{Binding WeekFormat}">
+                    <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="星期"/>
+                    <ComboBox Grid.Row="5" Grid.Column="1" Style="{StaticResource FormValue_Style}" SelectedValue="{Binding WeekFormat}" SelectedValuePath="Content">
                         <ComboBoxItem Content="星期"/>
                         <ComboBoxItem Content="周"/>
                         <ComboBoxItem Content="曜日"/>
                         <ComboBoxItem Content="Mon"/>
-                        <ComboBoxItem Content="Mo"/>
-                        <ComboBoxItem Content="Mon."/>
                     </ComboBox>
                 </Grid>
             </GroupBox>

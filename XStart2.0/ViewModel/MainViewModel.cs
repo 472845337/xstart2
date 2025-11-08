@@ -1,4 +1,5 @@
 ﻿using PropertyChanged;
+using System;
 using System.Windows.Media;
 using XStart2._0.Bean;
 using XStart2._0.Config;
@@ -25,6 +26,7 @@ namespace XStart2._0.ViewModel {
         public int AvatarSize { get; set; }
         // 昵称
         public string NickName { get; set; }
+        public string TimeFormat { get; set; }
         public string DateFormat { get; set; }
         public string YearFormat { get; set; }
         public string MonthFormat { get; set; }
@@ -210,6 +212,46 @@ namespace XStart2._0.ViewModel {
 
         public void ConvertBrush() {
             BackgroundBrush = BackgroundUtils.GetBrush(MainBackground, MainOpacity);
+        }
+
+        public void FreshDate() {
+            string dateFormat = DateFormat;
+            if (string.IsNullOrEmpty(dateFormat)) {
+                MyDateTime.CurDate = DateTime.Now.ToString("D");
+            } else {
+                if (dateFormat.Contains("Y")) {
+                    // 将年换成格式
+                    dateFormat = dateFormat.Replace("Y", YearFormat);
+                }
+                if (dateFormat.Contains("M")) {
+                    // 将月换成格式
+                    dateFormat = dateFormat.Replace("M", MonthFormat);
+                }
+                if (dateFormat.Contains("D")) {
+                    // 将日换成格式
+                    dateFormat = dateFormat.Replace("D", DayFormat);
+                }
+                MyDateTime.CurDate = DateTime.Now.ToString(dateFormat);
+            }
+            string weekFormat = WeekFormat;
+            if (string.IsNullOrEmpty(weekFormat) || "星期".Equals(weekFormat)) {
+                MyDateTime.CurWeekDay = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
+            } else {
+                switch (weekFormat) {
+                    case "周":
+                        MyDateTime.CurWeekDay = DateTime.Now.ToString("ddd");
+                        break;
+                    case "曜日":
+                        MyDateTime.CurWeekDay = System.Globalization.CultureInfo.CreateSpecificCulture("ja-JP").DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
+                        break;
+                    case "Mon":
+                        MyDateTime.CurWeekDay = DateTime.Now.ToString("ddd", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
+                        break;
+                    default:
+                        MyDateTime.CurWeekDay = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
+                        break;
+                }
+            }
         }
     }
 }

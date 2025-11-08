@@ -6,27 +6,30 @@ namespace XStart2._0.Windows {
     /// AvatarWindow.xaml 的交互逻辑
     /// </summary>
     public partial class UserWindow : Window {
-        private UserViewModel vm = new UserViewModel();
-        public string AvatarPath { get; set; }
-        public double GifSpeedRatio { get; set; }
-        public string NickName { get; set; }
-        public int AvatarSize { get; set; }
-        public UserWindow(string avatarPath, double gifSpeedRadio, string nickName, int avatarSize) {
+
+        public readonly UserViewModel vm = new UserViewModel();
+
+        public UserWindow(string avatarPath, double gifSpeedRadio, string nickName, int avatarSize
+            , string timeFormat, string dateFormat
+            , string yearFormat, string monthFormat, string dayFormat, string weekFormat) {
             InitializeComponent();
             Loaded += Window_Loaded;
             Closing += Window_Closing;
-            AvatarPath = avatarPath;
-            AvatarSize = avatarSize;
-            GifSpeedRatio = gifSpeedRadio;
-            NickName = nickName;
+            vm.AvatarPath = avatarPath;
+            vm.AvatarSize = avatarSize;
+            vm.GifSpeedRatio = gifSpeedRadio;
+            vm.NickName = nickName;
+            vm.TimeFormat = timeFormat;
+            vm.DateFormat = dateFormat;
+            vm.YearFormat = yearFormat;
+            vm.MonthFormat = monthFormat;
+            vm.DayFormat = dayFormat;
+            vm.WeekFormat = weekFormat;
             DataContext = vm;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            vm.AvatarPath = AvatarPath;
-            vm.AvatarSize = AvatarSize;
-            vm.GifSpeedRatio = GifSpeedRatio;
-            vm.NickName = NickName;
+            
         }
         private void Window_Closing(object sender, System.EventArgs e) {
             DataContext = null;
@@ -42,10 +45,6 @@ namespace XStart2._0.Windows {
         }
 
         private void Confirm_Click(object sender, RoutedEventArgs e) {
-            AvatarPath = vm.AvatarPath;
-            AvatarSize = vm.AvatarSize;
-            GifSpeedRatio = vm.GifSpeedRatio;
-            NickName = vm.NickName;
             DialogResult = true;
         }
 

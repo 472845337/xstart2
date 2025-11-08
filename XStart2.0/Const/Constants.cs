@@ -27,6 +27,14 @@
         public const string SECTION_SYSTEM_APP = "SystemApp";
         public const string SECTION_WEATHER = "Weather";
         public const string SECTION_THEME = "Theme";
+        public const string SECTION_FORMAT = "Format";
+
+        public const string KEY_TIME_FORMAT = "Time";
+        public const string KEY_DATE_FORMAT = "Date";
+        public const string KEY_YEAR_FORMAT = "Year";
+        public const string KEY_MONTH_FORMAT = "Month";
+        public const string KEY_DAY_FORMAT = "Day";
+        public const string KEY_WEEK_FORMAT = "Week";
 
         public const string KEY_MAIN_HEAD_SHOW = "MainHeadShow";
         public const string KEY_TYPE_TAB_EXPAND = "TypeTabExpand";

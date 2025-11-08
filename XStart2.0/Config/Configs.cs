@@ -26,6 +26,13 @@ namespace XStart2._0.Config {
         public static bool? typeTabExpand;// 类别标签头是否展开
         public static Tuple<double, double> scale;// 缩放
 
+        public static string timeFormat;
+        public static string dateFormat;
+        public static string yearFormat;
+        public static string monthFormat;
+        public static string dayFormat;
+        public static string weekFormat;
+
         public static Admin admin;// 管理员信息，头像，昵称，口令
 
         public static string mainBackground;// 主窗口背景

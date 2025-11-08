@@ -335,7 +335,7 @@
                     </Border>
                     <TextBlock Style="{StaticResource TextBlock_ThemeStyle}" Text="{Binding NickName}" VerticalAlignment="Bottom" Margin="8 0 8 5"/>
                 </VirtualizingStackPanel>
-                <VirtualizingStackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <VirtualizingStackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" MouseLeftButtonUp="User_Click" Style="{StaticResource CursorHand_Style}">
                     <TextBlock Style="{StaticResource TextBlock_ThemeStyle}" Text="{Binding MyDateTime.CurTime}" HorizontalAlignment="Right"/>
                     <TextBlock Style="{StaticResource TextBlock_ThemeStyle}" Text="{Binding MyDateTime.CurWeekDay}" HorizontalAlignment="Right"/>
                     <TextBlock Style="{StaticResource TextBlock_ThemeStyle}" Text="{Binding MyDateTime.CurDate}" HorizontalAlignment="Right"/>

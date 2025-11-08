@@ -78,6 +78,26 @@ namespace XStart2._0 {
             #region 读取配置文件
             var iniData = IniParserUtils.GetIniData(Configs.AppStartPath + Constants.SET_FILE);
             #endregion
+            #region 时间格式配置
+            string timeFormat = iniData[Constants.SECTION_FORMAT][Constants.KEY_TIME_FORMAT];
+            string dateFormat = iniData[Constants.SECTION_FORMAT][Constants.KEY_DATE_FORMAT];
+            string yearFormat = iniData[Constants.SECTION_FORMAT][Constants.KEY_YEAR_FORMAT];
+            string monthFormat = iniData[Constants.SECTION_FORMAT][Constants.KEY_MONTH_FORMAT];
+            string dayFormat = iniData[Constants.SECTION_FORMAT][Constants.KEY_DAY_FORMAT];
+            string weekFormat = iniData[Constants.SECTION_FORMAT][Constants.KEY_WEEK_FORMAT];
+            Configs.timeFormat = timeFormat;
+            Configs.dateFormat = dateFormat;
+            Configs.yearFormat = yearFormat;
+            Configs.monthFormat = monthFormat;
+            Configs.dayFormat = dayFormat;
+            Configs.weekFormat = weekFormat;
+            mainViewModel.TimeFormat = Configs.timeFormat;
+            mainViewModel.DateFormat = Configs.dateFormat;
+            mainViewModel.YearFormat = Configs.yearFormat;
+            mainViewModel.MonthFormat = Configs.monthFormat;
+            mainViewModel.DayFormat = Configs.dayFormat;
+            mainViewModel.WeekFormat = Configs.weekFormat;
+            #endregion
             #region 窗口相关加载，尺寸，位置，置顶
             string isMaximum = iniData[Constants.SECTION_LOCATION][Constants.KEY_IS_MAXIMUM];
             string leftStr = iniData[Constants.SECTION_LOCATION][Constants.KEY_LEFT];
@@ -114,9 +134,9 @@ namespace XStart2._0 {
 
             Configs.themeName = string.IsNullOrEmpty(themeName) ? Constants.WINDOW_THEME_BLUE : themeName;
             Configs.themeCustom = themeCustom;
-            Configs.mainBackground = !string.IsNullOrEmpty(mainBackground) && StringUtils.IsHtmlColor(mainBackground)? mainBackground:"#FFFFFF";
+            Configs.mainBackground = !string.IsNullOrEmpty(mainBackground) && StringUtils.IsHtmlColor(mainBackground) ? mainBackground : "#FFFFFF";
             Configs.mainOpacity = ConvertUtils.ToNum(mainOpacityStr, 1D);
-            Configs.projectForeground =!string.IsNullOrEmpty(projectForeground) && StringUtils.IsHtmlColor(projectForeground) ? projectForeground: "#000000";
+            Configs.projectForeground = !string.IsNullOrEmpty(projectForeground) && StringUtils.IsHtmlColor(projectForeground) ? projectForeground : "#000000";
             Configs.fontFamily = string.IsNullOrEmpty(fontFamily) || !FontUtils.IsSystemFont(fontFamily) ? "微软雅黑" : fontFamily;
             Configs.fontSize = ConvertUtils.ToInt(fontSizeStr, 14);
             Configs.opacity = ConvertUtils.ToNum(opacityStr, 1D);
@@ -1808,14 +1828,18 @@ namespace XStart2._0 {
 
         //计时执行的程序
         private void CurrentTimer_Tick(object sender, EventArgs e) {
-            mainViewModel.MyDateTime.CurTime = DateTime.Now.ToString("T");
+            if (string.IsNullOrEmpty(mainViewModel.TimeFormat)) {
+                mainViewModel.MyDateTime.CurTime = DateTime.Now.ToString("T");
+            } else {
+                mainViewModel.MyDateTime.CurTime = DateTime.Now.ToString(mainViewModel.TimeFormat);
+            }
+
         }
         private void CurrentDate_Tick(object sender, EventArgs e) {
             // 下次运行时间
             TimeSpan timeToGo = TimeUtils.GetTimeToNext(TimeEnum.DAY);
             currentDateTimer.Interval = timeToGo;
-            mainViewModel.MyDateTime.CurDate = DateTime.Now.ToString("D");
-            mainViewModel.MyDateTime.CurWeekDay = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
+            mainViewModel.FreshDate();
         }
 
         private void AutoGcTimer_Tick(object sender, EventArgs e) {
@@ -1845,7 +1869,14 @@ namespace XStart2._0 {
         #region 保存配置项
         private void SaveSetting() {
             IniParser.Model.IniData iniData = new IniParser.Model.IniData();
-
+            #region 日期格式
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_FORMAT, Constants.KEY_TIME_FORMAT, ref Configs.timeFormat, mainViewModel.TimeFormat);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_FORMAT, Constants.KEY_DATE_FORMAT, ref Configs.dateFormat, mainViewModel.DateFormat);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_FORMAT, Constants.KEY_YEAR_FORMAT, ref Configs.yearFormat, mainViewModel.YearFormat);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_FORMAT, Constants.KEY_MONTH_FORMAT, ref Configs.monthFormat, mainViewModel.MonthFormat);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_FORMAT, Constants.KEY_DAY_FORMAT, ref Configs.dayFormat, mainViewModel.DayFormat);
+            IniParserUtils.ConfigIniData(iniData, Constants.SECTION_FORMAT, Constants.KEY_WEEK_FORMAT, ref Configs.weekFormat, mainViewModel.WeekFormat);
+            #endregion
             #region 窗口位置和尺寸保存
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_MAIN_BACKGROUND, ref Configs.mainBackground, mainViewModel.MainBackground);
             IniParserUtils.ConfigIniData(iniData, Constants.SECTION_THEME, Constants.KEY_MAIN_OPACITY, ref Configs.mainOpacity, mainViewModel.MainOpacity);
@@ -2132,33 +2163,47 @@ namespace XStart2._0 {
         #region 用户头像和昵称修改
         private void User_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
-            UserWindow userWindow = new UserWindow(mainViewModel.AvatarPath, mainViewModel.GifSpeedRatio, mainViewModel.NickName, mainViewModel.AvatarSize) { WindowStartupLocation = WindowStartupLocation.CenterScreen, Owner = this };
+            UserWindow userWindow = new UserWindow(
+                mainViewModel.AvatarPath, 
+                mainViewModel.GifSpeedRatio, 
+                mainViewModel.NickName, 
+                mainViewModel.AvatarSize
+                , mainViewModel.TimeFormat, mainViewModel.DateFormat
+                ,mainViewModel.YearFormat, mainViewModel.MonthFormat, mainViewModel.DayFormat, mainViewModel.WeekFormat) { WindowStartupLocation = WindowStartupLocation.CenterScreen, Owner = this };
             if (true == userWindow.ShowDialog()) {
                 bool isChange = false;
                 // 保存配置项
-                if (!mainViewModel.AvatarPath.Equals(userWindow.AvatarPath)) {
-                    Configs.admin.Avator = userWindow.AvatarPath;
-                    mainViewModel.AvatarPath = userWindow.AvatarPath;
+                if (!mainViewModel.AvatarPath.Equals(userWindow.vm.AvatarPath)) {
+                    Configs.admin.Avator = userWindow.vm.AvatarPath;
+                    mainViewModel.AvatarPath = userWindow.vm.AvatarPath;
                     isChange = true;
                 }
-                if (mainViewModel.GifSpeedRatio != userWindow.GifSpeedRatio) {
-                    Configs.admin.GifSpeedRatio = userWindow.GifSpeedRatio;
-                    mainViewModel.GifSpeedRatio = userWindow.GifSpeedRatio;
+                if (mainViewModel.GifSpeedRatio != userWindow.vm.GifSpeedRatio) {
+                    Configs.admin.GifSpeedRatio = userWindow.vm.GifSpeedRatio;
+                    mainViewModel.GifSpeedRatio = userWindow.vm.GifSpeedRatio;
                     isChange = true;
                 }
-                if (!mainViewModel.NickName.Equals(userWindow.NickName)) {
-                    Configs.admin.Name = userWindow.NickName;
-                    mainViewModel.NickName = userWindow.NickName;
+                if (!mainViewModel.NickName.Equals(userWindow.vm.NickName)) {
+                    Configs.admin.Name = userWindow.vm.NickName;
+                    mainViewModel.NickName = userWindow.vm.NickName;
                     isChange = true;
                 }
-                if (mainViewModel.AvatarSize != userWindow.AvatarSize) {
-                    Configs.admin.AvatorSize = userWindow.AvatarSize;
-                    mainViewModel.AvatarSize = userWindow.AvatarSize;
+                if (mainViewModel.AvatarSize != userWindow.vm.AvatarSize) {
+                    Configs.admin.AvatorSize = userWindow.vm.AvatarSize;
+                    mainViewModel.AvatarSize = userWindow.vm.AvatarSize;
                     isChange = true;
                 }
                 if (isChange) {
                     adminService.Update(Configs.admin);
                 }
+                // 记录时间格式
+                mainViewModel.TimeFormat = userWindow.vm.TimeFormat;
+                mainViewModel.DateFormat = userWindow.vm.DateFormat;
+                mainViewModel.YearFormat = userWindow.vm.YearFormat;
+                mainViewModel.MonthFormat = userWindow.vm.MonthFormat;
+                mainViewModel.DayFormat = userWindow.vm.DayFormat;
+                mainViewModel.WeekFormat = userWindow.vm.WeekFormat;
+                mainViewModel.FreshDate();
             }
             userWindow.Close();
             OpenNewWindowUtils.RecoverTopmost(this, mainViewModel);

@@ -10,6 +10,7 @@ namespace XStart2._0.ViewModel {
         public int AvatarSize { get; set; }
         public double GifSpeedRatio { get; set; }
         public string NickName { get; set; }
+        public string TimeFormat {  get; set; }
         public string DateFormat { get; set; }
         public string YearFormat {  get; set; }
         public string MonthFormat {  get; set; }
