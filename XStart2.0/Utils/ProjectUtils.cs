@@ -337,6 +337,7 @@ namespace XStart2._0.Utils {
         }
 
         static MstscManagerWindow mstscWindow = null;
+        public static MainWindow mainWindow = null;
         private static void OpenNewMstsc(Project project) {
             string arguments = project.Arguments;
             if (string.IsNullOrEmpty(arguments)) {
@@ -350,7 +351,7 @@ namespace XStart2._0.Utils {
             }
             if (Configs.MstscHandler.ToInt32() == 0) {
                 // 新建窗口
-                mstscWindow = new MstscManagerWindow();
+                mstscWindow = new MstscManagerWindow(mainWindow);
                 //分离任务栏图标主要代码。
                 new WindowInteropHelper(mstscWindow);
                 DllUtils.SetCurrentProcessExplicitAppUserModelID("Gx3OptimisationWindow");
@@ -377,7 +378,7 @@ namespace XStart2._0.Utils {
             }
             if (Configs.MstscHandler.ToInt32() == 0) {
                 // 新建窗口
-                mstscWindow = new MstscManagerWindow();
+                mstscWindow = new MstscManagerWindow(mainWindow);
                 //分离任务栏图标主要代码。
                 new WindowInteropHelper(mstscWindow);
                 DllUtils.SetCurrentProcessExplicitAppUserModelID("Gx3OptimisationWindow");

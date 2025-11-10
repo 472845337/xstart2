@@ -60,15 +60,18 @@ namespace XStart2._0.Windows {
                 if (SystemProjectParam.CLEAR_SOME_DIRECTORY.Equals(path)) {
                     // 清空目录
                     vm.ArgumentsReadonly = true;
-                    ArgumentsTextBox.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(ClearSomeDirectory_ArgumentsTextBoxMouseLeftButtonUp), true);
+                    ArgumentsTextBox.AddHandler(MouseDoubleClickEvent, new MouseButtonEventHandler(ClearSomeDirectory_ArgumentsTextBoxMouseDoubleClick), true);
+                    ArgumentsTextBox.ToolTip = "双击修改";
                 } else if (SystemProjectParam.MSTSC.Equals(path)) {
                     // 远程桌面应用
                     vm.ArgumentsReadonly = true;
-                    ArgumentsTextBox.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(MstscProject_ArgumentsTextBoxMouseLeftButtonUp), true);
+                    ArgumentsTextBox.AddHandler(MouseDoubleClickEvent, new MouseButtonEventHandler(MstscProject_ArgumentsTextBoxMouseDoubleClick), true);
+                    ArgumentsTextBox.ToolTip = "双击修改";
                 } else if (SystemProjectParam.CONTROL_APP_MEMORY.Equals(path)) {
                     // 控制应用内存
                     vm.ArgumentsReadonly = true;
-                    ArgumentsTextBox.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(ControlAppMemoryProject_ArgumentsTextBoxMouseLeftButtonUp), true);
+                    ArgumentsTextBox.AddHandler(MouseDoubleClickEvent, new MouseButtonEventHandler(ControlAppMemoryProject_ArgumentsTextBoxMouseDoubleClick), true);
+                    ArgumentsTextBox.ToolTip = "双击修改";
                 }
             }
         }
@@ -194,7 +197,7 @@ namespace XStart2._0.Windows {
             }
         }
 
-        private void ClearSomeDirectory_ArgumentsTextBoxMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+        private void ClearSomeDirectory_ArgumentsTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e) {
             string directory = vm.Arguments;
             using System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog() { SelectedPath = directory };
             if (System.Windows.Forms.DialogResult.OK == fbd.ShowDialog()) {
@@ -204,7 +207,7 @@ namespace XStart2._0.Windows {
             }
         }
 
-        private void MstscProject_ArgumentsTextBoxMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+        private void MstscProject_ArgumentsTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
             string[] argumentArray = vm.Arguments.Split(Constants.SPLIT_CHAR);
 
@@ -220,7 +223,7 @@ namespace XStart2._0.Windows {
             OpenNewWindowUtils.RecoverTopmost(this, vm);
         }
 
-        private void ControlAppMemoryProject_ArgumentsTextBoxMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+        private void ControlAppMemoryProject_ArgumentsTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
             string[] argumentArray = vm.Arguments.Split(Constants.SPLIT_CHAR);
             ControlAppMemoryWindow cam = new ControlAppMemoryWindow { Owner = this };

@@ -81,6 +81,15 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <!-- 钉在桌面按钮样式 -->
+            <Style x:Key="PinButton_Style" TargetType="Button" BasedOn="{StaticResource TitleButton_Style}">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{Binding ButtonConfirmIsMouseOverBackGround,Source={x:Static bean:WindowTheme.Instance}}"/>
+                        <Setter Property="Foreground" Value="{Binding ButtonConfirmIsMouseOverForeGround,Source={x:Static bean:WindowTheme.Instance}}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
             <!-- 最小化按钮样式 -->
             <Style x:Key="MinimumButton_Style" TargetType="Button" BasedOn="{StaticResource TitleButton_Style}">
                 <Style.Triggers>

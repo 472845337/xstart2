@@ -314,6 +314,19 @@
                         </MenuItem>
                     </MenuItem>
                 </Menu>
+                <!-- 钉住按钮 -->
+                <Button Style="{StaticResource PinButton_Style}" DockPanel.Dock="Right" Click="PinButton_Click">
+                    <Button.Content>
+                        <Grid>
+                            <Path Stroke="{Binding Foreground,RelativeSource={RelativeSource AncestorLevel=1, AncestorType={x:Type Button}}}" 
+                                  Data="M1,0 L1,0 9,0 L9,0 7,3 L7,3 10,7 L10,7 0,7 L0,7 3,3 L3,3 1,0 M5,7 L5,7 5,10" ToolTip="钉在桌面"
+                                  Visibility="{Binding IsPinDesktop, Converter={StaticResource Boolean2CollapsedConverter}}"/>
+                            <Path Stroke="{Binding Foreground,RelativeSource={RelativeSource AncestorLevel=1, AncestorType={x:Type Button}}}" 
+                                  Data="M1,0 L1,0 9,0 L9,0 7,3 L7,3 10,7 L10,7 0,7 L0,7 3,3 L3,3 1,0" ToolTip="取消钉住"
+                                  Visibility="{Binding IsPinDesktop, Converter={StaticResource Boolean2VisibilityConverter}}"/>
+                        </Grid>
+                    </Button.Content>
+                </Button>
             </DockPanel>
             <Grid Grid.Row="1" Visibility="{Binding MainHeadShow,Converter={StaticResource Boolean2MainHeadShowConverter}}">
                 <Grid.ColumnDefinitions>

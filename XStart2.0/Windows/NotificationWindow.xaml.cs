@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 
 namespace XStart2._0.Windows {
@@ -18,7 +19,7 @@ namespace XStart2._0.Windows {
         // 保留时长，多少秒
         public int SaveTime { get; set; } = 5;
 
-        public NotificationWindow(string title, string content, Color background, int height, int saveTime) {
+        public NotificationWindow(Window mainWindow, string title, string content, Color background, int height, int saveTime) {
             InitializeComponent();
             Loaded += NotificationWindow_Loaded;
             vm.Title = title;
@@ -27,6 +28,7 @@ namespace XStart2._0.Windows {
             vm.Content = content;
             vm.SaveTime = saveTime;
             DataContext = vm;
+            Owner = mainWindow;
         }
 
 
@@ -38,7 +40,7 @@ namespace XStart2._0.Windows {
                     SystemSounds.Asterisk.Play();//播放提示声
                 }
 
-                double right = SystemParameters.WorkArea.Right;//工作区最右边的值
+                double right = NotifyUtils.GetRight();//工作区最右边的值
                 self.Top = self.TopFrom - self.ActualHeight;
                 DoubleAnimation animation = new DoubleAnimation {
                     Duration = new Duration(TimeSpan.FromMilliseconds(500)),//NotifyTimeSpan是自己定义的一个int型变量，用来设置动画的持续时间

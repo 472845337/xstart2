@@ -506,7 +506,9 @@ namespace XStart2._0 {
                 }
             }
         }
-
+        private void PinButton_Click(object sender, RoutedEventArgs e) {
+            mainViewModel.IsPinDesktop = !mainViewModel.IsPinDesktop;
+        }
         /// <summary>
         /// 主窗口加载
         /// </summary>
@@ -569,6 +571,8 @@ namespace XStart2._0 {
             #endregion
             Configs.Handler = new WindowInteropHelper(this).Handle;
             Configs.inited = true;
+            ProjectUtils.mainWindow = this;
+            NotifyUtils.mainWindow = this;
             // mainViewModel.HideWindowHelper.TryShow();
             IsAllShow = true;
             mainViewModel.AutoHideToggle();
@@ -1971,7 +1975,7 @@ namespace XStart2._0 {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         public void AutoHideTimer_Tick(object sender, EventArgs e) {
-            if (isTick || mainViewModel.IsMaximum) {
+            if (isTick || mainViewModel.IsMaximum || mainViewModel.IsPinDesktop) {
                 return;
             } else {
                 isTick = true;

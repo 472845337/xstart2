@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XStart2._0.Windows"
         mc:Ignorable="d"
-        Title="{Binding Title}" Width="300" Height="{Binding Height, Mode = TwoWay}" Icon="pack://application:,,,/Files/Icons/App/info.ico">
+        Title="{Binding Title}" Width="300" WindowStartupLocation="CenterOwner" Height="{Binding Height, Mode = TwoWay}" Icon="pack://application:,,,/Files/Icons/App/info.ico">
     <Grid Margin="5">
         <RichTextBox Background="{Binding Background}">
             <FlowDocument>

@@ -16,11 +16,12 @@ namespace XStart2._0.Windows {
     public partial class MstscManagerWindow : Window {
 
         private readonly System.Windows.Threading.DispatcherTimer RdpTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
-        public MstscManagerWindow() {
+        public MstscManagerWindow(Window mainWindow) {
             InitializeComponent();
             Loaded += Window_Loaded;
             Closing += Window_Closing;
             ContentRendered += Window_ContentRendered;
+            Owner = mainWindow;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {

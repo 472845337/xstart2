@@ -2,6 +2,7 @@
 using System;
 using System.Windows.Media;
 using XStart2._0.Bean;
+using XStart2._0.Commands;
 using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Services;
@@ -9,7 +10,6 @@ using XStart2._0.Utils;
 
 namespace XStart2._0.ViewModel {
     public class MainViewModel : BaseViewModel {
-
         public PathGeometry MaximumButtonPathData { get; set; }
         #region 用户数据
         [OnChangedMethod(nameof(SetAvatar))]
@@ -52,6 +52,8 @@ namespace XStart2._0.ViewModel {
         public double MainOpacity { get; set; }
         // 根据MainBackground和Opacity生成背景画刷
         public Brush BackgroundBrush { get; set; }
+        // 是否钉在桌面
+        public bool IsPinDesktop { get; set; } = false;
         // 是否最大化
         public bool IsMaximum { get; set; }
         // 主窗口高度
