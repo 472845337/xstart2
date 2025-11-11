@@ -20,23 +20,23 @@
             <RowDefinition Style="{StaticResource BottomButtonPanel_RowDefinition_Style}"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Text="地址" Style="{StaticResource FormLabel_Style}"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Address}"/>
+        <TextBox x:Name="AddressTextBox" Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" KeyDown="TextBox_KeyDown"/>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="端口" Style="{StaticResource FormLabel_Style}"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Port}"/>
+        <TextBox x:Name="PortTextBox" Grid.Row="1" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}" KeyDown="TextBox_KeyDown"/>
         <TextBlock Grid.Row="2" Grid.Column="0" Text="用户名" Style="{StaticResource FormLabel_Style}"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Account}"/>
+        <TextBox x:Name="AccountTextBox" Grid.Row="2" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Account, UpdateSourceTrigger=PropertyChanged}" KeyDown="TextBox_KeyDown"/>
         <TextBlock Grid.Row="3" Grid.Column="0" Text="密码" Style="{StaticResource FormLabel_Style}"/>
         <Grid Grid.Row="3" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <PasswordBox Grid.Column="0" Style="{StaticResource FormValue_Style}" helper:PasswordBoxHelper.Attach="True" helper:PasswordBoxHelper.Password="{Binding Password,Mode=TwoWay}" Visibility="{Binding PasswordTextHidden}"/>
-            <TextBox Grid.Column="0" Style="{StaticResource FormValue_Style}" Text="{Binding Password}" Visibility="{Binding PasswordTextShow}"/>
+            <PasswordBox x:Name="PasswordPasswordBox" Grid.Column="0" Style="{StaticResource FormValue_Style}" helper:PasswordBoxHelper.Attach="True" helper:PasswordBoxHelper.Password="{Binding Password,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding PasswordTextHidden}" KeyDown="TextBox_KeyDown"/>
+            <TextBox x:Name="PasswordTextBox" Grid.Column="0" Style="{StaticResource FormValue_Style}" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding PasswordTextShow}" KeyDown="TextBox_KeyDown"/>
             <Button Grid.Column="1" Style="{StaticResource BtnConfirm_Style}" VerticalAlignment="Center" Width="28" Content="{Binding SeePassword}" FontFamily="{StaticResource FontAwesomeSolid}" FontSize="12" Click="SeePassowrd_Click"/>
         </Grid>
         <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Style="{StaticResource BtnConfirm_Style}" Click="Confirm_Click"/>
+            <Button x:Name="ConfirmButton" Style="{StaticResource BtnConfirm_Style}" Click="Confirm_Click"/>
             <Button Style="{StaticResource BtnCancel_Style}" Click="Cancel_Click"/>
         </StackPanel>
     </Grid>

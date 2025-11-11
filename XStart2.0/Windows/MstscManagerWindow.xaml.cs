@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Interop;
 using XStart2._0.Bean;
 using XStart2._0.Config;
@@ -16,16 +17,17 @@ namespace XStart2._0.Windows {
     public partial class MstscManagerWindow : Window {
 
         private readonly System.Windows.Threading.DispatcherTimer RdpTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
-        public MstscManagerWindow(Window mainWindow) {
+        Window mainWindow;
+        public MstscManagerWindow(MainWindow mainWindow) {
+            this.mainWindow = mainWindow;
             InitializeComponent();
             Loaded += Window_Loaded;
             Closing += Window_Closing;
             ContentRendered += Window_ContentRendered;
-            Owner = mainWindow;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-            var rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
+            var rdpTabControl = (TabControl)RdpWfh.Child;
             if (rdpTabControl.TabPages.Count > 0) {
                 if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk("当前存在远程连接，确认关闭吗？")) {
                     // 关闭所有连接
@@ -55,15 +57,20 @@ namespace XStart2._0.Windows {
         int rdpWidth = 0;
         int rdpHeight = 0;
         private void Window_Loaded(object sender, EventArgs e) {
-            var rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
-            rdpTabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            // 子窗口的位置跟随主窗口所在的屏幕
+            Screen mainScreen = ScreenUtils.GetMainWindowScreen(mainWindow);
+            ScreenUtils.SetWindowToScreen(this, mainScreen);
+            this.WindowState = WindowState.Maximized;
+
+            var rdpTabControl = (TabControl)RdpWfh.Child;
+            rdpTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
             rdpTabControl.DrawItem += AppRunTabControl_DrawItem;
             rdpTabControl.MouseDown += AppRunTabControl_MouseDown;
-            var rightMenu = new System.Windows.Forms.ContextMenuStrip();
-            var reconnectMenu = new System.Windows.Forms.ToolStripMenuItem { Name = "Reconnect", Text = "重新连接" };
-            var newConnectMenu = new System.Windows.Forms.ToolStripMenuItem { Name = "NewReconnect", Text = "打开新连接" };
-            var disconnectMenu = new System.Windows.Forms.ToolStripMenuItem { Name = "Disconnect", Text = "关闭连接" };
-            var closeAllMenu = new System.Windows.Forms.ToolStripMenuItem { Name = "CloseAllConnect", Text = "全部关闭" };
+            var rightMenu = new ContextMenuStrip();
+            var reconnectMenu = new ToolStripMenuItem { Name = "Reconnect", Text = "重新连接" };
+            var newConnectMenu = new ToolStripMenuItem { Name = "NewReconnect", Text = "打开新连接" };
+            var disconnectMenu = new ToolStripMenuItem { Name = "Disconnect", Text = "关闭连接" };
+            var closeAllMenu = new ToolStripMenuItem { Name = "CloseAllConnect", Text = "全部关闭" };
             // 右键按钮事件
             reconnectMenu.Click += Reconnect_Click;
             newConnectMenu.Click += NewConnect_Click;
@@ -93,7 +100,7 @@ namespace XStart2._0.Windows {
 
         private void RdpConnectTick(object sender, EventArgs e) {
             if (newRdpQueue.TryDequeue(out Rdp newRdp)) {
-                System.Windows.Forms.TabPage tabPage = new System.Windows.Forms.TabPage {
+                TabPage tabPage = new TabPage {
                     Text = newRdp.Title + "    "// 标题要加长，用于放置自定义的关闭按钮
                 };
                 var rdpScript = new AxMSTSCLib.AxMsRdpClient11NotSafeForScripting {
@@ -102,7 +109,7 @@ namespace XStart2._0.Windows {
                 };
                 tabPage.Controls.Add(rdpScript);
                 tabPage.Tag = newRdp;
-                System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
+                TabControl rdpTabControl = (TabControl)RdpWfh.Child;
                 rdpTabControl.TabPages.Add(tabPage);
                 rdpTabControl.SelectedTab = tabPage;
                 try {
@@ -115,9 +122,9 @@ namespace XStart2._0.Windows {
         }
 
         private void Reconnect_Click(object sender, EventArgs e) {
-            System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
+            TabControl rdpTabControl = (TabControl)RdpWfh.Child;
             if (rdpTabControl.SelectedIndex >= 0) {
-                System.Windows.Forms.TabPage tabPage = rdpTabControl.SelectedTab;
+                TabPage tabPage = rdpTabControl.SelectedTab;
                 Rdp rdp = (Rdp)tabPage.Tag;
                 var rdpScript = (AxMSTSCLib.AxMsRdpClient11NotSafeForScripting)tabPage.Controls[0];
                 //var rdpScript = (AxMSTSCLib.AxMsTscAxNotSafeForScripting)tabPage.Controls[0];
@@ -147,9 +154,9 @@ namespace XStart2._0.Windows {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void NewConnect_Click(object sender, EventArgs e) {
-            System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
+            TabControl rdpTabControl = (TabControl)RdpWfh.Child;
             if (rdpTabControl.SelectedIndex >= 0) {
-                System.Windows.Forms.TabPage tabPage = rdpTabControl.SelectedTab;
+                TabPage tabPage = rdpTabControl.SelectedTab;
                 Rdp rdp = (Rdp)tabPage.Tag;
                 newRdpQueue.Enqueue(rdp);
             }
@@ -179,7 +186,7 @@ namespace XStart2._0.Windows {
         }
 
         private void Disconnect_Click(object sender, EventArgs e) {
-            System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
+            TabControl rdpTabControl = (TabControl)RdpWfh.Child;
             if (rdpTabControl.SelectedIndex >= 0) {
                 CloseRdpAndPage(rdpTabControl, rdpTabControl.SelectedIndex);
             }
@@ -206,9 +213,9 @@ namespace XStart2._0.Windows {
 
         readonly int tabPageCloseSize = (int)(15 * Configs.scale.Item1);
         //重绘关闭按钮
-        public void AppRunTabControl_DrawItem(object sender, System.Windows.Forms.DrawItemEventArgs e) {
+        public void AppRunTabControl_DrawItem(object sender, DrawItemEventArgs e) {
             try {
-                var rdpTabControl = (System.Windows.Forms.TabControl)sender;
+                var rdpTabControl = (TabControl)sender;
                 // 重绘tabPage 
                 var myTabRect = rdpTabControl.GetTabRect(e.Index);
                 //添加TabPage属性
@@ -262,9 +269,9 @@ namespace XStart2._0.Windows {
         }
 
 
-        public void AppRunTabControl_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
-            var rdpTabControl = (System.Windows.Forms.TabControl)sender;
-            if (e.Button == System.Windows.Forms.MouseButtons.Right) {
+        public void AppRunTabControl_MouseDown(object sender, MouseEventArgs e) {
+            var rdpTabControl = (TabControl)sender;
+            if (e.Button == MouseButtons.Right) {
                 System.Drawing.Point pt = new System.Drawing.Point(e.X, e.Y);
                 for (int i = 0; i < rdpTabControl.TabCount; i++) {
                     System.Drawing.Rectangle rect = rdpTabControl.GetTabRect(i);
@@ -272,7 +279,7 @@ namespace XStart2._0.Windows {
                         rdpTabControl.SelectedIndex = i;
                 }
 
-            } else if (e.Button == System.Windows.Forms.MouseButtons.Left && rdpTabControl.SelectedIndex >= 0) {
+            } else if (e.Button == MouseButtons.Left && rdpTabControl.SelectedIndex >= 0) {
                 int x = e.X, y = e.Y;
                 //计算关闭区域   
                 var myTabRect = rdpTabControl.GetTabRect(rdpTabControl.SelectedIndex);
@@ -291,16 +298,16 @@ namespace XStart2._0.Windows {
         }
 
         private void CloseAllRdp() {
-            System.Windows.Forms.TabControl rdpTabControl = (System.Windows.Forms.TabControl)RdpWfh.Child;
-            foreach (System.Windows.Forms.TabPage tabPage in rdpTabControl.TabPages) {
+            TabControl rdpTabControl = (TabControl)RdpWfh.Child;
+            foreach (TabPage tabPage in rdpTabControl.TabPages) {
                 var rdpScript = (AxMSTSCLib.AxMsRdpClient11NotSafeForScripting)tabPage.Controls[0];
                 DisconnectRdp(rdpScript);
             }
             rdpTabControl.TabPages.Clear();
         }
 
-        private void CloseRdpAndPage(System.Windows.Forms.TabControl tabControl, int index) {
-            System.Windows.Forms.TabPage tabPage = tabControl.TabPages[index];
+        private void CloseRdpAndPage(TabControl tabControl, int index) {
+            TabPage tabPage = tabControl.TabPages[index];
             var rdpScript = (AxMSTSCLib.AxMsRdpClient11NotSafeForScripting)tabPage.Controls[0];
             if (null != rdpScript && rdpScript.Connected.ToString() == "1") {
                 if (MessageBoxResult.Yes == MsgBoxUtils.ShowAsk($"确认退出{tabPage.Text.Trim()}远程")) {

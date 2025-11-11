@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
+using System.Windows.Input;
 using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 using static XStart2._0.Utils.FontAwesome6;
@@ -12,6 +13,7 @@ namespace XStart2._0.Windows {
     /// </summary>
     public partial class ProjectTypeWindow : Window {
         public ProjectTypeVM VM { get; set; }
+        public bool isAdd = true;
         public ProjectTypeWindow() {
             InitializeComponent();
             Loaded += Window_Loaded;
@@ -27,6 +29,19 @@ namespace XStart2._0.Windows {
             DataContext = null;
         }
 
+        private void TextBox_KeyDown(object sender, KeyEventArgs e) {
+            if (e.Key == System.Windows.Input.Key.Enter) {
+                if (isAdd && (string.IsNullOrEmpty(VM.SelectedFa) || string.IsNullOrEmpty(VM.SelectedFf))) {
+                    VM.SelectedFa = VM.PopularFas[new Random().Next(VM.PopularFas.Count)];
+                    VM.SelectedFf = "pack://application:,,,/Resources/Fonts/#Font Awesome 6 Free Solid";
+                    VM.SelectedIconColor = "#345dab";
+                } else {
+                    // 保存按钮
+                    ProjectType_Save(sender, e);
+                }
+
+            }
+        }
         public void PopularFa_MouseLeftButtonUp(object sender, RoutedEventArgs e) {
             TextBlock selectTextBlock = sender as TextBlock;
             VM.SelectedFa = selectTextBlock.Text;
@@ -58,7 +73,7 @@ namespace XStart2._0.Windows {
         }
 
         private void SelectIconColor(object sender, RoutedEventArgs e) {
-            using ColorDialog colorDialog = new ColorDialog();
+            using System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
             if (System.Windows.Forms.DialogResult.OK == colorDialog.ShowDialog()) {
                 VM.SelectedIconColor = ColorUtils.GetHtml(colorDialog.Color);
             }

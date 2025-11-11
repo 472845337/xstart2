@@ -1063,7 +1063,12 @@ namespace XStart2._0 {
             ProjectTypeVM typeVm = new ProjectTypeVM {
                 Title = "添加类别"
             };
-            ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow { VM = typeVm, WindowStartupLocation = WindowStartupLocation.CenterScreen, Owner = this };
+            ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow {
+                VM = typeVm,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                Owner = this,
+                isAdd = true
+            };
             OperateType(projectTypeWindow);
         }
 
@@ -1111,7 +1116,12 @@ namespace XStart2._0 {
                 , SelectedFa = type.FaIcon, SelectedIconColor = type.FaIconColor,
                 SelectedFf = type.FaIconFontFamily
             };
-            ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow { VM = typeVm, WindowStartupLocation = WindowStartupLocation.CenterScreen, Owner = this };
+            ProjectTypeWindow projectTypeWindow = new ProjectTypeWindow {
+                VM = typeVm,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                Owner = this,
+                isAdd = false
+            };
             OperateType(projectTypeWindow);
         }
 
@@ -2168,12 +2178,12 @@ namespace XStart2._0 {
         private void User_Click(object sender, RoutedEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
             UserWindow userWindow = new UserWindow(
-                mainViewModel.AvatarPath, 
-                mainViewModel.GifSpeedRatio, 
-                mainViewModel.NickName, 
+                mainViewModel.AvatarPath,
+                mainViewModel.GifSpeedRatio,
+                mainViewModel.NickName,
                 mainViewModel.AvatarSize
                 , mainViewModel.TimeFormat, mainViewModel.DateFormat
-                ,mainViewModel.YearFormat, mainViewModel.MonthFormat, mainViewModel.DayFormat, mainViewModel.WeekFormat) { WindowStartupLocation = WindowStartupLocation.CenterScreen, Owner = this };
+                , mainViewModel.YearFormat, mainViewModel.MonthFormat, mainViewModel.DayFormat, mainViewModel.WeekFormat) { WindowStartupLocation = WindowStartupLocation.CenterScreen, Owner = this };
             if (true == userWindow.ShowDialog()) {
                 bool isChange = false;
                 // 保存配置项

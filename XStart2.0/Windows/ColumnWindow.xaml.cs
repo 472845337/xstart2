@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 using XStart2._0.Const;
 using XStart2._0.Services;
 using XStart2._0.Utils;
@@ -29,7 +30,12 @@ namespace XStart2._0.Windows {
         private void Window_Close(object sender, RoutedEventArgs e) {
             Close();
         }
-
+        private void TextBox_KeyDown(object sender, KeyEventArgs e) {
+            if (e.Key == Key.Enter) {
+                // 确认按钮
+                Save_Column(sender, e);
+            }
+        }
         private void Save_Column(object sender, RoutedEventArgs e) {
             if (string.IsNullOrEmpty(vm.Name)) {
                 MsgBoxUtils.ShowError("名称不能为空！", Constants.MESSAGE_BOX_TITLE_ERROR);

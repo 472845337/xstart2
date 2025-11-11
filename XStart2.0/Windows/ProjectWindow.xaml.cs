@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Utils;
 using XStart2._0.Bean;
@@ -15,8 +16,9 @@ namespace XStart2._0.Windows {
     /// </summary>
     public partial class ProjectWindow : Window {
         readonly ProjectViewModel vm = new ProjectViewModel();
+        bool isAdd = true;
         public Project Project { get; set; }
-
+        Control[] controls;
         public ProjectWindow(string title, string typeSection, string columnSection) {
             InitializeComponent();
             vm.Title = title;
@@ -27,7 +29,13 @@ namespace XStart2._0.Windows {
             Closing += Window_Closing;
         }
         private void Window_Loaded(object sender, RoutedEventArgs e) {
+            controls = new Control[] {
+                NameTextBox,
+                PathTextBox,
+                IconPathTextBox
+            };
             if (null != Project) {
+                isAdd = false;
                 vm.Name = Project.Name;
                 vm.Path = Project.Path;
                 vm.Kind = Project.Kind;
@@ -51,6 +59,19 @@ namespace XStart2._0.Windows {
 
         private void Window_Closing(object sender, System.EventArgs e) {
             DataContext = null;
+        }
+
+        private void TextBox_KeyDown(object sender, KeyEventArgs e) {
+            if (e.Key == Key.Enter) {
+                // 判断是否最后一个输入框
+                var textBox = sender as Control;
+                if (!isAdd || IconPathTextBox == textBox || ArgumentsTextBox == textBox || RunStartPathTextBox == textBox || RemarkTextBox == textBox) {
+                    // 确认按钮
+                    ConfirmBtn_Click(sender, e);
+                } else if (null != controls && controls.Length > 0) {
+                    TextBoxUtils.Move2Next(sender as Control, controls);
+                }
+            }
         }
 
         private void SystemPathSpecialArguments(string path) {
@@ -209,13 +230,14 @@ namespace XStart2._0.Windows {
 
         private void MstscProject_ArgumentsTextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e) {
             OpenNewWindowUtils.SetTopmost(this);
-            string[] argumentArray = vm.Arguments.Split(Constants.SPLIT_CHAR);
+            string[] argumentArray = vm.Arguments?.Split(Constants.SPLIT_CHAR);
 
             MstscWindow mstsc = new MstscWindow { Owner = this };
-            mstsc.vm.Address = argumentArray[0];
-            mstsc.vm.Port = argumentArray[1];
-            mstsc.vm.Account = argumentArray[2];
-            mstsc.vm.Password = argumentArray[3];
+            mstsc.vm.IsAdd = false;// 编辑
+            mstsc.vm.Address = argumentArray?[0];
+            mstsc.vm.Port = argumentArray?[1];
+            mstsc.vm.Account = argumentArray?[2];
+            mstsc.vm.Password = argumentArray?[3];
             if (true == mstsc.ShowDialog()) {
                 vm.Arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}";
             }

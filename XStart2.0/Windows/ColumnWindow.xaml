@@ -18,7 +18,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource FormLabel_Style}" Text="名称："/>
-        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Name}"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormValue_Style}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" KeyDown="TextBox_KeyDown"/>
         <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="5 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>

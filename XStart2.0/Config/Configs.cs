@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using XStart2._0.Bean;
 using XStart2._0.Bean.Weather;
@@ -232,10 +233,10 @@ namespace XStart2._0.Config {
         public static BitmapImage GetIcon(int size, string key) {
             Dictionary<string, BitmapImage> iconDic = GetIconDicBySize(size);
             // 加载
-            if (!iconDic.ContainsKey(key)) {
+            if (iconPathDic.ContainsKey(key) && !iconDic.ContainsKey(key)) {
                 iconDic.Add(key, IconUtils.GetBitmapImage(AppStartPath + iconPathDic[key], size));
             }
-            return iconDic[key];
+            return iconDic.TryGetValue(key, out BitmapImage image) ? image : null;
         }
 
         private static void InitIconDic(int size) {

@@ -2,7 +2,6 @@
 using System;
 using System.Windows.Media;
 using XStart2._0.Bean;
-using XStart2._0.Commands;
 using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Services;

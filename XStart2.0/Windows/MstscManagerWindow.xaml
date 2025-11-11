@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         mc:Ignorable="d"
-        Title="远程管理" Left="0" Top="0" WindowStartupLocation="CenterOwner" WindowState="Maximized" Icon="pack://application:,,,/Files/Images/Mstsc.ico">
+        Title="远程管理" Icon="pack://application:,,,/Files/Images/Mstsc.ico">
     <Grid x:Name="RdpGrid">
         <WindowsFormsHost Name="RdpWfh" Width="{Binding ActualWidth, ElementName=RdpGrid}"
                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

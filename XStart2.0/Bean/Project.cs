@@ -58,6 +58,7 @@ namespace XStart2._0.Bean {
         }
 
         [OnChangedMethod(nameof(SetIsMstsc))]
+        [OnChangedMethod(nameof(InitIcon))]
         [TableParam("path", "VARCHAR")]
         public string Path { get; set; }// 应用路径或链接url
         [TableParam("icon_path", "VARCHAR")]
@@ -91,8 +92,8 @@ namespace XStart2._0.Bean {
         public string ToolTipContent {
             get {
                 if (SystemProjectParam.MSTSC.Equals(Path)) {
-                    string[] argumentArray = Arguments.Split(Constants.SPLIT_CHAR);
-                    return $"{Name}\r\n远程->{argumentArray[0]}:{argumentArray[1]}";
+                    string[] argumentArray = Arguments?.Split(Constants.SPLIT_CHAR);
+                    return $"{Name}\r\n远程->{argumentArray?[0]}:{argumentArray?[1]}";
                 } else {
                     return Path;
                 }

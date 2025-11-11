@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Input;
+using XStart2._0.Utils;
 using XStart2._0.ViewModel;
 
 namespace XStart2._0.Windows {
@@ -29,7 +31,7 @@ namespace XStart2._0.Windows {
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            
+
         }
         private void Window_Closing(object sender, System.EventArgs e) {
             DataContext = null;
@@ -50,6 +52,13 @@ namespace XStart2._0.Windows {
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             DialogResult = false;
+        }
+
+        private void TextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e) {
+            if (e.Key == Key.Enter) {
+                // 确认按钮
+                Confirm_Click(sender, e);
+            }
         }
     }
 }

@@ -38,13 +38,13 @@ namespace XStart2._0.Utils {
         }
 
         public static double GetBottom() {
-            if(null == mainWindow) {
+            if (null == mainWindow) {
                 return SystemParameters.WorkArea.Bottom;
             } else {
                 // 获取窗口所在的屏幕
                 Screen currentScreen = Screen.FromHandle(new System.Windows.Interop.WindowInteropHelper(mainWindow).Handle);
                 // 获取工作区域（不包括任务栏）
-               return currentScreen.WorkingArea.Bottom;
+                return currentScreen.WorkingArea.Bottom;
             }
         }
 

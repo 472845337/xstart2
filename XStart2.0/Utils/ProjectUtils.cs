@@ -244,10 +244,11 @@ namespace XStart2._0.Utils {
                         default:
                             // 调用exe执行的功能
                             if (OperateParam.TryGetValue(project.Path, out SystemProject appOperateParam) && !string.IsNullOrEmpty(appOperateParam.Execute)) {
-                                ProcessStartInfo startInfo = new ProcessStartInfo();
-                                startInfo.FileName = appOperateParam.Execute;
-                                startInfo.Arguments = appOperateParam.Param;
-                                startInfo.WorkingDirectory = appOperateParam.WorkingDirectory;
+                                ProcessStartInfo startInfo = new ProcessStartInfo {
+                                    FileName = appOperateParam.Execute,
+                                    Arguments = appOperateParam.Param,
+                                    WorkingDirectory = appOperateParam.WorkingDirectory
+                                };
                                 Process.Start(startInfo);
                                 break;
                             } else {

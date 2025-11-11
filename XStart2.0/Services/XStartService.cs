@@ -36,15 +36,17 @@ namespace XStart2._0.Services {
                 } else {
                     // IconPath为空，则取项目文件的图标
                     iconPath = path;
-                    if (Project.KIND_FILE.Equals(kind) || Project.KIND_DIRECTORY.Equals(kind)) {
+                    if ((Project.KIND_FILE.Equals(kind) || Project.KIND_DIRECTORY.Equals(kind)) && (File.Exists(iconPath) || Directory.Exists(iconPath))) {
                         image = IconUtils.GetBitmapImage(iconPath, size);
                     } else if (Project.KIND_URL.Equals(kind)) {
                         image = Configs.GetIcon(size, SystemProjectParam.URL);
+                    } else {
+                        image = Configs.GetIcon(size, SystemProjectParam.APP);
                     }
                 }
                 return image;
             } catch (Exception ex) {
-                MsgBoxUtils.ShowError(ex.StackTrace);
+                MsgBoxUtils.ShowError(null, ex.StackTrace);
                 return null;
             }
         }

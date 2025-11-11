@@ -4,6 +4,7 @@ using XStart2._0.Utils;
 
 namespace XStart2._0.ViewModel {
     public class MstscViewModel : BaseViewModel {
+        public bool IsAdd { get; set; } = true;
         public string Address { get; set; }
         public string Port { get; set; }
         public string Account { get; set; }

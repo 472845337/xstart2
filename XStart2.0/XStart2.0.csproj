@@ -194,7 +194,9 @@
     <Compile Include="Utils\GradientColorUtils.cs" />
     <Compile Include="Utils\MsgBoxUtils.cs" />
     <Compile Include="Utils\OpenNewWindowUtils.cs" />
+    <Compile Include="Utils\ScreenUtils.cs" />
     <Compile Include="Utils\TempUtil.cs" />
+    <Compile Include="Utils\TextBoxUtils.cs" />
     <Compile Include="Utils\TimeUtils.cs" />
     <Compile Include="Utils\WindUtil.cs" />
     <Compile Include="ViewModel\BeautifulViewModel.cs" />
