@@ -238,20 +238,12 @@ namespace XStart2._0.ViewModel {
             if (string.IsNullOrEmpty(weekFormat) || "星期".Equals(weekFormat)) {
                 MyDateTime.CurWeekDay = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
             } else {
-                switch (weekFormat) {
-                    case "周":
-                        MyDateTime.CurWeekDay = DateTime.Now.ToString("ddd");
-                        break;
-                    case "曜日":
-                        MyDateTime.CurWeekDay = System.Globalization.CultureInfo.CreateSpecificCulture("ja-JP").DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
-                        break;
-                    case "Mon":
-                        MyDateTime.CurWeekDay = DateTime.Now.ToString("ddd", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
-                        break;
-                    default:
-                        MyDateTime.CurWeekDay = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
-                        break;
-                }
+                MyDateTime.CurWeekDay = weekFormat switch {
+                    "周" => DateTime.Now.ToString("ddd"),
+                    "曜日" => System.Globalization.CultureInfo.CreateSpecificCulture("ja-JP").DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek),
+                    "Mon" => DateTime.Now.ToString("ddd", System.Globalization.CultureInfo.CreateSpecificCulture("en-US")),
+                    _ => System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek),
+                };
             }
         }
     }

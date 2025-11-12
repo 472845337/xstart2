@@ -137,7 +137,7 @@ namespace XStart2._0 {
             Configs.mainBackground = !string.IsNullOrEmpty(mainBackground) && StringUtils.IsHtmlColor(mainBackground) ? mainBackground : "#FFFFFF";
             Configs.mainOpacity = ConvertUtils.ToNum(mainOpacityStr, 1D);
             Configs.projectForeground = !string.IsNullOrEmpty(projectForeground) && StringUtils.IsHtmlColor(projectForeground) ? projectForeground : "#000000";
-            Configs.fontFamily = string.IsNullOrEmpty(fontFamily) || !FontUtils.IsSystemFont(fontFamily) ? "微软雅黑" : fontFamily;
+            Configs.fontFamily = string.IsNullOrEmpty(fontFamily) || !FontUtils.IsSystemFont(fontFamily) ? Constants.DEFAULT_FONT_FAMILY : fontFamily;
             Configs.fontSize = ConvertUtils.ToInt(fontSizeStr, 14);
             Configs.opacity = ConvertUtils.ToNum(opacityStr, 1D);
             // 是否最大化
