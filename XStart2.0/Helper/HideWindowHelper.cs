@@ -6,9 +6,7 @@ namespace XStart2._0.Helper {
     public class HideWindowHelper {
         public static int GetAnchorStyle(Window mainWindow) {
             int anchorStyle;
-            if (mainWindow.Top <= SystemParameters.VirtualScreenTop && mainWindow.Left <= SystemParameters.VirtualScreenLeft) {
-                anchorStyle = Constants.ANCHOR_STYLE_NONE;
-            } else if (mainWindow.Top <= SystemParameters.VirtualScreenTop) {
+            if (mainWindow.Top <= SystemParameters.VirtualScreenTop) {
                 anchorStyle = Constants.ANCHOR_STYLE_TOP;
             } else if (mainWindow.Left <= SystemParameters.VirtualScreenLeft) {
                 anchorStyle = Constants.ANCHOR_STYLE_LEFT;

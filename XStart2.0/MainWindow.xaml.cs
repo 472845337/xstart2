@@ -217,11 +217,6 @@ namespace XStart2._0 {
             mainViewModel.ExitButtonType = Configs.exitButtonType;
 
             #region 自动隐藏
-            //mainViewModel.HideWindowHelper = HideWindowHelper
-            //    .CreateFor(this)
-            //    .AddHider<HideOnLeft>()
-            //    .AddHider<HideOnRight>()
-            //    .AddHider<HideOnTop>();
             mainViewModel.AutoHideTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
             mainViewModel.AutoHideTimer.Tick += AutoHideTimer_Tick;
             mainViewModel.AutoHideTimer.Start();
@@ -1991,7 +1986,9 @@ namespace XStart2._0 {
                 isTick = true;
             }
             try {
+                double screenLeft = SystemParameters.VirtualScreenLeft;
                 double screenWidth = SystemParameters.VirtualScreenWidth;
+                double screenTop = SystemParameters.VirtualScreenTop;
                 double screenHeight = SystemParameters.VirtualScreenHeight;
                 Point toPoint = new Point(Left, Top);
                 DllUtils.Point curPoint = new DllUtils.Point();
@@ -2007,24 +2004,28 @@ namespace XStart2._0 {
                 switch (anchorStyle) {
                     case Constants.ANCHOR_STYLE_TOP:
                     case Constants.ANCHOR_STYLE_BOTTOM:
-                        if (Left + Width > screenWidth) {
-                            Left = screenWidth - Width;
+                        if (Left + Width > screenWidth + screenLeft) {
+                            Left = screenWidth + screenLeft - Width;
+                        } else if(Left < screenLeft){
+                           Left = screenLeft;
                         }
                         if (anchorStyle == Constants.ANCHOR_STYLE_TOP) {
-                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, 0) : new Point(Left, -(Height - Constants.ANCHOR_BORDER_SIZE));
+                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, screenTop) : new Point(Left, screenTop - (Height - Constants.ANCHOR_BORDER_SIZE));
                         } else {
-                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, screenHeight - Height) : new Point(Left, screenHeight - Constants.ANCHOR_BORDER_SIZE);
+                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(Left, screenHeight + screenTop - Height) : new Point(Left, screenHeight + screenTop - Constants.ANCHOR_BORDER_SIZE);
                         }
                         break;
                     case Constants.ANCHOR_STYLE_LEFT:
                     case Constants.ANCHOR_STYLE_RIGHT:
-                        if (Top + Height > screenHeight) {
-                            Top = screenHeight - Height;
+                        if (Top + Height > screenHeight + screenTop) {
+                            Top = screenHeight + screenTop - Height;
+                        } else if(Top < screenTop){
+                            Top = screenTop;
                         }
                         if (anchorStyle == Constants.ANCHOR_STYLE_LEFT) {
-                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(0, Top) : new Point(-(Width - Constants.ANCHOR_BORDER_SIZE), Top);
+                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(screenLeft, Top) : new Point(screenLeft - (Width - Constants.ANCHOR_BORDER_SIZE), Top);
                         } else {
-                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(screenWidth - Width, Top) : new Point(screenWidth - Constants.ANCHOR_BORDER_SIZE, Top);
+                            toPoint = IsAllShow || mainViewModel.CancelHide || !mainViewModel.CloseBorderHide || isMouseEnter ? new Point(screenWidth + screenLeft - Width, Top) : new Point(screenWidth + screenLeft - Constants.ANCHOR_BORDER_SIZE, Top);
                         }
                         break;
                 }
