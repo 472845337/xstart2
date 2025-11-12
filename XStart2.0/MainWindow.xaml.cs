@@ -123,12 +123,12 @@ namespace XStart2._0 {
             // 当位置超出屏幕时，调整位置
             if (Configs.mainLeft + Configs.mainWidth > SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft) {
                 Configs.mainLeft = SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft - Configs.mainWidth - Constants.ANCHOR_BORDER_SIZE;
-            } else if (Configs.mainLeft + Configs.mainWidth < SystemParameters.VirtualScreenLeft) {
+            } else if (Configs.mainLeft < SystemParameters.VirtualScreenLeft) {
                 Configs.mainLeft = SystemParameters.VirtualScreenLeft + Constants.ANCHOR_BORDER_SIZE;
             }
             if (Configs.mainTop + Configs.mainHeight > SystemParameters.VirtualScreenHeight + SystemParameters.VirtualScreenTop) {
                 Configs.mainTop = SystemParameters.VirtualScreenHeight + SystemParameters.VirtualScreenTop - Configs.mainHeight - Constants.ANCHOR_BORDER_SIZE;
-            } else if (Configs.mainTop + Configs.mainHeight < SystemParameters.VirtualScreenTop) {
+            } else if (Configs.mainTop < SystemParameters.VirtualScreenTop) {
                 Configs.mainTop = SystemParameters.VirtualScreenTop + Constants.ANCHOR_BORDER_SIZE;
             }
 
@@ -503,6 +503,11 @@ namespace XStart2._0 {
         }
         private void PinButton_Click(object sender, RoutedEventArgs e) {
             mainViewModel.IsPinDesktop = !mainViewModel.IsPinDesktop;
+            if (mainViewModel.IsPinDesktop) {
+                mainViewModel.TopMost = true;
+            } else {
+                mainViewModel.TopMost = Configs.topMost;
+            }
         }
         /// <summary>
         /// 主窗口加载
