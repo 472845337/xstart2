@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Media.Imaging;
 using XStart2._0.Bean;
 using XStart2._0.Bean.Weather;

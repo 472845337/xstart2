@@ -21,7 +21,7 @@ namespace XStart2._0.Utils {
             if (messageBox.WindowStartupLocation == WindowStartupLocation.CenterOwner) {
                 var ownerWindow = owner ?? Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
                 // 不能是NotificationWindow
-                if(ownerWindow != null && ownerWindow is NotificationWindow){
+                if (ownerWindow != null && ownerWindow is NotificationWindow) {
                     ownerWindow = ownerWindow.Owner;
                 }
                 messageBox.Owner = ownerWindow;
