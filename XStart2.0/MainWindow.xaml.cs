@@ -122,14 +122,14 @@ namespace XStart2._0 {
             Configs.mainWidth = ConvertUtils.ToNum(widthStr, Constants.MAIN_WIDTH);
             // 当位置超出屏幕时，调整位置
             if (Configs.mainLeft + Configs.mainWidth > SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft) {
-                Configs.mainLeft = SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft - Configs.mainWidth - Constants.ANCHOR_BORDER_SIZE;
+                Configs.mainLeft = SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft - Configs.mainWidth;
             } else if (Configs.mainLeft < SystemParameters.VirtualScreenLeft) {
-                Configs.mainLeft = SystemParameters.VirtualScreenLeft + Constants.ANCHOR_BORDER_SIZE;
+                Configs.mainLeft = SystemParameters.VirtualScreenLeft;
             }
             if (Configs.mainTop + Configs.mainHeight > SystemParameters.VirtualScreenHeight + SystemParameters.VirtualScreenTop) {
-                Configs.mainTop = SystemParameters.VirtualScreenHeight + SystemParameters.VirtualScreenTop - Configs.mainHeight - Constants.ANCHOR_BORDER_SIZE;
+                Configs.mainTop = SystemParameters.VirtualScreenHeight + SystemParameters.VirtualScreenTop - Configs.mainHeight;
             } else if (Configs.mainTop < SystemParameters.VirtualScreenTop) {
-                Configs.mainTop = SystemParameters.VirtualScreenTop + Constants.ANCHOR_BORDER_SIZE;
+                Configs.mainTop = SystemParameters.VirtualScreenTop;
             }
 
             Configs.themeName = string.IsNullOrEmpty(themeName) ? Constants.WINDOW_THEME_BLUE : themeName;
@@ -1845,7 +1845,11 @@ namespace XStart2._0 {
             if (string.IsNullOrEmpty(mainViewModel.TimeFormat)) {
                 mainViewModel.MyDateTime.CurTime = DateTime.Now.ToString("T");
             } else {
-                mainViewModel.MyDateTime.CurTime = DateTime.Now.ToString(mainViewModel.TimeFormat);
+                if ("時辰".Equals(mainViewModel.TimeFormat)) {
+                    mainViewModel.MyDateTime.CurTime = LunarCalendar.GetShiChen(DateTime.Now.Hour) +"時" + LunarCalendar.GetKe(DateTime.Now.Minute);
+                } else {
+                    mainViewModel.MyDateTime.CurTime = DateTime.Now.ToString(mainViewModel.TimeFormat);
+                }
             }
 
         }
@@ -2000,8 +2004,8 @@ namespace XStart2._0 {
                 DllUtils.GetCursorPos(ref curPoint); //获取鼠标相对桌面的位置
 
                 // 获取缩放比例
-                double curPointX = curPoint.X / Configs.scale.Item1;
-                double curPointY = curPoint.Y / Configs.scale.Item2;
+                double curPointX = curPoint.X / (null == Configs.scale?1:Configs.scale.Item1);
+                double curPointY = curPoint.Y / (null == Configs.scale?1:Configs.scale.Item2);
                 bool isMouseEnter = curPointX >= Left - Constants.ANCHOR_BORDER_SIZE
                                    && curPointX <= Left + Width + Constants.ANCHOR_BORDER_SIZE
                                    && curPointY >= Top - Constants.ANCHOR_BORDER_SIZE

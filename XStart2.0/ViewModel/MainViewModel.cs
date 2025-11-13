@@ -6,6 +6,7 @@ using XStart2._0.Config;
 using XStart2._0.Const;
 using XStart2._0.Services;
 using XStart2._0.Utils;
+using static XStart2._0.Const.Constants;
 
 namespace XStart2._0.ViewModel {
     public class MainViewModel : BaseViewModel {
@@ -218,21 +219,67 @@ namespace XStart2._0.ViewModel {
         public void FreshDate() {
             string dateFormat = DateFormat;
             if (string.IsNullOrEmpty(dateFormat)) {
-                MyDateTime.CurDate = DateTime.Now.ToString("D");
+                MyDateTime.CurDate = DateTime.Now.ToString(DF_D);
             } else {
-                if (dateFormat.Contains("Y")) {
+                bool needFormat = false;
+                LunarCalendar lc = null;
+                if (DATE_FORMAT_GANZHI.Equals(YearFormat) || DATE_FORMAT_GANZHI.Equals(MonthFormat) || DATE_FORMAT_GANZHI.Equals(DayFormat)
+                    || DATE_FORMAT_YINLI.Equals(YearFormat) || DATE_FORMAT_YINLI.Equals(MonthFormat) || DATE_FORMAT_YINLI.Equals(DayFormat)) {
+                    lc = new LunarCalendar(DateTime.Now);
+                }
+                if (dateFormat.Contains(DF_Y)) {
                     // 将年换成格式
-                    dateFormat = dateFormat.Replace("Y", YearFormat);
+                    if (!string.IsNullOrEmpty(YearFormat) &&
+                        (DATE_FORMAT_GANZHI.Equals(YearFormat) || DATE_FORMAT_YINLI.Equals(YearFormat))) {
+                        if (DATE_FORMAT_GANZHI.Equals(YearFormat)) {
+                            // 干支年
+                            dateFormat = dateFormat.Replace(DF_Y, lc?.GetEraYear());
+                        } else {
+                            // 阴历年
+                            dateFormat = dateFormat.Replace(DF_Y, lc?.GetYear());
+                        }
+                    } else {
+                        needFormat = true;
+                        dateFormat = dateFormat.Replace(DF_Y, string.IsNullOrEmpty(YearFormat) ? "yyyy" : YearFormat);
+                    }
                 }
-                if (dateFormat.Contains("M")) {
-                    // 将月换成格式
-                    dateFormat = dateFormat.Replace("M", MonthFormat);
+                if (dateFormat.Contains(DF_M)) {
+                    if (!string.IsNullOrEmpty(MonthFormat) &&
+                        (DATE_FORMAT_GANZHI.Equals(MonthFormat) || DATE_FORMAT_YINLI.Equals(MonthFormat))) {
+                        if (DATE_FORMAT_GANZHI.Equals(MonthFormat)) {
+                            // 干支月
+                            dateFormat = dateFormat.Replace(DF_M, lc?.GetEraMonth());
+                        } else {
+                            // 阴历月
+                            dateFormat = dateFormat.Replace(DF_M, lc?.GetMonth());
+                        }
+                    } else {
+                        needFormat = true;
+                        // 将月换成格式
+                        dateFormat = dateFormat.Replace(DF_M, string.IsNullOrEmpty(MonthFormat) ? "MM" : MonthFormat);
+                    }
                 }
-                if (dateFormat.Contains("D")) {
-                    // 将日换成格式
-                    dateFormat = dateFormat.Replace("D", DayFormat);
+                if (dateFormat.Contains(DF_D)) {
+                    if (!string.IsNullOrEmpty(DayFormat) && 
+                        (DATE_FORMAT_GANZHI.Equals(DayFormat) || DATE_FORMAT_YINLI.Equals(DayFormat))) {
+                        if (DATE_FORMAT_GANZHI.Equals(DayFormat)) {
+                            // 干支日 
+                            dateFormat = dateFormat.Replace(DF_D, lc?.GetEraDay());
+                        } else {
+                            // 阴历日
+                            dateFormat = dateFormat.Replace(DF_D, lc?.GetDay());
+                        }
+                    } else {
+                        needFormat = true;
+                        // 将日换成格式
+                        dateFormat = dateFormat.Replace(DF_D, string.IsNullOrEmpty(DayFormat) ? "dd" : DayFormat);
+                    }
                 }
-                MyDateTime.CurDate = DateTime.Now.ToString(dateFormat);
+                if (needFormat) {
+                    MyDateTime.CurDate = DateTime.Now.ToString(dateFormat);
+                } else {
+                    MyDateTime.CurDate = dateFormat;
+                }
             }
             string weekFormat = WeekFormat;
             if (string.IsNullOrEmpty(weekFormat) || "星期".Equals(weekFormat)) {

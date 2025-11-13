@@ -35,7 +35,7 @@ namespace XStart2._0.Utils {
         private static readonly string[] _celestialStem = { "甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸" };
         private static readonly string[] _terrestrialBranch = { "子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥" };
         private static readonly string[] _chineseZodiac = { "鼠", "牛", "虎", "免", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪" };
-
+        private static string[] _kes = { "初刻", "二刻", "三刻", "四刻" };
         private static readonly string[] _solarTerm =
         {
             "小寒", "大寒", "立春", "雨水", "惊蛰", "春分",
@@ -48,7 +48,40 @@ namespace XStart2._0.Utils {
             308563, 331033, 353350, 375494, 397447, 419210, 440795, 462224, 483532, 504758
         };
         #endregion
+        public static string GetShiChen(int hour) {
+            if (hour == 23 || hour == 0) {
+                return (hour == 23 ? "初" : "正") + _terrestrialBranch[0];
+            } else if (hour == 1 || hour == 2) {
+                return (hour == 1 ? "初" : "正") + _terrestrialBranch[1];
+            } else if (hour == 3 || hour == 4) {
+                return (hour == 3 ? "初" : "正") + _terrestrialBranch[2];
+            } else if (hour == 5 || hour == 6) {
+                return (hour == 5 ? "初" : "正") + _terrestrialBranch[3];
+            } else if (hour == 7 || hour == 8) {
+                return (hour == 7 ? "初" : "正") + _terrestrialBranch[4];
+            } else if (hour == 9 || hour == 10) {
+                return (hour == 9 ? "初" : "正") + _terrestrialBranch[5];
+            } else if (hour == 11 || hour == 12) {
+                return (hour == 11 ? "初" : "正") + _terrestrialBranch[6];
+            } else if (hour == 13 || hour == 14) {
+                return (hour == 13 ? "初" : "正") + _terrestrialBranch[7];
+            } else if (hour == 15 || hour == 16) {
+                return (hour == 15 ? "初" : "正") + _terrestrialBranch[8];
+            } else if (hour == 17 || hour == 18) {
+                return (hour == 17 ? "初" : "正") + _terrestrialBranch[9];
+            } else if (hour == 19 || hour == 20) {
+                return (hour == 19 ? "初" : "正") + _terrestrialBranch[10];
+            } else if (hour == 21 || hour == 22) {
+                return (hour == 21 ? "初" : "正") + _terrestrialBranch[11];
+            } else {
+                return "未知";
+            }
+        }
 
+        public static string GetKe(int minute) {
+            int ke = minute / 15;
+            return ke >= 0 && ke < 4 ? _kes[ke] : "未知";
+        }
         #region ======= 构建日期 ======
 
         public LunarCalendar(DateTime dateTime) {

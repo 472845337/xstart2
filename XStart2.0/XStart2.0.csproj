@@ -179,6 +179,9 @@
     <Compile Include="Converters\ClickTypeConverter.cs" />
     <Compile Include="Converters\ProjectAutoRunConverter.cs" />
     <Compile Include="Converters\Project2IconConverter.cs" />
+    <Compile Include="Converters\ValueEParam2CollapsedConverter.cs" />
+    <Compile Include="Converters\ValueEParam2VisibilityConverter.cs" />
+    <Compile Include="Converters\ValueEParamConverter.cs" />
     <Compile Include="Converters\WeatherAirColorConverter.cs" />
     <Compile Include="Converters\WeatherAirConverter.cs" />
     <Compile Include="Converters\WeaImgConverter.cs" />

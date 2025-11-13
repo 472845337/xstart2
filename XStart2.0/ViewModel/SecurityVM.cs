@@ -1,5 +1,5 @@
 ﻿using PropertyChanged;
-using System.Collections.Generic;
+using XStart2._0.Const;
 
 namespace XStart2._0.ViewModel {
     public class SecurityVM : BaseViewModel {
@@ -23,7 +23,6 @@ namespace XStart2._0.ViewModel {
         // 确认口令
         public string ConfirmSecurity { get; set; }
         public bool RunTypeShow { get; set; } = false;
-        public List<string> AutoRunTypes { get; set; } = new List<string>() { "自启动", "手工启动", "不启动" };
-        public string AutoRunType { get; set; } = "自启动";
+        public string AutoRunType { get; set; } = Constants.RUN_TYPE_AUTO;
     }
 }

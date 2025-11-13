@@ -1,5 +1,5 @@
 ﻿namespace XStart2._0.Const {
-    public class Constants {
+    public static class Constants {
         public const string APP_NAME = "XStart2_APP";
         public const string APP_TITLE = "X启动";
         public const string APP_SHOW = "Show";
@@ -232,8 +232,15 @@
         public const int ANCHOR_STYLE_BOTTOM = 4;
 
         public const string RUN_TYPE_AUTO = "自启动";
-        public const string RUN_TYPE_MANUAL = "手工启动";
-        public const string RUN_TYPE_NOT = "不启动";
+        public const string RUN_TYPE_MANUAL = "手工";
+        public const string RUN_TYPE_NOT = "跳过";
+
+        public const string DF_Y = "Y";// 格式年
+        public const string DF_M = "M";// 格式月
+        public const string DF_D = "D";// 格式日
+
+        public const string DATE_FORMAT_YINLI = "陰歷";// 特殊格式 阴历
+        public const string DATE_FORMAT_GANZHI = "乾支";// 特殊格式 干支
 
     }
 }

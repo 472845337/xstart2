@@ -40,6 +40,9 @@
             <con:AvatarSizeConverter x:Key="AvatarSizeConverter"/>
             <con:GradientColorConverter x:Key="GradientColorConverter"/>
             <con:IsNull2BoolConverter x:Key="IsNull2BoolConverter"/>
+            <con:ValueEParamConverter x:Key="ValueEParamConverter"/>
+            <con:ValueEParam2VisibilityConverter x:Key="ValueEParam2VisibilityConverter"/>
+            <con:ValueEParam2CollapsedConverter x:Key="ValueEParam2CollapsedConverter"/>
             <!-- 鼠标指针-手样式 -->
             <Style x:Key="CursorHand_Style" TargetType="FrameworkElement">
                 <Style.Triggers>
@@ -57,6 +60,7 @@
             <Style x:Key="CheckBox_ThemeStyle" TargetType="CheckBox">
                 <Setter Property="Foreground" Value="{Binding ProjectForeground,Source={x:Static bean:WindowTheme.Instance}}" />
                 <Setter Property="FontFamily" Value="{Binding FontFamily,Source={x:Static bean:WindowTheme.Instance}}"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
             </Style>
             <!-- 标题按钮Path -->
             <Style TargetType="Path">
