@@ -134,7 +134,15 @@ namespace XStart2._0 {
 
             Configs.themeName = string.IsNullOrEmpty(themeName) ? Constants.WINDOW_THEME_BLUE : themeName;
             Configs.themeCustom = themeCustom;
-            Configs.mainBackground = !string.IsNullOrEmpty(mainBackground) && StringUtils.IsHtmlColor(mainBackground) ? mainBackground : "#FFFFFF";
+            if (string.IsNullOrEmpty(mainBackground)) {
+                Configs.mainBackground = "#FFFFFF";
+            } else {
+                if (File.Exists(mainBackground) || StringUtils.IsHtmlColor(mainBackground)) {
+                    Configs.mainBackground = mainBackground;
+                } else {
+                    Configs.mainBackground = "#FFFFFF";
+                }
+            }
             Configs.mainOpacity = ConvertUtils.ToNum(mainOpacityStr, 1D);
             Configs.projectForeground = !string.IsNullOrEmpty(projectForeground) && StringUtils.IsHtmlColor(projectForeground) ? projectForeground : "#000000";
             Configs.fontFamily = string.IsNullOrEmpty(fontFamily) || !FontUtils.IsSystemFont(fontFamily) ? Constants.DEFAULT_FONT_FAMILY : fontFamily;

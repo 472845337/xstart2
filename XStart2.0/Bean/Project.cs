@@ -109,9 +109,6 @@ namespace XStart2._0.Bean {
 
         private void SetIsMstsc() {
             IsMstsc = SystemProjectParam.MSTSC.Equals(Path);
-            if (IsMstsc) {
-                CanAutoRun = true;
-            }
         }
     }
 }

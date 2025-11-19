@@ -571,7 +571,7 @@
                                                                     <view:DraggableGrid>
                                                                         <Grid.ColumnDefinitions>
                                                                             <ColumnDefinition/>
-                                                                            <ColumnDefinition Width="24"/>
+                                                                            <ColumnDefinition Width="Auto"/>
                                                                         </Grid.ColumnDefinitions>
                                                                         <view:ImageButton Grid.Column="0" Content="{Binding Value.Name}" Style="{StaticResource ProjectButton}"
                                                                               Foreground="{Binding ProjectForeground,Source={x:Static bean:WindowTheme.Instance}}"
@@ -644,8 +644,8 @@
                                                                                 </ContextMenu>
                                                                             </Button.ContextMenu>
                                                                         </view:ImageButton>
-                                                                        <ToggleButton Grid.Column="1" Style="{StaticResource GlassToggleButton}" Height="20" Margin="2" Background="Green" Tag="{Binding Value}"
-                                                                                      IsChecked="{Binding Value.AutoRun, Converter={StaticResource ProjectAutoRunConverter}}" IsEnabled="{Binding Value.CanAutoRun}" ToolTip="{Binding Value.CanAutoRun, Converter={StaticResource ProjectAutoRunToolTipConverter}}" Click="ToggleAutoRun_Click" ToolTipService.ShowOnDisabled="True"/>
+                                                                        <ToggleButton Grid.Column="1" Style="{StaticResource GlassToggleButton}" Height="20" Width="20" Margin="2" Background="Green" Tag="{Binding Value}"
+                                                                                      IsChecked="{Binding Value.AutoRun, Converter={StaticResource ProjectAutoRunConverter}}" Visibility="{Binding Value.CanAutoRun, Converter={StaticResource Boolean2VisibilityConverter}}" ToolTip="{Binding Value.CanAutoRun, Converter={StaticResource ProjectAutoRunToolTipConverter}}" Click="ToggleAutoRun_Click" ToolTipService.ShowOnDisabled="True"/>
                                                                     </view:DraggableGrid>
                                                                 </DataTemplate>
                                                             </ItemsControl.ItemTemplate>

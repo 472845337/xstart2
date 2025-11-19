@@ -50,9 +50,9 @@
                     <Paragraph Style="{StaticResource Paragraph_Content_Style}">7.MSTSCLib --远程插件</Paragraph>
                     
                     <Paragraph Style="{StaticResource Paragraph_Title_Style}">功能点</Paragraph>
-                    <Paragraph Style="{StaticResource Paragraph_Content_Style}">快捷应用自启动</Paragraph>
-                    <Paragraph Style="{StaticResource Paragraph_Content_Style}">软体主题变更</Paragraph>
-                    <Paragraph Style="{StaticResource Paragraph_Content_Style}">文件，目录，系统功能快捷启动</Paragraph>
+                    <Paragraph Style="{StaticResource Paragraph_Content_Style}">快捷应用自启动，请不要搞自启动关机程序这种骚操作，后果自负</Paragraph>
+                    <Paragraph Style="{StaticResource Paragraph_Content_Style}">软体主题变更，背景字体配置</Paragraph>
+                    <Paragraph Style="{StaticResource Paragraph_Content_Style}">文件，目录，系统功能</Paragraph>
                     <Paragraph Style="{StaticResource Paragraph_Content_Style}">日历，天气插件</Paragraph>
                     <Paragraph Style="{StaticResource Paragraph_Content_Style}">远程桌面统一管理</Paragraph>
                     
