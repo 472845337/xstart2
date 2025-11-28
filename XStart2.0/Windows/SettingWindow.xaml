@@ -286,7 +286,7 @@
                                         <TextBlock Grid.Row="1" Grid.Column="5" Text="去注册" Style="{StaticResource WeatherRegister_Style}" MouseLeftButtonUp="GoRegesitYky_MouseLeftButtonUp"/>
                                     </Grid>
                                 </TabItem>
-                                <TabItem Header="OpenWeather">
+                                <TabItem Header="OpenWeather" Visibility="Collapsed">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="60"/>
@@ -305,7 +305,7 @@
                                         <TextBlock Grid.Row="1" Grid.Column="2" Text="去注册" Style="{StaticResource WeatherRegister_Style}" MouseLeftButtonUp="GoRegesitOpen_MouseLeftButtonUp"/>
                                     </Grid>
                                 </TabItem>
-                                <TabItem Header="AccuWeather">
+                                <TabItem Header="AccuWeather" Visibility="Collapsed">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="60"/>
@@ -324,7 +324,7 @@
                                         <TextBlock Grid.Row="1" Grid.Column="2" Text="去注册" Style="{StaticResource WeatherRegister_Style}" MouseLeftButtonUp="GoRegesitAccu_MouseLeftButtonUp"/>
                                     </Grid>
                                 </TabItem>
-                                <TabItem Header="VisualCrossing">
+                                <TabItem Header="VisualCrossing" Visibility="Collapsed">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="60"/>
@@ -351,9 +351,9 @@
                                     <ComboBoxItem Content="高德"/>
                                     <ComboBoxItem Content="心知"/>
                                     <ComboBoxItem Content="和风"/>
-                                    <ComboBoxItem Content="OpenWeather"/>
-                                    <ComboBoxItem Content="AccuWeather"/>
-                                    <ComboBoxItem Content="VisualCrossing"/>
+                                    <ComboBoxItem Content="OpenWeather" Visibility="Collapsed"/>
+                                    <ComboBoxItem Content="AccuWeather" Visibility="Collapsed"/>
+                                    <ComboBoxItem Content="VisualCrossing" Visibility="Collapsed"/>
                                 </ComboBox>
                                 <TextBlock Text="主题" Style="{StaticResource FormLabel_Style}"/>
                                 <ComboBox Style="{StaticResource FormValue_Style}" SelectedValuePath="Content" SelectedValue="{Binding WeatherImgTheme}" Width="80">

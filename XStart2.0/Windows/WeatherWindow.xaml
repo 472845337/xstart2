@@ -122,9 +122,9 @@
                     <ComboBoxItem Content="心知"/>
                     <ComboBoxItem Content="和风"/>
                     <ComboBoxItem Content="易客云"/>
-                    <ComboBoxItem Content="OpenWeather"/>
-                    <ComboBoxItem Content="AccuWeather"/>
-                    <ComboBoxItem Content="VisualCrossing"/>
+                    <ComboBoxItem Content="OpenWeather" Visibility="Collapsed"/>
+                    <ComboBoxItem Content="AccuWeather" Visibility="Collapsed"/>
+                    <ComboBoxItem Content="VisualCrossing" Visibility="Collapsed"/>
                 </ComboBox>
             </DockPanel>
             <Grid>
