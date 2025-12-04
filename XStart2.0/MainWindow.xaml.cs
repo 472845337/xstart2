@@ -957,9 +957,9 @@ namespace XStart2._0 {
             } else {
                 // 一行一个
                 if (Visibility.Visible == column.VerticalScrollBar || ScrollBarVisibility.Visible == XStartService.TypeDic[column.TypeSection].VerticalScroll) {
-                    column.ProjectWidth = (int)(MainTabControl.ActualWidth - mainViewModel.TypeWidth - 46);
+                    column.ProjectWidth = (int)(MainTabControl.ActualWidth - mainViewModel.TypeWidth - 36);
                 } else {
-                    column.ProjectWidth = (int)(MainTabControl.ActualWidth - mainViewModel.TypeWidth - 28);
+                    column.ProjectWidth = (int)(MainTabControl.ActualWidth - mainViewModel.TypeWidth - 24);
                 }
             }
             #endregion
