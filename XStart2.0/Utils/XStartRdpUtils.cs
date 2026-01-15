@@ -1,4 +1,5 @@
-﻿using Utils;
+﻿using System;
+using Utils;
 using XStart2._0.Bean;
 using XStart2._0.Config;
 using XStart2._0.Const;
@@ -18,12 +19,13 @@ namespace XStart2._0.Utils {
             string port = argumentArray[1];
             string username = argumentArray[2];
             string password = argumentArray[3];
+            bool mapDriver = argumentArray.Length > 4 ? Convert.ToBoolean(argumentArray[4]) : false;
 
             server += string.IsNullOrEmpty(port) ? string.Empty : (":" + port);
             if (Constants.OPERATE_UPDATE.Equals(type)) {
-                UpdateProfile(Configs.AppStartPath + @$"rdp\{project.Section}.rdp", server, username, password);
+                UpdateProfile(Configs.AppStartPath + @$"rdp\{project.Section}.rdp", server, username, password, mapDriver);
             } else {
-                CreateProfile(Configs.AppStartPath + @$"rdp\{project.Section}.rdp", server, username, password);
+                CreateProfile(Configs.AppStartPath + @$"rdp\{project.Section}.rdp", server, username, password, mapDriver);
             }
         }
     }

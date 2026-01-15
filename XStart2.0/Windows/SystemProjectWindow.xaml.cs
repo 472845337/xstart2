@@ -235,7 +235,7 @@ namespace XStart2._0.Windows {
                 MstscWindow mstsc = new MstscWindow() { Owner = this };
                 if (true == mstsc.ShowDialog()) {
                     name = $"{mstsc.vm.Address}远程";
-                    arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}";
+                    arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}{Constants.SPLIT_CHAR}{mstsc.vm.MapDriver}";
                 } else {
                     isAdd = false;
                 }

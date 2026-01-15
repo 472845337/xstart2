@@ -6,13 +6,14 @@
         xmlns:local="clr-namespace:XStart2._0.Windows"
         xmlns:helper="clr-namespace:XStart2._0.Helper"
         mc:Ignorable="d"
-        Title="远程" Height="210" Width="380" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="pack://application:,,,/Files/Icons/App/mstsc.ico">
+        Title="远程" Height="250" Width="380" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="pack://application:,,,/Files/Icons/App/mstsc.ico">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="60"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
@@ -35,7 +36,9 @@
             <TextBox x:Name="PasswordTextBox" Grid.Column="0" Style="{StaticResource FormValue_Style}" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding PasswordTextShow}" KeyDown="TextBox_KeyDown"/>
             <Button Grid.Column="1" Style="{StaticResource BtnConfirm_Style}" VerticalAlignment="Center" Width="28" Content="{Binding SeePassword}" FontFamily="{StaticResource FontAwesomeSolid}" FontSize="12" Click="SeePassowrd_Click"/>
         </Grid>
-        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="驱动器" Style="{StaticResource FormLabel_Style}"/>
+        <CheckBox Grid.Row="4" Grid.Column="1" Content="映射" Style="{StaticResource FormValue_Style}" IsChecked="{Binding MapDriver}"/>
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="ConfirmButton" Style="{StaticResource BtnConfirm_Style}" Click="Confirm_Click"/>
             <Button Style="{StaticResource BtnCancel_Style}" Click="Cancel_Click"/>
         </StackPanel>

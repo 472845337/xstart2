@@ -9,6 +9,7 @@ namespace XStart2._0.ViewModel {
         public string Port { get; set; }
         public string Account { get; set; }
         public string Password { get; set; }
+        public bool MapDriver {  get; set; }
         public string SeePassword { get; set; } = FontAwesome6.Eye;
         [OnChangedMethod(nameof(ChangeShowPassword))]
         public bool ShowPassword { get; set; } = false;

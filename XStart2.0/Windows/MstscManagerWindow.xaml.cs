@@ -41,8 +41,8 @@ namespace XStart2._0.Windows {
         }
 
         ConcurrentQueue<Rdp> newRdpQueue = new ConcurrentQueue<Rdp>();
-        public void AddRdp(string id, string title, string server, int port, string account, string password) {
-            newRdpQueue.Enqueue(new Rdp() { Id = id, Title = title, Server = server, Port = port, Account = account, Password = password });
+        public void AddRdp(string id, string title, string server, int port, string account, string password, bool mapDriver) {
+            newRdpQueue.Enqueue(new Rdp() { Id = id, Title = title, Server = server, Port = port, Account = account, Password = password, MapDriver = mapDriver });
         }
 
         public void AddRdp(Rdp rdp) {
@@ -170,6 +170,10 @@ namespace XStart2._0.Windows {
             IMsRdpClientAdvancedSettings8 iClientSetting = (IMsRdpClientAdvancedSettings8)rdpScript.AdvancedSettings;
             if (rdp.Port > 0) {
                 iClientSetting.RDPPort = rdp.Port;
+            }
+            // 是否映射磁盘
+            if (rdp.MapDriver) {
+                iClientSetting.RedirectDrives = true;
             }
             iClientSetting.ClearTextPassword = rdp.Password;
             iClientSetting.EnableSuperPan = false;

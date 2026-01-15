@@ -238,8 +238,11 @@ namespace XStart2._0.Windows {
             mstsc.vm.Port = argumentArray?[1];
             mstsc.vm.Account = argumentArray?[2];
             mstsc.vm.Password = argumentArray?[3];
+            if (null != argumentArray && argumentArray.Length > 4) {
+                mstsc.vm.MapDriver = Convert.ToBoolean(argumentArray[4]);
+            }
             if (true == mstsc.ShowDialog()) {
-                vm.Arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}";
+                vm.Arguments = $"{mstsc.vm.Address}{Constants.SPLIT_CHAR}{mstsc.vm.Port}{Constants.SPLIT_CHAR}{mstsc.vm.Account}{Constants.SPLIT_CHAR}{mstsc.vm.Password}{Constants.SPLIT_CHAR}{mstsc.vm.MapDriver}";
             }
             mstsc.Close();
             OpenNewWindowUtils.RecoverTopmost(this, vm);

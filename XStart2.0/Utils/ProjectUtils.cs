@@ -346,7 +346,7 @@ namespace XStart2._0.Utils {
                 return;
             }
             string[] argumentArray = arguments.Split(Constants.SPLIT_CHAR);
-            if (argumentArray.Length != 4) {
+            if (argumentArray.Length < 4) {
                 MsgBoxUtils.ShowError("远程参数不匹配！");
                 return;
             }
@@ -361,7 +361,14 @@ namespace XStart2._0.Utils {
                 mstscWindow.Show();
                 DllUtils.ShowWindow(Configs.MstscHandler, WinApi.SW_MAXIMIZE);
             }
-            mstscWindow.AddRdp(project.Section, project.Name, argumentArray[0], string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]), argumentArray[2], argumentArray[3]);
+            mstscWindow.AddRdp(
+                project.Section,
+                project.Name,
+                argumentArray[0],
+                string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]),
+                argumentArray[2],
+                argumentArray[3],
+                argumentArray.Length > 4 ? Convert.ToBoolean(argumentArray[4]) : false);
         }
 
         private static void OpenNewMstsc(List<Project> projects) {
@@ -391,7 +398,14 @@ namespace XStart2._0.Utils {
             projects.ForEach(project => {
                 string arguments = project.Arguments;
                 string[] argumentArray = arguments.Split(Constants.SPLIT_CHAR);
-                mstscWindow.AddRdp(project.Section, project.Name, argumentArray[0], string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]), argumentArray[2], argumentArray[3]);
+                mstscWindow.AddRdp(
+                    project.Section,
+                    project.Name,
+                    argumentArray[0],
+                    string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]),
+                    argumentArray[2],
+                    argumentArray[3],
+                argumentArray.Length > 4 ? Convert.ToBoolean(argumentArray[4]) : false);
             });
 
         }
