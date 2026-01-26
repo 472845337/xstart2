@@ -98,7 +98,14 @@ namespace XStart2._0.Utils {
                             }
                             cmd.StartInfo = startInfo;
                             cmd.Start();
-                        } else if (project.Path.EndsWith(".exe", true, CultureInfo.CurrentCulture) || project.Path.EndsWith(".bat", true, CultureInfo.CurrentCulture) || project.Path.EndsWith(".cmd", true, CultureInfo.CurrentCulture)) {
+                        } else if (project.Path.EndsWith(".exe", true, CultureInfo.CurrentCulture)) {
+                            ProcessStartInfo startInfo = new ProcessStartInfo {
+                                FileName = project.Path,
+                                Arguments = project.Arguments ?? string.Empty,
+                                WorkingDirectory = project.RunStartPath ?? Path.GetDirectoryName(project.Path)
+                            };
+                            Process.Start(startInfo);
+                        } else if (project.Path.EndsWith(".bat", true, CultureInfo.CurrentCulture) || project.Path.EndsWith(".cmd", true, CultureInfo.CurrentCulture)) {
                             CliWrapUtils.ExecuteApp(project.Path, string.IsNullOrEmpty(project.RunStartPath) ? Path.GetDirectoryName(project.Path) : project.RunStartPath, project.Arguments);
                         } else {
                             Process.Start(project.Path);
@@ -368,7 +375,7 @@ namespace XStart2._0.Utils {
                 string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]),
                 argumentArray[2],
                 argumentArray[3],
-                argumentArray.Length > 4 ? Convert.ToBoolean(argumentArray[4]) : false);
+                argumentArray.Length > 4 && Convert.ToBoolean(argumentArray[4]));
         }
 
         private static void OpenNewMstsc(List<Project> projects) {
@@ -405,7 +412,7 @@ namespace XStart2._0.Utils {
                     string.IsNullOrEmpty(argumentArray[1]) ? 0 : Convert.ToInt32(argumentArray[1]),
                     argumentArray[2],
                     argumentArray[3],
-                argumentArray.Length > 4 ? Convert.ToBoolean(argumentArray[4]) : false);
+                    argumentArray.Length > 4 && Convert.ToBoolean(argumentArray[4]));
             });
 
         }
