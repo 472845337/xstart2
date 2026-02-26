@@ -17,7 +17,7 @@ namespace XStart2._0.Windows {
     public partial class MstscManagerWindow : Window {
 
         private readonly System.Windows.Threading.DispatcherTimer RdpTimer = new System.Windows.Threading.DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
-        Window mainWindow;
+        private readonly Window mainWindow;
         public MstscManagerWindow(MainWindow mainWindow) {
             this.mainWindow = mainWindow;
             InitializeComponent();
@@ -37,10 +37,11 @@ namespace XStart2._0.Windows {
                     return;
                 }
             }
+            RdpTimer.Stop();
             Configs.MstscHandler = IntPtr.Zero;
         }
 
-        ConcurrentQueue<Rdp> newRdpQueue = new ConcurrentQueue<Rdp>();
+        private readonly ConcurrentQueue<Rdp> newRdpQueue = new ConcurrentQueue<Rdp>();
         public void AddRdp(string id, string title, string server, int port, string account, string password, bool mapDriver) {
             newRdpQueue.Enqueue(new Rdp() { Id = id, Title = title, Server = server, Port = port, Account = account, Password = password, MapDriver = mapDriver });
         }
@@ -117,6 +118,12 @@ namespace XStart2._0.Windows {
                     ConnectRdp(rdpScript, newRdp);
                 } catch (Exception Ex) {
                     MsgBoxUtils.ShowError("远程连接异常： " + newRdp.Server + " 错误:  " + Ex.Message);
+                    // 异常时释放 RDP 控件
+                    try {
+                        tabPage.Controls.Clear();
+                        rdpScript.Dispose();
+                        rdpTabControl.TabPages.Remove(tabPage);
+                    } catch { }
                 }
             }
         }
@@ -267,6 +274,8 @@ namespace XStart2._0.Windows {
                 }
 
                 e.Graphics.Dispose();
+                bshBack.Dispose();
+                bshFore.Dispose();
             } catch (Exception ex) {
                 Console.WriteLine(ex.Message);
             }

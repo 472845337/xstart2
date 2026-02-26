@@ -76,6 +76,7 @@ namespace XStart2._0.Utils {
                     }
                 }
             }
+            enumerator.Dispose();
             return null;
         }
     }

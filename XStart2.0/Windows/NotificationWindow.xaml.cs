@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Media;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -18,10 +19,12 @@ namespace XStart2._0.Windows {
         }
         // 保留时长，多少秒
         public int SaveTime { get; set; } = 5;
+        private CancellationTokenSource _cancellationTokenSource;
 
         public NotificationWindow(Window mainWindow, string title, string content, Color background, int height, int saveTime) {
             InitializeComponent();
             Loaded += NotificationWindow_Loaded;
+            Closing += NotificationWindow_Closing;
             vm.Title = title;
             vm.Background = background.ToString();
             vm.Height = height;
@@ -31,10 +34,14 @@ namespace XStart2._0.Windows {
             Owner = mainWindow;
         }
 
+        private void NotificationWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+        }
 
         private void NotificationWindow_Loaded(object sender, RoutedEventArgs e) {
-
             if (sender is NotificationWindow self) {
+                _cancellationTokenSource = new CancellationTokenSource();
                 self.UpdateLayout();
                 if (Config.Configs.audio) {
                     SystemSounds.Asterisk.Play();//播放提示声
@@ -49,20 +56,26 @@ namespace XStart2._0.Windows {
                 };
                 self.BeginAnimation(LeftProperty, animation);//设定动画应用于窗体的Left属性
 
-                Task.Factory.StartNew(delegate {
-                    int seconds = self.SaveTime;//通知持续多少秒后消失
-                    System.Threading.Thread.Sleep(TimeSpan.FromSeconds(seconds));
-                    //Invoke到主进程中去执行
-                    this.Dispatcher.Invoke(delegate {
-                        animation = new DoubleAnimation {
-                            Duration = new Duration(TimeSpan.FromMilliseconds(500)),
-                            From = right - self.ActualWidth,
-                            To = right//通知从左往右收回
-                        };
-                        animation.Completed += (s, a) => { self.Close(); };//动画执行完毕，关闭当前窗体
-                        self.BeginAnimation(LeftProperty, animation);
-                    });
-                });
+                Task.Run(async delegate {
+                    try {
+                        await Task.Delay(TimeSpan.FromSeconds(self.SaveTime), _cancellationTokenSource.Token);
+                        //Invoke到主进程中去执行
+                        await self.Dispatcher.InvokeAsync(delegate {
+                            // 检查窗口是否已关闭
+                            if (!_cancellationTokenSource.Token.IsCancellationRequested) {
+                                animation = new DoubleAnimation {
+                                    Duration = new Duration(TimeSpan.FromMilliseconds(500)),
+                                    From = right - self.ActualWidth,
+                                    To = right//通知从左往右收回
+                                };
+                                animation.Completed += (s, a) => { self.Close(); };//动画执行完毕，关闭当前窗体
+                                self.BeginAnimation(LeftProperty, animation);
+                            }
+                        });
+                    } catch (OperationCanceledException) {
+                        // 任务被取消，正常情况
+                    }
+                }, _cancellationTokenSource.Token);
             }
         }
     }

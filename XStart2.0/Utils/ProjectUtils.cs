@@ -98,15 +98,28 @@ namespace XStart2._0.Utils {
                             }
                             cmd.StartInfo = startInfo;
                             cmd.Start();
-                        } else if (project.Path.EndsWith(".exe", true, CultureInfo.CurrentCulture)) {
-                            ProcessStartInfo startInfo = new ProcessStartInfo {
-                                FileName = project.Path,
-                                Arguments = project.Arguments ?? string.Empty,
-                                WorkingDirectory = project.RunStartPath ?? Path.GetDirectoryName(project.Path)
-                            };
-                            Process.Start(startInfo);
-                        } else if (project.Path.EndsWith(".bat", true, CultureInfo.CurrentCulture) || project.Path.EndsWith(".cmd", true, CultureInfo.CurrentCulture)) {
-                            CliWrapUtils.ExecuteApp(project.Path, string.IsNullOrEmpty(project.RunStartPath) ? Path.GetDirectoryName(project.Path) : project.RunStartPath, project.Arguments);
+                        } else if (project.Path.EndsWith(".exe", true, CultureInfo.CurrentCulture) || project.Path.EndsWith(".bat", true, CultureInfo.CurrentCulture) || project.Path.EndsWith(".cmd", true, CultureInfo.CurrentCulture)) {
+                            //if ("idea.exe".Equals(project.Path) || "idea64.exe".Equals(project.Path)) {
+                            //    ProcessStartInfo startInfo = new ProcessStartInfo {
+                            //        FileName = project.Path,
+                            //        Arguments = project.Arguments ?? string.Empty,
+                            //        WorkingDirectory = project.RunStartPath ?? Path.GetDirectoryName(project.Path)
+                            //    };
+                            //    Process.Start(startInfo);
+                            //} else {
+                            //    CliWrapUtils.ExecuteApp(project.Path, string.IsNullOrEmpty(project.RunStartPath) ? Path.GetDirectoryName(project.Path) : project.RunStartPath, project.Arguments);
+                            //}
+                            if (project.Path.EndsWith(".exe", true, CultureInfo.CurrentCulture)) {
+                                ProcessStartInfo startInfo = new ProcessStartInfo {
+                                    UseShellExecute = false,
+                                    FileName = project.Path,
+                                    Arguments = string.IsNullOrEmpty(project.Arguments) ? string.Empty : project.Arguments,
+                                    WorkingDirectory = string.IsNullOrEmpty(project.RunStartPath) ? Path.GetDirectoryName(project.Path) : project.RunStartPath
+                                };
+                                Process.Start(startInfo);
+                            } else {
+                                CliWrapUtils.ExecuteApp(project.Path, string.IsNullOrEmpty(project.RunStartPath) ? Path.GetDirectoryName(project.Path) : project.RunStartPath, project.Arguments);
+                            }
                         } else {
                             Process.Start(project.Path);
                         }

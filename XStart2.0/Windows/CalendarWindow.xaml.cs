@@ -2,6 +2,7 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,6 +20,8 @@ namespace XStart2._0.Windows {
         public readonly CalendarViewModel vm = new CalendarViewModel();
 
         private readonly System.Windows.Threading.DispatcherTimer currentMinuteTimer = new System.Windows.Threading.DispatcherTimer();
+        private CancellationTokenSource _cancellationTokenSource;
+
         public CalendarWindow() {
             InitializeComponent();
             Loaded += Window_Loaded;
@@ -39,6 +42,9 @@ namespace XStart2._0.Windows {
         }
 
         private void Window_Closing(object sender, EventArgs e) {
+            currentMinuteTimer.Stop();
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
             Config.Configs.CalendarHandler = IntPtr.Zero;
             DataContext = null;
         }
@@ -62,13 +68,24 @@ namespace XStart2._0.Windows {
             vm.Zodiac = lunarCalendar.ChineseZodiac;
             vm.WeekDay = lunarCalendar.ChineseWeek;
             vm.SolarTerm = string.IsNullOrEmpty(lunarCalendar.SolarTerm) ? lunarCalendar.SolarTermPrev : lunarCalendar.SolarTerm;
-            Task task = new Task(() => {
-                IsHolidayResponse response = GetIsHoliday(dateTime.ToString("yyyy-MM-dd"));
-                if (null != response && HcaResponse.CODE_SUCCESS.Equals(response.Code) && null != response.IsHoliday) {
-                    vm.Holiday = $"{((bool)response.IsHoliday ? "休" : "班")} {response.HolidayName}";
+
+            if (_cancellationTokenSource == null || _cancellationTokenSource.IsCancellationRequested) {
+                _cancellationTokenSource = new CancellationTokenSource();
+            }
+
+            Task.Run(async () => {
+                try {
+                    IsHolidayResponse response = await GetIsHolidayAsync(dateTime.ToString("yyyy-MM-dd"), _cancellationTokenSource.Token);
+                    if (!_cancellationTokenSource.Token.IsCancellationRequested &&
+                        null != response && HcaResponse.CODE_SUCCESS.Equals(response.Code) && null != response.IsHoliday) {
+                        await Dispatcher.InvokeAsync(() => {
+                            vm.Holiday = $"{((bool)response.IsHoliday ? "休" : "班")} {response.HolidayName}";
+                        });
+                    }
+                } catch (OperationCanceledException) {
+                    // 任务被取消，正常情况
                 }
-            });
-            task.Start();
+            }, _cancellationTokenSource.Token);
         }
 
         private void CurrentMinuteTime_Tick(object sender, EventArgs e) {
@@ -82,16 +99,27 @@ namespace XStart2._0.Windows {
             vm.CurZodiac = lunarCalendar.ChineseZodiac;
             vm.CurWeekDay = lunarCalendar.ChineseWeek;
             vm.CurSolarTerm = string.IsNullOrEmpty(lunarCalendar.SolarTerm) ? lunarCalendar.SolarTermPrev : lunarCalendar.SolarTerm;
-            Task task = new Task(() => {
-                IsHolidayResponse response = GetIsHoliday(now.ToString("yyyy-MM-dd"));
-                if (null != response && HcaResponse.CODE_SUCCESS.Equals(response.Code) && null != response.IsHoliday) {
-                    vm.CurHoliday = $"{((bool)response.IsHoliday ? "休" : "班")} {response.HolidayName}";
+
+            if (_cancellationTokenSource == null || _cancellationTokenSource.IsCancellationRequested) {
+                _cancellationTokenSource = new CancellationTokenSource();
+            }
+
+            Task.Run(async () => {
+                try {
+                    IsHolidayResponse response = await GetIsHolidayAsync(now.ToString("yyyy-MM-dd"), _cancellationTokenSource.Token);
+                    if (!_cancellationTokenSource.Token.IsCancellationRequested &&
+                        null != response && HcaResponse.CODE_SUCCESS.Equals(response.Code) && null != response.IsHoliday) {
+                        await Dispatcher.InvokeAsync(() => {
+                            vm.CurHoliday = $"{((bool)response.IsHoliday ? "休" : "班")} {response.HolidayName}";
+                        });
+                    }
+                } catch (OperationCanceledException) {
+                    // 任务被取消，正常情况
                 }
-            });
-            task.Start();
+            }, _cancellationTokenSource.Token);
         }
 
-        private IsHolidayResponse GetIsHoliday(string date) {
+        private async Task<IsHolidayResponse> GetIsHolidayAsync(string date, CancellationToken cancellationToken) {
             IsHolidayRequest request = new IsHolidayRequest {
                 Loginname = "xstart",
                 Version = "1.0.0",
@@ -103,8 +131,10 @@ namespace XStart2._0.Windows {
             request.Date = date;
             IsHolidayResponse response = null;
             try {
-                string responseJson = HttpUtils.PostRequest(HcaRequest.ApiUrl + IsHolidayRequest.ApiPath, JsonConvert.SerializeObject(request), HttpUtils.ContentTypeJson, 20000);
-                response = JsonConvert.DeserializeObject<IsHolidayResponse>(responseJson);
+                await Task.Run(() => {
+                    string responseJson = HttpUtils.PostRequest(HcaRequest.ApiUrl + IsHolidayRequest.ApiPath, JsonConvert.SerializeObject(request), HttpUtils.ContentTypeJson, 20000);
+                    response = JsonConvert.DeserializeObject<IsHolidayResponse>(responseJson);
+                }, cancellationToken);
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
             }
